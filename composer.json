@@ -1,0 +1,39 @@
+{
+    "name": "mpociot/slackbot",
+    "license": "MIT",
+    "description": "",
+    "keywords": [
+        "Bot",
+        "Botkit",
+        "Slack",
+        "Laravel"
+    ],
+    "homepage": "http://github.com/mpociot/slackbot",
+    "authors": [
+        {
+            "name": "Marcel Pociot",
+            "email": "m.pociot@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "illuminate/support": "~5.0",
+        "frlnc/php-slack": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "^0.9.5",
+        "sllh/php-cs-fixer-styleci-bridge": "^2.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mpociot\\SlackBot": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mpociot\\SlackBot\\Tests\\": "tests/"
+        }
+    }
+}
