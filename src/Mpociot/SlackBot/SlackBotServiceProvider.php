@@ -21,7 +21,7 @@ class SlackBotServiceProvider extends ServiceProvider
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
 
-            return new SlackBot(new Serializer(), new Commander('', $interactor));
+            return new SlackBot(new Serializer(), new Commander('', $interactor), $app->make('request'));
         });
     }
 }

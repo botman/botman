@@ -5,6 +5,7 @@ use Cache;
 use Closure;
 use Frlnc\Slack\Core\Commander;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use SuperClosure\Serializer;
@@ -47,22 +48,29 @@ class SlackBot
     protected $matches = [];
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * Slack constructor.
      * @param Serializer $serializer
      * @param Commander $commander
+     * @param Request $request
      */
-    public function __construct(Serializer $serializer, Commander $commander)
+    public function __construct(Serializer $serializer, Commander $commander, Request $request)
     {
-        if (request()->has('payload')) {
-            $this->payload = collect(json_decode(request()->get('payload'), true));
+        if ($request->has('payload')) {
+            $this->payload = collect(json_decode($request->get('payload'), true));
             $this->event   = collect();
         } else {
-            $this->payload = request()->json();
+            $this->payload = $request->json();
             $this->event   = collect($this->payload->get('event'));
         }
 
         $this->serializer = $serializer;
         $this->commander = $commander;
+        $this->request = $request;
     }
 
     /**
@@ -126,7 +134,7 @@ class SlackBot
         collect($message)->map(function ($words) {
             return strtolower($words);
         })->contains(function ($key, $value) {
-            return preg_match('/'.$value.'/', $this->getMessage(), $this->matches);
+            return preg_match('/'.$value.'/i', $this->getMessage(), $this->matches);
         })
         ) {
             $callback($this, $this->matches);
