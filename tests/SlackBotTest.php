@@ -59,6 +59,23 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertTrue($called);
     }
 
+    public function testBotPassesItselfToClosure()
+    {
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'foo'
+            ]
+        ]);
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+            $this->assertInstanceOf(SlackBot::class, $bot);
+        });
+        $this->assertTrue($called);
+    }
+
     public function testBotAllowsRegularExpressions()
     {
         $called = false;
@@ -74,5 +91,62 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             $this->assertSame('Julia', $matches[1]);
         });
         $this->assertTrue($called);
+    }
+
+    public function testBotReturnsRegularExpressionMatches()
+    {
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'Hi Julia'
+            ]
+        ]);
+
+        $slackbot->hears('hi (.*)', function ($bot, $matches) use (&$called) {
+            $called = true;
+            $this->assertSame('Julia', $matches[1]);
+            $this->assertSame('Julia', $bot->getMatches()[1]);
+        });
+        $this->assertTrue($called);
+    }
+
+    public function testBotReturnsMessage()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'Hi Julia'
+            ]
+        ]);
+        $this->assertSame('Hi Julia', $slackbot->getMessage());
+    }
+
+    public function testBotDoesNotReturnMessageFromBots()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'bot_id' => 'foo',
+                'text' => 'Hi Julia'
+            ]
+        ]);
+        $this->assertSame('', $slackbot->getMessage());
+    }
+
+    public function testBotDetectsBotMessages()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'Hi Julia'
+            ]
+        ]);
+        $this->assertFalse($slackbot->isBot());
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'bot_id' => 'foo',
+                'text' => 'Hi Julia'
+            ]
+        ]);
+        $this->assertTrue($slackbot->isBot());
     }
 }

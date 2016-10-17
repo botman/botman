@@ -117,7 +117,7 @@ class SlackBot
     /**
      * @return bool
      */
-    protected function isBot()
+    public function isBot()
     {
         return $this->event->has('bot_id');
     }
