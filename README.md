@@ -48,7 +48,7 @@ class OrderPizzaConversation extends Conversation
     public function askTopping()
     {
         $this->ask('What toppings do you want?', function($answer) {
-            $this->reply('Okay, I\'ll putt some '.$answer.' on your pizza');
+            $this->reply('Okay, I\'ll put some '.$answer.' on your pizza');
             $this->toppings = $answer;
             
         });
