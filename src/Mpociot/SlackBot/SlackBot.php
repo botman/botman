@@ -1,17 +1,21 @@
 <?php
-
 namespace Mpociot\SlackBot;
 
 use Cache;
 use Closure;
 use Frlnc\Slack\Core\Commander;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use SuperClosure\Serializer;
 
 /**
- * Class SlackBot.
+ * Class SlackBot
+ * @package Mpociot\SlackBot
  */
 class SlackBot
 {
+
     /**
      * @var \Symfony\Component\HttpFoundation\ParameterBag
      */
@@ -38,14 +42,24 @@ class SlackBot
     protected $token;
 
     /**
+     * @var array
+     */
+    protected $matches = [];
+
+    /**
      * Slack constructor.
      * @param Serializer $serializer
      * @param Commander $commander
      */
     public function __construct(Serializer $serializer, Commander $commander)
     {
-        $this->payload = request()->json();
-        $this->event = collect($this->payload->get('event'));
+        if (request()->has('payload')) {
+            $this->payload = collect(json_decode(request()->get('payload'), true));
+            $this->event   = collect();
+        } else {
+            $this->payload = request()->json();
+            $this->event   = collect($this->payload->get('event'));
+        }
 
         $this->serializer = $serializer;
         $this->commander = $commander;
@@ -62,13 +76,34 @@ class SlackBot
     }
 
     /**
-     * Retrieve the chat message.
+     * Retrieve the chat message
      *
      * @return string
      */
     public function getMessage()
     {
-        return $this->event->get('text', '');
+        if ($this->payload instanceof Collection || $this->isBot()) {
+            return '';
+        } else {
+            return $this->event->get('text');
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->event->get('user');
+    }
+
+    public function getConversationReply()
+    {
+        if ($this->payload instanceof Collection) {
+            return $this->payload->toArray();
+        } else {
+            return $this->event->get('text');
+        }
     }
 
     /**
@@ -86,29 +121,33 @@ class SlackBot
      */
     public function hears($message, Closure $callback)
     {
-        if (collect($message)->map(function ($words) {
+        $this->matches = [];
+        if (
+        collect($message)->map(function ($words) {
             return strtolower($words);
-        })->contains(strtolower($this->getMessage()))
+        })->contains(function ($key, $value) {
+            return preg_match('/'.$value.'/', $this->getMessage(), $this->matches);
+        })
         ) {
-            $callback($this);
+            $callback($this, $this->matches);
         }
-
         return $this;
     }
 
     /**
      * @param $message
+     * @param array $attachments
      * @param null $channel
      * @return $this
      */
-    public function respond($message, $channel = null)
+    public function respond($message, $attachments = [], $channel = null)
     {
         $this->commander->execute('chat.postMessage', [
             'token' => $this->payload->get('token'),
             'channel' => $channel ? $channel : $this->event->get('channel'),
             'text' => $message,
+            'attachments' => json_encode($attachments)
         ]);
-
         return $this;
     }
 
@@ -127,24 +166,24 @@ class SlackBot
      */
     public function storeConversation(Conversation $instance, Closure $next)
     {
-        Cache::put('conversation', [
+        Cache::put($this->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => $this->serializer->serialize($next),
+            'next' => $this->serializer->serialize($next)
         ], 30);
     }
 
     /**
      * Look for active conversations and clear the payload
-     * if a conversation is found.
+     * if a conversation is found
      */
     protected function loadActiveConversation()
     {
-        if (! $this->isBot() && Cache::has($this->getConversationIdentifier())) {
+        if (!$this->isBot() && Cache::has($this->getConversationIdentifier())) {
             $convo = Cache::pull($this->getConversationIdentifier());
             $next = $this->serializer->unserialize($convo['next']);
 
             if (is_callable($next)) {
-                $next($this->getMessage(), $convo['conversation']);
+                $next($this->getConversationReply(), $convo['conversation']);
             }
 
             // Unset payload for possible other listeners
@@ -157,7 +196,11 @@ class SlackBot
      */
     protected function getConversationIdentifier()
     {
-        return 'conversation:'.$this->event->get('user').'-'.$this->event->get('channel');
+        if ($this->payload instanceof Collection) {
+            return 'conversation:'.Arr::get($this->payload->toArray(), 'user.id').'-'.Arr::get($this->payload->toArray(), 'channel.id');
+        } else {
+            return 'conversation:'.$this->event->get('user').'-'.$this->event->get('channel');
+        }
     }
 
     /**
@@ -165,7 +208,11 @@ class SlackBot
      */
     protected function clearPayload()
     {
-        $this->payload->replace();
+        if ($this->payload instanceof Collection) {
+
+        } else {
+            $this->payload->replace();
+        }
         $this->event = collect();
     }
 
@@ -175,5 +222,13 @@ class SlackBot
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMatches()
+    {
+        return $this->matches;
     }
 }
