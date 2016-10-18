@@ -27,7 +27,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         return new SlackBot(new Serializer(), new Commander('', $interactor), $request);
     }
 
-    public function testBotDoesNotHearCommands()
+    /** @test */
+    public function it_does_not_hear_commands()
     {
         $called = false;
 
@@ -43,7 +44,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertFalse($called);
     }
 
-    public function testBotHearsCommands()
+    /** @test */
+    public function it_hears_matching_commands()
     {
         $called = false;
 
@@ -59,7 +61,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertTrue($called);
     }
 
-    public function testBotPassesItselfToClosure()
+    /** @test */
+    public function it_passes_itself_to_the_closure()
     {
         $called = false;
 
@@ -76,7 +79,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertTrue($called);
     }
 
-    public function testBotAllowsRegularExpressions()
+    /** @test */
+    public function it_allows_regular_expressions()
     {
         $called = false;
 
@@ -86,32 +90,53 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ]
         ]);
 
-        $slackbot->hears('hi (.*)', function ($bot, $matches) use (&$called) {
+        $slackbot->hears('hi {name}', function ($bot, $name) use (&$called) {
             $called = true;
-            $this->assertSame('Julia', $matches[1]);
+            $this->assertSame('Julia', $name);
         });
         $this->assertTrue($called);
     }
 
-    public function testBotReturnsRegularExpressionMatches()
+    /** @test */
+    public function it_returns_regular_expression_matches()
     {
         $called = false;
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'Hi Julia'
+                'text' => 'I am Gandalf the grey'
             ]
         ]);
 
-        $slackbot->hears('hi (.*)', function ($bot, $matches) use (&$called) {
+        $slackbot->hears('I am {name} the {attribute}', function ($bot, $name, $attribute) use (&$called) {
             $called = true;
-            $this->assertSame('Julia', $matches[1]);
-            $this->assertSame('Julia', $bot->getMatches()[1]);
+            $this->assertSame('Gandalf', $name);
+            $this->assertSame('grey', $attribute);
         });
         $this->assertTrue($called);
     }
 
-    public function testBotReturnsMessage()
+    /** @test */
+    public function it_returns_the_matches()
+    {
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'I am Gandalf'
+            ]
+        ]);
+
+        $slackbot->hears('I am {name}', function ($bot, $name) use (&$called) {
+            $called = true;
+        });
+        $matches = $slackbot->getMatches();
+        $this->assertSame('Gandalf', $matches['name']);
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_the_message()
     {
         $slackbot = $this->getBot([
             'event' => [
@@ -121,7 +146,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertSame('Hi Julia', $slackbot->getMessage());
     }
 
-    public function testBotDoesNotReturnMessageFromBots()
+    /** @test */
+    public function it_does_not_return_messages_for_bots()
     {
         $slackbot = $this->getBot([
             'event' => [
@@ -132,7 +158,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $this->assertSame('', $slackbot->getMessage());
     }
 
-    public function testBotDetectsBotMessages()
+    /** @test */
+    public function it_detects_bots()
     {
         $slackbot = $this->getBot([
             'event' => [

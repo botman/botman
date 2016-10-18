@@ -13,8 +13,8 @@ $slackBot->hears('Hello', function (SlackBot $bot) {
 });
 
 // Include regular expression matches
-$slackBot->hears('Call me (.*)', function (SlackBot $bot, $matches) {
-    $bot->respond('Hi '.$matches[1].'!');
+$slackBot->hears('Call me {name} the {attribute}', function (SlackBot $bot, $name, $attribute) {
+    $bot->respond('Hi '.$name.'! You truly are '.$attribute);
 });
 
 // Use conversations

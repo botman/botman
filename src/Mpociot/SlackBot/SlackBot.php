@@ -48,11 +48,6 @@ class SlackBot
     protected $matches = [];
 
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * Slack constructor.
      * @param Serializer $serializer
      * @param Commander $commander
@@ -123,21 +118,34 @@ class SlackBot
     }
 
     /**
+     * Get the parameter names for the route.
+     *
+     * @return array
+     */
+    protected function compileParameterNames($value)
+    {
+        preg_match_all('/\{(.*?)\}/', $value, $matches);
+
+        return array_map(function ($m) {
+            return trim($m, '?');
+        }, $matches[1]);
+    }
+
+    /**
      * @param $message
      * @param Closure $callback
      * @return $this
      */
     public function hears($message, Closure $callback)
     {
-        $this->matches = [];
-        if (
-        collect($message)->map(function ($words) {
-            return strtolower($words);
-        })->contains(function ($key, $value) {
-            return preg_match('/'.$value.'/i', $this->getMessage(), $this->matches);
-        })
-        ) {
-            $callback($this, $this->matches);
+        $parameterNames = $this->compileParameterNames($message);
+        $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
+
+        if ( preg_match('/'.$message.'/i', $this->getMessage(), $matches) ) {
+            $parameters = array_combine($parameterNames, array_slice($matches, 1));
+            $this->matches = $parameters;
+            array_unshift($parameters, $this);
+            call_user_func_array($callback, $parameters);
         }
         return $this;
     }
