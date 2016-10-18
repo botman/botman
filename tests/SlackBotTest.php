@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class SlackBotTest extends Orchestra\Testbench\TestCase
 {
 
+    /** @var  MockInterface */
+    protected $commander;
+
     public function tearDown()
     {
         m::close();
@@ -24,7 +27,8 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $interactor->setResponseFactory(new SlackResponseFactory);
         $request = m::mock(\Illuminate\Http\Request::class.'[json]');
         $request->shouldReceive('json')->once()->andReturn(new ParameterBag($responseData));
-        return new SlackBot(new Serializer(), new Commander('', $interactor), $request);
+        $this->commander = m::mock(Commander::class);
+        return new SlackBot(new Serializer(), $this->commander, $request);
     }
 
     /** @test */
@@ -175,5 +179,73 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ]
         ]);
         $this->assertTrue($slackbot->isBot());
+    }
+
+    /** @test */
+    public function it_returns_the_user_id()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345'
+            ]
+        ]);
+        $this->assertSame('U0X12345', $slackbot->getUser());
+    }
+
+    /** @test */
+    public function it_returns_the_slack_token()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345'
+            ]
+        ]);
+        $this->commander->shouldReceive('setToken')->once()->with('TOKEN');
+        $slackbot->initialize('TOKEN');
+        $this->assertSame('TOKEN', $slackbot->getToken());
+    }
+
+    /** @test */
+    public function it_responds_back_to_the_channel_message()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'channel' => 'general'
+            ]
+        ]);
+        $this->commander
+            ->shouldReceive('execute')
+            ->once()
+            ->with('chat.postMessage', [
+                'token' => 'foo',
+                'channel' => 'general',
+                'text' => 'This is my response',
+                'attachments' => '[]'
+            ]);
+
+        $slackbot->respond('This is my response');
+    }
+
+    /** @test */
+    public function it_responds_to_custom_channels()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'channel' => 'general'
+            ]
+        ]);
+        $this->commander
+            ->shouldReceive('execute')
+            ->once()
+            ->with('chat.postMessage', [
+                'token' => 'foo',
+                'channel' => 'customchannel',
+                'text' => 'This is my response',
+                'attachments' => '[]'
+            ]);
+
+        $slackbot->respond('This is my response', [], 'customchannel');
     }
 }
