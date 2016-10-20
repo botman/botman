@@ -274,4 +274,53 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
 
         $slackbot->respond($question, 'customchannel');
     }
+
+    /** @test */
+    public function it_can_store_conversations()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general'
+            ]
+        ]);
+
+        $conversation = new TestConversation();
+        $slackbot->storeConversation($conversation, function($answer){});
+
+        $this->assertTrue(Cache::has('conversation:UX12345-general'));
+
+        $cached = Cache::get('conversation:UX12345-general');
+
+        $this->assertSame($conversation, $cached['conversation']);
+
+        $this->assertTrue(is_string($cached['next']));
+    }
+
+    /** @test */
+    public function it_can_start_conversations()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general'
+            ]
+        ]);
+
+        $conversation = m::mock(TestConversation::class);
+        $conversation->shouldReceive('setBot')
+            ->once()
+            ->with($slackbot);
+
+        $conversation->shouldReceive('run')
+            ->once();
+
+        $slackbot->startConversation($conversation);
+    }
+}
+
+class BotTestConversation extends \Mpociot\SlackBot\Conversation {
+    public function run(){}
 }
