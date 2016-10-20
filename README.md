@@ -1,5 +1,9 @@
 # PHP SlackBot
 
+[![Build Status](https://travis-ci.org/mpociot/slackbot.svg?branch=master)](https://travis-ci.org/mpociot/slackbot)
+[![codecov](https://codecov.io/gh/mpociot/slackbot/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/slackbot)
+
+
 ## Example usage
 
 ```php
