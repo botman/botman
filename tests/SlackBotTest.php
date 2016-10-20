@@ -6,6 +6,7 @@ use Frlnc\Slack\Http\SlackResponseFactory;
 use Mockery as m;
 
 use Mockery\MockInterface;
+use Mpociot\SlackBot\Answer;
 use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
@@ -22,13 +23,26 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
     {
         m::close();
     }
-    
+
     protected function getBot($responseData)
     {
         $interactor = new CurlInteractor;
         $interactor->setResponseFactory(new SlackResponseFactory);
         $request = m::mock(\Illuminate\Http\Request::class.'[json]');
         $request->shouldReceive('json')->once()->andReturn(new ParameterBag($responseData));
+        $this->commander = m::mock(Commander::class);
+        return new SlackBot(new Serializer(), $this->commander, $request);
+    }
+
+    protected function getBotWithInteractiveData($payload)
+    {
+        $interactor = new CurlInteractor;
+        $interactor->setResponseFactory(new SlackResponseFactory);
+        /** @var \Illuminate\Http\Request $request */
+        $request = new \Illuminate\Http\Request();
+        $request->replace([
+            'payload' => $payload
+        ]);
         $this->commander = m::mock(Commander::class);
         return new SlackBot(new Serializer(), $this->commander, $request);
     }
@@ -195,6 +209,17 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
     }
 
     /** @test */
+    public function it_returns_the_channel_id()
+    {
+        $slackbot = $this->getBot([
+            'event' => [
+                'channel' => 'general'
+            ]
+        ]);
+        $this->assertSame('general', $slackbot->getChannel());
+    }
+
+    /** @test */
     public function it_returns_the_slack_token()
     {
         $slackbot = $this->getBot([
@@ -323,6 +348,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_picks_up_conversations()
     {
+        $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
         $slackbot = $this->getBot([
             'token' => 'foo',
@@ -333,17 +359,68 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ]
         ]);
 
-        $this->commander->shouldReceive('setToken');
-
         $conversation = new BotTestConversation();
 
         $slackbot->storeConversation($conversation, function($answer) use (&$called) {
+            $GLOBALS['answer'] = $answer;
             $GLOBALS['called'] = true;
         });
 
+        /**
+         * Now that the first message is saved, fake a reply
+         */
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again'
+            ]
+        ]);
+        $this->commander->shouldReceive('setToken');
         $slackbot->initialize('TOKEN');
 
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('Hello again', $GLOBALS['answer']->getText());
         $this->assertTrue($GLOBALS['called']);
+    }
+
+    /** @test */
+    public function it_detects_users_from_interactive_messages()
+    {
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $this->assertSame('U045VRZFT', $slackbot->getUser());
+    }
+
+    /** @test */
+    public function it_detects_bots_from_interactive_messages()
+    {
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $this->assertFalse($slackbot->isBot());
+    }
+
+    /** @test */
+    public function it_detects_channels_from_interactive_messages()
+    {
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $this->assertSame('C065W1189', $slackbot->getChannel());
+    }
+
+    /** @test */
+    public function it_responds_back_to_the_channel_message_from_interactive_messages()
+    {
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $this->commander
+            ->shouldReceive('execute')
+            ->once()
+            ->with('chat.postMessage', [
+                'token' => 'xAB3yVzGS4BQ3O9FACTa8Ho4',
+                'channel' => 'C065W1189',
+                'text' => 'This is my response'
+            ]);
+
+        $slackbot->respond('This is my response');
     }
 }
 

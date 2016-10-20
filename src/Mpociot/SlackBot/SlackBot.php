@@ -55,9 +55,17 @@ class SlackBot
      */
     public function __construct(Serializer $serializer, Commander $commander, Request $request)
     {
+        /**
+         * If the request has a POST parameter called 'payload'
+         * we're dealing with an interactive button response.
+         */
         if ($request->has('payload')) {
-            $this->payload = collect(json_decode($request->get('payload'), true));
-            $this->event   = collect();
+            $payloadData = json_decode($request->get('payload'), true);
+            $this->payload = collect($payloadData);
+            $this->event   = collect([
+                'channel' => array_get($payloadData, 'channel.id'),
+                'user' => array_get($payloadData, 'user.id')
+            ]);
         } else {
             $this->payload = $request->json();
             $this->event   = collect($this->payload->get('event'));
@@ -92,19 +100,29 @@ class SlackBot
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUser()
     {
         return $this->event->get('user');
     }
 
-    public function getConversationReply()
+    /**
+     * @return string
+     */
+    public function getChannel()
+    {
+        return $this->event->get('channel');
+    }
+
+    public function getConversationAnswer()
     {
         if ($this->payload instanceof Collection) {
-            return $this->payload->toArray();
+            return Answer::create(array_get($this->payload, 'actions.0.name'))
+                ->setValue(array_get($this->payload, 'actions.0.value'))
+                ->setCallbackId(array_get($this->payload, 'callback_id'));
         } else {
-            return $this->event->get('text');
+            return Answer::create($this->event->get('text'));
         }
     }
 
@@ -158,7 +176,7 @@ class SlackBot
     {
         $parameters = [
             'token' => $this->payload->get('token'),
-            'channel' => $channel ? $channel : $this->event->get('channel'),
+            'channel' => $channel ? $channel : $this->getChannel(),
             'text' => $message,
         ];
         /**
@@ -205,7 +223,7 @@ class SlackBot
             $next = $this->serializer->unserialize($convo['next']);
 
             if (is_callable($next)) {
-                $next($this->getConversationReply(), $convo['conversation']);
+                $next($this->getConversationAnswer(), $convo['conversation']);
             }
 
             // Unset payload for possible other listeners
@@ -218,11 +236,7 @@ class SlackBot
      */
     protected function getConversationIdentifier()
     {
-        if ($this->payload instanceof Collection) {
-            return 'conversation:'.Arr::get($this->payload->toArray(), 'user.id').'-'.Arr::get($this->payload->toArray(), 'channel.id');
-        } else {
-            return 'conversation:'.$this->event->get('user').'-'.$this->event->get('channel');
-        }
+        return 'conversation:'.$this->getUser().'-'.$this->getChannel();
     }
 
     /**
