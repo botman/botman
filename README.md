@@ -52,7 +52,7 @@ class OrderPizzaConversation extends Conversation
                     
         $this->ask($question, function($answer) {
             $this->reply('Got you - your pizza needs to be '.$answer->getText());
-            $this->size = $answer;
+            $this->size = $answer->getValue();
             
             $this->askTopping();
         });
@@ -62,7 +62,7 @@ class OrderPizzaConversation extends Conversation
     {
         $this->ask('What toppings do you want?', function($answer) {
             $this->reply('Okay, I\'ll put some '.$answer->getText().' on your pizza');
-            $this->toppings = $answer;
+            $this->toppings = $answer->getText();
             
         });
     }
