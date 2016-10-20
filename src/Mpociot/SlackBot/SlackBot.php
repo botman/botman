@@ -65,7 +65,6 @@ class SlackBot
 
         $this->serializer = $serializer;
         $this->commander = $commander;
-        $this->request = $request;
     }
 
     /**
