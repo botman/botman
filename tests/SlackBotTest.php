@@ -319,6 +319,32 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
 
         $slackbot->startConversation($conversation);
     }
+
+    /** @test */
+    public function it_picks_up_conversations()
+    {
+        $GLOBALS['called'] = false;
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia'
+            ]
+        ]);
+
+        $this->commander->shouldReceive('setToken');
+
+        $conversation = new BotTestConversation();
+
+        $slackbot->storeConversation($conversation, function($answer) use (&$called) {
+            $GLOBALS['called'] = true;
+        });
+
+        $slackbot->initialize('TOKEN');
+
+        $this->assertTrue($GLOBALS['called']);
+    }
 }
 
 class BotTestConversation extends \Mpociot\SlackBot\Conversation {
