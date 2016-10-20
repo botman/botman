@@ -49,6 +49,26 @@ class ConversationTest extends Orchestra\Testbench\TestCase
         $conversation->setBot($bot);
         $conversation->reply('This is my reply');
     }
+
+    /** @test */
+    public function it_can_ask_questions()
+    {
+        $conversation = new TestConversation();
+        $question = 'Will this test work?';
+        $closure = function($answer){};
+
+        $bot = m::mock(SlackBot::class);
+        $bot->shouldReceive('getToken');
+        $bot->shouldReceive('respond')
+            ->once()
+            ->with($question);
+        $bot->shouldReceive('storeConversation')
+            ->once()
+            ->with($conversation, $closure);
+
+        $conversation->setBot($bot);
+        $conversation->ask($question, $closure);
+    }
 }
 
 class TestConversation extends \Mpociot\SlackBot\Conversation {
