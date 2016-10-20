@@ -150,19 +150,26 @@ class SlackBot
     }
 
     /**
-     * @param $message
-     * @param array $attachments
+     * @param string|Question $message
      * @param null $channel
      * @return $this
      */
-    public function respond($message, $attachments = [], $channel = null)
+    public function respond($message, $channel = null)
     {
-        $this->commander->execute('chat.postMessage', [
+        $parameters = [
             'token' => $this->payload->get('token'),
             'channel' => $channel ? $channel : $this->event->get('channel'),
             'text' => $message,
-            'attachments' => json_encode($attachments)
-        ]);
+        ];
+        /**
+         * If we send a Question with buttons, ignore
+         * the text and append the question.
+         */
+        if ($message instanceof Question) {
+            $parameters['text'] = '';
+            $parameters['attachments'] = json_encode($message);
+        }
+        $this->commander->execute('chat.postMessage', $parameters);
         return $this;
     }
 

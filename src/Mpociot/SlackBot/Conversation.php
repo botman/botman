@@ -33,7 +33,7 @@ abstract class Conversation
     }
 
     /**
-     * @param $question
+     * @param string|Question $question
      * @param Closure $next
      * @return $this
      */
@@ -45,22 +45,13 @@ abstract class Conversation
         return $this;
     }
 
-    public function askWithAttachments($question, $attachments = [], Closure $next)
-    {
-        $this->bot->respond($question, $attachments);
-        $this->bot->storeConversation($this,$next);
-
-        return $this;
-    }
-
     /**
-     * @param $message
-     * @param array $attachments
+     * @param string|Question $message
      * @return $this
      */
-    public function reply($message, $attachments = [])
+    public function reply($message)
     {
-        $this->bot->respond($message, $attachments);
+        $this->bot->respond($message);
         return $this;
     }
 

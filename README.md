@@ -37,7 +37,16 @@ class OrderPizzaConversation extends Conversation
     
     public function askSize()
     {
-        $this->ask('Which size do you want?', function($answer) {
+    
+        $question = Question::create('How are you doing?')
+                    ->addButton(
+                        Button::create('Extra Large')->value('xl')
+                    )
+                    ->addButton(
+                        Button::create('Mega Large')->value('xxl')
+                    );
+                    
+        $this->ask($question, function($answer) {
             $this->reply('Got you - your pizza needs to be '.$answer);
             $this->size = $answer;
             

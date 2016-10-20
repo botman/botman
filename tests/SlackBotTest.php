@@ -6,6 +6,8 @@ use Frlnc\Slack\Http\SlackResponseFactory;
 use Mockery as m;
 
 use Mockery\MockInterface;
+use Mpociot\SlackBot\Button;
+use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
 use SuperClosure\Serializer;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -220,8 +222,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ->with('chat.postMessage', [
                 'token' => 'foo',
                 'channel' => 'general',
-                'text' => 'This is my response',
-                'attachments' => '[]'
+                'text' => 'This is my response'
             ]);
 
         $slackbot->respond('This is my response');
@@ -242,10 +243,35 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ->with('chat.postMessage', [
                 'token' => 'foo',
                 'channel' => 'customchannel',
-                'text' => 'This is my response',
-                'attachments' => '[]'
+                'text' => 'This is my response'
             ]);
 
-        $slackbot->respond('This is my response', [], 'customchannel');
+        $slackbot->respond('This is my response', 'customchannel');
+    }
+
+    /** @test */
+    public function it_can_send_questions()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'channel' => 'general'
+            ]
+        ]);
+        $question = Question::create('How are you doing?')
+                ->addButton(Button::create('Great'))
+                ->addButton(Button::create('Good'));
+
+        $this->commander
+            ->shouldReceive('execute')
+            ->once()
+            ->with('chat.postMessage', [
+                'token' => 'foo',
+                'channel' => 'customchannel',
+                'text' => '',
+                'attachments' => json_encode($question)
+            ]);
+
+        $slackbot->respond($question, 'customchannel');
     }
 }
