@@ -35,6 +35,20 @@ class ConversationTest extends Orchestra\Testbench\TestCase
 
         $this->assertSame('Foo', $conversation->getToken());
     }
+
+    /** @test */
+    public function it_can_reply()
+    {
+        $bot = m::mock(SlackBot::class);
+        $bot->shouldReceive('getToken');
+        $bot->shouldReceive('respond')
+            ->once()
+            ->with('This is my reply');
+
+        $conversation = new TestConversation();
+        $conversation->setBot($bot);
+        $conversation->reply('This is my reply');
+    }
 }
 
 class TestConversation extends \Mpociot\SlackBot\Conversation {
