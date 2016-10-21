@@ -3,26 +3,42 @@
 [![Build Status](https://travis-ci.org/mpociot/slackbot.svg?branch=master)](https://travis-ci.org/mpociot/slackbot)
 [![codecov](https://codecov.io/gh/mpociot/slackbot/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/slackbot)
 
+## Installation
+
+### Using Laravel
+Require this package with composer using the following command:
+
+```sh
+$ composer require mpociot/slackbot
+```
+
+Go to your `config/app.php` and add the service provider:
+
+```php
+Mpociot\SlackBot\SlackBotServiceProvider::class,
+```
+
+Also add the alias / facade:
+
+```php
+'SlackBot' => Mpociot\SlackBot\Facades\SlackBot::class
+```
 
 ## Example usage
 
 ```php
-/** @var SlackBot $slackBot */
-$slackBot = app(SlackBot::class);
-$slackBot->initialize(env('SLACK_TOKEN'));
-
 // Listen to simple commands
-$slackBot->hears('Hello', function (SlackBot $bot) {
+SlackBot::hears('Hello', function (SlackBot $bot) {
     $bot->respond('Hi there!');
 });
 
 // Include regular expression matches
-$slackBot->hears('Call me {name} the {attribute}', function (SlackBot $bot, $name, $attribute) {
+SlackBot::hears('Call me {name} the {attribute}', function (SlackBot $bot, $name, $attribute) {
     $bot->respond('Hi '.$name.'! You truly are '.$attribute);
 });
 
 // Use conversations
-$slackBot->hears('order pizza', function (SlackBot $bot, $matches) {
+SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
     $bot->startConversation(new OrderPizzaConversation());
 });
 ```
