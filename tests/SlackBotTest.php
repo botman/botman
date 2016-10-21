@@ -294,7 +294,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
                 'token' => 'foo',
                 'channel' => 'customchannel',
                 'text' => '',
-                'attachments' => json_encode($question)
+                'attachments' => json_encode([$question])
             ]);
 
         $slackbot->respond($question, 'customchannel');

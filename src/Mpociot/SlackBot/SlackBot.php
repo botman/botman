@@ -185,7 +185,7 @@ class SlackBot
          */
         if ($message instanceof Question) {
             $parameters['text'] = '';
-            $parameters['attachments'] = json_encode($message);
+            $parameters['attachments'] = json_encode([$message->toArray()]);
         }
         $this->commander->execute('chat.postMessage', $parameters);
         return $this;
