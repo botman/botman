@@ -61,7 +61,33 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $slackbot->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
+        $slackbot->listen();
         $this->assertFalse($called);
+    }
+
+    /** @test */
+    public function it_does_not_hear_commands_and_uses_fallback()
+    {
+        $called = false;
+        $fallbackCalled = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'bar'
+            ]
+        ]);
+
+        $slackbot->fallback(function ($bot) use (&$fallbackCalled) {
+            $fallbackCalled = true;
+        });
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $slackbot->listen();
+        $this->assertFalse($called);
+        $this->assertTrue($fallbackCalled);
     }
 
     /** @test */
@@ -78,6 +104,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $slackbot->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
+        $slackbot->listen();
         $this->assertTrue($called);
     }
 
@@ -96,6 +123,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             $called = true;
             $this->assertInstanceOf(SlackBot::class, $bot);
         });
+        $slackbot->listen();
         $this->assertTrue($called);
     }
 
@@ -114,6 +142,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             $called = true;
             $this->assertSame('Julia', $name);
         });
+        $slackbot->listen();
         $this->assertTrue($called);
     }
 
@@ -133,6 +162,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             $this->assertSame('Gandalf', $name);
             $this->assertSame('grey', $attribute);
         });
+        $slackbot->listen();
         $this->assertTrue($called);
     }
 
@@ -150,6 +180,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $slackbot->hears('I am {name}', function ($bot, $name) use (&$called) {
             $called = true;
         });
+        $slackbot->listen();
         $matches = $slackbot->getMatches();
         $this->assertSame('Gandalf', $matches['name']);
         $this->assertTrue($called);

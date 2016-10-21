@@ -41,6 +41,14 @@ SlackBot::hears('Call me {name} the {attribute}', function (SlackBot $bot, $name
 SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
     $bot->startConversation(new OrderPizzaConversation());
 });
+
+// Default reply if nothing else matches
+SlackBot::fallback(function(SlackBot $bot) {
+    $bot->respond("I don't understand a word you just said.");
+});
+
+// Start listening
+SlackBot::listen();
 ```
 
 ## Conversation Syntax

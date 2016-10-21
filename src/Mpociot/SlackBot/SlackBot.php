@@ -4,9 +4,7 @@ namespace Mpociot\SlackBot;
 use Cache;
 use Closure;
 use Frlnc\Slack\Core\Commander;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use SuperClosure\Serializer;
 
@@ -41,6 +39,19 @@ class SlackBot
      * @var string
      */
     protected $token;
+
+    /**
+     * Messages to listen to.
+     * @var array
+     */
+    protected $listenTo = [];
+
+    /**
+     * The fallback message to use, if no match
+     * could be heard.
+     * @var callable|null
+     */
+    protected $fallbackMessage;
 
     /**
      * @var array
@@ -86,6 +97,16 @@ class SlackBot
     }
 
     /**
+     * Set a fallback message to use if no listener matches.
+     *
+     * @param callable $callback
+     */
+    public function fallback($callback)
+    {
+        $this->fallbackMessage = $callback;
+    }
+
+    /**
      * Retrieve the chat message
      *
      * @return string
@@ -115,6 +136,9 @@ class SlackBot
         return $this->event->get('channel');
     }
 
+    /**
+     * @return $this|static
+     */
     public function getConversationAnswer()
     {
         if ($this->payload instanceof Collection) {
@@ -155,16 +179,39 @@ class SlackBot
      */
     public function hears($message, Closure $callback)
     {
-        $parameterNames = $this->compileParameterNames($message);
-        $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
+        $this->listenTo[] = [
+            'message' => $message,
+            'callback' => $callback
+        ];
 
-        if ( preg_match('/'.$message.'/i', $this->getMessage(), $matches) ) {
-            $parameters = array_combine($parameterNames, array_slice($matches, 1));
-            $this->matches = $parameters;
-            array_unshift($parameters, $this);
-            call_user_func_array($callback, $parameters);
-        }
         return $this;
+    }
+
+    /**
+     * Try to match messages with the ones we should
+     * listen to.
+     */
+    public function listen()
+    {
+        $heardMessage = false;
+        foreach ($this->listenTo as $messageData) {
+            $message = $messageData['message'];
+            $callback = $messageData['callback'];
+
+            $parameterNames = $this->compileParameterNames($message);
+            $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
+
+            if ( preg_match('/'.$message.'/i', $this->getMessage(), $matches) ) {
+                $heardMessage = true;
+                $parameters = array_combine($parameterNames, array_slice($matches, 1));
+                $this->matches = $parameters;
+                array_unshift($parameters, $this);
+                call_user_func_array($callback, $parameters);
+            }
+        }
+        if ($heardMessage === false && is_callable($this->fallbackMessage)) {
+            call_user_func($this->fallbackMessage, $this);
+        }
     }
 
     /**
