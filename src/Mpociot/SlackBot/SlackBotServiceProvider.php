@@ -17,7 +17,7 @@ class SlackBotServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(SlackBot::class, function ($app) {
+        $this->app->bind('slackbot', function ($app) {
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
 
