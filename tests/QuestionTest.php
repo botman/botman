@@ -44,6 +44,19 @@ class QuestionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_add_multiple_buttons()
+    {
+        $question = Question::create('text');
+        $question->addButtons([
+            Button::create('button 1'),
+            Button::create('button 2'),
+        ]);
+        $this->assertCount(2, Arr::get($question->toArray(), 'actions'));
+        $this->assertSame('button 1', Arr::get($question->toArray(), 'actions.0.text'));
+        $this->assertSame('button 2', Arr::get($question->toArray(), 'actions.1.text'));
+    }
+
+    /** @test */
     public function it_can_be_json_encoded()
     {
         $question = Question::create('text');

@@ -74,6 +74,19 @@ class Question implements JsonSerializable
     }
 
     /**
+     * @param array $buttons
+     * @return $this
+     */
+    public function addButtons(array $buttons)
+    {
+        foreach ($buttons as $button) {
+            $this->buttons[] = $button->toArray();
+        }
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
