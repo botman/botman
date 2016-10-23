@@ -320,4 +320,21 @@ class SlackBot
     {
         return $this->matches;
     }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [
+            'payload',
+            'event',
+            'commander',
+            'serializer',
+            'token',
+            'listenTo',
+            'fallbackMessage',
+            'matches'
+        ];
+    }
 }
