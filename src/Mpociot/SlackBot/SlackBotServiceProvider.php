@@ -5,7 +5,9 @@ namespace Mpociot\SlackBot;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
+use Illuminate\Cache\Repository;
 use Illuminate\Support\ServiceProvider;
+use Mpociot\SlackBot\Cache\LaravelCache;
 use SuperClosure\Serializer;
 
 class SlackBotServiceProvider extends ServiceProvider
@@ -21,7 +23,7 @@ class SlackBotServiceProvider extends ServiceProvider
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
 
-            $slackbot = new SlackBot(new Serializer(), new Commander('', $interactor), $app->make('request'));
+            $slackbot = new SlackBot(new Serializer(), new Commander('', $interactor), $app->make('request'), new LaravelCache($app->make(Repository::class)));
             $slackbot->initialize(config('services.slack.bot_token'));
             return $slackbot;
         });

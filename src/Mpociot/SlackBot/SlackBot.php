@@ -1,11 +1,11 @@
 <?php
 namespace Mpociot\SlackBot;
 
-use Cache;
 use Closure;
 use Frlnc\Slack\Core\Commander;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Mpociot\SlackBot\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
 
 /**
@@ -57,14 +57,19 @@ class SlackBot
      * @var array
      */
     protected $matches = [];
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
     /**
      * Slack constructor.
      * @param Serializer $serializer
      * @param Commander $commander
      * @param Request $request
+     * @param CacheInterface $cache
      */
-    public function __construct(Serializer $serializer, Commander $commander, Request $request)
+    public function __construct(Serializer $serializer, Commander $commander, Request $request, CacheInterface $cache)
     {
         /**
          * If the request has a POST parameter called 'payload'
@@ -74,8 +79,8 @@ class SlackBot
             $payloadData = json_decode($request->get('payload'), true);
             $this->payload = collect($payloadData);
             $this->event   = collect([
-                'channel' => array_get($payloadData, 'channel.id'),
-                'user' => array_get($payloadData, 'user.id')
+                'channel' => $payloadData['channel']['id'],
+                'user' => $payloadData['user']['id'],
             ]);
         } else {
             $this->payload = $request->json();
@@ -84,6 +89,7 @@ class SlackBot
 
         $this->serializer = $serializer;
         $this->commander = $commander;
+        $this->cache = $cache;
     }
 
     /**
@@ -142,9 +148,9 @@ class SlackBot
     public function getConversationAnswer()
     {
         if ($this->payload instanceof Collection) {
-            return Answer::create(array_get($this->payload, 'actions.0.name'))
-                ->setValue(array_get($this->payload, 'actions.0.value'))
-                ->setCallbackId(array_get($this->payload, 'callback_id'));
+            return Answer::create($this->payload['actions'][0]['name'])
+                ->setValue($this->payload['actions'][0]['value'])
+                ->setCallbackId($this->payload['callback_id']);
         } else {
             return Answer::create($this->event->get('text'));
         }
@@ -253,7 +259,7 @@ class SlackBot
      */
     public function storeConversation(Conversation $instance, Closure $next)
     {
-        Cache::put($this->getConversationIdentifier(), [
+        $this->cache->put($this->getConversationIdentifier(), [
             'conversation' => $instance,
             'next' => $this->serializer->serialize($next)
         ], 30);
@@ -265,8 +271,8 @@ class SlackBot
      */
     protected function loadActiveConversation()
     {
-        if (!$this->isBot() && Cache::has($this->getConversationIdentifier())) {
-            $convo = Cache::pull($this->getConversationIdentifier());
+        if (!$this->isBot() && $this->cache->has($this->getConversationIdentifier())) {
+            $convo = $this->cache->pull($this->getConversationIdentifier());
             $next = $this->serializer->unserialize($convo['next']);
 
             if (is_callable($next)) {

@@ -8,6 +8,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\SlackBot\Answer;
 use Mpociot\SlackBot\Button;
+use Mpociot\SlackBot\Cache\ArrayCache;
 use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
 use SuperClosure\Serializer;
@@ -19,9 +20,18 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
     /** @var  MockInterface */
     protected $commander;
 
+    /** @var  ArrayCache */
+    protected $cache;
+
     public function tearDown()
     {
         m::close();
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->cache = new ArrayCache();
     }
 
     protected function getBot($responseData)
@@ -31,7 +41,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[json]');
         $request->shouldReceive('json')->once()->andReturn(new ParameterBag($responseData));
         $this->commander = m::mock(Commander::class);
-        return new SlackBot(new Serializer(), $this->commander, $request);
+        return new SlackBot(new Serializer(), $this->commander, $request, $this->cache);
     }
 
     protected function getBotWithInteractiveData($payload)
@@ -44,7 +54,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             'payload' => $payload
         ]);
         $this->commander = m::mock(Commander::class);
-        return new SlackBot(new Serializer(), $this->commander, $request);
+        return new SlackBot(new Serializer(), $this->commander, $request, $this->cache);
     }
 
     /** @test */
@@ -345,9 +355,9 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
         $conversation = new TestConversation();
         $slackbot->storeConversation($conversation, function($answer){});
 
-        $this->assertTrue(Cache::has('conversation:UX12345-general'));
+        $this->assertTrue($this->cache->has('conversation:UX12345-general'));
 
-        $cached = Cache::get('conversation:UX12345-general');
+        $cached = $this->cache->get('conversation:UX12345-general');
 
         $this->assertSame($conversation, $cached['conversation']);
 

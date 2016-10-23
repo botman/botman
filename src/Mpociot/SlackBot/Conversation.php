@@ -2,7 +2,6 @@
 namespace Mpociot\SlackBot;
 
 use Closure;
-use Illuminate\Queue\SerializesModels;
 
 /**
  * Class Conversation
@@ -10,8 +9,6 @@ use Illuminate\Queue\SerializesModels;
  */
 abstract class Conversation
 {
-
-    use SerializesModels;
 
     /**
      * @var SlackBot
