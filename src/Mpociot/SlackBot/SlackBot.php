@@ -332,7 +332,6 @@ class SlackBot
             'commander',
             'serializer',
             'token',
-            'listenTo',
             'fallbackMessage',
             'matches'
         ];
