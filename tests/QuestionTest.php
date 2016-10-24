@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
 use Illuminate\Support\Arr;
@@ -66,5 +67,4 @@ class QuestionTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(json_encode($question->toArray()), json_encode($question));
     }
-
 }

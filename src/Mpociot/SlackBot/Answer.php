@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot;
 
 class Answer
@@ -15,7 +16,7 @@ class Answer
     /**
      * @return static
      */
-    public static function create($text='')
+    public static function create($text = '')
     {
         return new static($text);
     }
@@ -38,7 +39,7 @@ class Answer
      */
     public function isInteractiveMessageReply()
     {
-        return !is_null($this->getCallbackId());
+        return ! is_null($this->getCallbackId());
     }
 
     /**
@@ -97,5 +98,4 @@ class Answer
 
         return $this;
     }
-
 }

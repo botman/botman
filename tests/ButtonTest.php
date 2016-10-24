@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
 use Illuminate\Support\Arr;
@@ -57,5 +58,4 @@ class ButtonTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(json_encode($button->toArray()), json_encode($button));
     }
-
 }

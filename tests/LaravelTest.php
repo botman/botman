@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
 use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
@@ -8,7 +9,6 @@ use Cache;
 
 class LaravelTest extends TestCase
 {
-
     public function setUp()
     {
         parent::setUp();
@@ -23,7 +23,7 @@ class LaravelTest extends TestCase
     protected function getPackageAliases($app)
     {
         return [
-            'SlackBot' => \Mpociot\SlackBot\Facades\SlackBot::class
+            'SlackBot' => \Mpociot\SlackBot\Facades\SlackBot::class,
         ];
     }
 
@@ -46,11 +46,11 @@ class LaravelTest extends TestCase
         $conversation = new TestConversation();
 
         $bot = app('slackbot');
-        SlackBot::storeConversation($conversation, function($answer) use ($bot) {});
+        SlackBot::storeConversation($conversation, function ($answer) use ($bot) {
+        });
 
         $cached = Cache::get('conversation:-');
         $this->assertEquals($conversation, $cached['conversation']);
         $this->assertTrue(is_string($cached['next']));
     }
-
 }

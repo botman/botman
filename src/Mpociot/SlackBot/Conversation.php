@@ -1,15 +1,14 @@
 <?php
+
 namespace Mpociot\SlackBot;
 
 use Closure;
 
 /**
- * Class Conversation
- * @package Mpociot\SlackBot
+ * Class Conversation.
  */
 abstract class Conversation
 {
-
     /**
      * @var SlackBot
      */
@@ -37,7 +36,7 @@ abstract class Conversation
     public function ask($question, Closure $next)
     {
         $this->bot->respond($question);
-        $this->bot->storeConversation($this,$next);
+        $this->bot->storeConversation($this, $next);
 
         return $this;
     }
@@ -49,6 +48,7 @@ abstract class Conversation
     public function reply($message)
     {
         $this->bot->respond($message);
+
         return $this;
     }
 

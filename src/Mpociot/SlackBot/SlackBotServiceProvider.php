@@ -30,6 +30,7 @@ class SlackBotServiceProvider extends ServiceProvider
                 new LaravelCache($app->make(Repository::class))
             );
             $slackbot->initialize(config('services.slack.bot_token'));
+
             return $slackbot;
         });
     }

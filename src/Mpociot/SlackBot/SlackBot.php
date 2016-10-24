@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot;
 
 use Closure;
@@ -9,12 +10,10 @@ use Mpociot\SlackBot\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
 
 /**
- * Class SlackBot
- * @package Mpociot\SlackBot
+ * Class SlackBot.
  */
 class SlackBot
 {
-
     /**
      * @var \Symfony\Component\HttpFoundation\ParameterBag
      */
@@ -71,20 +70,20 @@ class SlackBot
      */
     public function __construct(Serializer $serializer, Commander $commander, Request $request, CacheInterface $cache)
     {
-        /**
+        /*
          * If the request has a POST parameter called 'payload'
          * we're dealing with an interactive button response.
          */
         if ($request->has('payload')) {
             $payloadData = json_decode($request->get('payload'), true);
             $this->payload = collect($payloadData);
-            $this->event   = collect([
+            $this->event = collect([
                 'channel' => $payloadData['channel']['id'],
                 'user' => $payloadData['user']['id'],
             ]);
         } else {
             $this->payload = $request->json();
-            $this->event   = collect($this->payload->get('event'));
+            $this->event = collect($this->payload->get('event'));
         }
 
         $this->serializer = $serializer;
@@ -113,7 +112,7 @@ class SlackBot
     }
 
     /**
-     * Retrieve the chat message
+     * Retrieve the chat message.
      *
      * @return string
      */
@@ -187,7 +186,7 @@ class SlackBot
     {
         $this->listenTo[] = [
             'message' => $message,
-            'callback' => $callback
+            'callback' => $callback,
         ];
 
         return $this;
@@ -207,7 +206,7 @@ class SlackBot
             $parameterNames = $this->compileParameterNames($message);
             $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
 
-            if ( preg_match('/'.$message.'/i', $this->getMessage(), $matches) ) {
+            if (preg_match('/'.$message.'/i', $this->getMessage(), $matches)) {
                 $heardMessage = true;
                 $parameters = array_combine($parameterNames, array_slice($matches, 1));
                 $this->matches = $parameters;
@@ -232,7 +231,7 @@ class SlackBot
             'channel' => $channel ? $channel : $this->getChannel(),
             'text' => $message,
         ];
-        /**
+        /*
          * If we send a Question with buttons, ignore
          * the text and append the question.
          */
@@ -241,6 +240,7 @@ class SlackBot
             $parameters['attachments'] = json_encode([$message->toArray()]);
         }
         $this->commander->execute('chat.postMessage', $parameters);
+
         return $this;
     }
 
@@ -261,17 +261,17 @@ class SlackBot
     {
         $this->cache->put($this->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => $this->serializer->serialize($next)
+            'next' => $this->serializer->serialize($next),
         ], 30);
     }
 
     /**
      * Look for active conversations and clear the payload
-     * if a conversation is found
+     * if a conversation is found.
      */
     protected function loadActiveConversation()
     {
-        if (!$this->isBot() && $this->cache->has($this->getConversationIdentifier())) {
+        if (! $this->isBot() && $this->cache->has($this->getConversationIdentifier())) {
             $convo = $this->cache->pull($this->getConversationIdentifier());
             $next = $this->serializer->unserialize($convo['next']);
 
@@ -298,7 +298,6 @@ class SlackBot
     protected function clearPayload()
     {
         if ($this->payload instanceof Collection) {
-
         } else {
             $this->payload->replace();
         }
@@ -333,7 +332,7 @@ class SlackBot
             'serializer',
             'token',
             'fallbackMessage',
-            'matches'
+            'matches',
         ];
     }
 }
