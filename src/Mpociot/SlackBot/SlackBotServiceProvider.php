@@ -23,7 +23,12 @@ class SlackBotServiceProvider extends ServiceProvider
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
 
-            $slackbot = new SlackBot(new Serializer(), new Commander('', $interactor), $app->make('request'), new LaravelCache($app->make(Repository::class)));
+            $slackbot = new SlackBot(
+                new Serializer(),
+                new Commander('', $interactor),
+                $app->make('request'),
+                new LaravelCache($app->make(Repository::class))
+            );
             $slackbot->initialize(config('services.slack.bot_token'));
             return $slackbot;
         });

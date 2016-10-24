@@ -1,4 +1,5 @@
 <?php
+namespace Mpociot\SlackBot\Tests;
 
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -9,10 +10,12 @@ use Mockery\MockInterface;
 use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
+use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class ConversationTest extends Orchestra\Testbench\TestCase
+class ConversationTest extends PHPUnit_Framework_TestCase
 {
 
     /** @var  MockInterface */
@@ -68,16 +71,5 @@ class ConversationTest extends Orchestra\Testbench\TestCase
 
         $conversation->setBot($bot);
         $conversation->ask($question, $closure);
-    }
-}
-
-class TestConversation extends \Mpociot\SlackBot\Conversation {
-
-    /**
-     * @return mixed
-     */
-    public function run()
-    {
-        
     }
 }

@@ -1,8 +1,10 @@
 <?php
+namespace Mpociot\SlackBot\Tests;
 
 use Illuminate\Support\Arr;
 use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Question;
+use PHPUnit_Framework_TestCase;
 
 class QuestionTest extends PHPUnit_Framework_TestCase
 {

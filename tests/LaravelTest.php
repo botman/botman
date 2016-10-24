@@ -1,7 +1,19 @@
 <?php
+namespace Mpociot\SlackBot\Tests;
 
-class LaravelTest extends \Orchestra\Testbench\TestCase
+use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use Orchestra\Testbench\TestCase;
+use SlackBot;
+use Cache;
+
+class LaravelTest extends TestCase
 {
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->app['config']->set('cache.default', 'file');
+    }
 
     protected function getPackageProviders($app)
     {
@@ -26,6 +38,19 @@ class LaravelTest extends \Orchestra\Testbench\TestCase
     {
         $this->app['config']->set('services.slack.bot_token', 'this_is_a_bot_token');
         $this->assertSame('this_is_a_bot_token', SlackBot::getToken());
+    }
+
+    /** @test */
+    public function it_can_serialize_closures_using_the_bot()
+    {
+        $conversation = new TestConversation();
+
+        $bot = app('slackbot');
+        SlackBot::storeConversation($conversation, function($answer) use ($bot) {});
+
+        $cached = Cache::get('conversation:-');
+        $this->assertEquals($conversation, $cached['conversation']);
+        $this->assertTrue(is_string($cached['next']));
     }
 
 }

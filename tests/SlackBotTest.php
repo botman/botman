@@ -1,4 +1,5 @@
 <?php
+namespace Mpociot\SlackBot\Tests;
 
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -11,10 +12,12 @@ use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Cache\ArrayCache;
 use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
+use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class SlackBotTest extends Orchestra\Testbench\TestCase
+class SlackBotTest extends PHPUnit_Framework_TestCase
 {
 
     /** @var  MockInterface */
@@ -400,7 +403,7 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
             ]
         ]);
 
-        $conversation = new BotTestConversation();
+        $conversation = new TestConversation();
 
         $slackbot->storeConversation($conversation, function($answer) use (&$called) {
             $GLOBALS['answer'] = $answer;
@@ -430,28 +433,28 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_detects_users_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
         $this->assertSame('U045VRZFT', $slackbot->getUser());
     }
 
     /** @test */
     public function it_detects_bots_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
         $this->assertFalse($slackbot->isBot());
     }
 
     /** @test */
     public function it_detects_channels_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
         $this->assertSame('C065W1189', $slackbot->getChannel());
     }
 
     /** @test */
     public function it_responds_back_to_the_channel_message_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
         $this->commander
             ->shouldReceive('execute')
             ->once()
@@ -463,8 +466,4 @@ class SlackBotTest extends Orchestra\Testbench\TestCase
 
         $slackbot->respond('This is my response');
     }
-}
-
-class BotTestConversation extends \Mpociot\SlackBot\Conversation {
-    public function run(){}
 }
