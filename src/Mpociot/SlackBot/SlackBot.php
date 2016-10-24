@@ -4,7 +4,8 @@ namespace Mpociot\SlackBot;
 
 use Closure;
 use Frlnc\Slack\Core\Commander;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Collection;
 use Mpociot\SlackBot\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
@@ -74,7 +75,7 @@ class SlackBot
          * If the request has a POST parameter called 'payload'
          * we're dealing with an interactive button response.
          */
-        if ($request->has('payload')) {
+        if (!is_null($request->get('payload'))) {
             $payloadData = json_decode($request->get('payload'), true);
             $this->payload = collect($payloadData);
             $this->event = collect([
@@ -82,7 +83,7 @@ class SlackBot
                 'user' => $payloadData['user']['id'],
             ]);
         } else {
-            $this->payload = $request->json();
+            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->event = collect($this->payload->get('event'));
         }
 

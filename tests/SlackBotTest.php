@@ -40,8 +40,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $interactor = new CurlInteractor;
         $interactor->setResponseFactory(new SlackResponseFactory);
-        $request = m::mock(\Illuminate\Http\Request::class.'[json]');
-        $request->shouldReceive('json')->once()->andReturn(new ParameterBag($responseData));
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->once()->andReturn(json_encode($responseData));
         $this->commander = m::mock(Commander::class);
 
         return new SlackBot(new Serializer(), $this->commander, $request, $this->cache);
