@@ -1,11 +1,11 @@
 <?php
+
 namespace Mpociot\SlackBot;
 
 use JsonSerializable;
 
 class Button implements JsonSerializable
 {
-
     /** @var string */
     protected $text;
 
@@ -34,7 +34,7 @@ class Button implements JsonSerializable
     }
 
     /**
-     * Set the button value
+     * Set the button value.
      *
      * @param string $value
      * @return $this
@@ -47,7 +47,7 @@ class Button implements JsonSerializable
     }
 
     /**
-     * Set the button name (defaults to button text)
+     * Set the button name (defaults to button text).
      *
      * @param string $name
      * @return $this
@@ -65,17 +65,17 @@ class Button implements JsonSerializable
     public function toArray()
     {
         return [
-            "name" => isset($this->name) ? $this->name : $this->text,
-            "text" => $this->text,
-            "type" => "button",
-            "value" => $this->value
+            'name' => isset($this->name) ? $this->name : $this->text,
+            'text' => $this->text,
+            'type' => 'button',
+            'value' => $this->value,
         ];
     }
 
     /**
      * @return array
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->toArray();
     }

@@ -1,24 +1,16 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
-use Frlnc\Slack\Core\Commander;
-use Frlnc\Slack\Http\CurlInteractor;
-use Frlnc\Slack\Http\SlackResponseFactory;
 use Mockery as m;
-
 use Mockery\MockInterface;
-use Mpociot\SlackBot\Button;
-use Mpociot\SlackBot\Question;
 use Mpociot\SlackBot\SlackBot;
 use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
-use SuperClosure\Serializer;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class ConversationTest extends PHPUnit_Framework_TestCase
 {
-
-    /** @var  MockInterface */
+    /** @var MockInterface */
     protected $commander;
 
     public function tearDown()
@@ -58,7 +50,8 @@ class ConversationTest extends PHPUnit_Framework_TestCase
     {
         $conversation = new TestConversation();
         $question = 'Will this test work?';
-        $closure = function($answer){};
+        $closure = function ($answer) {
+        };
 
         $bot = m::mock(SlackBot::class);
         $bot->shouldReceive('getToken');

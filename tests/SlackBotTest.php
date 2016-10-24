@@ -1,11 +1,11 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Mockery as m;
-
 use Mockery\MockInterface;
 use Mpociot\SlackBot\Answer;
 use Mpociot\SlackBot\Button;
@@ -19,11 +19,10 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SlackBotTest extends PHPUnit_Framework_TestCase
 {
-
-    /** @var  MockInterface */
+    /** @var MockInterface */
     protected $commander;
 
-    /** @var  ArrayCache */
+    /** @var ArrayCache */
     protected $cache;
 
     public function tearDown()
@@ -44,6 +43,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[json]');
         $request->shouldReceive('json')->once()->andReturn(new ParameterBag($responseData));
         $this->commander = m::mock(Commander::class);
+
         return new SlackBot(new Serializer(), $this->commander, $request, $this->cache);
     }
 
@@ -54,9 +54,10 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         /** @var \Illuminate\Http\Request $request */
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => $payload
+            'payload' => $payload,
         ]);
         $this->commander = m::mock(Commander::class);
+
         return new SlackBot(new Serializer(), $this->commander, $request, $this->cache);
     }
 
@@ -67,8 +68,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'bar'
-            ]
+                'text' => 'bar',
+            ],
         ]);
 
         $slackbot->hears('foo', function ($bot) use (&$called) {
@@ -86,8 +87,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'bar'
-            ]
+                'text' => 'bar',
+            ],
         ]);
 
         $slackbot->fallback(function ($bot) use (&$fallbackCalled) {
@@ -110,8 +111,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'foo'
-            ]
+                'text' => 'foo',
+            ],
         ]);
 
         $slackbot->hears('foo', function ($bot) use (&$called) {
@@ -128,8 +129,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'foo'
-            ]
+                'text' => 'foo',
+            ],
         ]);
 
         $slackbot->hears('foo', function ($bot) use (&$called) {
@@ -147,8 +148,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
 
         $slackbot->hears('hi {name}', function ($bot, $name) use (&$called) {
@@ -166,8 +167,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'I am Gandalf the grey'
-            ]
+                'text' => 'I am Gandalf the grey',
+            ],
         ]);
 
         $slackbot->hears('I am {name} the {attribute}', function ($bot, $name, $attribute) use (&$called) {
@@ -186,8 +187,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'I am Gandalf'
-            ]
+                'text' => 'I am Gandalf',
+            ],
         ]);
 
         $slackbot->hears('I am {name}', function ($bot, $name) use (&$called) {
@@ -204,8 +205,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
         $this->assertSame('Hi Julia', $slackbot->getMessage());
     }
@@ -216,8 +217,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $slackbot = $this->getBot([
             'event' => [
                 'bot_id' => 'foo',
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
         $this->assertSame('', $slackbot->getMessage());
     }
@@ -227,16 +228,16 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $slackbot = $this->getBot([
             'event' => [
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
         $this->assertFalse($slackbot->isBot());
 
         $slackbot = $this->getBot([
             'event' => [
                 'bot_id' => 'foo',
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
         $this->assertTrue($slackbot->isBot());
     }
@@ -246,8 +247,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $slackbot = $this->getBot([
             'event' => [
-                'user' => 'U0X12345'
-            ]
+                'user' => 'U0X12345',
+            ],
         ]);
         $this->assertSame('U0X12345', $slackbot->getUser());
     }
@@ -257,8 +258,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $slackbot = $this->getBot([
             'event' => [
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
         $this->assertSame('general', $slackbot->getChannel());
     }
@@ -268,8 +269,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $slackbot = $this->getBot([
             'event' => [
-                'user' => 'U0X12345'
-            ]
+                'user' => 'U0X12345',
+            ],
         ]);
         $this->commander->shouldReceive('setToken')->once()->with('TOKEN');
         $slackbot->initialize('TOKEN');
@@ -282,8 +283,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $slackbot = $this->getBot([
             'token' => 'foo',
             'event' => [
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
         $this->commander
             ->shouldReceive('execute')
@@ -291,7 +292,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ->with('chat.postMessage', [
                 'token' => 'foo',
                 'channel' => 'general',
-                'text' => 'This is my response'
+                'text' => 'This is my response',
             ]);
 
         $slackbot->respond('This is my response');
@@ -303,8 +304,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $slackbot = $this->getBot([
             'token' => 'foo',
             'event' => [
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
         $this->commander
             ->shouldReceive('execute')
@@ -312,7 +313,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ->with('chat.postMessage', [
                 'token' => 'foo',
                 'channel' => 'customchannel',
-                'text' => 'This is my response'
+                'text' => 'This is my response',
             ]);
 
         $slackbot->respond('This is my response', 'customchannel');
@@ -324,8 +325,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $slackbot = $this->getBot([
             'token' => 'foo',
             'event' => [
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
         $question = Question::create('How are you doing?')
                 ->addButton(Button::create('Great'))
@@ -338,7 +339,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'token' => 'foo',
                 'channel' => 'customchannel',
                 'text' => '',
-                'attachments' => json_encode([$question])
+                'attachments' => json_encode([$question]),
             ]);
 
         $slackbot->respond($question, 'customchannel');
@@ -351,12 +352,13 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
 
         $conversation = new TestConversation();
-        $slackbot->storeConversation($conversation, function($answer){});
+        $slackbot->storeConversation($conversation, function ($answer) {
+        });
 
         $this->assertTrue($this->cache->has('conversation:UX12345-general'));
 
@@ -374,8 +376,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
-                'channel' => 'general'
-            ]
+                'channel' => 'general',
+            ],
         ]);
 
         $conversation = m::mock(TestConversation::class);
@@ -399,18 +401,18 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'UX12345',
                 'channel' => 'general',
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
 
         $conversation = new TestConversation();
 
-        $slackbot->storeConversation($conversation, function($answer) use (&$called) {
+        $slackbot->storeConversation($conversation, function ($answer) use (&$called) {
             $GLOBALS['answer'] = $answer;
             $GLOBALS['called'] = true;
         });
 
-        /**
+        /*
          * Now that the first message is saved, fake a reply
          */
         $slackbot = $this->getBot([
@@ -418,8 +420,8 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'UX12345',
                 'channel' => 'general',
-                'text' => 'Hello again'
-            ]
+                'text' => 'Hello again',
+            ],
         ]);
         $this->commander->shouldReceive('setToken');
         $slackbot->initialize('TOKEN');
@@ -433,35 +435,35 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_detects_users_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__.'/Fixtures/payload.json'));
         $this->assertSame('U045VRZFT', $slackbot->getUser());
     }
 
     /** @test */
     public function it_detects_bots_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__.'/Fixtures/payload.json'));
         $this->assertFalse($slackbot->isBot());
     }
 
     /** @test */
     public function it_detects_channels_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__.'/Fixtures/payload.json'));
         $this->assertSame('C065W1189', $slackbot->getChannel());
     }
 
     /** @test */
     public function it_responds_back_to_the_channel_message_from_interactive_messages()
     {
-        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__ . '/Fixtures/payload.json'));
+        $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__.'/Fixtures/payload.json'));
         $this->commander
             ->shouldReceive('execute')
             ->once()
             ->with('chat.postMessage', [
                 'token' => 'xAB3yVzGS4BQ3O9FACTa8Ho4',
                 'channel' => 'C065W1189',
-                'text' => 'This is my response'
+                'text' => 'This is my response',
             ]);
 
         $slackbot->respond('This is my response');

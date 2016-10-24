@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Cache;
 
 use Illuminate\Cache\Repository;
@@ -6,7 +7,6 @@ use Mpociot\SlackBot\Interfaces\CacheInterface;
 
 class LaravelCache implements CacheInterface
 {
-
     /**
      * @var Repository
      */

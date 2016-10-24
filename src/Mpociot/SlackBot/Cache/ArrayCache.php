@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Cache;
 
 use Mpociot\SlackBot\Interfaces\CacheInterface;
@@ -30,10 +31,10 @@ class ArrayCache implements CacheInterface
      */
     public function get($key, $default = null)
     {
-
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
+
         return $default;
     }
 
@@ -49,8 +50,10 @@ class ArrayCache implements CacheInterface
         if (isset($this->cache[$key])) {
             $cached = $this->cache[$key];
             unset($this->cache[$key]);
+
             return $cached;
         }
+
         return $default;
     }
 

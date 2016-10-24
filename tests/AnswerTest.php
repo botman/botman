@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\SlackBot\Tests;
 
 use Mpociot\SlackBot\Answer;
@@ -58,7 +59,6 @@ class AnswerTest extends PHPUnit_Framework_TestCase
     public function it_returns_text_as_string()
     {
         $answer = new Answer('foo');
-        $this->assertSame('foo', (string)$answer);
+        $this->assertSame('foo', (string) $answer);
     }
-
 }
