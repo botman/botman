@@ -193,7 +193,7 @@ class SlackBot
         $this->listenTo[] = [
             'message' => $message,
             'callback' => $callback,
-            'in' => $in
+            'in' => $in,
         ];
 
         return $this;
@@ -318,15 +318,16 @@ class SlackBot
      */
     protected function isChannelValid($givenChannel, $allowedChannel)
     {
-        /**
+        /*
          * If the Slack channel starts with a "D" it's a direct message,
          * if it starts with a "C" it is a public channel.
          */
         if ($allowedChannel === self::DIRECT_MESSAGE) {
             return strtolower($givenChannel[0]) === 'd';
-        } elseif( $allowedChannel === self::PUBLIC_CHANNEL) {
+        } elseif ($allowedChannel === self::PUBLIC_CHANNEL) {
             return strtolower($givenChannel[0]) === 'c';
         }
+
         return true;
     }
 
