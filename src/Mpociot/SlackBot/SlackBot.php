@@ -228,16 +228,16 @@ class SlackBot
 
     /**
      * @param string|Question $message
-     * @param null $channel
+     * @param array $additionalParameters
      * @return $this
      */
-    public function respond($message, $channel = null)
+    public function reply($message, $additionalParameters = [])
     {
-        $parameters = [
+        $parameters = array_merge([
             'token' => $this->payload->get('token'),
-            'channel' => $channel ? $channel : $this->getChannel(),
+            'channel' => $this->getChannel(),
             'text' => $message,
-        ];
+        ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
          * the text and append the question.

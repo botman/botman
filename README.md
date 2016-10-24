@@ -29,12 +29,12 @@ Also add the alias / facade:
 ```php
 // Listen to simple commands
 SlackBot::hears('Hello', function (SlackBot $bot) {
-    $bot->respond('Hi there!');
+    $bot->reply('Hi there!');
 });
 
 // Include regular expression matches
 SlackBot::hears('Call me {name} the {attribute}', function (SlackBot $bot, $name, $attribute) {
-    $bot->respond('Hi '.$name.'! You truly are '.$attribute);
+    $bot->reply('Hi '.$name.'! You truly are '.$attribute);
 });
 
 // Use conversations
@@ -49,7 +49,7 @@ SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
 
 // Default reply if nothing else matches
 SlackBot::fallback(function(SlackBot $bot) {
-    $bot->respond("I don't understand a word you just said.");
+    $bot->reply("I don't understand a word you just said.");
 });
 
 // Start listening

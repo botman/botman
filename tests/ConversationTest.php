@@ -36,7 +36,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
     {
         $bot = m::mock(SlackBot::class);
         $bot->shouldReceive('getToken');
-        $bot->shouldReceive('respond')
+        $bot->shouldReceive('reply')
             ->once()
             ->with('This is my reply');
 
@@ -55,7 +55,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
 
         $bot = m::mock(SlackBot::class);
         $bot->shouldReceive('getToken');
-        $bot->shouldReceive('respond')
+        $bot->shouldReceive('reply')
             ->once()
             ->with($question);
         $bot->shouldReceive('storeConversation')

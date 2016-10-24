@@ -35,7 +35,7 @@ abstract class Conversation
      */
     public function ask($question, Closure $next)
     {
-        $this->bot->respond($question);
+        $this->bot->reply($question);
         $this->bot->storeConversation($this, $next);
 
         return $this;
@@ -47,7 +47,7 @@ abstract class Conversation
      */
     public function reply($message)
     {
-        $this->bot->respond($message);
+        $this->bot->reply($message);
 
         return $this;
     }

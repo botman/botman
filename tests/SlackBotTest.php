@@ -363,11 +363,11 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'text' => 'This is my response',
             ]);
 
-        $slackbot->respond('This is my response');
+        $slackbot->reply('This is my response');
     }
 
     /** @test */
-    public function it_responds_to_custom_channels()
+    public function it_responds_with_additional_parameters()
     {
         $slackbot = $this->getBot([
             'token' => 'foo',
@@ -380,11 +380,16 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('chat.postMessage', [
                 'token' => 'foo',
-                'channel' => 'customchannel',
+                'channel' => 'general',
                 'text' => 'This is my response',
+                'username' => 'ReplyBot',
+                'icon_emoji' => ':dash:',
             ]);
 
-        $slackbot->respond('This is my response', 'customchannel');
+        $slackbot->reply('This is my response', [
+            'username' => 'ReplyBot',
+            'icon_emoji' => ':dash:',
+        ]);
     }
 
     /** @test */
@@ -405,12 +410,12 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('chat.postMessage', [
                 'token' => 'foo',
-                'channel' => 'customchannel',
+                'channel' => 'general',
                 'text' => '',
                 'attachments' => json_encode([$question]),
             ]);
 
-        $slackbot->respond($question, 'customchannel');
+        $slackbot->reply($question);
     }
 
     /** @test */
@@ -534,6 +539,6 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'text' => 'This is my response',
             ]);
 
-        $slackbot->respond('This is my response');
+        $slackbot->reply('This is my response');
     }
 }
