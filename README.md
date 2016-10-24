@@ -42,6 +42,11 @@ SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
     $bot->startConversation(new OrderPizzaConversation());
 });
 
+// Only listen in direct messages
+SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
+    $bot->startConversation(new OrderPizzaConversation());
+}, SlackBot::DIRECT_MESSAGE);
+
 // Default reply if nothing else matches
 SlackBot::fallback(function(SlackBot $bot) {
     $bot->respond("I don't understand a word you just said.");
