@@ -62,6 +62,10 @@ class SlackBot
      */
     private $cache;
 
+    const DIRECT_MESSAGE = 'direct_message';
+
+    const PUBLIC_CHANNEL = 'public_channel';
+
     /**
      * Slack constructor.
      * @param Serializer $serializer
@@ -179,15 +183,17 @@ class SlackBot
     }
 
     /**
-     * @param $message
-     * @param Closure $callback
+     * @param $message the message to listen for
+     * @param Closure $callback the callback to execute
+     * @param string $in the channel type to listen to (either direct message or public channel)
      * @return $this
      */
-    public function hears($message, Closure $callback)
+    public function hears($message, Closure $callback, $in = null)
     {
         $this->listenTo[] = [
             'message' => $message,
             'callback' => $callback,
+            'in' => $in
         ];
 
         return $this;
@@ -207,7 +213,7 @@ class SlackBot
             $parameterNames = $this->compileParameterNames($message);
             $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
 
-            if (preg_match('/'.$message.'/i', $this->getMessage(), $matches)) {
+            if (preg_match('/'.$message.'/i', $this->getMessage(), $matches) && $this->isChannelValid($this->getChannel(), $messageData['in'])) {
                 $heardMessage = true;
                 $parameters = array_combine($parameterNames, array_slice($matches, 1));
                 $this->matches = $parameters;
@@ -303,6 +309,25 @@ class SlackBot
             $this->payload->replace();
         }
         $this->event = collect();
+    }
+
+    /**
+     * @param $givenChannel
+     * @param $allowedChannel
+     * @return bool
+     */
+    protected function isChannelValid($givenChannel, $allowedChannel)
+    {
+        /**
+         * If the Slack channel starts with a "D" it's a direct message,
+         * if it starts with a "C" it is a public channel.
+         */
+        if ($allowedChannel === self::DIRECT_MESSAGE) {
+            return strtolower($givenChannel[0]) === 'd';
+        } elseif( $allowedChannel === self::PUBLIC_CHANNEL) {
+            return strtolower($givenChannel[0]) === 'c';
+        }
+        return true;
     }
 
     /**

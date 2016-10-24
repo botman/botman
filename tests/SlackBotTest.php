@@ -122,6 +122,75 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_hears_in_public_channel_only()
+    {
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'channel' => 'D12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        }, SlackBot::PUBLIC_CHANNEL);
+        $slackbot->listen();
+        $this->assertFalse($called);
+
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        }, SlackBot::PUBLIC_CHANNEL);
+        $slackbot->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_hears_in_private_channel_only()
+    {
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'foo',
+                'channel' => 'C12345',
+            ],
+        ]);
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        }, SlackBot::DIRECT_MESSAGE);
+        $slackbot->listen();
+        $this->assertFalse($called);
+
+
+        $called = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'foo',
+                'channel' => 'D12345',
+            ],
+        ]);
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        }, SlackBot::DIRECT_MESSAGE);
+        $slackbot->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_passes_itself_to_the_closure()
     {
         $called = false;
