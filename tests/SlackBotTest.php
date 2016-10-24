@@ -15,7 +15,6 @@ use Mpociot\SlackBot\SlackBot;
 use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SlackBotTest extends PHPUnit_Framework_TestCase
 {
