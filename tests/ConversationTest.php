@@ -42,7 +42,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
 
         $conversation = new TestConversation();
         $conversation->setBot($bot);
-        $conversation->reply('This is my reply');
+        $conversation->say('This is my reply');
     }
 
     /** @test */

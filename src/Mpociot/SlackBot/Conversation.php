@@ -45,7 +45,7 @@ abstract class Conversation
      * @param string|Question $message
      * @return $this
      */
-    public function reply($message)
+    public function say($message)
     {
         $this->bot->reply($message);
 
