@@ -89,15 +89,15 @@ class ConversationTest extends PHPUnit_Framework_TestCase
             ->with($conversation, m::type('array'));
 
         $conversation->setBot($bot);
-        $conversation->ask($question,[
+        $conversation->ask($question, [
             [
                 'pattern' => 'Sure',
-                'callback' => $closure
+                'callback' => $closure,
             ],
             [
                 'pattern' => 'No way',
-                'callback' => $closure
-            ]
+                'callback' => $closure,
+            ],
         ]);
     }
 }

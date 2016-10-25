@@ -231,6 +231,7 @@ class SlackBot
     protected function isMessageMatching($pattern, &$matches)
     {
         $message = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
+
         return preg_match('/'.$message.'/i', $this->getMessage(), $matches);
     }
 
@@ -292,6 +293,7 @@ class SlackBot
         foreach ($callbacks as &$callback) {
             $callback['callback'] = $this->serializer->serialize($callback['callback']);
         }
+
         return $callbacks;
     }
 
