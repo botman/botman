@@ -5,7 +5,6 @@ namespace Mpociot\SlackBot;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
-use Illuminate\Cache\Repository;
 use Illuminate\Support\ServiceProvider;
 use Mpociot\SlackBot\Cache\LaravelCache;
 use SuperClosure\Serializer;
