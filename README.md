@@ -8,13 +8,9 @@ SlackBot is a framework agnostic PHP library that is designed to simplify the ta
 ## Getting Started
 
 1) Open the Laravel/Symfony/PHP project your new Bot will live in
-
 2) [Install SlackBot with composer](#installation-using-composer)
-
 3) Obtain a Bot Token on Slack
-
 4) Make your application respond to Slack Event requests
-
 5) Implement your bot logic
  
 ## Installation using Composer
@@ -172,6 +168,141 @@ $slackbot->hears('keyword', function (SlackBot $bot, $message) {
     ]);
 
 })
+```
+
+### Multi-message Replies to Incoming Messages
+
+For more complex commands, multiple messages may be necessary to send a response,
+particularly if the bot needs to collect additional information from the user.
+
+SlackBot provides a `Conversation` object that is used to string together several
+messages, including questions for the user, into a cohesive unit. SlackBot conversations
+provide useful methods that enable developers to craft complex conversational
+user interfaces that may span a several minutes of dialog with a user, without having to manage
+the complexity of connecting multiple incoming and outgoing messages across
+multiple API calls into a single function.
+
+### Start a Conversation
+
+#### $bot->startConversation()
+| Argument | Description
+|---  |---
+| conversation  | A `Conversation` object
+
+`startConversation()` is a function that creates conversation in response to an incoming message. You can control where the bot should start the conversation by calling `startConversation` in the `hears()` method of your bot.
+
+Simple conversation example:
+
+```php
+$slackbot->hears('start conversation', function (SlackBot $bot, $message) {
+
+  $bot->startConversation(new PizzaConversation);
+
+});
+```
+
+### Creating Conversations
+
+When starting a new conversation using the `startConversation()` method, you need to pass the method the conversation that you want to start gathering information with.
+Each conversation object needs to extend from the SlackBot `Conversation` object and must implement a simple `run()` method.
+
+This is the very first method that gets executed, when the conversation starts.
+
+Example conversation object:
+
+```php
+class PizzaConversation extends Conversation
+{
+	protected $size;
+
+	public function askSize()
+	{
+		$this->ask('What pizza size do you want?', function(Answer $answer) {
+			
+			// Save size for next question
+			$this->size = $answer->getText();
+
+			$this->say('Got it. Your pizza will be '.$answer->getText());
+            
+        });
+	}
+
+	public function run()
+	{
+		// This will be called immediately
+		$this->askSize();
+	}
+
+}
+``` 
+
+### Control Conversation Flow
+
+#### $conversation->say()
+| Argument | Description
+|---  |---
+| message   | String or `Question` object
+
+Call $conversation->say() several times in a row to queue messages inside the conversation. Only one message will be sent at a time, in the order they are queued.
+
+#### $conversation->ask()
+| Argument | Description
+|---  |---
+| message   | String or `Question` object
+| callback _or_ array of callbacks   | callback function in the form function($answer), or array of arrays in the form ``[ 'pattern' => regular_expression, 'callback' => function($answer) { ... } ]``
+
+When passed a callback function, $conversation->ask will execute the callback function for any response.
+This allows the bot to respond to open ended questions, collect the responses, and handle them in whatever
+manner it needs to.
+
+When passed an array, the bot will look first for a matching pattern, and execute only the callback whose
+pattern is matched. This allows the bot to present multiple choice options, or to proceed
+only when a valid response has been received. 
+The patterns can have the same placeholders as the `$bot->reply()` method has. All matching parameters will be passed to the callback function.
+
+Callback functions passed to `ask()` receive (at least) two parameters - the first is an `Answer` object containing
+the user's response to the question. 
+If the conversation continues because of a matching pattern, all matching pattern parameters will be passed to the callback function too.
+The last parameter is always a reference to the conversation itself.
+
+##### Using $conversation->ask with a callback:
+
+```php
+	// ...inside the conversation object...
+	public function askMood()
+	{
+		$this->ask('How are you?', function (Answer $response) {
+			
+			$this->say('Cool - you said ' . $response->getText());
+			
+		});
+	}
+
+```
+
+##### Using $conversation->ask with an array of callbacks:
+
+
+```php
+	// ...inside the conversation object...
+	public function askNextStep()
+	{
+		$this->ask('Shall we proceed? Say YES or NO', [
+			[
+				'pattern' => 'yes|yep',
+				'callback' => function () {
+					$this->say('Okay - we\'ll keep going');
+				}
+			],
+			[
+				'pattern' => 'nah|no|nope',
+				'callback' => function () {
+					$this->say('PANIC!! Stop the engines NOW!');
+				}
+			]
+		]);
+	}
+
 ```
 
 ## Example usage
