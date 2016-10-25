@@ -2,24 +2,16 @@
 
 namespace Mpociot\SlackBot\Cache;
 
-use Illuminate\Cache\Repository;
+use Cache;
 use Mpociot\SlackBot\Interfaces\CacheInterface;
 
+/**
+ * The Laravel Cache implenentation.
+ * Since the Laravel Cache uses closures, it cannot be serialized,
+ * that's why I'm using the facade in here.
+ */
 class LaravelCache implements CacheInterface
 {
-    /**
-     * @var Repository
-     */
-    private $cache;
-
-    /**
-     * LaravelCache constructor.
-     * @param Repository $cache
-     */
-    public function __construct(Repository $cache)
-    {
-        $this->cache = $cache;
-    }
 
     /**
      * Determine if an item exists in the cache.
@@ -29,7 +21,7 @@ class LaravelCache implements CacheInterface
      */
     public function has($key)
     {
-        return $this->cache->has($key);
+        return Cache::has($key);
     }
 
     /**
@@ -41,7 +33,7 @@ class LaravelCache implements CacheInterface
      */
     public function get($key, $default = null)
     {
-        return $this->cache->get($key, $default = null);
+        return Cache::get($key, $default = null);
     }
 
     /**
@@ -53,7 +45,7 @@ class LaravelCache implements CacheInterface
      */
     public function pull($key, $default = null)
     {
-        return $this->cache->pull($key, $default);
+        return Cache::pull($key, $default);
     }
 
     /**
@@ -66,6 +58,6 @@ class LaravelCache implements CacheInterface
      */
     public function put($key, $value, $minutes)
     {
-        $this->cache->put($key, $value, $minutes);
+        Cache::put($key, $value, $minutes);
     }
 }
