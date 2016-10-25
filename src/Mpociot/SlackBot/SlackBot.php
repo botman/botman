@@ -261,6 +261,19 @@ class SlackBot
     }
 
     /**
+     * @param string|Question $message
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function replyPrivate($message, $additionalParameters = [])
+    {
+        $privateChannel = [
+            'channel' => $this->getUser()
+        ];
+        return $this->reply($message, array_merge($additionalParameters, $privateChannel));
+    }
+
+    /**
      * @param Conversation $instance
      */
     public function startConversation(Conversation $instance)

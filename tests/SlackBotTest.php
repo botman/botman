@@ -393,6 +393,28 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_responds_back_with_a_private_message()
+    {
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+            ],
+        ]);
+        $this->commander
+            ->shouldReceive('execute')
+            ->once()
+            ->with('chat.postMessage', [
+                'token' => 'foo',
+                'channel' => 'U0X12345',
+                'text' => 'This is my response',
+            ]);
+
+        $slackbot->replyPrivate('This is my response');
+    }
+
+    /** @test */
     public function it_can_send_questions()
     {
         $slackbot = $this->getBot([
