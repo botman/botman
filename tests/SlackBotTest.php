@@ -104,6 +104,32 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_does_not_use_fallback_for_bot_replies()
+    {
+        $called = false;
+        $fallbackCalled = false;
+
+        $slackbot = $this->getBot([
+            'event' => [
+                'text' => 'bar',
+                'bot_id' => 'i_am_a_bot'
+            ],
+        ]);
+
+        $slackbot->fallback(function ($bot) use (&$fallbackCalled) {
+            $fallbackCalled = true;
+        });
+
+        $slackbot->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $slackbot->listen();
+        $this->assertFalse($called);
+        $this->assertFalse($fallbackCalled);
+    }
+
+    /** @test */
     public function it_hears_matching_commands()
     {
         $called = false;

@@ -218,7 +218,7 @@ class SlackBot
                 call_user_func_array($callback, $parameters);
             }
         }
-        if ($heardMessage === false && is_callable($this->fallbackMessage)) {
+        if ($heardMessage === false && !$this->isBot() && is_callable($this->fallbackMessage)) {
             call_user_func($this->fallbackMessage, $this);
         }
     }
