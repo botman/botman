@@ -8,9 +8,13 @@ SlackBot is a framework agnostic PHP library that is designed to simplify the ta
 ## Getting Started
 
 1) Open the Laravel/Symfony/PHP project your new Bot will live in
+
 2) [Install SlackBot with composer](#installation-using-composer)
+
 3) Obtain a Bot Token on Slack
+
 4) Make your application respond to Slack Event requests
+
 5) Implement your bot logic
  
 ## Installation using Composer
