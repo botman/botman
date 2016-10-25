@@ -7,6 +7,7 @@ use Mockery\MockInterface;
 use Mpociot\SlackBot\SlackBot;
 use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
+use SuperClosure\Serializer;
 
 class ConversationTest extends PHPUnit_Framework_TestCase
 {
@@ -64,5 +65,39 @@ class ConversationTest extends PHPUnit_Framework_TestCase
 
         $conversation->setBot($bot);
         $conversation->ask($question, $closure);
+    }
+
+    /** @test */
+    public function it_can_ask_question_with_multiple_callbacks()
+    {
+        $conversation = new TestConversation();
+        $question = 'Will this test work?';
+        $closure = function ($answer) {
+        };
+
+        $serializer = m::mock(Serializer::class);
+        $serializer->shouldReceive('serialize')->andReturn('serialized_closure');
+
+        $bot = m::mock(SlackBot::class);
+        $bot->shouldReceive('getSerializer')->andReturn($serializer);
+        $bot->shouldReceive('getToken');
+        $bot->shouldReceive('reply')
+            ->once()
+            ->with($question);
+        $bot->shouldReceive('storeConversation')
+            ->once()
+            ->with($conversation, m::type('array'));
+
+        $conversation->setBot($bot);
+        $conversation->ask($question,[
+            [
+                'pattern' => 'Sure',
+                'callback' => $closure
+            ],
+            [
+                'pattern' => 'No way',
+                'callback' => $closure
+            ]
+        ]);
     }
 }

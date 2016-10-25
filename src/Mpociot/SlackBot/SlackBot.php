@@ -183,15 +183,15 @@ class SlackBot
     }
 
     /**
-     * @param $message the message to listen for
+     * @param $pattern the $pattern to listen for
      * @param Closure $callback the callback to execute
      * @param string $in the channel type to listen to (either direct message or public channel)
      * @return $this
      */
-    public function hears($message, Closure $callback, $in = null)
+    public function hears($pattern, Closure $callback, $in = null)
     {
         $this->listenTo[] = [
-            'message' => $message,
+            'pattern' => $pattern,
             'callback' => $callback,
             'in' => $in,
         ];
@@ -207,15 +207,12 @@ class SlackBot
     {
         $heardMessage = false;
         foreach ($this->listenTo as $messageData) {
-            $message = $messageData['message'];
+            $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
 
-            $parameterNames = $this->compileParameterNames($message);
-            $message = preg_replace('/\{(\w+?)\}/', '(.*)', $message);
-
-            if (preg_match('/'.$message.'/i', $this->getMessage(), $matches) && $this->isChannelValid($this->getChannel(), $messageData['in'])) {
+            if ($this->isMessageMatching($pattern, $matches) && $this->isChannelValid($this->getChannel(), $messageData['in'])) {
                 $heardMessage = true;
-                $parameters = array_combine($parameterNames, array_slice($matches, 1));
+                $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
                 $this->matches = $parameters;
                 array_unshift($parameters, $this);
                 call_user_func_array($callback, $parameters);
@@ -224,6 +221,17 @@ class SlackBot
         if ($heardMessage === false && is_callable($this->fallbackMessage)) {
             call_user_func($this->fallbackMessage, $this);
         }
+    }
+
+    /**
+     * @param string $pattern
+     * @param array $matches
+     * @return int
+     */
+    protected function isMessageMatching($pattern, &$matches)
+    {
+        $message = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
+        return preg_match('/'.$message.'/i', $this->getMessage(), $matches);
     }
 
     /**
@@ -262,14 +270,29 @@ class SlackBot
 
     /**
      * @param Conversation $instance
-     * @param Closure $next
+     * @param array|Closure $next
      */
-    public function storeConversation(Conversation $instance, Closure $next)
+    public function storeConversation(Conversation $instance, $next)
     {
         $this->cache->put($this->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => $this->serializer->serialize($next),
+            'next' => is_array($next) ? $this->prepareCallbacks($next) : $this->serializer->serialize($next),
         ], 30);
+    }
+
+    /**
+     * Prepare an array of pattern / callbacks before
+     * caching them.
+     *
+     * @param array $callbacks
+     * @return array
+     */
+    protected function prepareCallbacks(array $callbacks)
+    {
+        foreach ($callbacks as &$callback) {
+            $callback['callback'] = $this->serializer->serialize($callback['callback']);
+        }
+        return $callbacks;
     }
 
     /**
@@ -280,10 +303,26 @@ class SlackBot
     {
         if (! $this->isBot() && $this->cache->has($this->getConversationIdentifier())) {
             $convo = $this->cache->pull($this->getConversationIdentifier());
-            $next = $this->serializer->unserialize($convo['next']);
+            $next = false;
+            $parameters = [];
+
+            if (is_array($convo['next'])) {
+                foreach ($convo['next'] as $callback) {
+                    if ($this->isMessageMatching($callback['pattern'], $matches)) {
+                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
+                        $this->matches = $parameters;
+                        $next = $this->serializer->unserialize($callback['callback']);
+                        break;
+                    }
+                }
+            } else {
+                $next = $this->serializer->unserialize($convo['next']);
+            }
 
             if (is_callable($next)) {
-                $next($this->getConversationAnswer(), $convo['conversation']);
+                array_unshift($parameters, $this->getConversationAnswer());
+                array_push($parameters, $convo['conversation']);
+                call_user_func_array($next, $parameters);
             }
 
             // Unset payload for possible other listeners

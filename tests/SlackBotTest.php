@@ -506,6 +506,105 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_picks_up_conversations_with_multiple_callbacks()
+    {
+        $GLOBALS['answer'] = '';
+        $GLOBALS['called_foo'] = false;
+        $GLOBALS['called_bar'] = false;
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $conversation = new TestConversation();
+
+        $slackbot->storeConversation($conversation, [
+            [
+                'pattern' => 'token_one',
+                'callback' => function ($answer) use (&$called) {
+                    $GLOBALS['answer'] = $answer;
+                    $GLOBALS['called_foo'] = true;
+                }
+            ],
+            [
+                'pattern' => 'token_two',
+                'callback' => function ($answer) use (&$called) {
+                    $GLOBALS['answer'] = $answer;
+                    $GLOBALS['called_bar'] = true;
+                }
+            ]
+        ]);
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'token_one',
+            ],
+        ]);
+        $this->commander->shouldReceive('setToken');
+        $slackbot->initialize('TOKEN');
+
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('token_one', $GLOBALS['answer']->getText());
+        $this->assertTrue($GLOBALS['called_foo']);
+        $this->assertFalse($GLOBALS['called_bar']);
+    }
+
+    /** @test */
+    public function it_picks_up_conversations_with_patterns()
+    {
+        $GLOBALS['answer'] = '';
+        $GLOBALS['called'] = false;
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $conversation = new TestConversation();
+
+        $slackbot->storeConversation($conversation, [
+            [
+                'pattern' => 'Call me {name}',
+                'callback' => function ($answer, $name) use (&$called) {
+                    $GLOBALS['answer'] = $name;
+                    $GLOBALS['called'] = true;
+                }
+            ],
+        ]);
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $slackbot = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'call me Heisenberg',
+            ],
+        ]);
+        $this->commander->shouldReceive('setToken');
+        $slackbot->initialize('TOKEN');
+
+        $this->assertSame('Heisenberg', $GLOBALS['answer']);
+        $this->assertTrue($GLOBALS['called']);
+    }
+
+    /** @test */
     public function it_detects_users_from_interactive_messages()
     {
         $slackbot = $this->getBotWithInteractiveData(file_get_contents(__DIR__.'/Fixtures/payload.json'));
