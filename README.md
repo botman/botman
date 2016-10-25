@@ -104,6 +104,72 @@ $slackbot->hears('open the {doorType} doors', function(SlackBot $bot, $doorType)
 });
 ```
 
+## Sending Messages
+
+Bots have to send messages to deliver information and present an interface for their
+functionality.  SlackBot bots can send messages in several different ways, depending
+on the type and number of messages that will be sent.
+
+Single message replies to incoming commands can be sent using the `$bot->reply()` function.
+
+Multi-message replies, particularly those that present questions for the end user to respond to,
+can be sent using the `$bot->startConversation()` function and the related conversation sub-functions. 
+
+
+### Single Message Replies to Incoming Messages
+
+Once a bot has received a message using `hears()`, a response
+can be sent using `$bot->reply()`.
+
+Messages sent using `$bot->reply()` are sent immediately. If multiple messages are sent via
+`$bot->reply()` in a single event handler, they will arrive in the  client very quickly
+and may be difficult for the user to process. We recommend using `$bot->startConversation()`
+if more than one message needs to be sent.
+
+You may pass either a string, or a Question object to the function.
+
+As a second parameter, you may also send any additional fields supported by Slack:
+
+[Slack's chat.postMessage](https://api.slack.com/methods/chat.postMessage) API accepts several additional fields. These fields can be used to adjust the message appearance, add attachments, or even change the displayed user name.
+
+#### $bot->reply()
+
+| Argument | Description
+|--- |---
+| reply | _String_ or _Question_ Outgoing response
+| callback | _Optional_ Array containing additional parameters
+
+Simple reply example:
+
+```php
+$slackbot->hears('keyword', function (SlackBot $bot, $message) {
+
+  // do something to respond to message
+  // ...
+
+  $bot->reply("Tell me more!");
+
+});
+```
+
+
+Slack-specific fields and attachments:
+
+```php
+$slackbot->hears('keyword', function (SlackBot $bot, $message) {
+
+    // do something...
+
+    // then respond with a message object
+    //
+    $bot->reply("A more complex response",[
+      'username' => "ReplyBot",
+      'icon_emoji' => ":dash:",
+    ]);
+
+})
+```
+
 ## Example usage
 
 ```php
