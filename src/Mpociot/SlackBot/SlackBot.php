@@ -218,7 +218,7 @@ class SlackBot
                 call_user_func_array($callback, $parameters);
             }
         }
-        if ($heardMessage === false && !$this->isBot() && is_callable($this->fallbackMessage)) {
+        if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage)) {
             call_user_func($this->fallbackMessage, $this);
         }
     }
@@ -268,8 +268,9 @@ class SlackBot
     public function replyPrivate($message, $additionalParameters = [])
     {
         $privateChannel = [
-            'channel' => $this->getUser()
+            'channel' => $this->getUser(),
         ];
+
         return $this->reply($message, array_merge($additionalParameters, $privateChannel));
     }
 

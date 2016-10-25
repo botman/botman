@@ -112,7 +112,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $slackbot = $this->getBot([
             'event' => [
                 'text' => 'bar',
-                'bot_id' => 'i_am_a_bot'
+                'bot_id' => 'i_am_a_bot',
             ],
         ]);
 
