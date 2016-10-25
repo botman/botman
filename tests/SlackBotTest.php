@@ -528,15 +528,15 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'callback' => function ($answer) use (&$called) {
                     $GLOBALS['answer'] = $answer;
                     $GLOBALS['called_foo'] = true;
-                }
+                },
             ],
             [
                 'pattern' => 'token_two',
                 'callback' => function ($answer) use (&$called) {
                     $GLOBALS['answer'] = $answer;
                     $GLOBALS['called_bar'] = true;
-                }
-            ]
+                },
+            ],
         ]);
 
         /*
@@ -582,7 +582,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'callback' => function ($answer, $name) use (&$called) {
                     $GLOBALS['answer'] = $name;
                     $GLOBALS['called'] = true;
-                }
+                },
             ],
         ]);
 
