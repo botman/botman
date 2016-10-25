@@ -412,7 +412,6 @@ class SlackBot
             'commander',
             'serializer',
             'token',
-            'fallbackMessage',
             'matches',
         ];
     }
