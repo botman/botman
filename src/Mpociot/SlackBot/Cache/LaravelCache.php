@@ -12,7 +12,6 @@ use Mpociot\SlackBot\Interfaces\CacheInterface;
  */
 class LaravelCache implements CacheInterface
 {
-
     /**
      * Determine if an item exists in the cache.
      *
