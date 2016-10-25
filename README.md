@@ -304,84 +304,61 @@ The last parameter is always a reference to the conversation itself.
 	}
 
 ```
+#### Using $conversation->ask with a Question object
 
-## Example usage
+Instead of passing a string to the `ask()` method, it is also possible to create a `Question` object.
+The Question objects make use of Slack's interactive messages to present the user buttons to interact with.
+
+When passing question objects to the `ask()` method, the returned `Answer` object has a method called `isInteractiveMessageReply` to detect, if 
+the user interacted with the message and clicked on a button.
+
+Creating a simple Question object:
 
 ```php
-// Listen to simple commands
-SlackBot::hears('Hello', function (SlackBot $bot) {
-    $bot->reply('Hi there!');
-});
 
-// Include regular expression matches
-SlackBot::hears('Call me {name} the {attribute}', function (SlackBot $bot, $name, $attribute) {
-    $bot->reply('Hi '.$name.'! You truly are '.$attribute);
-});
+	// ...inside the conversation object...
+	public function askForDatabase()
+	{
+    $question = Question::create('Do you need a database?')
+      ->fallback('Unable to create a new database')
+      ->callbackId('create_database')
+      ->addButtons([
+          Button::create('Of course')->value('yes'),
+          Button::create('Hell no!')->value('no'),
+    ]);
 
-// Use conversations
-SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
-    $bot->startConversation(new OrderPizzaConversation());
-});
+    $this->ask($question, function (Answer $answer) {
+      // Detect if button was clicked:
+      if ($answer->isInteractiveMessageReply()) {
+        $selectedValue = $answer->getValue(); // will be either 'yes' or 'no'
+        $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+      }
+    });
 
-// Only listen in direct messages
-SlackBot::hears('order pizza', function (SlackBot $bot, $matches) {
-    $bot->startConversation(new OrderPizzaConversation());
-}, SlackBot::DIRECT_MESSAGE);
-
-// Default reply if nothing else matches
-SlackBot::fallback(function(SlackBot $bot) {
-    $bot->reply("I don't understand a word you just said.");
-});
-
-// Start listening
-SlackBot::listen();
+  }
 ```
 
-## Conversation Syntax
+
+### Long running tasks
+
+SlackBot uses the Slack Event API to get information from Slack. When Slack sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
+Otherwise Slack will consider the event delivery attempt failed and Slack will attempt to deliver the message up to three more times.
+
+This means that you should push long running tasks into an asynchronous queue.
+
+Queue example using Laravel:
 
 ```php
-use Mpociot\SlackBot\Conversation;
-
-class OrderPizzaConversation extends Conversation
-{
-
-    protected $size;
-    
-    protected $toppings;
-    
-    public function askSize()
-    {
-    
-        $question = Question::create('Which pizza do you want?')
-                    ->addButton(
-                        Button::create('Extra Large')->value('xl')
-                    )
-                    ->addButton(
-                        Button::create('Mega Large')->value('xxl')
-                    );
-                    
-        $this->ask($question, function($answer) {
-            $this->say('Got you - your pizza needs to be '.$answer->getText());
-            $this->size = $answer->getValue();
-            
-            $this->askTopping();
-        });
-    }
-    
-    public function askTopping()
-    {
-        $this->ask('What toppings do you want?', function($answer) {
-            $this->say('Okay, I\'ll put some '.$answer->getText().' on your pizza');
-            $this->toppings = $answer->getText();
-            
-        });
-    }
-    
-    public function run()
-    {
-        $this->askSize();
-    }
-}
+	// ...inside the conversation object...
+  public function askDomainName()
+  {
+    $this->ask('What should be the domain name?', function (Answer $answer) {
+      // Push long running task onto the queue.
+      $this->reply('Okay, creating subdomain ' . $answer->getText());
+      dispatch(new CreateSubdomain($this, $answer->getText()));
+      
+    });
+  }
 ```
 
 ## License
