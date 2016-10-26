@@ -21,6 +21,9 @@ class Answer
         return new static($text);
     }
 
+    /**
+     * @param string $text
+     */
     public function __construct($text = '')
     {
         $this->text = $text;
