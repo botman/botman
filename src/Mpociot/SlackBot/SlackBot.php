@@ -183,7 +183,7 @@ class SlackBot
     }
 
     /**
-     * @param string $pattern the $pattern to listen for
+     * @param string $pattern the pattern to listen for
      * @param Closure $callback the callback to execute
      * @param string $in the channel type to listen to (either direct message or public channel)
      * @return $this
