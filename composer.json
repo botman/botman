@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "symfony/http-foundation": "2.8.*|3.0.*",
+        "symfony/http-foundation": "2.8.*|3.0.*|3.1.*",
         "tightenco/collect": "~5.0",
         "frlnc/php-slack": "^1.0"
     },
