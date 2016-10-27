@@ -123,11 +123,11 @@ class SlackBot
      */
     public function getMessage()
     {
-        if ($this->payload instanceof Collection || $this->isBot()) {
-            return '';
-        } else {
+        if (! $this->payload instanceof Collection && ! $this->isBot()) {
             return $this->event->get('text');
         }
+
+        return '';
     }
 
     /**
@@ -155,9 +155,9 @@ class SlackBot
             return Answer::create($this->payload['actions'][0]['name'])
                 ->setValue($this->payload['actions'][0]['value'])
                 ->setCallbackId($this->payload['callback_id']);
-        } else {
-            return Answer::create($this->event->get('text'));
         }
+
+        return Answer::create($this->event->get('text'));
     }
 
     /**
@@ -359,10 +359,10 @@ class SlackBot
      */
     protected function clearPayload()
     {
-        if ($this->payload instanceof Collection) {
-        } else {
+        if (! $this->payload instanceof Collection) {
             $this->payload->replace();
         }
+
         $this->event = collect();
     }
 
