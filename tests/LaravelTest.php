@@ -41,6 +41,12 @@ class LaravelTest extends TestCase
     }
 
     /** @test */
+    public function the_service_provider_does_not_register_the_token_if_not_configured()
+    {
+        $this->assertSame(null, SlackBot::getToken());
+    }
+
+    /** @test */
     public function it_can_serialize_closures_using_the_bot()
     {
         $conversation = new TestConversation();
