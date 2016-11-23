@@ -39,7 +39,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
         $bot->shouldReceive('getToken');
         $bot->shouldReceive('reply')
             ->once()
-            ->with('This is my reply');
+            ->with('This is my reply', []);
 
         $conversation = new TestConversation();
         $conversation->setBot($bot);

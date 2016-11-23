@@ -410,11 +410,17 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
                 'text' => 'This is my response',
                 'username' => 'ReplyBot',
                 'icon_emoji' => ':dash:',
+                'attachments' => json_encode([[
+                    'image_url' => 'imageurl',
+                ]]),
             ]);
 
         $slackbot->reply('This is my response', [
             'username' => 'ReplyBot',
             'icon_emoji' => ':dash:',
+            'attachments' => json_encode([[
+                'image_url' => 'imageurl',
+            ]]),
         ]);
     }
 

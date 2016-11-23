@@ -43,11 +43,12 @@ abstract class Conversation
 
     /**
      * @param string|Question $message
+     * @param array $additionalParameters
      * @return $this
      */
-    public function say($message)
+    public function say($message, $additionalParameters = [])
     {
-        $this->bot->reply($message);
+        $this->bot->reply($message, $additionalParameters);
 
         return $this;
     }
