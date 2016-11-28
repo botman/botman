@@ -1,6 +1,6 @@
 # PHP BotMan 🤖 Create messaging bots in PHP with ease
 
-[![Build Status](https://travis-ci.org/mpociot/botman.svg?branch=master)](https://travis-ci.org/mpociot/botman)
+[![Build Status](https://travis-ci.org/mpociot/slackbot.svg?branch=master)](https://travis-ci.org/mpociot/slackbot)
 [![codecov](https://codecov.io/gh/mpociot/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/botman)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 
