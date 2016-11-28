@@ -1,8 +1,8 @@
 # PHP BotMan 🤖 Create messaging bots in PHP with ease
 
-[![Build Status](https://travis-ci.org/mpociot/slackbot.svg?branch=master)](https://travis-ci.org/mpociot/slackbot)
-[![codecov](https://codecov.io/gh/mpociot/slackbot/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/slackbot)
-[![Packagist](https://img.shields.io/packagist/l/mpociot/slackbot.svg)]()
+[![Build Status](https://travis-ci.org/mpociot/botman.svg?branch=master)](https://travis-ci.org/mpociot/botman)
+[![codecov](https://codecov.io/gh/mpociot/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/botman)
+[![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 
 BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me) and [Facebook Messenger](http://messenger.com). 
 
