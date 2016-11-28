@@ -2,11 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 class NullDriver extends Driver
@@ -30,7 +28,7 @@ class NullDriver extends Driver
 
     /**
      * @param Message $message
-     * 
+     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message)

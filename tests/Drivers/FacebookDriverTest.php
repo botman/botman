@@ -12,7 +12,6 @@ use PHPUnit_Framework_TestCase;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
-
     private function getDriver($responseData)
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
@@ -76,7 +75,6 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $this->assertSame('1433960459967306', $driver->getMessages()[0]->getChannel());
     }
 
-
     /** @test */
     public function it_can_reply_string_messages()
     {
@@ -87,17 +85,17 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
                     'messaging' => [
                         [
                             'sender' => [
-                                'id' => '1234567890'
+                                'id' => '1234567890',
                             ],
                             'recipient' => [
-                                'id' => '0987654321'
+                                'id' => '0987654321',
                             ],
                             'message' => [
-                                'text' => 'test'
-                            ]
-                        ]
-                    ]
-                ]
+                                'text' => 'test',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
 
@@ -106,25 +104,24 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://graph.facebook.com/v2.6/me/messages', [], [
                 'recipient' => [
-                    'id' => '1234567890'
+                    'id' => '1234567890',
                 ],
                 'message' => [
-                    'text' => 'Test'
+                    'text' => 'Test',
                 ],
-                'access_token' => 'Foo'
+                'access_token' => 'Foo',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new FacebookDriver($request, [
-            'facebook_token' => 'Foo'
+            'facebook_token' => 'Foo',
         ], $html);
 
         $message = new Message('', '', '1234567890');
         $driver->reply('Test', $message);
     }
-
 
     /** @test */
     public function it_can_reply_with_additional_parameters()
@@ -136,17 +133,17 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
                     'messaging' => [
                         [
                             'sender' => [
-                                'id' => '1234567890'
+                                'id' => '1234567890',
                             ],
                             'recipient' => [
-                                'id' => '0987654321'
+                                'id' => '0987654321',
                             ],
                             'message' => [
-                                'text' => 'test'
-                            ]
-                        ]
-                    ]
-                ]
+                                'text' => 'test',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
 
@@ -155,25 +152,25 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://graph.facebook.com/v2.6/me/messages', [], [
                 'recipient' => [
-                    'id' => '1234567890'
+                    'id' => '1234567890',
                 ],
                 'message' => [
-                    'text' => 'Test'
+                    'text' => 'Test',
                 ],
                 'access_token' => 'Foo',
-                'custom' => 'payload'
+                'custom' => 'payload',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new FacebookDriver($request, [
-            'facebook_token' => 'Foo'
+            'facebook_token' => 'Foo',
         ], $html);
 
         $message = new Message('', '', '1234567890');
         $driver->reply('Test', $message, [
-            'custom' => 'payload'
+            'custom' => 'payload',
         ]);
     }
 
@@ -184,22 +181,22 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getContent')->andReturn(json_encode([]));
 
         $driver = new FacebookDriver($request, [
-            'facebook_token' => 'Foo'
+            'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
         $message = new Message('Red', '0987654321', '1234567890', [
             'sender' => [
-                'id' => '1234567890'
+                'id' => '1234567890',
             ],
             'recipient' => [
-                'id' => '0987654321'
+                'id' => '0987654321',
             ],
             'message' => [
                 'text' => 'Red',
                 'quick_reply' => [
-                    'payload' => 'DEVELOPER_DEFINED_PAYLOAD'
-                ]
-            ]
+                    'payload' => 'DEVELOPER_DEFINED_PAYLOAD',
+                ],
+            ],
         ]);
 
         $this->assertSame('Red', $driver->getConversationAnswer($message)->getText());
@@ -213,19 +210,19 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getContent')->andReturn(json_encode([]));
 
         $driver = new FacebookDriver($request, [
-            'facebook_token' => 'Foo'
+            'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
         $message = new Message('Red', '0987654321', '1234567890', [
             'sender' => [
-                'id' => '1234567890'
+                'id' => '1234567890',
             ],
             'recipient' => [
-                'id' => '0987654321'
+                'id' => '0987654321',
             ],
             'message' => [
                 'text' => 'Red',
-            ]
+            ],
         ]);
 
         $this->assertSame('Red', $driver->getConversationAnswer($message)->getText());
@@ -235,7 +232,6 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_reply_questions()
     {
-
         $question = Question::create('How are you doing?')
             ->addButton(Button::create('Great')->value('great'))
             ->addButton(Button::create('Good')->value('good'));
@@ -245,7 +241,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://graph.facebook.com/v2.6/me/messages', [], [
                 'recipient' => [
-                    'id' => '1234567890'
+                    'id' => '1234567890',
                 ],
                 'message' => [
                     'text' => 'How are you doing?',
@@ -254,28 +250,27 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
                             'content_type' => 'text',
                             'title' => 'Great',
                             'payload' => 'great',
-                            'image_url' => null
+                            'image_url' => null,
                         ],
                         [
                             'content_type' => 'text',
                             'title' => 'Good',
                             'payload' => 'good',
-                            'image_url' => null
-                        ]
-                    ]
+                            'image_url' => null,
+                        ],
+                    ],
                 ],
-                'access_token' => 'Foo'
-            ]); 
+                'access_token' => 'Foo',
+            ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn('[]');
 
         $driver = new FacebookDriver($request, [
-            'facebook_token' => 'Foo'
+            'facebook_token' => 'Foo',
         ], $html);
 
         $message = new Message('', '', '1234567890');
         $driver->reply($question, $message);
     }
-
 }

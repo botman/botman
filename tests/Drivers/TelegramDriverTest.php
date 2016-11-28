@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TelegramDriverTest extends PHPUnit_Framework_TestCase
 {
-
     private function getDriver($responseData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -21,6 +20,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         if ($htmlInterface === null) {
             $htmlInterface = m::mock(Curl::class);
         }
+
         return new TelegramDriver($request, [], $htmlInterface);
     }
 
@@ -39,14 +39,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
-            ]
+                'text' => 'Telegram Text',
+            ],
         ]);
         $this->assertTrue($driver->matchesRequest());
     }
@@ -59,14 +59,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
-            ]
+                'text' => 'Telegram Text',
+            ],
         ]);
         $this->assertTrue(is_array($driver->getMessages()));
     }
@@ -79,14 +79,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Hi Julia'
-            ]
+                'text' => 'Hi Julia',
+            ],
         ]);
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
     }
@@ -99,13 +99,13 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
+                'text' => 'Telegram Text',
             ],
         ]);
         $this->assertFalse($driver->isBot());
@@ -115,16 +115,16 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
                 'text' => 'Telegram Text',
                 'entities' => [
-                    'foo'
-                ]
+                    'foo',
+                ],
             ],
         ]);
         $this->assertTrue($driver->isBot());
@@ -138,15 +138,15 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
+                'text' => 'Telegram Text',
             ],
-            'entities' => []
+            'entities' => [],
         ]);
         $this->assertSame('chat_id', $driver->getMessages()[0]->getUser());
     }
@@ -159,15 +159,15 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => 'chat_id'
+                    'id' => 'chat_id',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
+                'text' => 'Telegram Text',
             ],
-            'entities' => []
+            'entities' => [],
         ]);
         $this->assertSame('from_id', $driver->getMessages()[0]->getChannel());
     }
@@ -180,21 +180,21 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'callback_query' => [
                 'id' => '11717237123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'message' => [
                     'message_id' => '123',
                     'from' => [
-                        'id' => 'from_id'
+                        'id' => 'from_id',
                     ],
                     'chat' => [
-                        'id' => 'chat_id'
+                        'id' => 'chat_id',
                     ],
                     'date' => '1480369277',
-                    'text' => 'Telegram Text'
+                    'text' => 'Telegram Text',
                 ],
             ],
-            'data' => 'FooBar'
+            'data' => 'FooBar',
         ]);
 
         $this->assertSame('chat_id', $driver->getMessages()[0]->getUser());
@@ -208,21 +208,21 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'callback_query' => [
                 'id' => '11717237123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'message' => [
                     'message_id' => '123',
                     'from' => [
-                        'id' => 'from_id'
+                        'id' => 'from_id',
                     ],
                     'chat' => [
-                        'id' => 'chat_id'
+                        'id' => 'chat_id',
                     ],
                     'date' => '1480369277',
-                    'text' => 'Telegram Text'
+                    'text' => 'Telegram Text',
                 ],
             ],
-            'data' => 'FooBar'
+            'data' => 'FooBar',
         ]);
 
         $this->assertSame('from_id', $driver->getMessages()[0]->getChannel());
@@ -236,14 +236,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => '12345'
+                    'id' => '12345',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
-            ]
+                'text' => 'Telegram Text',
+            ],
         ];
 
         $html = m::mock(Curl::class);
@@ -251,14 +251,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendMessage', [], [
                 'chat_id' => '12345',
-                'text' => 'Test'
+                'text' => 'Test',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new TelegramDriver($request, [
-            'telegram_token' => 'TELEGRAM-BOT-TOKEN'
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
         ], $html);
 
         $message = $driver->getMessages()[0];
@@ -273,14 +273,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => '12345'
+                    'id' => '12345',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
-            ]
+                'text' => 'Telegram Text',
+            ],
         ];
 
         $question = Question::create('How are you doing?')
@@ -297,21 +297,21 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                     'inline_keyboard' => [[
                         [
                             'text' => 'Great',
-                            'callback_data' => 'great'
+                            'callback_data' => 'great',
                         ],
                         [
                             'text' => 'Good',
-                            'callback_data' => 'good'
-                        ]
-                    ]]
-                ], true)
+                            'callback_data' => 'good',
+                        ],
+                    ]],
+                ], true),
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new TelegramDriver($request, [
-            'telegram_token' => 'TELEGRAM-BOT-TOKEN'
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
         ], $html);
 
         $message = $driver->getMessages()[0];
@@ -326,14 +326,14 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'message' => [
                 'message_id' => '123',
                 'from' => [
-                    'id' => 'from_id'
+                    'id' => 'from_id',
                 ],
                 'chat' => [
-                    'id' => '12345'
+                    'id' => '12345',
                 ],
                 'date' => '1480369277',
-                'text' => 'Telegram Text'
-            ]
+                'text' => 'Telegram Text',
+            ],
         ];
 
         $html = m::mock(Curl::class);
@@ -342,19 +342,19 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendMessage', [], [
                 'chat_id' => '12345',
                 'text' => 'Test',
-                'foo' => 'bar'
+                'foo' => 'bar',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new TelegramDriver($request, [
-            'telegram_token' => 'TELEGRAM-BOT-TOKEN'
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
         ], $html);
 
         $message = $driver->getMessages()[0];
         $driver->reply('Test', $message, [
-            'foo' => 'bar'
+            'foo' => 'bar',
         ]);
     }
 }

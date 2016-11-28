@@ -2,13 +2,11 @@
 
 namespace Mpociot\BotMan\Http;
 
-
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class Curl implements HttpInterface
 {
-
     /**
      * {@inheritdoc}
      */
@@ -34,8 +32,9 @@ class Curl implements HttpInterface
     {
         $request = curl_init();
 
-        if ($query = http_build_query($parameters))
-            $url .= '?' . $query;
+        if ($query = http_build_query($parameters)) {
+            $url .= '?'.$query;
+        }
 
         curl_setopt($request, CURLOPT_URL, $url);
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
@@ -62,22 +61,21 @@ class Curl implements HttpInterface
         $statusCode = $info['http_code'];
         $headers = $info['request_header'];
 
-        if (function_exists('http_parse_headers'))
+        if (function_exists('http_parse_headers')) {
             $headers = http_parse_headers($headers);
-        else
-        {
+        } else {
             $header_text = substr($headers, 0, strpos($headers, "\r\n\r\n"));
             $headers = [];
 
-            foreach (explode("\r\n", $header_text) as $i => $line)
-                if ($i === 0)
+            foreach (explode("\r\n", $header_text) as $i => $line) {
+                if ($i === 0) {
                     continue;
-                else
-                {
-                    list ($key, $value) = explode(': ', $line);
+                } else {
+                    list($key, $value) = explode(': ', $line);
 
                     $headers[$key] = $value;
                 }
+            }
         }
 
         return new Response($body, $statusCode, $headers);

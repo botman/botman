@@ -2,14 +2,12 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
-
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\Request;
 
 interface DriverInterface
 {
-
     /**
      * Determine if the request is for this driver.
      *
@@ -37,7 +35,7 @@ interface DriverInterface
 
     /**
      * @param Message $matchingMessage
-     * 
+     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message);

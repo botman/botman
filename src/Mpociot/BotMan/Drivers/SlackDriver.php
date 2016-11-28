@@ -47,7 +47,7 @@ class SlackDriver extends Driver
      */
     public function matchesRequest()
     {
-        return !is_null($this->event->get('user'));
+        return ! is_null($this->event->get('user'));
     }
 
     /**
@@ -99,7 +99,7 @@ class SlackDriver extends Driver
     {
         $parameters = array_merge([
             'token' => $this->payload->get('token'),
-            'channel' => $matchingMessage->getChannel()
+            'channel' => $matchingMessage->getChannel(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore

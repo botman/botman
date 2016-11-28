@@ -39,7 +39,8 @@ class LaravelTest extends TestCase
         $conversation = new TestConversation();
 
         $bot = app('botman');
-        $bot->hears('foo', function(){});
+        $bot->hears('foo', function () {
+        });
         BotMan::storeConversation($conversation, function ($answer) use ($bot) {
         });
 

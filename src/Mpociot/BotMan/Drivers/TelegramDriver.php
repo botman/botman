@@ -34,7 +34,7 @@ class TelegramDriver extends Driver
      */
     public function matchesRequest()
     {
-        return (!is_null($this->event->get('from')) || !is_null($this->payload->get('callback_query'))) && !is_null($this->payload->get('update_id'));
+        return (! is_null($this->event->get('from')) || ! is_null($this->payload->get('callback_query'))) && ! is_null($this->payload->get('update_id'));
     }
 
     /**
@@ -63,6 +63,7 @@ class TelegramDriver extends Driver
     {
         if ($this->payload->get('callback_query') !== null) {
             $callback = collect($this->payload->get('callback_query'));
+
             return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'])];
         } else {
             return [new Message($this->event->get('text'), $this->event->get('chat')['id'], $this->event->get('from')['id'])];
@@ -84,11 +85,12 @@ class TelegramDriver extends Driver
      * @param Question $question
      * @return array
      */
-    private function convertQuestion(Question $question) {
-        $replies = collect($question->getButtons())->map(function($button) {
+    private function convertQuestion(Question $question)
+    {
+        $replies = collect($question->getButtons())->map(function ($button) {
             return [
                 'text' => $button['text'],
-                'callback_data' => $button['value']
+                'callback_data' => $button['value'],
             ];
         });
 
@@ -104,7 +106,7 @@ class TelegramDriver extends Driver
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
-            'chat_id' => $matchingMessage->getUser()
+            'chat_id' => $matchingMessage->getUser(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
@@ -113,12 +115,12 @@ class TelegramDriver extends Driver
         if ($message instanceof Question) {
             $parameters['text'] = $message->getText();
             $parameters['reply_markup'] = json_encode([
-                'inline_keyboard' => [$this->convertQuestion($message)]
+                'inline_keyboard' => [$this->convertQuestion($message)],
             ], true);
         } else {
-            $parameters['text'] =  $message;
+            $parameters['text'] = $message;
         }
 
-        return $this->http->post('https://api.telegram.org/bot'. $this->config->get('telegram_token').'/sendMessage', [], $parameters);
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendMessage', [], $parameters);
     }
 }
