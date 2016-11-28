@@ -57,11 +57,4 @@ abstract class Conversation
      */
     abstract public function run();
 
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
 }
