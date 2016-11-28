@@ -10,6 +10,8 @@ BotMan is a framework agnostic PHP library that is designed to simplify the task
 BotMan::hears('I want cross-platform bots with PHP!', function($bot) {
     $bot->reply('Look no further!');
 });
+
+BotMan::listen();
 ```
 
 ## Getting Started
