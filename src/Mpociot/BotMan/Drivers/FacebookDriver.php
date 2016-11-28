@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -24,7 +23,7 @@ class FacebookDriver extends Driver
     public function buildPayload(Request $request)
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = collect((array)$this->payload->get('entry')[0]);
+        $this->event = collect((array) $this->payload->get('entry')[0]);
     }
 
     /**
@@ -62,13 +61,14 @@ class FacebookDriver extends Driver
     public function getMessages()
     {
         $messages = collect($this->event->get('messaging'));
-        $messages->transform(function($msg) {
+        $messages->transform(function ($msg) {
             return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
         })->toArray();
 
         if (count($messages) === 0) {
             return [new Message('', '', '')];
         }
+
         return $messages;
     }
 
@@ -88,20 +88,21 @@ class FacebookDriver extends Driver
      * @param Question $question
      * @return array
      */
-    private function convertQuestion(Question $question) {
+    private function convertQuestion(Question $question)
+    {
         $questionData = $question->toArray();
-        $replies = collect($question->getButtons())->map(function($button) {
+        $replies = collect($question->getButtons())->map(function ($button) {
             return [
                 'content_type' => 'text',
                 'title' => $button['text'],
                 'payload' => $button['value'],
-                'image_url' => $button['image_url']
+                'image_url' => $button['image_url'],
             ];
         });
 
         return [
             'text' => $questionData['text'],
-            'quick_replies' => $replies->toArray()
+            'quick_replies' => $replies->toArray(),
         ];
     }
 

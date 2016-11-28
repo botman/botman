@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
 {
-
     private function getDriver($responseData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -21,6 +20,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         if ($htmlInterface === null) {
             $htmlInterface = m::mock(Curl::class);
         }
+
         return new SlackDriver($request, [], $htmlInterface);
     }
 
@@ -131,7 +131,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'general',
-                'text' => 'response'
+                'text' => 'response',
             ],
         ]);
 
@@ -144,7 +144,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__.'/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -156,7 +156,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__.'/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -168,7 +168,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__.'/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -180,7 +180,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__.'/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -195,7 +195,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'general',
-                'text' => 'response'
+                'text' => 'response',
             ],
         ];
 
@@ -205,14 +205,14 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ->with('https://slack.com/api/chat.postMessage', [], [
                 'token' => 'Foo',
                 'channel' => 'general',
-                'text' => 'Test'
+                'text' => 'Test',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new SlackDriver($request, [
-            'slack_token' => 'Foo'
+            'slack_token' => 'Foo',
         ], $html);
 
         $message = new Message('', '', 'general');
@@ -226,7 +226,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'general',
-                'text' => 'response'
+                'text' => 'response',
             ],
         ];
 
@@ -248,7 +248,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new SlackDriver($request, [
-            'slack_token' => 'Foo'
+            'slack_token' => 'Foo',
         ], $html);
 
         $message = new Message('', '', 'general');
@@ -262,7 +262,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'general',
-                'text' => 'response'
+                'text' => 'response',
             ],
         ];
 
@@ -277,14 +277,14 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'icon_emoji' => ':dash:',
                 'attachments' => json_encode([[
                     'image_url' => 'imageurl',
-                ]])
+                ]]),
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         $driver = new SlackDriver($request, [
-            'slack_token' => 'Foo'
+            'slack_token' => 'Foo',
         ], $html);
 
 
@@ -294,7 +294,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'icon_emoji' => ':dash:',
             'attachments' => json_encode([[
                 'image_url' => 'imageurl',
-            ]])
+            ]]),
         ]);
     }
 }

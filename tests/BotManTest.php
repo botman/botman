@@ -309,11 +309,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('foo',function(){});
+        $botman->hears('foo', function () {
+        });
         $botman->listen();
 
         $conversation = new TestConversation();
-        $botman->storeConversation($conversation, function ($answer) {});
+        $botman->storeConversation($conversation, function ($answer) {
+        });
 
         $this->assertTrue($this->cache->has('conversation:UX12345-general'));
 
@@ -333,10 +335,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'user' => 'UX12345',
                 'channel' => 'general',
             ],
-            'text' => 'foo'
+            'text' => 'foo',
         ]);
 
-        $botman->hears('foo',function(){});
+        $botman->hears('foo', function () {
+        });
         $botman->listen();
 
         $conversation = m::mock(TestConversation::class);
@@ -364,7 +367,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('Hi Julia',function(){});
+        $botman->hears('Hi Julia', function () {
+        });
         $botman->listen();
 
         $conversation = new TestConversation();
@@ -407,7 +411,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('Hi Julia',function(){});
+        $botman->hears('Hi Julia', function () {
+        });
         $botman->listen();
 
         $conversation = new TestConversation();
@@ -462,7 +467,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('Hi Julia',function(){});
+        $botman->hears('Hi Julia', function () {
+        });
         $botman->listen();
 
         $conversation = new TestConversation();

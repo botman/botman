@@ -63,7 +63,7 @@ class Button implements JsonSerializable
     }
 
     /**
-     * Set the button image (Facebook only)
+     * Set the button image (Facebook only).
      *
      * @param string $image_url
      * @return $this

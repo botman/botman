@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-
 class Message
 {
     /** @var string */
@@ -64,5 +63,4 @@ class Message
     {
         return 'conversation:'.$this->getUser().'-'.$this->getChannel();
     }
-
 }

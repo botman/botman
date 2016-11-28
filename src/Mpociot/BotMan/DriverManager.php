@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -19,7 +18,7 @@ class DriverManager
     protected $drivers = [
         SlackDriver::class,
         FacebookDriver::class,
-        TelegramDriver::class
+        TelegramDriver::class,
     ];
 
     /** @var array */
@@ -52,6 +51,7 @@ class DriverManager
                 return $driver;
             }
         }
+
         return new NullDriver($request, [], $this->http);
     }
 }
