@@ -95,14 +95,15 @@ class SlackDriver extends Driver
 
     /**
      * @param string|Question $message
+     * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
      */
-    public function reply($message, $additionalParameters = [])
+    public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
             'token' => $this->payload->get('token'),
-            'channel' => $this->event->get('channel'),
+            'channel' => $matchingMessage->getChannel()
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore

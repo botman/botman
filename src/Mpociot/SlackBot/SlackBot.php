@@ -207,7 +207,7 @@ class SlackBot
      */
     public function reply($message, $additionalParameters = [])
     {
-        $this->getDriver()->reply($message, $additionalParameters);
+        $this->getDriver()->reply($message, $this->message, $additionalParameters);
 
         return $this;
     }

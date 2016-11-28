@@ -6,6 +6,7 @@ use Mockery as m;
 use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Drivers\SlackDriver;
 use Mpociot\SlackBot\Http\Curl;
+use Mpociot\SlackBot\Message;
 use Mpociot\SlackBot\Question;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -211,7 +212,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo'
         ], $html);
 
-        $driver->reply('Test');
+        $message = new Message('', '', 'general');
+        $driver->reply('Test', $message);
     }
 
     /** @test */
@@ -246,7 +248,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo'
         ], $html);
 
-        $driver->reply($question);
+        $message = new Message('', '', 'general');
+        $driver->reply($question, $message);
     }
 
     /** @test */
@@ -281,7 +284,9 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo'
         ], $html);
 
-        $driver->reply('Test', [
+
+        $message = new Message('response', '', 'general');
+        $driver->reply('Test', $message, [
             'username' => 'ReplyBot',
             'icon_emoji' => ':dash:',
             'attachments' => json_encode([[

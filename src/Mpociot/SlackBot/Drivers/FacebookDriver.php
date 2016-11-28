@@ -82,7 +82,6 @@ class FacebookDriver extends Driver
             return $messages->transform(function($msg) {
                 return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id']);
             })->toArray();
-            //$messageText = $messages->first()['message']['text'];
         }
 
         return [new Message('', '', '')];
@@ -98,41 +97,31 @@ class FacebookDriver extends Driver
     }
 
     /**
-     * @return string
-     */
-    public function getUser()
-    {
-        return $this->event->get('user');
-    }
-
-    /**
-     * @return string
-     */
-    public function getChannel()
-    {
-        return $this->event->get('channel');
-    }
-
-    /**
      * @param string|Question $message
+     * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
      */
-    public function reply($message, $additionalParameters = [])
+    public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
-            'token' => $this->payload->get('token'),
-            'channel' => $this->getChannel(),
-            'text' => $message,
+            'recipient' => [
+                'id' => $matchingMessage->getChannel(),
+            ],
+            'message' => [
+                'text' => $message,
+            ],
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
          * the text and append the question.
          */
         if ($message instanceof Question) {
-            $parameters['text'] = '';
             $parameters['attachments'] = json_encode([$message->toArray()]);
         }
-        $this->commander->execute('chat.postMessage', $parameters);
+
+        $parameters['access_token'] = $this->config->get('facebook_token');
+
+        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
     }
 }

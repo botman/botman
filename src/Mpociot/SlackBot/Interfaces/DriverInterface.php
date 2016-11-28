@@ -9,6 +9,8 @@
 namespace Mpociot\SlackBot\Interfaces;
 
 
+use Mpociot\SlackBot\Message;
+use Mpociot\SlackBot\Question;
 use Symfony\Component\HttpFoundation\Request;
 
 interface DriverInterface
@@ -46,8 +48,9 @@ interface DriverInterface
 
     /**
      * @param string|Question $message
+     * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
      */
-    public function reply($message, $additionalParameters = []);
+    public function reply($message, $matchingMessage, $additionalParameters = []);
 }

@@ -5,6 +5,7 @@ namespace Mpociot\SlackBot\Tests;
 use Mockery as m;
 use Mpociot\SlackBot\Drivers\FacebookDriver;
 use Mpociot\SlackBot\Http\Curl;
+use Mpociot\SlackBot\Message;
 use PHPUnit_Framework_TestCase;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
@@ -62,6 +63,107 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver($request);
 
         $this->assertSame('111899832631525', $driver->getMessages()[0]->getChannel());
+    }
+
+
+    /** @test */
+    public function it_can_reply_string_messages()
+    {
+        $responseData = [
+            'object' => 'page',
+            'event' => [
+                [
+                    'messaging' => [
+                        [
+                            'sender' => [
+                                'id' => '1234567890'
+                            ],
+                            'recipient' => [
+                                'id' => '0987654321'
+                            ],
+                            'message' => [
+                                'text' => 'test'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890'
+                ],
+                'message' => [
+                    'text' => 'Test'
+                ],
+                'access_token' => 'Foo'
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo'
+        ], $html);
+
+        $message = new Message('', '', '1234567890');
+        $driver->reply('Test', $message);
+    }
+
+
+    /** @test */
+    public function it_can_reply_with_additional_parameters()
+    {
+        $responseData = [
+            'object' => 'page',
+            'event' => [
+                [
+                    'messaging' => [
+                        [
+                            'sender' => [
+                                'id' => '1234567890'
+                            ],
+                            'recipient' => [
+                                'id' => '0987654321'
+                            ],
+                            'message' => [
+                                'text' => 'test'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890'
+                ],
+                'message' => [
+                    'text' => 'Test'
+                ],
+                'access_token' => 'Foo',
+                'custom' => 'payload'
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo'
+        ], $html);
+
+        $message = new Message('', '', '1234567890');
+        $driver->reply('Test', $message, [
+            'custom' => 'payload'
+        ]);
     }
 
 }
