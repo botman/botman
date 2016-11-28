@@ -52,6 +52,16 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 
 That's it.
 
+## Getting Started
+
+After you've installed BotMan, the first thing you'll need to do is register your bot with a messaging platform, and get a few configuration options set. This will allow your bot to connect, send and receive messages.
+
+You can support all messaging platforms using the exact same Bot-API.
+
+- [Setup and connect Telegram](readme-telegram.md)
+- [Setup and connect Facebook Messenger](readme-facebook.md)
+- Setup and connect Slack
+
 ## Core Concepts
 
 Bots built with BotMan have a few key capabilities, which can be used to create clever, conversational applications. 
@@ -81,6 +91,8 @@ $botman = new BotMan(
 
 // Usage with Laravel
 $botman = app('botman');
+
+// Or use the facade, by using BotMan:: instead of $botman-> in the examples
 
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot, $message) {
@@ -328,7 +340,7 @@ The last parameter is always a reference to the conversation itself.
 #### Using $conversation->ask with a Question object
 
 Instead of passing a string to the `ask()` method, it is also possible to create a `Question` object.
-The Question objects make use of Slack's interactive messages to present the user buttons to interact with.
+The Question objects make use of the interactive messages from Facebook, Telegram and Slack to present the user buttons to interact with.
 
 When passing question objects to the `ask()` method, the returned `Answer` object has a method called `isInteractiveMessageReply` to detect, if 
 the user interacted with the message and clicked on a button.
@@ -362,8 +374,8 @@ Creating a simple Question object:
 
 ### Long running tasks
 
-BotMan uses the Slack Event API to get information from Slack. When Slack sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
-Otherwise Slack will consider the event delivery attempt failed and Slack will attempt to deliver the message up to three more times.
+BotMan uses the Webhook APIs to get information from the messaging system. When the messaging system of your choice sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
+Otherwise the delivery attempt will be considered as a failure and the messaging system will attempt to deliver the message up to three more times.
 
 This means that you should push long running tasks into an asynchronous queue.
 
