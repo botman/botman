@@ -1,24 +1,19 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
-use Frlnc\Slack\Core\Commander;
-use Frlnc\Slack\Http\CurlInteractor;
-use Frlnc\Slack\Http\SlackResponseFactory;
 use Mockery as m;
 use Mockery\MockInterface;
-use Mpociot\SlackBot\Answer;
-use Mpociot\SlackBot\Button;
-use Mpociot\SlackBot\Cache\ArrayCache;
-use Mpociot\SlackBot\DriverManager;
-use Mpociot\SlackBot\Http\Curl;
-use Mpociot\SlackBot\Question;
-use Mpociot\SlackBot\SlackBot;
-use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
 
-class SlackBotTest extends PHPUnit_Framework_TestCase
+class BotManTest extends PHPUnit_Framework_TestCase
 {
     /** @var MockInterface */
     protected $commander;
@@ -39,25 +34,21 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
 
     protected function getBot($responseData)
     {
-        $interactor = new CurlInteractor;
-        $interactor->setResponseFactory(new SlackResponseFactory);
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        return new SlackBot(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
+        return new BotMan(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
     }
 
     protected function getBotWithInteractiveData($payload)
     {
-        $interactor = new CurlInteractor;
-        $interactor->setResponseFactory(new SlackResponseFactory);
         /** @var \Illuminate\Http\Request $request */
         $request = new \Illuminate\Http\Request();
         $request->replace([
             'payload' => $payload,
         ]);
 
-        return new SlackBot(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
+        return new BotMan(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
     }
 
     /** @test */
@@ -65,17 +56,17 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'bar',
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
-        $slackbot->listen();
+        $botman->listen();
         $this->assertFalse($called);
     }
 
@@ -85,22 +76,22 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $called = false;
         $fallbackCalled = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'bar',
             ],
         ]);
 
-        $slackbot->fallback(function ($bot) use (&$fallbackCalled) {
+        $botman->fallback(function ($bot) use (&$fallbackCalled) {
             $fallbackCalled = true;
         });
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
 
-        $slackbot->listen();
+        $botman->listen();
         $this->assertFalse($called);
         $this->assertTrue($fallbackCalled);
     }
@@ -111,7 +102,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $called = false;
         $fallbackCalled = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'bar',
@@ -119,15 +110,15 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->fallback(function ($bot) use (&$fallbackCalled) {
+        $botman->fallback(function ($bot) use (&$fallbackCalled) {
             $fallbackCalled = true;
         });
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
 
-        $slackbot->listen();
+        $botman->listen();
         $this->assertFalse($called);
         $this->assertFalse($fallbackCalled);
     }
@@ -137,17 +128,17 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'foo',
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
         });
-        $slackbot->listen();
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -156,7 +147,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'D12345',
@@ -164,15 +155,15 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, SlackBot::PUBLIC_CHANNEL);
-        $slackbot->listen();
+        }, BotMan::PUBLIC_CHANNEL);
+        $botman->listen();
         $this->assertFalse($called);
 
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'C12345',
@@ -180,10 +171,10 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, SlackBot::PUBLIC_CHANNEL);
-        $slackbot->listen();
+        }, BotMan::PUBLIC_CHANNEL);
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -192,7 +183,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'foo',
@@ -200,16 +191,16 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, SlackBot::DIRECT_MESSAGE);
-        $slackbot->listen();
+        }, BotMan::DIRECT_MESSAGE);
+        $botman->listen();
         $this->assertFalse($called);
 
 
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'foo',
@@ -217,10 +208,10 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, SlackBot::DIRECT_MESSAGE);
-        $slackbot->listen();
+        }, BotMan::DIRECT_MESSAGE);
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -229,18 +220,18 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'foo',
             ],
         ]);
 
-        $slackbot->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-            $this->assertInstanceOf(SlackBot::class, $bot);
+            $this->assertInstanceOf(BotMan::class, $bot);
         });
-        $slackbot->listen();
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -249,18 +240,18 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'Hi Julia',
             ],
         ]);
 
-        $slackbot->hears('hi {name}', function ($bot, $name) use (&$called) {
+        $botman->hears('hi {name}', function ($bot, $name) use (&$called) {
             $called = true;
             $this->assertSame('Julia', $name);
         });
-        $slackbot->listen();
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -269,19 +260,19 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'I am Gandalf the grey',
             ],
         ]);
 
-        $slackbot->hears('I am {name} the {attribute}', function ($bot, $name, $attribute) use (&$called) {
+        $botman->hears('I am {name} the {attribute}', function ($bot, $name, $attribute) use (&$called) {
             $called = true;
             $this->assertSame('Gandalf', $name);
             $this->assertSame('grey', $attribute);
         });
-        $slackbot->listen();
+        $botman->listen();
         $this->assertTrue($called);
     }
 
@@ -290,18 +281,18 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'I am Gandalf',
             ],
         ]);
 
-        $slackbot->hears('I am {name}', function ($bot, $name) use (&$called) {
+        $botman->hears('I am {name}', function ($bot, $name) use (&$called) {
             $called = true;
         });
-        $slackbot->listen();
-        $matches = $slackbot->getMatches();
+        $botman->listen();
+        $matches = $botman->getMatches();
         $this->assertSame('Gandalf', $matches['name']);
         $this->assertTrue($called);
     }
@@ -309,7 +300,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_store_conversations()
     {
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -318,11 +309,11 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('foo',function(){});
-        $slackbot->listen();
+        $botman->hears('foo',function(){});
+        $botman->listen();
 
         $conversation = new TestConversation();
-        $slackbot->storeConversation($conversation, function ($answer) {});
+        $botman->storeConversation($conversation, function ($answer) {});
 
         $this->assertTrue($this->cache->has('conversation:UX12345-general'));
 
@@ -336,7 +327,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_start_conversations()
     {
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -345,18 +336,18 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             'text' => 'foo'
         ]);
 
-        $slackbot->hears('foo',function(){});
-        $slackbot->listen();
+        $botman->hears('foo',function(){});
+        $botman->listen();
 
         $conversation = m::mock(TestConversation::class);
         $conversation->shouldReceive('setBot')
             ->once()
-            ->with($slackbot);
+            ->with($botman);
 
         $conversation->shouldReceive('run')
             ->once();
 
-        $slackbot->startConversation($conversation);
+        $botman->startConversation($conversation);
     }
 
     /** @test */
@@ -364,7 +355,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -373,12 +364,12 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('Hi Julia',function(){});
-        $slackbot->listen();
+        $botman->hears('Hi Julia',function(){});
+        $botman->listen();
 
         $conversation = new TestConversation();
 
-        $slackbot->storeConversation($conversation, function ($answer) use (&$called) {
+        $botman->storeConversation($conversation, function ($answer) use (&$called) {
             $GLOBALS['answer'] = $answer;
             $GLOBALS['called'] = true;
         });
@@ -386,7 +377,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         /*
          * Now that the first message is saved, fake a reply
          */
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -407,7 +398,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         $GLOBALS['answer'] = '';
         $GLOBALS['called_foo'] = false;
         $GLOBALS['called_bar'] = false;
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -416,12 +407,12 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('Hi Julia',function(){});
-        $slackbot->listen();
+        $botman->hears('Hi Julia',function(){});
+        $botman->listen();
 
         $conversation = new TestConversation();
 
-        $slackbot->storeConversation($conversation, [
+        $botman->storeConversation($conversation, [
             [
                 'pattern' => 'token_one',
                 'callback' => function ($answer) use (&$called) {
@@ -441,7 +432,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         /*
          * Now that the first message is saved, fake a reply
          */
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -462,7 +453,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
     {
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',
@@ -471,12 +462,12 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $slackbot->hears('Hi Julia',function(){});
-        $slackbot->listen();
+        $botman->hears('Hi Julia',function(){});
+        $botman->listen();
 
         $conversation = new TestConversation();
 
-        $slackbot->storeConversation($conversation, [
+        $botman->storeConversation($conversation, [
             [
                 'pattern' => 'Call me {name}',
                 'callback' => function ($answer, $name) use (&$called) {
@@ -489,7 +480,7 @@ class SlackBotTest extends PHPUnit_Framework_TestCase
         /*
          * Now that the first message is saved, fake a reply
          */
-        $slackbot = $this->getBot([
+        $botman = $this->getBot([
             'token' => 'foo',
             'event' => [
                 'user' => 'UX12345',

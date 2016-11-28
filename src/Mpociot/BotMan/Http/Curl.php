@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\SlackBot\Http;
+namespace Mpociot\BotMan\Http;
 
 
-use Mpociot\SlackBot\Interfaces\HttpInterface;
+use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class Curl implements HttpInterface

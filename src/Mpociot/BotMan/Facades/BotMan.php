@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\SlackBot\Facades;
+namespace Mpociot\BotMan\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class SlackBot extends Facade
+class BotMan extends Facade
 {
     /**
      * @return string
      */
     protected static function getFacadeAccessor()
     {
-        return 'slackbot';
+        return 'botman';
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\SlackBot;
+namespace Mpociot\BotMan;
 
 
-use Mpociot\SlackBot\Drivers\Driver;
-use Mpociot\SlackBot\Drivers\FacebookDriver;
-use Mpociot\SlackBot\Drivers\NullDriver;
-use Mpociot\SlackBot\Drivers\SlackDriver;
-use Mpociot\SlackBot\Interfaces\HttpInterface;
+use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Drivers\FacebookDriver;
+use Mpociot\BotMan\Drivers\NullDriver;
+use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class DriverManager

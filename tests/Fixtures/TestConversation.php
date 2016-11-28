@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests\Fixtures;
+namespace Mpociot\BotMan\Tests\Fixtures;
 
-use Mpociot\SlackBot\Conversation;
+use Mpociot\BotMan\Conversation;
 
 class TestConversation extends Conversation
 {

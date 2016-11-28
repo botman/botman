@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use Mpociot\SlackBot\SlackBot;
-use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
 
@@ -22,7 +22,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_set_a_bot_and_store_its_token()
     {
-        $bot = m::mock(SlackBot::class);
+        $bot = m::mock(BotMan::class);
         $bot->shouldReceive('getToken')
             ->once()
             ->andReturn('Foo');
@@ -35,7 +35,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_reply()
     {
-        $bot = m::mock(SlackBot::class);
+        $bot = m::mock(BotMan::class);
         $bot->shouldReceive('getToken');
         $bot->shouldReceive('reply')
             ->once()
@@ -54,7 +54,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
         $closure = function ($answer) {
         };
 
-        $bot = m::mock(SlackBot::class);
+        $bot = m::mock(BotMan::class);
         $bot->shouldReceive('getToken');
         $bot->shouldReceive('reply')
             ->once()
@@ -78,7 +78,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
         $serializer = m::mock(Serializer::class);
         $serializer->shouldReceive('serialize')->andReturn('serialized_closure');
 
-        $bot = m::mock(SlackBot::class);
+        $bot = m::mock(BotMan::class);
         $bot->shouldReceive('getSerializer')->andReturn($serializer);
         $bot->shouldReceive('getToken');
         $bot->shouldReceive('reply')

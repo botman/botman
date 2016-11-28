@@ -1,22 +1,20 @@
-# PHP SlackBot 🤖 Create Slack bots in PHP with ease
+# PHP BotMan 🤖 Create messaging bots in PHP with ease
 
 [![Build Status](https://travis-ci.org/mpociot/slackbot.svg?branch=master)](https://travis-ci.org/mpociot/slackbot)
 [![codecov](https://codecov.io/gh/mpociot/slackbot/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/slackbot)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/slackbot.svg)]()
 
-SlackBot is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for [Slack](http://slack.com). 
+BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com) and [Facebook Messenger](http://messenger.com). 
 
 ## Getting Started
 
 1) Open the Laravel/Symfony/PHP project your new Bot will live in
 
-2) [Install SlackBot with composer](#installation-using-composer)
+2) [Install BotMan with composer](#installation-using-composer)
 
-3) Obtain a Bot Token on Slack
+3) Configure your messaging platform
 
-4) Make your application respond to Slack Event requests
-
-5) Implement your bot logic
+4) Implement your bot logic
  
 ## Installation using Composer
 
@@ -26,26 +24,26 @@ Require this package with composer using the following command:
 $ composer require mpociot/slackbot
 ```
 
-### Using SlackBot within a Laravel app
+### Using BotMan within a Laravel app
 
-SlackBot comes with a Service Provider to make using this library in your [Laravel](http://laravel.com) application as simple as possible.
+BotMan comes with a Service Provider to make using this library in your [Laravel](http://laravel.com) application as simple as possible.
 
 Go to your `config/app.php` and add the service provider:
 
 ```php
-Mpociot\SlackBot\SlackBotServiceProvider::class,
+Mpociot\BotMan\BotManServiceProvider::class,
 ```
 
 Also add the alias / facade:
 
 ```php
-'SlackBot' => Mpociot\SlackBot\Facades\SlackBot::class
+'BotMan' => Mpociot\BotMan\Facades\BotMan::class
 ```
 
 Add your Facebook access token / Slack token to your `config/services.php`:
 
 ```php
-    'slackbot' => [
+    'botman' => [
     	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
         'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
     ],
@@ -55,7 +53,7 @@ That's it.
 
 ## Core Concepts
 
-Bots built with SlackBot have a few key capabilities, which can be used to create clever, conversational applications. 
+Bots built with BotMan have a few key capabilities, which can be used to create clever, conversational applications. 
 These capabilities map to the way real human people talk to each other.
 
 Bots can [hear things](#receiving-messages), [say things and reply](#sending-messages) to what they hear.
@@ -64,13 +62,13 @@ With these two building blocks, almost any type of conversation can be created.
 
 ## Basic Usage
 
-Here's an example of using SlackBot with Slack's Event API.
+Here's an example of using BotMan with Slack's Event API.
 
 This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
 
 ```php
 // Usage without Laravel
-$slackbot = new SlackBot(
+$botman = new BotMan(
     new Serializer(),
     $request,
     new LaravelCache(),
@@ -81,15 +79,15 @@ $slackbot = new SlackBot(
 );
 
 // Usage with Laravel
-$slackbot = app('slackbot');
+$botman = app('botman');
 
 // give the bot something to listen for.
-$slackbot->hears('hello', function (SlackBot $bot, $message) {
+$botman->hears('hello', function (BotMan $bot, $message) {
   $bot->reply('Hello yourself.');
 });
 ```
 
-# Developing with SlackBot
+# Developing with BotMan
 
 Table of Contents
 
@@ -100,16 +98,16 @@ Table of Contents
 
 ### Matching Patterns and Keywords with `hears()`
 
-SlackBot provides a `hears()` function, which will listen to specific patterns in public and/or private channels.
+BotMan provides a `hears()` function, which will listen to specific patterns in public and/or private channels.
 
 | Argument | Description
 |--- |---
 | pattern | A string with a regular expressions to match
-| callback | Callback function that receives a SlackBot object, as well as additional matching regular expression parameters
-| in | Defines where the Bot should listen for this message. Can be either `SlackBot::DIRECT_MESSAGE` or `SlackBot::PUBLIC_CHANNEL`
+| callback | Callback function that receives a BotMan object, as well as additional matching regular expression parameters
+| in | Defines where the Bot should listen for this message. Can be either `BotMan::DIRECT_MESSAGE` or `BotMan::PUBLIC_CHANNEL`
 
 ```php
-$slackbot->hears('keyword', function(SlackBot $bot, $message) {
+$botman->hears('keyword', function(BotMan $bot, $message) {
 
   // do something to respond to message
   $bot->reply('You used a keyword!');
@@ -120,7 +118,7 @@ $slackbot->hears('keyword', function(SlackBot $bot, $message) {
 When using the built in regular expression matching, the results of the expression will be passed to the callback function. For example:
 
 ```php
-$slackbot->hears('open the {doorType} doors', function(SlackBot $bot, $doorType) {
+$botman->hears('open the {doorType} doors', function(BotMan $bot, $doorType) {
   if ($doorType === 'pod bay') {
     return $bot->reply('I\'m sorry, Dave. I\'m afraid I can\'t do that.');
   }
@@ -131,7 +129,7 @@ $slackbot->hears('open the {doorType} doors', function(SlackBot $bot, $doorType)
 ## Sending Messages
 
 Bots have to send messages to deliver information and present an interface for their
-functionality.  SlackBot bots can send messages in several different ways, depending
+functionality.  BotMan bots can send messages in several different ways, depending
 on the type and number of messages that will be sent.
 
 Single message replies to incoming commands can be sent using the `$bot->reply()` function.
@@ -166,7 +164,7 @@ As a second parameter, you may also send any additional fields supported by Slac
 Simple reply example:
 
 ```php
-$slackbot->hears('keyword', function (SlackBot $bot, $message) {
+$botman->hears('keyword', function (BotMan $bot, $message) {
 
   // do something to respond to message
   // ...
@@ -180,7 +178,7 @@ $slackbot->hears('keyword', function (SlackBot $bot, $message) {
 Slack-specific fields and attachments:
 
 ```php
-$slackbot->hears('keyword', function (SlackBot $bot, $message) {
+$botman->hears('keyword', function (BotMan $bot, $message) {
 
     // do something...
 
@@ -199,8 +197,8 @@ $slackbot->hears('keyword', function (SlackBot $bot, $message) {
 For more complex commands, multiple messages may be necessary to send a response,
 particularly if the bot needs to collect additional information from the user.
 
-SlackBot provides a `Conversation` object that is used to string together several
-messages, including questions for the user, into a cohesive unit. SlackBot conversations
+BotMan provides a `Conversation` object that is used to string together several
+messages, including questions for the user, into a cohesive unit. BotMan conversations
 provide useful methods that enable developers to craft complex conversational
 user interfaces that may span a several minutes of dialog with a user, without having to manage
 the complexity of connecting multiple incoming and outgoing messages across
@@ -218,7 +216,7 @@ multiple API calls into a single function.
 Simple conversation example:
 
 ```php
-$slackbot->hears('start conversation', function (SlackBot $bot, $message) {
+$botman->hears('start conversation', function (BotMan $bot, $message) {
 
   $bot->startConversation(new PizzaConversation);
 
@@ -228,7 +226,7 @@ $slackbot->hears('start conversation', function (SlackBot $bot, $message) {
 ### Creating Conversations
 
 When starting a new conversation using the `startConversation()` method, you need to pass the method the conversation that you want to start gathering information with.
-Each conversation object needs to extend from the SlackBot `Conversation` object and must implement a simple `run()` method.
+Each conversation object needs to extend from the BotMan `Conversation` object and must implement a simple `run()` method.
 
 This is the very first method that gets executed, when the conversation starts.
 
@@ -365,7 +363,7 @@ Creating a simple Question object:
 
 ### Long running tasks
 
-SlackBot uses the Slack Event API to get information from Slack. When Slack sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
+BotMan uses the Slack Event API to get information from Slack. When Slack sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
 Otherwise Slack will consider the event delivery attempt failed and Slack will attempt to deliver the message up to three more times.
 
 This means that you should push long running tasks into an asynchronous queue.
@@ -387,4 +385,4 @@ Queue example using Laravel:
 
 ## License
 
-SlackBot is free software distributed under the terms of the MIT license.
+BotMan is free software distributed under the terms of the MIT license.

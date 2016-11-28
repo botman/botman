@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\SlackBot\Drivers;
+namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
-use Mpociot\SlackBot\Answer;
-use Mpociot\SlackBot\Button;
-use Mpociot\SlackBot\Message;
-use Mpociot\SlackBot\Question;
+use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Button;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

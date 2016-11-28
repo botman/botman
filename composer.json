@@ -4,8 +4,9 @@
     "description": "",
     "keywords": [
         "Bot",
-        "Botkit",
+        "Botman",
         "Slack",
+        "Facebook Messenger",
         "Laravel"
     ],
     "homepage": "http://github.com/mpociot/slackbot",
@@ -30,12 +31,12 @@
     },
     "autoload": {
         "psr-0": {
-            "Mpociot\\SlackBot": "src/"
+            "Mpociot\\BotMan": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mpociot\\SlackBot\\Tests\\": "tests/"
+            "Mpociot\\BotMan\\Tests\\": "tests/"
         }
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
 use Mockery as m;
-use Mpociot\SlackBot\Button;
-use Mpociot\SlackBot\Drivers\FacebookDriver;
-use Mpociot\SlackBot\Http\Curl;
-use Mpociot\SlackBot\Message;
-use Mpociot\SlackBot\Question;
+use Mpociot\BotMan\Button;
+use Mpociot\BotMan\Drivers\FacebookDriver;
+use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Question;
 use PHPUnit_Framework_TestCase;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase

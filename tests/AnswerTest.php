@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
-use Mpociot\SlackBot\Answer;
+use Mpociot\BotMan\Answer;
 use PHPUnit_Framework_TestCase;
 
 class AnswerTest extends PHPUnit_Framework_TestCase

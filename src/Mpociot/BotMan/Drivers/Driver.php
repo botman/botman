@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\SlackBot\Drivers;
+namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
-use Mpociot\SlackBot\Interfaces\DriverInterface;
-use Mpociot\SlackBot\Interfaces\HttpInterface;
+use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class Driver implements DriverInterface

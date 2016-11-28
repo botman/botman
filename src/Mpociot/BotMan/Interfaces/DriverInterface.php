@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\SlackBot\Interfaces;
+namespace Mpociot\BotMan\Interfaces;
 
 
-use Mpociot\SlackBot\Message;
-use Mpociot\SlackBot\Question;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\Request;
 
 interface DriverInterface

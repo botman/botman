@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\SlackBot;
+namespace Mpociot\BotMan;
 
 use Closure;
 
@@ -10,7 +10,7 @@ use Closure;
 abstract class Conversation
 {
     /**
-     * @var SlackBot
+     * @var BotMan
      */
     protected $bot;
 
@@ -20,9 +20,9 @@ abstract class Conversation
     protected $token;
 
     /**
-     * @param SlackBot $bot
+     * @param BotMan $bot
      */
-    public function setBot(SlackBot $bot)
+    public function setBot(BotMan $bot)
     {
         $this->bot = $bot;
         $this->token = $bot->getToken();

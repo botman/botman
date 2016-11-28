@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\SlackBot;
+namespace Mpociot\BotMan;
 
 class Answer
 {

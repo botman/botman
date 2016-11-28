@@ -1,17 +1,17 @@
 <?php
 
-namespace Mpociot\SlackBot;
+namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\SlackBot\Drivers\Driver;
+use Mpociot\BotMan\Drivers\Driver;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\SlackBot\Interfaces\CacheInterface;
+use Mpociot\BotMan\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
 
 /**
- * Class SlackBot.
+ * Class BotMan.
  */
-class SlackBot
+class BotMan
 {
     /**
      * @var \Symfony\Component\HttpFoundation\ParameterBag
@@ -68,7 +68,7 @@ class SlackBot
     const PUBLIC_CHANNEL = 'public_channel';
 
     /**
-     * Slack constructor.
+     * BotMan constructor.
      * @param Serializer $serializer
      * @param Request $request
      * @param CacheInterface $cache

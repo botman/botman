@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\SlackBot\Cache;
+namespace Mpociot\BotMan\Cache;
 
-use Mpociot\SlackBot\Interfaces\CacheInterface;
+use Mpociot\BotMan\Interfaces\CacheInterface;
 
 class ArrayCache implements CacheInterface
 {

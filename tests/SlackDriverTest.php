@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
 use Mockery as m;
-use Mpociot\SlackBot\Button;
-use Mpociot\SlackBot\Drivers\SlackDriver;
-use Mpociot\SlackBot\Http\Curl;
-use Mpociot\SlackBot\Message;
-use Mpociot\SlackBot\Question;
+use Mpociot\BotMan\Button;
+use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Question;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +16,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
 
     private function getDriver($responseData, $htmlInterface = null)
     {
-        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request = m::mock(Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
         if ($htmlInterface === null) {
             $htmlInterface = m::mock(Curl::class);

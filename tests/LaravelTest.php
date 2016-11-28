@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\SlackBot\Tests;
+namespace Mpociot\BotMan\Tests;
 
-use Mpociot\SlackBot\Tests\Fixtures\TestConversation;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Orchestra\Testbench\TestCase;
-use SlackBot;
+use BotMan;
 use Cache;
 
 class LaravelTest extends TestCase
@@ -17,20 +17,20 @@ class LaravelTest extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return [\Mpociot\SlackBot\SlackBotServiceProvider::class];
+        return [\Mpociot\BotMan\BotManServiceProvider::class];
     }
 
     protected function getPackageAliases($app)
     {
         return [
-            'SlackBot' => \Mpociot\SlackBot\Facades\SlackBot::class,
+            'BotMan' => \Mpociot\BotMan\Facades\BotMan::class,
         ];
     }
 
     /** @test */
     public function the_facade_works()
     {
-        $this->assertFalse(SlackBot::isBot());
+        $this->assertFalse(BotMan::isBot());
     }
 
     /** @test */
@@ -38,9 +38,9 @@ class LaravelTest extends TestCase
     {
         $conversation = new TestConversation();
 
-        $bot = app('slackbot');
+        $bot = app('botman');
         $bot->hears('foo', function(){});
-        SlackBot::storeConversation($conversation, function ($answer) use ($bot) {
+        BotMan::storeConversation($conversation, function ($answer) use ($bot) {
         });
 
         $cached = Cache::get('conversation:-');

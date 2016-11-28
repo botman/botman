@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\SlackBot\Cache;
+namespace Mpociot\BotMan\Cache;
 
 use Cache;
-use Mpociot\SlackBot\Interfaces\CacheInterface;
+use Mpociot\BotMan\Interfaces\CacheInterface;
 
 /**
  * The Laravel Cache implenentation.

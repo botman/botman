@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\SlackBot\Interfaces;
+namespace Mpociot\BotMan\Interfaces;
 
 interface CacheInterface
 {
