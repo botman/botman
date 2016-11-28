@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 27/11/2016
- * Time: 22:03
- */
 
 namespace Mpociot\SlackBot;
 
@@ -20,11 +14,15 @@ class Message
     /** @var string */
     protected $channel;
 
-    public function __construct($message, $user, $channel)
+    /** @var mixed */
+    protected $payload;
+
+    public function __construct($message, $user, $channel, $payload = null)
     {
         $this->message = $message;
         $this->user = $user;
         $this->channel = $channel;
+        $this->payload = $payload;
     }
 
     /**
@@ -41,6 +39,14 @@ class Message
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayload()
+    {
+        return $this->payload;
     }
 
     /**

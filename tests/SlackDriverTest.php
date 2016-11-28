@@ -134,7 +134,9 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'response'
             ],
         ]);
-        $this->assertSame('response', $driver->getConversationAnswer()->getText());
+
+        $message = new Message('response', 'U0X12345', 'general');
+        $this->assertSame('response', $driver->getConversationAnswer($message)->getText());
     }
 
     /** @test */
@@ -182,7 +184,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
-        $this->assertSame('yes', $driver->getConversationAnswer()->getValue());
+        $message = new Message('', '', '');
+        $this->assertSame('yes', $driver->getConversationAnswer($message)->getValue());
     }
 
     /** @test */

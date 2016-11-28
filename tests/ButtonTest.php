@@ -45,6 +45,13 @@ class ButtonTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_have_an_image_url()
+    {
+        $button = Button::create('text')->image('http://foobar.com/image.png');
+        $this->assertSame('http://foobar.com/image.png', Arr::get($button->toArray(), 'image_url'));
+    }
+
+    /** @test */
     public function it_has_a_button_type()
     {
         $button = Button::create('text');

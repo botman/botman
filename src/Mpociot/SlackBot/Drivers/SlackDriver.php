@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 27/11/2016
- * Time: 11:52
- */
 
 namespace Mpociot\SlackBot\Drivers;
 
@@ -57,9 +51,10 @@ class SlackDriver extends Driver
     }
 
     /**
+     * @param  Message $message
      * @return Answer
      */
-    public function getConversationAnswer()
+    public function getConversationAnswer(Message $message)
     {
         if ($this->payload instanceof Collection) {
             return Answer::create($this->payload['actions'][0]['name'])

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 28/11/2016
- * Time: 11:53
- */
 
 namespace Mpociot\SlackBot\Interfaces;
 
@@ -42,9 +36,11 @@ interface DriverInterface
     public function isBot();
 
     /**
+     * @param Message $matchingMessage
+     * 
      * @return Answer
      */
-    public function getConversationAnswer();
+    public function getConversationAnswer(Message $message);
 
     /**
      * @param string|Question $message

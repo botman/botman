@@ -15,6 +15,9 @@ class Button implements JsonSerializable
     /** @var string */
     protected $name;
 
+    /** @var string */
+    protected $image_url;
+
     /**
      * @param string $text
      *
@@ -60,6 +63,19 @@ class Button implements JsonSerializable
     }
 
     /**
+     * Set the button image (Facebook only)
+     *
+     * @param string $image_url
+     * @return $this
+     */
+    public function image($image_url)
+    {
+        $this->image_url = $image_url;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -67,6 +83,7 @@ class Button implements JsonSerializable
         return [
             'name' => isset($this->name) ? $this->name : $this->text,
             'text' => $this->text,
+            'image_url' => $this->image_url,
             'type' => 'button',
             'value' => $this->value,
         ];

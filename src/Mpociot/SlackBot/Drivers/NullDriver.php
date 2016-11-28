@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 27/11/2016
- * Time: 11:52
- */
 
 namespace Mpociot\SlackBot\Drivers;
 
@@ -35,9 +29,11 @@ class NullDriver extends Driver
     }
 
     /**
+     * @param Message $message
+     * 
      * @return Answer
      */
-    public function getConversationAnswer()
+    public function getConversationAnswer(Message $message)
     {
         return Answer::create('');
     }
@@ -58,22 +54,6 @@ class NullDriver extends Driver
     public function isBot()
     {
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUser()
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     */
-    public function getChannel()
-    {
-        return '';
     }
 
     /**

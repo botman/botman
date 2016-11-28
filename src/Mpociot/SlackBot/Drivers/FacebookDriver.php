@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 27/11/2016
- * Time: 11:52
- */
 
 namespace Mpociot\SlackBot\Drivers;
 
 use Illuminate\Support\Collection;
 use Mpociot\SlackBot\Answer;
+use Mpociot\SlackBot\Button;
 use Mpociot\SlackBot\Message;
 use Mpociot\SlackBot\Question;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -28,22 +23,8 @@ class FacebookDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        /*
-         * If the request has a POST parameter called 'payload'
-         * we're dealing with an interactive button response.
-         */
-        if (! is_null($request->get('payload'))) {
-            $payloadData = json_decode($request->get('payload'), true);
-
-            $this->payload = collect($payloadData);
-            $this->event = collect([
-                'channel' => $payloadData['channel']['id'],
-                'user' => $payloadData['user']['id'],
-            ]);
-        } else {
-            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-            $this->event = collect((array)$this->payload->get('entry')[0]);
-        }
+        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
+        $this->event = collect((array)$this->payload->get('entry')[0]);
     }
 
     /**
@@ -57,17 +38,19 @@ class FacebookDriver extends Driver
     }
 
     /**
+     * @param  Message $message
+     *
      * @return Answer
      */
-    public function getConversationAnswer()
+    public function getConversationAnswer(Message $message)
     {
-        if ($this->payload instanceof Collection) {
-            return Answer::create($this->payload['actions'][0]['name'])
-                ->setValue($this->payload['actions'][0]['value'])
-                ->setCallbackId($this->payload['callback_id']);
+        $payload = $message->getPayload();
+        if (isset($payload['message']['quick_reply'])) {
+            return Answer::create($message->getMessage())
+                ->setValue($payload['message']['quick_reply']['payload']);
         }
 
-        return Answer::create($this->event->get('text'));
+        return Answer::create($message->getMessage());
     }
 
     /**
@@ -77,14 +60,15 @@ class FacebookDriver extends Driver
      */
     public function getMessages()
     {
-        if (! $this->payload instanceof Collection) {
-            $messages = collect($this->event->get('messaging'));
-            return $messages->transform(function($msg) {
-                return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id']);
-            })->toArray();
-        }
+        $messages = collect($this->event->get('messaging'));
+        $messages->transform(function($msg) {
+            return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+        })->toArray();
 
-        return [new Message('', '', '')];
+        if (count($messages) === 0) {
+            return [new Message('', '', '')];
+        }
+        return $messages;
     }
 
     /**
@@ -94,6 +78,30 @@ class FacebookDriver extends Driver
     {
         // Facebook bot replies don't get returned
         return false;
+    }
+
+    /**
+     * Convert a Question object into a valid Facebook
+     * quick reply response object.
+     *
+     * @param Question $question
+     * @return array
+     */
+    private function convertQuestion(Question $question) {
+        $questionData = $question->toArray();
+        $replies = collect($question->getButtons())->map(function($button) {
+            return [
+                'content_type' => 'text',
+                'title' => $button['text'],
+                'payload' => $button['value'],
+                'image_url' => $button['image_url']
+            ];
+        });
+
+        return [
+            'text' => $questionData['text'],
+            'quick_replies' => $replies->toArray()
+        ];
     }
 
     /**
@@ -117,7 +125,7 @@ class FacebookDriver extends Driver
          * the text and append the question.
          */
         if ($message instanceof Question) {
-            $parameters['attachments'] = json_encode([$message->toArray()]);
+            $parameters['message'] = $this->convertQuestion($message);
         }
 
         $parameters['access_token'] = $this->config->get('facebook_token');

@@ -118,7 +118,7 @@ class SlackBot
      */
     public function getConversationAnswer()
     {
-        return $this->getDriver()->getConversationAnswer();
+        return $this->getDriver()->getConversationAnswer($this->message);
     }
 
     /**
@@ -288,6 +288,7 @@ class SlackBot
                             }
                         }
                     } else {
+                        $this->message = $message;
                         $next = $this->serializer->unserialize($convo['next']);
                     }
 

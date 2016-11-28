@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marcel
- * Date: 27/11/2016
- * Time: 23:01
- */
 
 namespace Mpociot\SlackBot\Http;
 
