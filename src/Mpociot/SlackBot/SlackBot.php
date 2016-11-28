@@ -3,10 +3,8 @@
 namespace Mpociot\SlackBot;
 
 use Closure;
-use Frlnc\Slack\Core\Commander;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Mpociot\SlackBot\Drivers\Driver;
 use Symfony\Component\HttpFoundation\Request;
-use Illuminate\Support\Collection;
 use Mpociot\SlackBot\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
 
@@ -26,19 +24,14 @@ class SlackBot
     protected $event;
 
     /**
-     * @var Commander
-     */
-    protected $commander;
-
-    /**
      * @var Serializer
      */
     protected $serializer;
 
     /**
-     * @var string
+     * @var Message
      */
-    protected $token;
+    protected $message;
 
     /**
      * Messages to listen to.
@@ -57,10 +50,18 @@ class SlackBot
      * @var array
      */
     protected $matches = [];
-    /**
-     * @var CacheInterface
-     */
+
+    /** @var Request */
+    protected $request;
+
+    /** @var array */
+    protected $config = [];
+
+    /** @var CacheInterface */
     private $cache;
+
+    /** @var DriverManager */
+    protected $manager;
 
     const DIRECT_MESSAGE = 'direct_message';
 
@@ -69,40 +70,18 @@ class SlackBot
     /**
      * Slack constructor.
      * @param Serializer $serializer
-     * @param Commander $commander
      * @param Request $request
      * @param CacheInterface $cache
+     * @param DriverManager $manager
      */
-    public function __construct(Serializer $serializer, Commander $commander, Request $request, CacheInterface $cache)
+    public function __construct(Serializer $serializer, Request $request, CacheInterface $cache, DriverManager $manager)
     {
-        /*
-         * If the request has a POST parameter called 'payload'
-         * we're dealing with an interactive button response.
-         */
-        if (! is_null($request->get('payload'))) {
-            $payloadData = json_decode($request->get('payload'), true);
-            $this->payload = collect($payloadData);
-            $this->event = collect([
-                'channel' => $payloadData['channel']['id'],
-                'user' => $payloadData['user']['id'],
-            ]);
-        } else {
-            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-            $this->event = collect($this->payload->get('event'));
-        }
-
         $this->serializer = $serializer;
-        $this->commander = $commander;
         $this->cache = $cache;
-    }
+        $this->request = $request;
+        $this->message = new Message('', '', '');
+        $this->manager = $manager;
 
-    /**
-     * @param string $token
-     */
-    public function initialize($token)
-    {
-        $this->token = $token;
-        $this->commander->setToken($token);
         $this->loadActiveConversation();
     }
 
@@ -117,47 +96,29 @@ class SlackBot
     }
 
     /**
+     * @return Driver
+     */
+    public function getDriver()
+    {
+        return $this->manager->getMatchingDriver($this->request);
+    }
+
+    /**
      * Retrieve the chat message.
      *
-     * @return string
+     * @return array
      */
-    public function getMessage()
+    public function getMessages()
     {
-        if (! $this->payload instanceof Collection && ! $this->isBot()) {
-            return $this->event->get('text');
-        }
-
-        return '';
+        return $this->getDriver()->getMessages();
     }
 
     /**
-     * @return string
-     */
-    public function getUser()
-    {
-        return $this->event->get('user');
-    }
-
-    /**
-     * @return string
-     */
-    public function getChannel()
-    {
-        return $this->event->get('channel');
-    }
-
-    /**
-     * @return $this|static
+     * @return Answer
      */
     public function getConversationAnswer()
     {
-        if ($this->payload instanceof Collection) {
-            return Answer::create($this->payload['actions'][0]['name'])
-                ->setValue($this->payload['actions'][0]['value'])
-                ->setCallbackId($this->payload['callback_id']);
-        }
-
-        return Answer::create($this->event->get('text'));
+        return $this->getDriver()->getConversationAnswer();
     }
 
     /**
@@ -165,7 +126,7 @@ class SlackBot
      */
     public function isBot()
     {
-        return $this->event->has('bot_id');
+        return $this->getDriver()->isBot();
     }
 
     /**
@@ -210,12 +171,15 @@ class SlackBot
             $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
 
-            if ($this->isMessageMatching($pattern, $matches) && $this->isChannelValid($this->getChannel(), $messageData['in'])) {
-                $heardMessage = true;
-                $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
-                $this->matches = $parameters;
-                array_unshift($parameters, $this);
-                call_user_func_array($callback, $parameters);
+            foreach ($this->getMessages() as $message) {
+                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in'])) {
+                    $this->message = $message;
+                    $heardMessage = true;
+                    $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
+                    $this->matches = $parameters;
+                    array_unshift($parameters, $this);
+                    call_user_func_array($callback, $parameters);
+                }
             }
         }
         if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage)) {
@@ -224,15 +188,16 @@ class SlackBot
     }
 
     /**
+     * @param Message $message
      * @param string $pattern
      * @param array $matches
      * @return int
      */
-    protected function isMessageMatching($pattern, &$matches)
+    protected function isMessageMatching(Message $message, $pattern, &$matches)
     {
-        $message = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
+        $text = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
 
-        return preg_match('/'.$message.'/i', $this->getMessage(), $matches);
+        return preg_match('/'.$text.'/i', $message->getMessage(), $matches);
     }
 
     /**
@@ -242,20 +207,7 @@ class SlackBot
      */
     public function reply($message, $additionalParameters = [])
     {
-        $parameters = array_merge([
-            'token' => $this->payload->get('token'),
-            'channel' => $this->getChannel(),
-            'text' => $message,
-        ], $additionalParameters);
-        /*
-         * If we send a Question with buttons, ignore
-         * the text and append the question.
-         */
-        if ($message instanceof Question) {
-            $parameters['text'] = '';
-            $parameters['attachments'] = json_encode([$message->toArray()]);
-        }
-        $this->commander->execute('chat.postMessage', $parameters);
+        $this->getDriver()->reply($message, $additionalParameters);
 
         return $this;
     }
@@ -268,7 +220,7 @@ class SlackBot
     public function replyPrivate($message, $additionalParameters = [])
     {
         $privateChannel = [
-            'channel' => $this->getUser(),
+            'channel' => $this->message->getUser(),
         ];
 
         return $this->reply($message, array_merge($additionalParameters, $privateChannel));
@@ -289,7 +241,7 @@ class SlackBot
      */
     public function storeConversation(Conversation $instance, $next)
     {
-        $this->cache->put($this->getConversationIdentifier(), [
+        $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
             'next' => is_array($next) ? $this->prepareCallbacks($next) : $this->serializer->serialize($next),
         ], 30);
@@ -317,53 +269,35 @@ class SlackBot
      */
     protected function loadActiveConversation()
     {
-        if (! $this->isBot() && $this->cache->has($this->getConversationIdentifier())) {
-            $convo = $this->cache->pull($this->getConversationIdentifier());
-            $next = false;
-            $parameters = [];
+        if ($this->isBot() === false) {
+            foreach ($this->getMessages() as $message) {
+                if ($this->cache->has($message->getConversationIdentifier())) {
+                    $convo = $this->cache->pull($message->getConversationIdentifier());
+                    $next = false;
+                    $parameters = [];
 
-            if (is_array($convo['next'])) {
-                foreach ($convo['next'] as $callback) {
-                    if ($this->isMessageMatching($callback['pattern'], $matches)) {
-                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
-                        $this->matches = $parameters;
-                        $next = $this->serializer->unserialize($callback['callback']);
-                        break;
+                    if (is_array($convo['next'])) {
+                        foreach ($convo['next'] as $callback) {
+                            if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
+                                $this->message = $message;
+                                $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
+                                $this->matches = $parameters;
+                                $next = $this->serializer->unserialize($callback['callback']);
+                                break;
+                            }
+                        }
+                    } else {
+                        $next = $this->serializer->unserialize($convo['next']);
+                    }
+
+                    if (is_callable($next)) {
+                        array_unshift($parameters, $this->getConversationAnswer());
+                        array_push($parameters, $convo['conversation']);
+                        call_user_func_array($next, $parameters);
                     }
                 }
-            } else {
-                $next = $this->serializer->unserialize($convo['next']);
             }
-
-            if (is_callable($next)) {
-                array_unshift($parameters, $this->getConversationAnswer());
-                array_push($parameters, $convo['conversation']);
-                call_user_func_array($next, $parameters);
-            }
-
-            // Unset payload for possible other listeners
-            $this->clearPayload();
         }
-    }
-
-    /**
-     * @return string
-     */
-    protected function getConversationIdentifier()
-    {
-        return 'conversation:'.$this->getUser().'-'.$this->getChannel();
-    }
-
-    /**
-     * Clear the payload object.
-     */
-    protected function clearPayload()
-    {
-        if (! $this->payload instanceof Collection) {
-            $this->payload->replace();
-        }
-
-        $this->event = collect();
     }
 
     /**
@@ -387,14 +321,6 @@ class SlackBot
     }
 
     /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
      * @return array
      */
     public function getMatches()
@@ -410,9 +336,8 @@ class SlackBot
         return [
             'payload',
             'event',
-            'commander',
+            'request',
             'serializer',
-            'token',
             'cache',
             'matches',
         ];
