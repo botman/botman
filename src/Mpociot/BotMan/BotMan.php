@@ -51,8 +51,8 @@ class BotMan
      */
     protected $matches = [];
 
-    /** @var Request */
-    protected $request;
+    /** @var Driver */
+    protected $driver;
 
     /** @var array */
     protected $config = [];
@@ -78,9 +78,9 @@ class BotMan
     {
         $this->serializer = $serializer;
         $this->cache = $cache;
-        $this->request = $request;
         $this->message = new Message('', '', '');
         $this->manager = $manager;
+        $this->driver = $this->manager->getMatchingDriver($request);
 
         $this->loadActiveConversation();
     }
@@ -100,7 +100,7 @@ class BotMan
      */
     public function getDriver()
     {
-        return $this->manager->getMatchingDriver($this->request);
+        return $this->driver;
     }
 
     /**
@@ -338,7 +338,8 @@ class BotMan
         return [
             'payload',
             'event',
-            'request',
+            'driver',
+            'message',
             'serializer',
             'cache',
             'matches',

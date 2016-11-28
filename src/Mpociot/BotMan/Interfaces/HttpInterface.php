@@ -3,6 +3,8 @@
 namespace Mpociot\BotMan\Interfaces;
 
 
+use Symfony\Component\HttpFoundation\Response;
+
 interface HttpInterface
 {
     /**
@@ -12,7 +14,7 @@ interface HttpInterface
      * @param  array  $urlParameters
      * @param  array  $postParameters
      * @param  array  $headers
-     * @return \Frlnc\Slack\Contracts\Http\Response
+     * @return Response
      */
     public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = []);
 }

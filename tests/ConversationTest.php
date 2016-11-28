@@ -20,19 +20,6 @@ class ConversationTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_set_a_bot_and_store_its_token()
-    {
-        $bot = m::mock(BotMan::class);
-        $bot->shouldReceive('getToken')
-            ->once()
-            ->andReturn('Foo');
-        $conversation = new TestConversation();
-        $conversation->setBot($bot);
-
-        $this->assertSame('Foo', $conversation->getToken());
-    }
-
-    /** @test */
     public function it_can_reply()
     {
         $bot = m::mock(BotMan::class);

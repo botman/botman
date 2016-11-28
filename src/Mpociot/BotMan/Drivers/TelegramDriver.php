@@ -4,13 +4,13 @@ namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class FacebookDriver extends Driver
+class TelegramDriver extends Driver
 {
     /** @var Collection|ParameterBag */
     protected $payload;
@@ -24,7 +24,7 @@ class FacebookDriver extends Driver
     public function buildPayload(Request $request)
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = collect((array)$this->payload->get('entry')[0]);
+        $this->event = collect($this->payload->get('message'));
     }
 
     /**
@@ -34,21 +34,21 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        return $this->event->has('messaging');
+        return (!is_null($this->event->get('from')) || !is_null($this->payload->get('callback_query'))) && !is_null($this->payload->get('update_id'));
     }
 
     /**
      * @param  Message $message
-     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message)
     {
-        $payload = $message->getPayload();
-        if (isset($payload['message']['quick_reply'])) {
-            return Answer::create($message->getMessage())
+        if ($this->payload->get('callback_query') !== null) {
+            $callback = collect($this->payload->get('callback_query'));
+
+            return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
-                ->setValue($payload['message']['quick_reply']['payload']);
+                ->setValue($callback->get('data'));
         }
 
         return Answer::create($message->getMessage());
@@ -61,15 +61,12 @@ class FacebookDriver extends Driver
      */
     public function getMessages()
     {
-        $messages = collect($this->event->get('messaging'));
-        $messages->transform(function($msg) {
-            return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
-        })->toArray();
-
-        if (count($messages) === 0) {
-            return [new Message('', '', '')];
+        if ($this->payload->get('callback_query') !== null) {
+            $callback = collect($this->payload->get('callback_query'));
+            return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'])];
+        } else {
+            return [new Message($this->event->get('text'), $this->event->get('chat')['id'], $this->event->get('from')['id'])];
         }
-        return $messages;
     }
 
     /**
@@ -77,8 +74,7 @@ class FacebookDriver extends Driver
      */
     public function isBot()
     {
-        // Facebook bot replies don't get returned
-        return false;
+        return $this->event->has('entities');
     }
 
     /**
@@ -89,48 +85,40 @@ class FacebookDriver extends Driver
      * @return array
      */
     private function convertQuestion(Question $question) {
-        $questionData = $question->toArray();
         $replies = collect($question->getButtons())->map(function($button) {
             return [
-                'content_type' => 'text',
-                'title' => $button['text'],
-                'payload' => $button['value'],
-                'image_url' => $button['image_url']
+                'text' => $button['text'],
+                'callback_data' => $button['value']
             ];
         });
 
-        return [
-            'text' => $questionData['text'],
-            'quick_replies' => $replies->toArray()
-        ];
+        return $replies->toArray();
     }
 
     /**
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return Response
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
-            'recipient' => [
-                'id' => $matchingMessage->getChannel(),
-            ],
-            'message' => [
-                'text' => $message,
-            ],
+            'chat_id' => $matchingMessage->getUser()
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
          * the text and append the question.
          */
         if ($message instanceof Question) {
-            $parameters['message'] = $this->convertQuestion($message);
+            $parameters['text'] = $message->getText();
+            $parameters['reply_markup'] = json_encode([
+                'inline_keyboard' => [$this->convertQuestion($message)]
+            ], true);
+        } else {
+            $parameters['text'] =  $message;
         }
 
-        $parameters['access_token'] = $this->config->get('facebook_token');
-
-        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
+        return $this->http->post('https://api.telegram.org/bot'. $this->config->get('telegram_token').'/sendMessage', [], $parameters);
     }
 }

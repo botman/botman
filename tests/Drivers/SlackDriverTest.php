@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
@@ -144,7 +144,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__.'/Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -156,7 +156,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__.'/Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -168,7 +168,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__.'/Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
@@ -180,7 +180,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = new \Illuminate\Http\Request();
         $request->replace([
-            'payload' => file_get_contents(__DIR__.'/Fixtures/payload.json'),
+            'payload' => file_get_contents(__DIR__ . '/../Fixtures/payload.json'),
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 

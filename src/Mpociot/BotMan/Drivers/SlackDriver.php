@@ -58,6 +58,7 @@ class SlackDriver extends Driver
     {
         if ($this->payload instanceof Collection) {
             return Answer::create($this->payload['actions'][0]['name'])
+                ->setInteractiveReply(true)
                 ->setValue($this->payload['actions'][0]['value'])
                 ->setCallbackId($this->payload['callback_id']);
         }

@@ -7,6 +7,7 @@ use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +18,8 @@ class DriverManager
      */
     protected $drivers = [
         SlackDriver::class,
-        FacebookDriver::class
+        FacebookDriver::class,
+        TelegramDriver::class
     ];
 
     /** @var array */

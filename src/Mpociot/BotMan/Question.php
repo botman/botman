@@ -114,4 +114,12 @@ class Question implements JsonSerializable
     {
         return $this->buttons;
     }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
 }

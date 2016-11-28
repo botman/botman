@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;

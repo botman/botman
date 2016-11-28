@@ -51,7 +51,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
         $answer = new Answer();
         $this->assertFalse($answer->isInteractiveMessageReply());
 
-        $answer = Answer::create()->setCallbackId('12345');
+        $answer = Answer::create()->setInteractiveReply(true);
         $this->assertTrue($answer->isInteractiveMessageReply());
     }
 

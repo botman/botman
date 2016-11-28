@@ -25,7 +25,6 @@ abstract class Conversation
     public function setBot(BotMan $bot)
     {
         $this->bot = $bot;
-        $this->token = $bot->getToken();
     }
 
     /**
