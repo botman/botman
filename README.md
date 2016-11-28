@@ -6,6 +6,12 @@
 
 BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me) and [Facebook Messenger](http://messenger.com). 
 
+```php
+BotMan::hears('I want cross-platform bots with PHP!', function($bot) {
+    $bot->reply('Look no further!');
+});
+```
+
 ## Getting Started
 
 1) Open the Laravel/Symfony/PHP project your new Bot will live in
@@ -52,7 +58,7 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 
 That's it.
 
-## Getting Started
+## Connect with your messaging service
 
 After you've installed BotMan, the first thing you'll need to do is register your bot with a messaging platform, and get a few configuration options set. This will allow your bot to connect, send and receive messages.
 
