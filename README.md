@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/mpociot/slackbot/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/slackbot)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/slackbot.svg)]()
 
-BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com) and [Facebook Messenger](http://messenger.com). 
+BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me) and [Facebook Messenger](http://messenger.com). 
 
 ## Getting Started
 
@@ -21,7 +21,7 @@ BotMan is a framework agnostic PHP library that is designed to simplify the task
 Require this package with composer using the following command:
 
 ```sh
-$ composer require mpociot/slackbot
+$ composer require mpociot/botman
 ```
 
 ### Using BotMan within a Laravel app
@@ -45,6 +45,7 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 ```php
     'botman' => [
     	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    	'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
         'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
     ],
 ```
@@ -62,7 +63,6 @@ With these two building blocks, almost any type of conversation can be created.
 
 ## Basic Usage
 
-Here's an example of using BotMan with Slack's Event API.
 
 This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
 
@@ -74,6 +74,7 @@ $botman = new BotMan(
     new LaravelCache(),
     new DriverManager([
     	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    	'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
         'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
     ]), new Curl())
 );
@@ -150,16 +151,14 @@ if more than one message needs to be sent.
 
 You may pass either a string, or a Question object to the function.
 
-As a second parameter, you may also send any additional fields supported by Slack:
-
-[Slack's chat.postMessage](https://api.slack.com/methods/chat.postMessage) API accepts several additional fields. These fields can be used to adjust the message appearance, add attachments, or even change the displayed user name.
+As a second parameter, you may also send any additional fields supported by Slack, Facebook Messenger or Telegram.
 
 #### $bot->reply()
 
 | Argument | Description
 |--- |---
 | reply | _String_ or _Question_ Outgoing response
-| callback | _Optional_ Array containing additional parameters
+| additionalParameters | _Optional_ Array containing additional parameters
 
 Simple reply example:
 
