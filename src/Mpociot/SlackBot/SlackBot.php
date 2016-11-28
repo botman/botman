@@ -183,6 +183,7 @@ class SlackBot
             }
         }
         if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage)) {
+            $this->message = $this->getMessages()[0];
             call_user_func($this->fallbackMessage, $this);
         }
     }
