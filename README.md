@@ -42,6 +42,15 @@ Also add the alias / facade:
 'SlackBot' => Mpociot\SlackBot\Facades\SlackBot::class
 ```
 
+Add your Facebook access token / Slack token to your `config/services.php`:
+
+```php
+    'slackbot' => [
+    	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+        'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    ],
+```
+
 That's it.
 
 ## Core Concepts
@@ -60,9 +69,19 @@ Here's an example of using SlackBot with Slack's Event API.
 This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
 
 ```php
+// Usage without Laravel
+$slackbot = new SlackBot(
+    new Serializer(),
+    $request,
+    new LaravelCache(),
+    new DriverManager([
+    	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+        'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    ]), new Curl())
+);
 
-$slackbot = new SlackBot();
-$slackbot->initialize(<my_slack_bot_token>);
+// Usage with Laravel
+$slackbot = app('slackbot');
 
 // give the bot something to listen for.
 $slackbot->hears('hello', function (SlackBot $bot, $message) {
