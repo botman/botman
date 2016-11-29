@@ -4,7 +4,6 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Mpociot\BotMan\Drivers\Driver;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
 
