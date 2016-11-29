@@ -16,12 +16,6 @@ interface DriverInterface
     public function matchesRequest();
 
     /**
-     * @param Request $request
-     * @return void
-     */
-    public function buildPayload(Request $request);
-
-    /**
      * Retrieve the chat message(s).
      *
      * @return array

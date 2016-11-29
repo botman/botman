@@ -29,14 +29,14 @@ class SlackDriver extends Driver
         if (! is_null($request->get('payload'))) {
             $payloadData = json_decode($request->get('payload'), true);
 
-            $this->payload = collect($payloadData);
-            $this->event = collect([
+            $this->payload = Collection::make($payloadData);
+            $this->event = Collection::make([
                 'channel' => $payloadData['channel']['id'],
                 'user' => $payloadData['user']['id'],
             ]);
         } else {
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-            $this->event = collect($this->payload->get('event'));
+            $this->event = Collection::make($this->payload->get('event'));
         }
     }
 

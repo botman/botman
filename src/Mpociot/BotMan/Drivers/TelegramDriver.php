@@ -24,7 +24,7 @@ class TelegramDriver extends Driver
     public function buildPayload(Request $request)
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = collect($this->payload->get('message'));
+        $this->event = Collection::make($this->payload->get('message'));
     }
 
     /**
@@ -44,7 +44,7 @@ class TelegramDriver extends Driver
     public function getConversationAnswer(Message $message)
     {
         if ($this->payload->get('callback_query') !== null) {
-            $callback = collect($this->payload->get('callback_query'));
+            $callback = Collection::make($this->payload->get('callback_query'));
 
             return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
@@ -62,7 +62,7 @@ class TelegramDriver extends Driver
     public function getMessages()
     {
         if ($this->payload->get('callback_query') !== null) {
-            $callback = collect($this->payload->get('callback_query'));
+            $callback = Collection::make($this->payload->get('callback_query'));
 
             return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'])];
         } else {
@@ -87,7 +87,7 @@ class TelegramDriver extends Driver
      */
     private function convertQuestion(Question $question)
     {
-        $replies = collect($question->getButtons())->map(function ($button) {
+        $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
                 'text' => $button['text'],
                 'callback_data' => $button['value'],

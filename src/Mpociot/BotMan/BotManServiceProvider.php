@@ -17,14 +17,7 @@ class BotManServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('botman', function ($app) {
-            $botman = new BotMan(
-                new Serializer(),
-                $app->make('request'),
-                new LaravelCache(),
-                new DriverManager(config('services.botman', []), new Curl())
-            );
-
-            return $botman;
+            return BotManFactory::create(config('services.botman', []), $app->make('request'), new LaravelCache());
         });
     }
 }

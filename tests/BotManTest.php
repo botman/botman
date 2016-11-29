@@ -6,6 +6,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Http\Curl;
@@ -37,7 +38,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        return new BotMan(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
+        return BotManFactory::create([], $request, $this->cache);
     }
 
     protected function getBotWithInteractiveData($payload)
@@ -48,7 +49,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'payload' => $payload,
         ]);
 
-        return new BotMan(new Serializer(), $request, $this->cache, new DriverManager([], new Curl()));
+        return BotManFactory::create([], $request, $this->cache);
     }
 
     /** @test */

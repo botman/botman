@@ -86,16 +86,13 @@ This sample bot listens for the word "hello" - either in a direct message (a pri
 
 ```php
 // Usage without Laravel
-$botman = new BotMan(
-    new Serializer(),
-    $request,
-    new LaravelCache(),
-    new DriverManager([
-    	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
-    	'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-        'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
-    ]), new Curl())
-);
+$config = [
+    'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+];
+
+$botman = BotManFactory::create($config, $request, new LaravelCache());
 
 // Usage with Laravel
 $botman = app('botman');

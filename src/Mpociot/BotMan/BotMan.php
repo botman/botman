@@ -60,9 +60,6 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
-    /** @var DriverManager */
-    protected $manager;
-
     const DIRECT_MESSAGE = 'direct_message';
 
     const PUBLIC_CHANNEL = 'public_channel';
@@ -70,17 +67,15 @@ class BotMan
     /**
      * BotMan constructor.
      * @param Serializer $serializer
-     * @param Request $request
      * @param CacheInterface $cache
-     * @param DriverManager $manager
+     * @param Driver $driver
      */
-    public function __construct(Serializer $serializer, Request $request, CacheInterface $cache, DriverManager $manager)
+    public function __construct(Serializer $serializer, CacheInterface $cache, Driver $driver)
     {
         $this->serializer = $serializer;
         $this->cache = $cache;
         $this->message = new Message('', '', '');
-        $this->manager = $manager;
-        $this->driver = $this->manager->getMatchingDriver($request);
+        $this->driver = $driver;
 
         $this->loadActiveConversation();
     }

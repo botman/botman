@@ -23,7 +23,7 @@ class FacebookDriver extends Driver
     public function buildPayload(Request $request)
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = collect((array) $this->payload->get('entry')[0]);
+        $this->event = Collection::make((array) $this->payload->get('entry')[0]);
     }
 
     /**
@@ -60,8 +60,8 @@ class FacebookDriver extends Driver
      */
     public function getMessages()
     {
-        $messages = collect($this->event->get('messaging'));
-        $messages->transform(function ($msg) {
+        $messages = Collection::make($this->event->get('messaging'));
+        $messages = $messages->transform(function ($msg) {
             return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
         })->toArray();
 
@@ -91,7 +91,7 @@ class FacebookDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $questionData = $question->toArray();
-        $replies = collect($question->getButtons())->map(function ($button) {
+        $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
                 'content_type' => 'text',
                 'title' => $button['text'],

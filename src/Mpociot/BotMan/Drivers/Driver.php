@@ -24,7 +24,13 @@ abstract class Driver implements DriverInterface
     final public function __construct(Request $request, array $config, HttpInterface $http)
     {
         $this->http = $http;
-        $this->config = collect($config);
+        $this->config = Collection::make($config);
         $this->buildPayload($request);
     }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    abstract public function buildPayload(Request $request);
 }
