@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -19,6 +20,7 @@ class DriverManager
         SlackDriver::class,
         FacebookDriver::class,
         TelegramDriver::class,
+        BotFrameworkDriver::class,
     ];
 
     /** @var array */

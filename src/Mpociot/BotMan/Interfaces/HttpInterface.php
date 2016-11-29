@@ -13,7 +13,8 @@ interface HttpInterface
      * @param  array  $urlParameters
      * @param  array  $postParameters
      * @param  array  $headers
+     * @param  bool  $asJSON
      * @return Response
      */
-    public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = []);
+    public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = [], $asJSON = false);
 }
