@@ -8,11 +8,8 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use PHPUnit_Framework_TestCase;
-use SuperClosure\Serializer;
 
 class BotManTest extends PHPUnit_Framework_TestCase
 {
