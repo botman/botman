@@ -45,6 +45,7 @@ class BotFrameworkDriver extends Driver
     {
         if (strstr($message->getMessage(), '<botman value="') !== false) {
             preg_match('/<botman value="(.*)"\/>/', $message->getMessage(), $matches);
+
             return Answer::create($message->getMessage())
                 ->setInteractiveReply(true)
                 ->setValue($matches[1]);
@@ -84,7 +85,7 @@ class BotFrameworkDriver extends Driver
             return [
                 'type' => 'imBack',
                 'title' => $button['text'],
-                'value' => $button['text'].'<botman value="'.$button['value'].'" />'
+                'value' => $button['text'].'<botman value="'.$button['value'].'" />',
             ];
         });
 
@@ -97,9 +98,10 @@ class BotFrameworkDriver extends Driver
             'client_id' => $this->config->get('microsoft_app_id'),
             'client_secret' => $this->config->get('microsoft_app_key'),
             'grant_type' => 'client_credentials',
-            'scope' => 'https://graph.microsoft.com/.default'
+            'scope' => 'https://graph.microsoft.com/.default',
         ]);
         $responseData = json_decode($response->getContent());
+
         return $responseData->access_token;
     }
 
@@ -114,7 +116,7 @@ class BotFrameworkDriver extends Driver
         $token = $this->getAccessToken();
 
         $parameters = array_merge([
-            'type' => 'message'
+            'type' => 'message',
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
@@ -126,9 +128,9 @@ class BotFrameworkDriver extends Driver
                     'contentType' => 'application/vnd.microsoft.card.hero',
                     'content' => [
                         'text' => $message->getText(),
-                        'buttons' => $this->convertQuestion($message)
-                    ]
-                ]
+                        'buttons' => $this->convertQuestion($message),
+                    ],
+                ],
             ];
         } else {
             $parameters['text'] = $message;
@@ -136,7 +138,7 @@ class BotFrameworkDriver extends Driver
 
         $headers = [
             'Content-Type:application/json',
-            'Authorization:Bearer '.$token
+            'Authorization:Bearer '.$token,
         ];
 
         return $this->http->post($matchingMessage->getPayload()->get('serviceUrl').'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
