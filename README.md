@@ -90,6 +90,8 @@ This sample bot listens for the word "hello" - either in a direct message (a pri
 ```php
 // Usage without Laravel
 $config = [
+    'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
+    'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
