@@ -30,11 +30,12 @@ abstract class Conversation
     /**
      * @param string|Question $question
      * @param array|Closure $next
+     * @param array $additionalParameters
      * @return $this
      */
-    public function ask($question, $next)
+    public function ask($question, $next, $additionalParameters = [])
     {
-        $this->bot->reply($question);
+        $this->bot->reply($question, $additionalParameters);
         $this->bot->storeConversation($this, $next);
 
         return $this;
