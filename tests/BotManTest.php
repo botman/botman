@@ -234,6 +234,26 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_retrieve_the_user()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+            $this->assertSame('U0X12345', $bot->getMessage()->getUser());
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_allows_regular_expressions()
     {
         $called = false;

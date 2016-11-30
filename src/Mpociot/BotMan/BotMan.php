@@ -325,6 +325,14 @@ class BotMan
     }
 
     /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * @return array
      */
     public function __sleep()
