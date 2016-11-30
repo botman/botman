@@ -8,6 +8,7 @@ use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
+use Mpociot\BotMan\Drivers\NexmoDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,6 +22,7 @@ class DriverManager
         FacebookDriver::class,
         TelegramDriver::class,
         BotFrameworkDriver::class,
+        NexmoDriver::class,
     ];
 
     /** @var array */
