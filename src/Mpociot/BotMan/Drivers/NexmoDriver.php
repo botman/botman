@@ -53,7 +53,7 @@ class NexmoDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('text'), $this->event->get('msisdn')   , $this->event->get('to'), $this->payload)];
+        return [new Message($this->event->get('text'), $this->event->get('msisdn'), $this->event->get('to'), $this->payload)];
     }
 
     /**
@@ -73,7 +73,7 @@ class NexmoDriver extends Driver
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
-            'api_key' =>  $this->config->get('nexmo_key'),
+            'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
             'to' => $matchingMessage->getUser(),
             'from' => $matchingMessage->getChannel(),
@@ -88,6 +88,6 @@ class NexmoDriver extends Driver
             $parameters['text'] = $message;
         }
 
-        return $this->http->post('https://rest.nexmo.com/sms/json?' . http_build_query($parameters));
+        return $this->http->post('https://rest.nexmo.com/sms/json?'.http_build_query($parameters));
     }
 }
