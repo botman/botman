@@ -16,13 +16,10 @@ BotMan::listen();
 
 ## Getting Started
 
-1) Open the Laravel/Symfony/PHP project your new Bot will live in
-
-2) [Install BotMan with composer](#installation-using-composer)
-
-3) Configure your messaging platform
-
-4) Implement your bot logic
+1. Open the Laravel/Symfony/PHP project your new Bot will live in
+2. [Install BotMan with composer](#installation-using-composer)
+3. Configure your messaging platform
+4. Implement your bot logic
  
 ## Installation using Composer
 
@@ -51,13 +48,13 @@ Also add the alias / facade:
 Add your Facebook access token / Slack token to your `config/services.php`:
 
 ```php
-    'botman' => [
-        'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
-        'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
-    	'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
-    	'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-        'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
-    ],
+'botman' => [
+    'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
+    'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
+    'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+],
 ```
 
 That's it.
@@ -84,7 +81,6 @@ With these two building blocks, almost any type of conversation can be created.
 
 ## Basic Usage
 
-
 This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
 
 ```php
@@ -106,7 +102,7 @@ $botman = app('botman');
 
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot, $message) {
-  $bot->reply('Hello yourself.');
+    $bot->reply('Hello yourself.');
 });
 ```
 
@@ -131,10 +127,8 @@ BotMan provides a `hears()` function, which will listen to specific patterns in 
 
 ```php
 $botman->hears('keyword', function(BotMan $bot, $message) {
-
-  // do something to respond to message
-  $bot->reply('You used a keyword!');
-
+    // do something to respond to message
+    $bot->reply('You used a keyword!');
 });
 ```
 
@@ -142,10 +136,11 @@ When using the built in regular expression matching, the results of the expressi
 
 ```php
 $botman->hears('open the {doorType} doors', function(BotMan $bot, $doorType) {
-  if ($doorType === 'pod bay') {
-    return $bot->reply('I\'m sorry, Dave. I\'m afraid I can\'t do that.');
-  }
-  return $bot->reply('Okay');
+    if ($doorType === 'pod bay') {
+        return $bot->reply('I\'m sorry, Dave. I\'m afraid I can\'t do that.');
+    }
+
+    return $bot->reply('Okay');
 });
 ```
 
@@ -186,12 +181,10 @@ Simple reply example:
 
 ```php
 $botman->hears('keyword', function (BotMan $bot, $message) {
+    // do something to respond to message
+    // ...
 
-  // do something to respond to message
-  // ...
-
-  $bot->reply("Tell me more!");
-
+    $bot->reply("Tell me more!");
 });
 ```
 
@@ -200,16 +193,13 @@ Slack-specific fields and attachments:
 
 ```php
 $botman->hears('keyword', function (BotMan $bot, $message) {
-
     // do something...
 
     // then respond with a message object
-    //
     $bot->reply("A more complex response",[
-      'username' => "ReplyBot",
-      'icon_emoji' => ":dash:",
+        'username' => "ReplyBot",
+        'icon_emoji' => ":dash:",
     ]);
-
 })
 ```
 
@@ -238,9 +228,7 @@ Simple conversation example:
 
 ```php
 $botman->hears('start conversation', function (BotMan $bot, $message) {
-
-  $bot->startConversation(new PizzaConversation);
-
+    $bot->startConversation(new PizzaConversation);
 });
 ```
 
@@ -256,26 +244,23 @@ Example conversation object:
 ```php
 class PizzaConversation extends Conversation
 {
-	protected $size;
+    protected $size;
 
-	public function askSize()
-	{
-		$this->ask('What pizza size do you want?', function(Answer $answer) {
-			
-			// Save size for next question
-			$this->size = $answer->getText();
+    public function askSize()
+    {
+        $this->ask('What pizza size do you want?', function(Answer $answer) {
+            // Save size for next question
+            $this->size = $answer->getText();
 
-			$this->say('Got it. Your pizza will be '.$answer->getText());
-            
+            $this->say('Got it. Your pizza will be '.$answer->getText());
         });
-	}
+    }
 
-	public function run()
-	{
-		// This will be called immediately
-		$this->askSize();
-	}
-
+    public function run()
+    {
+        // This will be called immediately
+        $this->askSize();
+    }
 }
 ``` 
 
@@ -311,40 +296,37 @@ The last parameter is always a reference to the conversation itself.
 ##### Using $conversation->ask with a callback:
 
 ```php
-	// ...inside the conversation object...
-	public function askMood()
-	{
-		$this->ask('How are you?', function (Answer $response) {
-			
-			$this->say('Cool - you said ' . $response->getText());
-			
-		});
-	}
-
+// ...inside the conversation object...
+public function askMood()
+{
+    $this->ask('How are you?', function (Answer $response) {
+        $this->say('Cool - you said ' . $response->getText());
+    });
+}
 ```
 
 ##### Using $conversation->ask with an array of callbacks:
 
 
 ```php
-	// ...inside the conversation object...
-	public function askNextStep()
-	{
-		$this->ask('Shall we proceed? Say YES or NO', [
-			[
-				'pattern' => 'yes|yep',
-				'callback' => function () {
-					$this->say('Okay - we\'ll keep going');
-				}
-			],
-			[
-				'pattern' => 'nah|no|nope',
-				'callback' => function () {
-					$this->say('PANIC!! Stop the engines NOW!');
-				}
-			]
-		]);
-	}
+// ...inside the conversation object...
+public function askNextStep()
+{
+    $this->ask('Shall we proceed? Say YES or NO', [
+        [
+            'pattern' => 'yes|yep',
+            'callback' => function () {
+                $this->say('Okay - we\'ll keep going');
+            }
+        ],
+        [
+            'pattern' => 'nah|no|nope',
+            'callback' => function () {
+                $this->say('PANIC!! Stop the engines NOW!');
+            }
+        ]
+    ]);
+}
 
 ```
 #### Using $conversation->ask with a Question object
@@ -358,27 +340,25 @@ the user interacted with the message and clicked on a button.
 Creating a simple Question object:
 
 ```php
-
-	// ...inside the conversation object...
-	public function askForDatabase()
-	{
+// ...inside the conversation object...
+public function askForDatabase()
+{
     $question = Question::create('Do you need a database?')
-      ->fallback('Unable to create a new database')
-      ->callbackId('create_database')
-      ->addButtons([
-          Button::create('Of course')->value('yes'),
-          Button::create('Hell no!')->value('no'),
-    ]);
+        ->fallback('Unable to create a new database')
+        ->callbackId('create_database')
+        ->addButtons([
+            Button::create('Of course')->value('yes'),
+            Button::create('Hell no!')->value('no'),
+        ]);
 
     $this->ask($question, function (Answer $answer) {
-      // Detect if button was clicked:
-      if ($answer->isInteractiveMessageReply()) {
-        $selectedValue = $answer->getValue(); // will be either 'yes' or 'no'
-        $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
-      }
+        // Detect if button was clicked:
+        if ($answer->isInteractiveMessageReply()) {
+            $selectedValue = $answer->getValue(); // will be either 'yes' or 'no'
+            $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+        }
     });
-
-  }
+}
 ```
 
 
@@ -392,16 +372,15 @@ This means that you should push long running tasks into an asynchronous queue.
 Queue example using Laravel:
 
 ```php
-	// ...inside the conversation object...
-  public function askDomainName()
-  {
+// ...inside the conversation object...
+public function askDomainName()
+{
     $this->ask('What should be the domain name?', function (Answer $answer) {
-      // Push long running task onto the queue.
-      $this->reply('Okay, creating subdomain ' . $answer->getText());
-      dispatch(new CreateSubdomain($this, $answer->getText()));
-      
+        // Push long running task onto the queue.
+        $this->reply('Okay, creating subdomain ' . $answer->getText());
+        dispatch(new CreateSubdomain($this, $answer->getText()));
     });
-  }
+}
 ```
 
 ## License
