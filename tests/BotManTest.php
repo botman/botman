@@ -95,6 +95,58 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_does_not_use_fallback_for_conversation_replies()
+    {
+        $GLOBALS['answer'] = '';
+        $GLOBALS['called'] = false;
+        $fallbackCalled = false;
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function () {
+        });
+        $botman->listen();
+
+        $conversation = new TestConversation();
+
+        $botman->storeConversation($conversation, function ($answer) use (&$called) {
+            $GLOBALS['answer'] = $answer;
+            $GLOBALS['called'] = true;
+        });
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again',
+            ],
+        ]);
+
+        $botman->fallback(function ($bot) use (&$fallbackCalled) {
+            $fallbackCalled = true;
+        });
+        $botman->listen();
+
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('Hello again', $GLOBALS['answer']->getText());
+        $this->assertTrue($GLOBALS['called']);
+
+        $this->assertFalse($fallbackCalled);
+    }
+
+    /** @test */
     public function it_does_not_use_fallback_for_bot_replies()
     {
         $called = false;

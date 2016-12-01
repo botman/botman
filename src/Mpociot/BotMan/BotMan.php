@@ -45,9 +45,7 @@ class BotMan
      */
     protected $fallbackMessage;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $matches = [];
 
     /** @var Driver */
@@ -58,6 +56,9 @@ class BotMan
 
     /** @var CacheInterface */
     private $cache;
+
+    /** @var bool */
+    protected $loadedConversation = false;
 
     const DIRECT_MESSAGE = 'direct_message';
 
@@ -176,7 +177,7 @@ class BotMan
                 }
             }
         }
-        if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage)) {
+        if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage) && $this->loadedConversation === false) {
             $this->message = $this->getMessages()[0];
             call_user_func($this->fallbackMessage, $this);
         }
@@ -290,6 +291,8 @@ class BotMan
                         array_unshift($parameters, $this->getConversationAnswer());
                         array_push($parameters, $convo['conversation']);
                         call_user_func_array($next, $parameters);
+                        // Mark conversation as loaded to avoid triggering the fallback method
+                        $this->loadedConversation = true;
                     }
                 }
             }
