@@ -16,6 +16,9 @@ class Message
     /** @var mixed */
     protected $payload;
 
+    /** @var array */
+    protected $extras = [];
+
     public function __construct($message, $user, $channel, $payload = null)
     {
         $this->message = $message;
@@ -62,5 +65,24 @@ class Message
     public function getConversationIdentifier()
     {
         return 'conversation:'.$this->getUser().'-'.$this->getChannel();
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return Message
+     */
+    public function addExtras($key, $value)
+    {
+        $this->extras[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtras()
+    {
+        return $this->extras;
     }
 }

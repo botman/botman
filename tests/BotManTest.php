@@ -9,6 +9,7 @@ use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
+use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use PHPUnit_Framework_TestCase;
 
 class BotManTest extends PHPUnit_Framework_TestCase
@@ -567,5 +568,43 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('Heisenberg', $GLOBALS['answer']);
         $this->assertTrue($GLOBALS['called']);
+    }
+
+    /** @test */
+    public function it_applies_middlewares()
+    {
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        $botman->middleware(new TestMiddleware());
+
+        $botman->hears('foo', function ($bot) {
+            $this->assertSame([
+                'test' => 'successful'
+            ], $bot->getMessage()->getExtras());
+        });
+        $botman->listen();
+    }
+
+    /** @test */
+    public function it_tries_to_match_with_middlewares()
+    {
+        $called = false;
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        $botman->middleware(new TestMiddleware());
+
+        $botman->hears('successful', function ($bot) use(&$called) {
+            $called = true;
+        });
+        $botman->listen();
+        $this->assertTrue($called);
     }
 }

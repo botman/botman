@@ -5,6 +5,7 @@ namespace Mpociot\BotMan;
 use Closure;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\CacheInterface;
+use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 use SuperClosure\Serializer;
 
 /**
@@ -12,24 +13,16 @@ use SuperClosure\Serializer;
  */
 class BotMan
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
-     */
+    /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
-    /**
-     * @var \Illuminate\Support\Collection
-     */
+    /** @var \Illuminate\Support\Collection */
     protected $event;
 
-    /**
-     * @var Serializer
-     */
+    /** @var Serializer */
     protected $serializer;
 
-    /**
-     * @var Message
-     */
+    /** @var Message */
     protected $message;
 
     /**
@@ -53,6 +46,9 @@ class BotMan
 
     /** @var array */
     protected $config = [];
+
+    /** @var array */
+    protected $middleware = [];
 
     /** @var CacheInterface */
     private $cache;
@@ -81,6 +77,14 @@ class BotMan
     }
 
     /**
+     * @param MiddlewareInterface $middleware
+     */
+    public function middleware(MiddlewareInterface $middleware)
+    {
+        $this->middleware[] = $middleware;
+    }
+
+    /**
      * Set a fallback message to use if no listener matches.
      *
      * @param callable $callback
@@ -105,7 +109,15 @@ class BotMan
      */
     public function getMessages()
     {
-        return $this->getDriver()->getMessages();
+        $messages = $this->getDriver()->getMessages();
+
+        foreach ($this->middleware as $middleware) {
+            foreach ($messages as &$message) {
+                $middleware->handle($message);
+            }
+        }
+
+        return $messages;
     }
 
     /**
@@ -191,6 +203,14 @@ class BotMan
      */
     protected function isMessageMatching(Message $message, $pattern, &$matches)
     {
+        $matches = [];
+        // Try middleware first
+        foreach ($this->middleware as $middleware) {
+            if ($middleware->isMessageMatching($message, $pattern)) {
+                return true;
+            }
+        }
+
         $text = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
 
         return preg_match('/'.$text.'/i', $message->getMessage(), $matches);

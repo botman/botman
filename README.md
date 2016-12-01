@@ -116,6 +116,7 @@ $botman->hears('hello', function (BotMan $bot, $message) {
 Table of Contents
 
 * [Receiving Messages](#receiving-messages)
+    * [Middleware](#middleware)
 * [Sending Messages](#sending-messages)
 
 ## Receiving Messages
@@ -148,6 +149,26 @@ $botman->hears('open the {doorType} doors', function(BotMan $bot, $doorType) {
     return $bot->reply('Okay');
 });
 ```
+
+### Middleware
+
+The usage of custom middleware allows you to enrich the messages your bot received with additional information from third party services such as [wit.ai](http://wit.ai) or [api.ai](http://api.ai).
+
+To let your BotMan instance make use of a middleware, simply add it to the list of middlewares:
+
+```php
+$botman->middleware(Wit::create('MY-WIT-ACCESS-TOKEN));
+$botman->hears('emotion', function($bot) {
+    $extras = $bot->getMessage()->getExras();
+    // Access extra information
+    $entities = $extras['entities'];
+});
+```
+
+The current Wit.ai middleware will send all incoming text messages to wit.ai and adds the `entities` received from wit.ai back to the message.
+You can then access the information using `$bot->getMessage()->getExtras()`. This method returns an array containing all wit.ai entities.
+
+In addition to that, it will check against a custom trait entity called `intent` instead of using the built-in matching pattern.
 
 ## Sending Messages
 

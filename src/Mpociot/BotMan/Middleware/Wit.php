@@ -1,0 +1,79 @@
+<?php
+
+namespace Mpociot\BotMan\Middleware;
+
+use Illuminate\Support\Collection;
+use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Interfaces\HttpInterface;
+use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Message;
+
+class Wit implements MiddlewareInterface
+{
+    /** @var string */
+    protected $token;
+
+    /** @var double */
+    protected $minimumConfidence = 0.5;
+
+    /** @var HttpInterface */
+    protected $http;
+
+    /**
+     * Wit constructor.
+     * @param string $token wit.ai access token
+     * @param double $minimumConfidence Minimum confidence value to match against
+     * @param HttpInterface $http
+     */
+    public function __construct($token, $minimumConfidence, HttpInterface $http)
+    {
+        $this->token = $token;
+        $this->http = $http;
+    }
+
+    /**
+     * Create a new Wit middleware instance
+     * @param $token wit.ai access token
+     * @param float $minimumConfidence
+     * @return Wit
+     */
+    public static function create($token, $minimumConfidence = 0.5) {
+        return new static($token, $minimumConfidence, new Curl());
+    }
+    
+    /**
+     * Handle / modify the message
+     *
+     * @param Message $message
+     */
+    public function handle(Message &$message)
+    {
+        $response = $this->http->post('https://api.wit.ai/message?q='.urlencode($message->getMessage()), [], [], [
+            'Authorization: Bearer '.$this->token
+        ]);
+        $responseData = Collection::make(json_decode($response->getContent(), true));
+        $message->addExtras('entities', $responseData->get('entities'));
+    }
+
+    /**
+     * @param Message $message
+     * @param string $test
+     * @return bool
+     */
+    public function isMessageMatching(Message $message, $test)
+    {
+        $entities = Collection::make($message->getExtras())->get('entities', []);
+
+        foreach ($entities as $name => $entity) {
+            if ($name === 'intent') {
+                foreach ($entity as $item) {
+                    if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}
