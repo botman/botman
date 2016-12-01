@@ -583,7 +583,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
-                'test' => 'successful'
+                'test' => 'successful',
             ], $bot->getMessage()->getExtras());
         });
         $botman->listen();
@@ -601,7 +601,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         ]);
         $botman->middleware(new TestMiddleware());
 
-        $botman->hears('successful', function ($bot) use(&$called) {
+        $botman->hears('successful', function ($bot) use (&$called) {
             $called = true;
         });
         $botman->listen();

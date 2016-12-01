@@ -13,7 +13,7 @@ class Wit implements MiddlewareInterface
     /** @var string */
     protected $token;
 
-    /** @var double */
+    /** @var float */
     protected $minimumConfidence = 0.5;
 
     /** @var HttpInterface */
@@ -22,7 +22,7 @@ class Wit implements MiddlewareInterface
     /**
      * Wit constructor.
      * @param string $token wit.ai access token
-     * @param double $minimumConfidence Minimum confidence value to match against
+     * @param float $minimumConfidence Minimum confidence value to match against
      * @param HttpInterface $http
      */
     public function __construct($token, $minimumConfidence, HttpInterface $http)
@@ -32,24 +32,25 @@ class Wit implements MiddlewareInterface
     }
 
     /**
-     * Create a new Wit middleware instance
+     * Create a new Wit middleware instance.
      * @param $token wit.ai access token
      * @param float $minimumConfidence
      * @return Wit
      */
-    public static function create($token, $minimumConfidence = 0.5) {
+    public static function create($token, $minimumConfidence = 0.5)
+    {
         return new static($token, $minimumConfidence, new Curl());
     }
-    
+
     /**
-     * Handle / modify the message
+     * Handle / modify the message.
      *
      * @param Message $message
      */
     public function handle(Message &$message)
     {
         $response = $this->http->post('https://api.wit.ai/message?q='.urlencode($message->getMessage()), [], [], [
-            'Authorization: Bearer '.$this->token
+            'Authorization: Bearer '.$this->token,
         ]);
         $responseData = Collection::make(json_decode($response->getContent(), true));
         $message->addExtras('entities', $responseData->get('entities'));

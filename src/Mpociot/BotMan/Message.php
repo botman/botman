@@ -75,6 +75,7 @@ class Message
     public function addExtras($key, $value)
     {
         $this->extras[$key] = $value;
+
         return $this;
     }
 

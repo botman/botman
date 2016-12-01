@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Illuminate\Support\Arr;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 
@@ -59,10 +58,9 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = new Message('', '', '');
         $this->assertSame([], $message->getExtras());
 
-        $message->addExtras('intents', [1,2,3]);
+        $message->addExtras('intents', [1, 2, 3]);
         $this->assertSame([
-            'intents' => [1,2,3]
+            'intents' => [1, 2, 3],
         ], $message->getExtras());
     }
-
 }
