@@ -157,7 +157,7 @@ The usage of custom middleware allows you to enrich the messages your bot receiv
 To let your BotMan instance make use of a middleware, simply add it to the list of middlewares:
 
 ```php
-$botman->middleware(Wit::create('MY-WIT-ACCESS-TOKEN));
+$botman->middleware(Wit::create('MY-WIT-ACCESS-TOKEN'));
 $botman->hears('emotion', function($bot) {
     $extras = $bot->getMessage()->getExras();
     // Access extra information
