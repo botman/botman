@@ -33,7 +33,7 @@ class Wit implements MiddlewareInterface
 
     /**
      * Create a new Wit middleware instance.
-     * @param $token wit.ai access token
+     * @param string $token wit.ai access token
      * @param float $minimumConfidence
      * @return Wit
      */

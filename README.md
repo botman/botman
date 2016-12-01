@@ -159,7 +159,7 @@ To let your BotMan instance make use of a middleware, simply add it to the list 
 ```php
 $botman->middleware(Wit::create('MY-WIT-ACCESS-TOKEN'));
 $botman->hears('emotion', function($bot) {
-    $extras = $bot->getMessage()->getExras();
+    $extras = $bot->getMessage()->getExtras();
     // Access extra information
     $entities = $extras['entities'];
 });
