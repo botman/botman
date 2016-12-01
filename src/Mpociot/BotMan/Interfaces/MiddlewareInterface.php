@@ -7,7 +7,7 @@ use Mpociot\BotMan\Message;
 interface MiddlewareInterface
 {
     /**
-     * Handle / modify the message
+     * Handle / modify the message.
      *
      * @param Message $message
      */

@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WitTest extends PHPUnit_Framework_TestCase
 {
-
     /** @test */
     public function it_adds_entities_to_the_message()
     {
@@ -24,7 +23,7 @@ class WitTest extends PHPUnit_Framework_TestCase
         $http->shouldReceive('post')
             ->once()
             ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
-                'Authorization: Bearer token'
+                'Authorization: Bearer token',
             ])
             ->andReturn($response);
 
@@ -32,7 +31,7 @@ class WitTest extends PHPUnit_Framework_TestCase
         $middleware->handle($message);
 
         $this->assertSame([
-            'entities' => ['foo' => 'bar']
+            'entities' => ['foo' => 'bar'],
         ], $message->getExtras());
     }
 
@@ -67,7 +66,7 @@ class WitTest extends PHPUnit_Framework_TestCase
         $http->shouldReceive('post')
             ->once()
             ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
-                'Authorization: Bearer token'
+                'Authorization: Bearer token',
             ])
             ->andReturn($response);
 
@@ -107,7 +106,7 @@ class WitTest extends PHPUnit_Framework_TestCase
         $http->shouldReceive('post')
             ->once()
             ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
-                'Authorization: Bearer token'
+                'Authorization: Bearer token',
             ])
             ->andReturn($response);
 

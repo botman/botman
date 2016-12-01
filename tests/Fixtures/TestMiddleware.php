@@ -7,9 +7,8 @@ use Mpociot\BotMan\Message;
 
 class TestMiddleware implements MiddlewareInterface
 {
-
     /**
-     * Handle / modify the message
+     * Handle / modify the message.
      *
      * @param Message $message
      */
