@@ -45,4 +45,4 @@ $botman = new BotMan(
 );
 ```
 
-And that's it - you can now use BotMan with your Telegram bot!
+And that's it - you can now use BotMan with your Facebook bot!
