@@ -3,10 +3,10 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use SuperClosure\Serializer;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use SuperClosure\Serializer;
 
 /**
  * Class BotMan.

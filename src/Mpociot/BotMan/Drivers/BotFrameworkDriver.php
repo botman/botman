@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class BotFrameworkDriver extends Driver
 {

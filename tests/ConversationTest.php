@@ -5,9 +5,9 @@ namespace Mpociot\BotMan\Tests;
 use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
-use PHPUnit_Framework_TestCase;
 use SuperClosure\Serializer;
+use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 
 class ConversationTest extends PHPUnit_Framework_TestCase
 {

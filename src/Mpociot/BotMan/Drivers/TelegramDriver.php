@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class TelegramDriver extends Driver
 {
@@ -45,10 +45,10 @@ class TelegramDriver extends Driver
     {
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
-            
+
             // Update original message
             $this->removeInlineKeyboard($callback->get('message')['chat']['id'], $callback->get('message')['message_id']);
-            
+
             return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
                 ->setValue($callback->get('data'));
@@ -92,8 +92,8 @@ class TelegramDriver extends Driver
     {
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
-                'text' => (string)$button['text'],
-                'callback_data' => (string)$button['value'],
+                'text' => (string) $button['text'],
+                'callback_data' => (string) $button['value'],
             ];
         });
 
@@ -114,6 +114,7 @@ class TelegramDriver extends Driver
             'message_id' => $messageId,
             'inline_keyboard' => [],
         ];
+
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/editMessageReplyMarkup', [], $parameters);
     }
 

@@ -4,11 +4,11 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Drivers\SlackDriver;
-use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Drivers\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
@@ -286,7 +286,6 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         $driver = new SlackDriver($request, [
             'slack_token' => 'Foo',
         ], $html);
-
 
         $message = new Message('response', '', 'general');
         $driver->reply('Test', $message, [

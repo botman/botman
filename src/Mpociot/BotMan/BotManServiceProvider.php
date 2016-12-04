@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan;
 
-use Illuminate\Support\ServiceProvider;
 use Mpociot\BotMan\Cache\LaravelCache;
+use Illuminate\Support\ServiceProvider;
 
 class BotManServiceProvider extends ServiceProvider
 {
