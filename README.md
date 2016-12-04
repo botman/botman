@@ -4,15 +4,7 @@
 [![codecov](https://codecov.io/gh/mpociot/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/botman)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 
-BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com) and [Facebook Messenger](http://messenger.com). 
-
-```php
-BotMan::hears('I want cross-platform bots with PHP!', function($bot) {
-    $bot->reply('Look no further!');
-});
-
-BotMan::listen();
-```
+BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com) and [Facebook Messenger](http://messenger.com).
 
 ## Getting Started
 
@@ -20,13 +12,41 @@ BotMan::listen();
 2. [Install BotMan with composer](#installation-using-composer)
 3. Configure your messaging platform
 4. Implement your bot logic
- 
+
 ## Installation using Composer
 
 Require this package with composer using the following command:
 
 ```sh
 $ composer require mpociot/botman
+```
+
+## Basic Usage
+
+This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
+
+```php
+use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\BotMan;
+
+$config = [
+    'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
+    'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
+    'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
+    'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
+    'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+];
+
+// create an instance
+$botman = BotManFactory::create($config, $request, new ArrayCache());
+
+// give the bot something to listen for.
+$botman->hears('hello', function (BotMan $bot, $message) {
+    $bot->reply('Hello yourself.');
+});
 ```
 
 ### Using BotMan within a Laravel app
@@ -59,6 +79,18 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 ],
 ```
 
+Using it:
+
+```php
+use Mpociot\BotMan;
+
+$botman = app('botman');
+
+$botman->hears('hello', function (BotMan $bot, $message) {
+    $bot->reply('Hello yourself.');
+});
+```
+
 That's it.
 
 ## Connect with your messaging service
@@ -75,41 +107,12 @@ You can support all messaging platforms using the exact same Bot-API.
 
 ## Core Concepts
 
-Bots built with BotMan have a few key capabilities, which can be used to create clever, conversational applications. 
+Bots built with BotMan have a few key capabilities, which can be used to create clever, conversational applications.
 These capabilities map to the way real human people talk to each other.
 
 Bots can [hear things](#receiving-messages), [say things and reply](#sending-messages) to what they hear.
 
 With these two building blocks, almost any type of conversation can be created.
-
-## Basic Usage
-
-This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
-
-```php
-// Usage without Laravel
-$config = [
-    'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
-    'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
-    'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
-    'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
-    'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
-    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
-];
-
-$botman = BotManFactory::create($config, $request, new LaravelCache());
-
-// Usage with Laravel
-$botman = app('botman');
-
-// Or use the facade, by using BotMan:: instead of $botman-> in the examples
-
-// give the bot something to listen for.
-$botman->hears('hello', function (BotMan $bot, $message) {
-    $bot->reply('Hello yourself.');
-});
-```
 
 # Developing with BotMan
 
