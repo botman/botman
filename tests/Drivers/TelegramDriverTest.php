@@ -229,6 +229,51 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_answer_from_interactive_messages_and_edits_original_message()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'callback_query' => [
+                'id' => '11717237123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'message' => [
+                    'message_id' => '123',
+                    'from' => [
+                        'id' => 'from_id',
+                    ],
+                    'chat' => [
+                        'id' => 'chat_id',
+                    ],
+                    'date' => '1480369277',
+                    'text' => 'Telegram Text',
+                ],
+                'data' => 'FooBar',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/editMessageReplyMarkup', [], [
+                'chat_id' => 'chat_id',
+                'message_id' => '123',
+                'inline_keyboard' => [],
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $this->assertSame('FooBar', $driver->getConversationAnswer($message)->getText());
+    }
+
+    /** @test */
     public function it_can_reply_string_messages()
     {
         $responseData = [

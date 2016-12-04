@@ -45,7 +45,10 @@ class TelegramDriver extends Driver
     {
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
-
+            
+            // Update original message
+            $this->removeInlineKeyboard($callback->get('message')['chat']['id'], $callback->get('message')['message_id']);
+            
             return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
                 ->setValue($callback->get('data'));
@@ -64,9 +67,9 @@ class TelegramDriver extends Driver
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
 
-            return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'])];
+            return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'], $callback->get('messsage'))];
         } else {
-            return [new Message($this->event->get('text'), $this->event->get('chat')['id'], $this->event->get('from')['id'])];
+            return [new Message($this->event->get('text'), $this->event->get('chat')['id'], $this->event->get('from')['id'], $this->event)];
         }
     }
 
@@ -95,6 +98,23 @@ class TelegramDriver extends Driver
         });
 
         return $replies->toArray();
+    }
+
+    /**
+     * Removes the inlince keyboard from an interactive
+     * message.
+     * @param  int $chatId
+     * @param  int $messageId
+     * @return Response
+     */
+    private function removeInlineKeyboard($chatId, $messageId)
+    {
+        $parameters = [
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'inline_keyboard' => [],
+        ];
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/editMessageReplyMarkup', [], $parameters);
     }
 
     /**
