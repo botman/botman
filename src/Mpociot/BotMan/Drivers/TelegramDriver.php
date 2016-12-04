@@ -92,8 +92,8 @@ class TelegramDriver extends Driver
     {
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
-                'text' => $button['text'],
-                'callback_data' => $button['value'],
+                'text' => (string)$button['text'],
+                'callback_data' => (string)$button['value'],
             ];
         });
 
