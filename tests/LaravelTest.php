@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
-use Orchestra\Testbench\TestCase;
-use BotMan;
 use Cache;
+use BotMan;
+use Orchestra\Testbench\TestCase;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 
 class LaravelTest extends TestCase
 {

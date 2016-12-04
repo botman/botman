@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class TestMiddleware implements MiddlewareInterface
 {

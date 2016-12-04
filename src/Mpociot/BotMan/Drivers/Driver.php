@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 
 abstract class Driver implements DriverInterface
 {

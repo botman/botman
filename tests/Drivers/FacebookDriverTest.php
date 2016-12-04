@@ -4,11 +4,11 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Drivers\FacebookDriver;
-use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Drivers\FacebookDriver;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {

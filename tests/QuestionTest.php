@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Illuminate\Support\Arr;
 use Mpociot\BotMan\Button;
+use Illuminate\Support\Arr;
 use Mpociot\BotMan\Question;
 use PHPUnit_Framework_TestCase;
 

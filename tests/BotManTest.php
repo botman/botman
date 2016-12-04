@@ -6,11 +6,11 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
-use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 
 class BotManTest extends PHPUnit_Framework_TestCase
 {
@@ -247,7 +247,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
         }, BotMan::DIRECT_MESSAGE);
         $botman->listen();
         $this->assertFalse($called);
-
 
         $called = false;
 

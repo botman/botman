@@ -2,10 +2,9 @@
 
 namespace Mpociot\BotMan;
 
-
+use SuperClosure\Serializer;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Interfaces\CacheInterface;
-use SuperClosure\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 
 class BotManFactory
