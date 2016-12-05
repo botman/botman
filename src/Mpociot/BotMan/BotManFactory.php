@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 
+use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use SuperClosure\Serializer;
@@ -18,8 +19,15 @@ class BotManFactory
      * @param CacheInterface $cache
      * @return \Mpociot\BotMan\BotMan
      */
-    public static function create(array $config, Request $request, CacheInterface $cache)
+    public static function create(array $config, Request $request, CacheInterface $cache = null)
     {
+        if (empty($request)) {
+            $request = Request::createFromGlobals();
+        }
+        if (empty($cache)) {
+            $cache = new ArrayCache();
+        }
+
         $driverManager = new DriverManager($config, new Curl());
         $driver = $driverManager->getMatchingDriver($request);
 

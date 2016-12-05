@@ -26,7 +26,6 @@ $ composer require mpociot/botman
 This sample bot listens for the word "hello" - either in a direct message (a private message inside Slack between the user and the bot) or in a message the bot user is invited to.
 
 ```php
-use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\BotMan;
 
@@ -41,7 +40,7 @@ $config = [
 ];
 
 // create an instance
-$botman = BotManFactory::create($config, $request, new ArrayCache());
+$botman = BotManFactory::create($config);
 
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot, $message) {
@@ -92,6 +91,20 @@ $botman->hears('hello', function (BotMan $bot, $message) {
 ```
 
 That's it.
+
+## Configuration
+
+### Cache
+
+With basic usage BotMan will use ``array`` cache which is non-persistent. When using the Laravel facade it will automatically use the Laravel Cache component.
+
+It's also possible to use any [Doctrine Cache](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/caching.html) driver by passing it to the factory:
+
+```php
+use Mpociot\BotMan\Cache\DoctrineCache;
+
+$botman = BotManFactory::create($config, null, DoctrineCache($doctrineCacheDriver));
+```
 
 ## Connect with your messaging service
 
