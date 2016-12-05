@@ -39,6 +39,11 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver($request);
 
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{}]}]}';
+        $driver = $this->getDriver($request);
+
+        $this->assertSame('', $driver->getMessages()[0]->getMessage());
     }
 
     /** @test */

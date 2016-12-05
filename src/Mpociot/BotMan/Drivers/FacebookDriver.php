@@ -62,7 +62,10 @@ class FacebookDriver extends Driver
     {
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
-            return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            if (isset($msg['message'])) {
+                return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            }
+            return new Message('', '', '');
         })->toArray();
 
         if (count($messages) === 0) {
