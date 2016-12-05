@@ -65,6 +65,7 @@ class FacebookDriver extends Driver
             if (isset($msg['message'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
+
             return new Message('', '', '');
         })->toArray();
 
