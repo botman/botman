@@ -26,7 +26,8 @@
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~5.0",
         "mockery/mockery": "^0.9.5",
-        "sllh/php-cs-fixer-styleci-bridge": "^2.1"
+        "sllh/php-cs-fixer-styleci-bridge": "^2.1",
+        "doctrine/cache": "^1.6"
     },
     "autoload": {
         "psr-0": {
