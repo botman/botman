@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Mpociot\BotMan\Cache\ArrayCache;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Cache\ArrayCache;
 
 class ArrayCacheTest extends PHPUnit_Framework_TestCase
 {
