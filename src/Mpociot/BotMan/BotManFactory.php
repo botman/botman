@@ -18,7 +18,7 @@ class BotManFactory
      * @param CacheInterface $cache
      * @return \Mpociot\BotMan\BotMan
      */
-    public static function create(array $config, Request $request, CacheInterface $cache = null)
+    public static function create(array $config, Request $request = null, CacheInterface $cache = null)
     {
         if (empty($request)) {
             $request = Request::createFromGlobals();
