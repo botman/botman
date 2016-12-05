@@ -6,7 +6,7 @@ use Cache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 
 /**
- * The Laravel Cache implenentation.
+ * The Laravel Cache implementation.
  * Since the Laravel Cache uses closures, it cannot be serialized,
  * that's why I'm using the facade in here.
  */
