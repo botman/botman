@@ -110,7 +110,7 @@ Use any [Doctrine Cache](http://docs.doctrine-project.org/projects/doctrine-orm/
 ```php
 use Mpociot\BotMan\Cache\DoctrineCache;
 
-$botman = BotManFactory::create($config, null, DoctrineCache($doctrineCacheDriver));
+$botman = BotManFactory::create($config, null, new DoctrineCache($doctrineCacheDriver));
 ```
 
 #### Symfony Cache
@@ -119,7 +119,7 @@ Use any [Symfony Cache](https://symfony.com/doc/current/components/cache.html) a
 ```php
 use Mpociot\BotMan\Cache\SymfonyCache;
 
-$botman = BotManFactory::create($config, null, SymfonyCache($symfonyCacheAdapter));
+$botman = BotManFactory::create($config, null, new SymfonyCache($symfonyCacheAdapter));
 ```
 
 ## Connect with your messaging service
