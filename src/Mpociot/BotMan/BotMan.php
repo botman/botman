@@ -4,7 +4,6 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Opis\Closure\SerializableClosure;
-use SuperClosure\Serializer;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
