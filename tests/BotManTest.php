@@ -443,7 +443,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $conversation = new TestConversation();
 
-        $botman->storeConversation($conversation, function ($answer) use (&$called) {
+        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
             $GLOBALS['answer'] = $answer;
             $GLOBALS['called'] = true;
         });
@@ -490,14 +490,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->storeConversation($conversation, [
             [
                 'pattern' => 'token_one',
-                'callback' => function ($answer) use (&$called) {
+                'callback' => function (Answer $answer) use (&$called) {
                     $GLOBALS['answer'] = $answer;
                     $GLOBALS['called_foo'] = true;
                 },
             ],
             [
                 'pattern' => 'token_two',
-                'callback' => function ($answer) use (&$called) {
+                'callback' => function (Answer $answer) use (&$called) {
                     $GLOBALS['answer'] = $answer;
                     $GLOBALS['called_bar'] = true;
                 },
