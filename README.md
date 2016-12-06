@@ -130,8 +130,8 @@ You can support all messaging platforms using the exact same Bot-API.
 
 - [Setup and connect Telegram](readme-telegram.md)
 - [Setup and connect Facebook Messenger](readme-facebook.md)
-- Setup and connect Microsoft Bot framework
-- Setup and connect Nexmo
+- [Setup and connect Microsoft Bot framework](readme-botframework.md)
+- [Setup and connect Nexmo](readme-nexmo.md)
 - Setup and connect Slack
 
 ## Core Concepts
