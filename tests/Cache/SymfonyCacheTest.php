@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests;
 
 use Mockery as m;
-use Mpociot\BotMan\Cache\SymfonyCache;
 use PHPUnit_Framework_TestCase;
 use Psr\Cache\CacheItemInterface;
+use Mpociot\BotMan\Cache\SymfonyCache;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

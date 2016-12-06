@@ -2,9 +2,8 @@
 
 namespace Mpociot\BotMan\Cache;
 
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Mpociot\BotMan\Interfaces\CacheInterface;
-use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class SymfonyCache implements CacheInterface
 {
@@ -39,7 +38,6 @@ class SymfonyCache implements CacheInterface
     {
         $item = $this->adapter->getItem($key);
         if ($item->isHit()) {
-
             return $item->get();
         }
 
@@ -75,8 +73,7 @@ class SymfonyCache implements CacheInterface
 
         if ($minutes instanceof \DateTimeInterface) {
             $item->expiresAt($minutes);
-        }
-        else {
+        } else {
             $item->expiresAfter(new \DateInterval(sprintf('PT%dM', $minutes)));
         }
 
