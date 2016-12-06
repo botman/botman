@@ -7,6 +7,9 @@
         "Botman",
         "Slack",
         "Facebook Messenger",
+        "Nexmo",
+        "Telegram",
+        "Skype",
         "Laravel"
     ],
     "homepage": "http://github.com/mpociot/botman",
