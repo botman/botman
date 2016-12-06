@@ -16,8 +16,8 @@ $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot, $m
 
 1. Open the Laravel/Symfony/PHP project your new Bot will live in
 2. [Install BotMan with composer](#installation-using-composer)
-3. Configure your messaging platform
-4. Implement your bot logic
+3. [Configure your messaging platform](#connect-with-your-messaging-service)
+4. [Implement your bot logic](#core-concepts)
 
 ## Installation using Composer
 
