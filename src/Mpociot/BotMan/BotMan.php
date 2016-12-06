@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Opis\Closure\SerializableClosure;
 use SuperClosure\Serializer;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\CacheInterface;
@@ -18,9 +19,6 @@ class BotMan
 
     /** @var \Illuminate\Support\Collection */
     protected $event;
-
-    /** @var Serializer */
-    protected $serializer;
 
     /** @var Message */
     protected $message;
@@ -62,13 +60,11 @@ class BotMan
 
     /**
      * BotMan constructor.
-     * @param Serializer $serializer
      * @param CacheInterface $cache
      * @param Driver $driver
      */
-    public function __construct(Serializer $serializer, CacheInterface $cache, Driver $driver)
+    public function __construct(CacheInterface $cache, Driver $driver)
     {
-        $this->serializer = $serializer;
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
@@ -259,7 +255,7 @@ class BotMan
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : $this->serializer->serialize($next),
+            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next)),
         ], 30);
     }
 
@@ -273,7 +269,7 @@ class BotMan
     protected function prepareCallbacks(array $callbacks)
     {
         foreach ($callbacks as &$callback) {
-            $callback['callback'] = $this->serializer->serialize($callback['callback']);
+            $callback['callback'] = serialize(new SerializableClosure($callback['callback']));
         }
 
         return $callbacks;
@@ -298,13 +294,13 @@ class BotMan
                                 $this->message = $message;
                                 $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
                                 $this->matches = $parameters;
-                                $next = $this->serializer->unserialize($callback['callback']);
+                                $next = unserialize($callback['callback']);
                                 break;
                             }
                         }
                     } else {
                         $this->message = $message;
-                        $next = $this->serializer->unserialize($convo['next']);
+                        $next = unserialize($convo['next']);
                     }
 
                     if (is_callable($next)) {
@@ -365,7 +361,6 @@ class BotMan
             'event',
             'driver',
             'message',
-            'serializer',
             'cache',
             'matches',
         ];

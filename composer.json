@@ -22,7 +22,8 @@
     "require": {
         "php": ">=5.5.0",
         "symfony/http-foundation": "2.8.*|3.0.*|3.1.*",
-        "tightenco/collect": "~5.0"
+        "tightenco/collect": "~5.0",
+        "opis/closure": "^2.3"
     },
     "require-dev": {
         "illuminate/support": "~5.0",
