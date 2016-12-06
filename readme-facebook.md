@@ -31,18 +31,13 @@ For Laravel, the page access token needs to be in your `config/services.php` fil
 
 ### Generic
 
-If you don't use Laravel, you can pass the page access token to the `DriverManager` class upon initialization.
+If you don't use Laravel, you can pass the page access token to the `BotManFactory` upon initialization.
 
 
 ```php
-$botman = new BotMan(
-    new Serializer(),
-    $request,
-    new CustomCache(),
-    new DriverManager([
-    	'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
-    ]), new Curl())
-);
+$botman = BotManFactory::create([
+    'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
+]);
 ```
 
 And that's it - you can now use BotMan with your Facebook bot!

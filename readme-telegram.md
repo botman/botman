@@ -16,18 +16,13 @@ For Laravel, the access token needs to be in your `config/services.php` file
 
 ### Generic
 
-If you don't use Laravel, you can pass the Telegram access token to the `DriverManager` class upon initialization.
+If you don't use Laravel, you can pass the Telegram access token to the `BotManFactory` upon initialization.
 
 
 ```php
-$botman = new BotMan(
-    new Serializer(),
-    $request,
-    new CustomCache(),
-    new DriverManager([
-    	'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    ]), new Curl())
-);
+$botman = BotManFactory::create([
+    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
+]);
 ```
 
 ## Register your Webhook
