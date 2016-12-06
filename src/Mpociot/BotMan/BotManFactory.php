@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-use SuperClosure\Serializer;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
@@ -30,6 +29,6 @@ class BotManFactory
         $driverManager = new DriverManager($config, new Curl());
         $driver = $driverManager->getMatchingDriver($request);
 
-        return new BotMan(new Serializer(), $cache, $driver);
+        return new BotMan($cache, $driver);
     }
 }
