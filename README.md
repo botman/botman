@@ -104,12 +104,22 @@ That's it.
 
 With basic usage BotMan will use ``array`` cache which is non-persistent. When using the Laravel facade it will automatically use the Laravel Cache component.
 
-It's also possible to use any [Doctrine Cache](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/caching.html) driver by passing it to the factory:
+#### Doctrine Cache
+Use any [Doctrine Cache](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/caching.html) driver by passing it to the factory:
 
 ```php
 use Mpociot\BotMan\Cache\DoctrineCache;
 
 $botman = BotManFactory::create($config, null, DoctrineCache($doctrineCacheDriver));
+```
+
+#### Symfony Cache
+Use any [Symfony Cache](https://symfony.com/doc/current/components/cache.html) adapter by passing it to the factory:
+
+```php
+use Mpociot\BotMan\Cache\SymfonyCache;
+
+$botman = BotManFactory::create($config, null, SymfonyCache($symfonyCacheAdapter));
 ```
 
 ## Connect with your messaging service
