@@ -14,17 +14,17 @@ class BotManFactory
      * Create a new BotMan instance.
      *
      * @param array $config
-     * @param Request $request
      * @param CacheInterface $cache
+     * @param Request $request
      * @return \Mpociot\BotMan\BotMan
      */
-    public static function create(array $config, Request $request = null, CacheInterface $cache = null)
+    public static function create(array $config, CacheInterface $cache = null, Request $request = null)
     {
-        if (empty($request)) {
-            $request = Request::createFromGlobals();
-        }
         if (empty($cache)) {
             $cache = new ArrayCache();
+        }
+        if (empty($request)) {
+            $request = Request::createFromGlobals();
         }
 
         $driverManager = new DriverManager($config, new Curl());

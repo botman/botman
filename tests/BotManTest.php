@@ -36,7 +36,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        return BotManFactory::create([], $request, $this->cache);
+        return BotManFactory::create([], $this->cache, $request);
     }
 
     protected function getBotWithInteractiveData($payload)
@@ -47,7 +47,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'payload' => $payload,
         ]);
 
-        return BotManFactory::create([], $request, $this->cache);
+        return BotManFactory::create([], $this->cache, $request);
     }
 
     /** @test */
