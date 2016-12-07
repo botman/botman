@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/mpociot/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/botman)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 
-BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com) and [Facebook Messenger](http://messenger.com).
+BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com), [HipChat](http://hipchat.com) and [Facebook Messenger](http://messenger.com).
 
 ```php
 $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
@@ -36,6 +36,10 @@ use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\BotMan;
 
 $config = [
+    'hipchat_urls' => [
+        'YOUR-INTEGRATION-URL-1',
+        'YOUR-INTEGRATION-URL-2',
+    ],
     'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
     'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
     'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
@@ -74,6 +78,10 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 
 ```php
 'botman' => [
+    'hipchat_urls' => [
+        'YOUR-INTEGRATION-URL-1',
+        'YOUR-INTEGRATION-URL-2',
+    ],
     'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
     'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
     'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
@@ -133,6 +141,7 @@ You can support all messaging platforms using the exact same Bot-API.
 - [Setup and connect Microsoft Bot framework](readme-botframework.md)
 - [Setup and connect Nexmo](readme-nexmo.md)
 - [Setup and connect Slack](readme-slack.md)
+- [Setup and connect HipChat](readme-hipchat.md)
 
 ## Core Concepts
 

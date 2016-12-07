@@ -6,6 +6,7 @@ use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\NexmoDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\HipChatDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
@@ -23,6 +24,7 @@ class DriverManager
         TelegramDriver::class,
         BotFrameworkDriver::class,
         NexmoDriver::class,
+        HipChatDriver::class,
     ];
 
     /** @var array */
