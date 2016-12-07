@@ -7,7 +7,7 @@
 BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com) and [Facebook Messenger](http://messenger.com).
 
 ```php
-$botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot, $message) {
+$botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
     $bot->reply('Look no further!');
 });
 ```
