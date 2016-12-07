@@ -44,6 +44,25 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_matches_the_request_for_outgoing_webhooks()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'text' => 'hello',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue($driver->matchesRequest());
+    }
+
+    /** @test */
     public function it_returns_the_message_object()
     {
         $driver = $this->getDriver([
@@ -53,6 +72,26 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertTrue(is_array($driver->getMessages()));
+    }
+
+    /** @test */
+    public function it_returns_the_message_object_for_outgoing_webhooks()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue(is_array($driver->getMessages()));
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
     }
 
     /** @test */
@@ -113,6 +152,26 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_the_user_id_for_outgoing_webhooks()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue(is_array($driver->getMessages()));
+        $this->assertSame('U1234567890', $driver->getMessages()[0]->getUser());
+    }
+
+    /** @test */
     public function it_returns_the_channel_id()
     {
         $driver = $this->getDriver([
@@ -122,6 +181,26 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertSame('general', $driver->getMessages()[0]->getChannel());
+    }
+
+    /** @test */
+    public function it_returns_the_channel_id_for_outgoing_webhooks()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue(is_array($driver->getMessages()));
+        $this->assertSame('C1234567890', $driver->getMessages()[0]->getChannel());
     }
 
     /** @test */
@@ -217,6 +296,25 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('', '', 'general');
         $driver->reply('Test', $message);
+    }
+
+    /** @test */
+    public function it_can_reply_string_messages_for_outgoing_webhooks()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $driver->reply('test', $driver->getMessages()[0]);
     }
 
     /** @test */

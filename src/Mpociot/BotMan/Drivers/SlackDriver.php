@@ -8,6 +8,7 @@ use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Response;
 
 class SlackDriver extends Driver
 {
@@ -34,6 +35,9 @@ class SlackDriver extends Driver
                 'channel' => $payloadData['channel']['id'],
                 'user' => $payloadData['user']['id'],
             ]);
+        } elseif (! is_null($request->get('team_domain'))) {
+            $this->payload = $request->request;
+            $this->event = Collection::make($request->request->all());
         } else {
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->event = Collection::make($this->payload->get('event'));
@@ -47,7 +51,7 @@ class SlackDriver extends Driver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('user'));
+        return ! is_null($this->event->get('user')) || ! is_null($this->event->get('team_domain'));
     }
 
     /**
@@ -78,7 +82,17 @@ class SlackDriver extends Driver
             $messageText = $this->event->get('text');
         }
 
-        return [new Message($messageText, $this->event->get('user'), $this->event->get('channel'))];
+        $user_id = $this->event->get('user');
+        if ($this->event->has('user_id')) {
+            $user_id = $this->event->get('user_id');
+        }
+
+        $channel_id = $this->event->get('channel');
+        if ($this->event->has('channel_id')) {
+            $channel_id = $this->event->get('channel_id');
+        }
+
+        return [new Message($messageText, $user_id, $channel_id, $this->event)];
     }
 
     /**
@@ -96,6 +110,43 @@ class SlackDriver extends Driver
      * @return $this
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
+    {
+        if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
+            $this->replyWithToken($message, $matchingMessage, $additionalParameters);
+        } else {
+            $this->respondJSON($message, $matchingMessage, $additionalParameters);
+        }
+    }
+
+    /**
+     * @param string|Question $message
+     * @param Message $matchingMessage
+     * @param array $parameters
+     * @return $this
+     */
+    protected function respondJSON($message, $matchingMessage, $parameters = [])
+    {
+        /*
+         * If we send a Question with buttons, ignore
+         * the text and append the question.
+         */
+        if ($message instanceof Question) {
+            $parameters['text'] = $this->format($message->getText());
+            $parameters['attachments'] = json_encode([$message->toArray()]);
+        } else {
+            $parameters['text'] = $this->format($message);
+        }
+
+        Response::create(json_encode($parameters))->send();
+    }
+
+    /**
+     * @param string|Question $message
+     * @param Message $matchingMessage
+     * @param array $additionalParameters
+     * @return $this
+     */
+    protected function replyWithToken($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
             'token' => $this->payload->get('token'),
