@@ -39,15 +39,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertTrue($driver->matchesRequest());
     }
@@ -60,15 +60,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertTrue(is_array($driver->getMessages()));
     }
@@ -81,15 +81,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
     }
@@ -102,15 +102,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertFalse($driver->isBot());
     }
@@ -123,15 +123,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertSame('12345', $driver->getMessages()[0]->getUser());
     }
@@ -144,15 +144,15 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             'item' => [
                 'message' => [
                     'from' => [
-                        'id' => '12345'
+                        'id' => '12345',
                     ],
-                    'message' => 'Hi Julia'
+                    'message' => 'Hi Julia',
                 ],
                 'room' => [
-                    'id' => '98765'
-                ]
+                    'id' => '98765',
+                ],
             ],
-            'webhook_id' => '11223344'
+            'webhook_id' => '11223344',
         ]);
         $this->assertSame('98765', $driver->getMessages()[0]->getChannel());
     }

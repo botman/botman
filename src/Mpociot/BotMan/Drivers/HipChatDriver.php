@@ -34,7 +34,7 @@ class HipChatDriver extends Driver
      */
     public function matchesRequest()
     {
-        return (! is_null($this->payload->get('webhook_id')) && $this->payload->get('event') === 'room_message');
+        return ! is_null($this->payload->get('webhook_id')) && $this->payload->get('event') === 'room_message';
     }
 
     /**
@@ -86,14 +86,14 @@ class HipChatDriver extends Driver
         }
 
         $headers = [
-            'Content-Type:application/json'
+            'Content-Type:application/json',
         ];
 
-        $apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function($url) use ($matchingMessage) {
+        $apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use ($matchingMessage) {
             return strstr($url, 'room/'.$matchingMessage->getChannel().'/notification');
         })->first();
 
-        if (!is_null($apiURL)) {
+        if (! is_null($apiURL)) {
             return $this->http->post($apiURL, [], $parameters, $headers, true);
         }
     }
