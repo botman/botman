@@ -30,7 +30,7 @@ $botman = BotManFactory::create([
 To let your Telegram Bot know, how it can communicate with your BotMan bot, you have to register the URL where BotMan is running at,
 with Telegram.
 
-You can do this by sending a `POST` request to this url:
+You can do this by sending a `POST` request to this URL:
 
 `https://api.telegram.org/bot<YOUR-TELEGRAM-TOKEN-HERE>/setWebhook`
 

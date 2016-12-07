@@ -29,7 +29,7 @@ $botman = BotManFactory::create([
 
 ## Register your Webhook
 
-To let Nexmo send your bot notifications, when incoming SMS arrive at your numbers, you have to register the URL where BotMan is running at,
+To let Nexmo send your bot notifications when incoming SMS arrive at your numbers, you have to register the URL where BotMan is running at,
 with Nexmo.
 
 You can do this by visiting your Nexmo dashboard at [https://dashboard.nexmo.com/settings](https://dashboard.nexmo.com/settings).

@@ -102,7 +102,7 @@ That's it.
 
 ### Cache
 
-With basic usage BotMan will use ``array`` cache which is non-persistent. When using the Laravel facade it will automatically use the Laravel Cache component.
+If not specified otherwise, BotMan will use ``array`` cache which is non-persistent. When using the Laravel facade it will automatically use the Laravel Cache component.
 
 #### Doctrine Cache
 Use any [Doctrine Cache](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/caching.html) driver by passing it to the factory:
@@ -224,7 +224,7 @@ Messages sent using `$bot->reply()` are sent immediately. If multiple messages a
 and may be difficult for the user to process. We recommend using `$bot->startConversation()`
 if more than one message needs to be sent.
 
-You may pass either a string, or a Question object to the function.
+You may pass either a string or a Question object to the function.
 
 As a second parameter, you may also send any additional fields supported by Slack, Facebook Messenger or Telegram.
 
@@ -269,7 +269,7 @@ particularly if the bot needs to collect additional information from the user.
 BotMan provides a `Conversation` object that is used to string together several
 messages, including questions for the user, into a cohesive unit. BotMan conversations
 provide useful methods that enable developers to craft complex conversational
-user interfaces that may span a several minutes of dialog with a user, without having to manage
+user interfaces that may span several minutes of dialog with a user, without having to manage
 the complexity of connecting multiple incoming and outgoing messages across
 multiple API calls into a single function.
 
@@ -295,7 +295,7 @@ $botman->hears('start conversation', function (BotMan $bot) {
 When starting a new conversation using the `startConversation()` method, you need to pass the method the conversation that you want to start gathering information with.
 Each conversation object needs to extend from the BotMan `Conversation` object and must implement a simple `run()` method.
 
-This is the very first method that gets executed, when the conversation starts.
+This is the very first method that gets executed when the conversation starts.
 
 Example conversation object:
 
@@ -329,7 +329,7 @@ class PizzaConversation extends Conversation
 |---  |---
 | message   | String or `Question` object
 
-Call $conversation->say() several times in a row to queue messages inside the conversation. Only one message will be sent at a time, in the order they are queued.
+Call $conversation->say() several times in a row to queue messages inside the conversation. Only one message will be sent at a time, in the order in which they are queued.
 
 #### $conversation->ask()
 | Argument | Description
@@ -338,7 +338,7 @@ Call $conversation->say() several times in a row to queue messages inside the co
 | callback _or_ array of callbacks   | callback function in the form function($answer), or array of arrays in the form ``[ 'pattern' => regular_expression, 'callback' => function($answer) { ... } ]``
 
 When passed a callback function, $conversation->ask will execute the callback function for any response.
-This allows the bot to respond to open ended questions, collect the responses, and handle them in whatever
+This allows the bot to respond to open-ended questions, collect the responses, and handle them in whatever
 manner it needs to.
 
 When passed an array, the bot will look first for a matching pattern, and execute only the callback whose
@@ -422,8 +422,8 @@ public function askForDatabase()
 
 ### Long running tasks
 
-BotMan uses the Webhook APIs to get information from the messaging system. When the messaging system of your choice sends the information to your app, you have **3 seconds** to return a HTTP 2xx status.
-Otherwise the delivery attempt will be considered as a failure and the messaging system will attempt to deliver the message up to three more times.
+BotMan uses the Webhook APIs to get information from the messaging system. When the messaging system of your choice sends the information to your app, you have **3 seconds** to return an HTTP 2xx status.
+Otherwise, the delivery attempt will be considered as a failure and the messaging system will attempt to deliver the message up to three more times.
 
 This means that you should push long running tasks into an asynchronous queue.
 

@@ -34,4 +34,4 @@ $botman = BotManFactory::create([
 ]);
 ```
 
-And that's it - you can now use BotMan with the Microsoft Bot Framework to create an interactive bots!
+And that's it - you can now use BotMan with the Microsoft Bot Framework to create interactive bots!
