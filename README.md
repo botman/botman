@@ -49,7 +49,7 @@ $config = [
 $botman = BotManFactory::create($config);
 
 // give the bot something to listen for.
-$botman->hears('hello', function (BotMan $bot, $message) {
+$botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
 });
 ```
@@ -91,7 +91,7 @@ use Mpociot\BotMan;
 
 $botman = app('botman');
 
-$botman->hears('hello', function (BotMan $bot, $message) {
+$botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
 });
 ```
@@ -164,7 +164,7 @@ BotMan provides a `hears()` function, which will listen to specific patterns in 
 | in | Defines where the Bot should listen for this message. Can be either `BotMan::DIRECT_MESSAGE` or `BotMan::PUBLIC_CHANNEL`
 
 ```php
-$botman->hears('keyword', function(BotMan $bot, $message) {
+$botman->hears('keyword', function(BotMan $bot) {
     // do something to respond to message
     $bot->reply('You used a keyword!');
 });
@@ -238,7 +238,7 @@ As a second parameter, you may also send any additional fields supported by Slac
 Simple reply example:
 
 ```php
-$botman->hears('keyword', function (BotMan $bot, $message) {
+$botman->hears('keyword', function (BotMan $bot) {
     // do something to respond to message
     // ...
 
@@ -250,7 +250,7 @@ $botman->hears('keyword', function (BotMan $bot, $message) {
 Slack-specific fields and attachments:
 
 ```php
-$botman->hears('keyword', function (BotMan $bot, $message) {
+$botman->hears('keyword', function (BotMan $bot) {
     // do something...
 
     // then respond with a message object
@@ -285,7 +285,7 @@ multiple API calls into a single function.
 Simple conversation example:
 
 ```php
-$botman->hears('start conversation', function (BotMan $bot, $message) {
+$botman->hears('start conversation', function (BotMan $bot) {
     $bot->startConversation(new PizzaConversation);
 });
 ```
