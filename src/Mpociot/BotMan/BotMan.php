@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\Driver;
+use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
