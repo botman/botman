@@ -13,6 +13,8 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
+    use VerifiesServices;
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 

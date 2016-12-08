@@ -7,12 +7,10 @@
 This URL needs to validate itself against Facebook. When you create the webhook on the Facebook developer website, you have to choose a unique
 verify token, which you can check against in your verify controller.
 
-This is what the Facebook verification would look like in a Laravel application. Place it in a controller method. Facebook will try to send it a `GET` request.
+BotMan comes with a method to simplify the verification process. Just place this line after the initialization:
+
 ```php
-// Facebook verification
-if ($request->hub_mode === 'subscribe' && $request->hub_verify_token === 'MY_SECRET_TOKEN') {
-    return $request->hub_challenge;
-}
+$botman->verifyServices('MY_SECRET_VERIFICATION_TOKEN');
 ```
 
 To connect BotMan with your Facebook Messenger Bot, you first need to follow the [official quick start guide](https://developers.facebook.com/docs/messenger-platform/guides/quick-start) to create your Messenger Bot and retrieve an access token.
