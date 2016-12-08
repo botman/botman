@@ -1,7 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan;
+namespace Mpociot\BotMan\Traits;
 
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,9 +18,7 @@ trait VerifiesServices
     public function verifyServices($facebookVerification)
     {
         $request = Request::createFromGlobals();
-
-        /** @var \Symfony\Component\HttpFoundation\ParameterBag $payload */
-        $payload = $request->json();
+        $payload = Collection::make(json_decode($request->getContent(), true));
 
         // Slack verification
         if ($payload->get('type') === 'url_verification') {
