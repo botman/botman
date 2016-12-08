@@ -8,9 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait VerifiesServices
 {
-
     /**
-     * Verify service webhook URLs
+     * Verify service webhook URLs.
      *
      * @param string $facebookVerification the Facebook verification string to match
      * @return Response
@@ -30,5 +29,4 @@ trait VerifiesServices
             return Response::create($request->get('hub_challenge'))->send();
         }
     }
-
 }
