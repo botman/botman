@@ -14,6 +14,8 @@ $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
 
 ## Getting Started
 
+> Want to get started even faster? Use the [BotMan Laravel Starter Project](https://github.com/mpociot/botman-laravel-starter)!
+
 1. Open the Laravel/Symfony/PHP project your new Bot will live in
 2. [Install BotMan with composer](#installation-using-composer)
 3. [Configure your messaging platform](#connect-with-your-messaging-service)
