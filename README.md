@@ -162,6 +162,28 @@ Table of Contents
 
 ## Receiving Messages
 
+### Driver specific information
+
+BotMan can listen to many different [messaging drivers](#connect-with-your-messaging-service) and therefore it might be required for you, to respond differently depending on which
+driver was used to respond to your message.
+
+Each messaging driver in BotMan has a `getName()` method, that returns a human readable name of the driver.
+ 
+You can access the driver object using `$botman->getDriver()`.
+To match against the driver name, you can use each driver's `NAME` constant or use the table below.
+
+The available driver names are:
+
+| Driver | Name
+|--- |---
+| `BotFrameworkDriver` | BotFramework
+| `FacebookDriver` | Facebook
+| `HipChatDriver` | HipChat
+| `NexmoDriver` | Nexmo
+| `SlackDriver` | Slack
+| `TelegramDriver` | Telegram
+
+
 ### Matching Patterns and Keywords with `hears()`
 
 BotMan provides a `hears()` function, which will listen to specific patterns in public and/or private channels.
