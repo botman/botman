@@ -56,6 +56,9 @@ $botman = BotManFactory::create($config);
 $botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
 });
+
+// start listening
+$botman->listen();
 ```
 
 ### Using BotMan within a Laravel app
@@ -102,6 +105,9 @@ $botman = app('botman');
 $botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
 });
+
+// start listening
+$botman->listen();
 ```
 
 That's it.
