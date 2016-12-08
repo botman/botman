@@ -1,10 +1,10 @@
 {
     "name": "mpociot/botman",
     "license": "MIT",
-    "description": "",
+    "description": "Create messaging bots in PHP with ease.",
     "keywords": [
         "Bot",
-        "Botman",
+        "BotMan",
         "Slack",
         "Facebook Messenger",
         "Nexmo",
