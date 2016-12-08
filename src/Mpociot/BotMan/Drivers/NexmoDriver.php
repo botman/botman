@@ -18,6 +18,8 @@ class NexmoDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'Nexmo';
+
     /**
      * @param Request $request
      */
@@ -25,6 +27,16 @@ class NexmoDriver extends Driver
     {
         $this->payload = $request->request->all();
         $this->event = Collection::make($this->payload);
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**

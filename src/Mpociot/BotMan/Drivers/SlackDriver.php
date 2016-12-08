@@ -18,6 +18,8 @@ class SlackDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'Slack';
+
     /**
      * @param Request $request
      */
@@ -42,6 +44,16 @@ class SlackDriver extends Driver
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->event = Collection::make($this->payload->get('event'));
         }
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**

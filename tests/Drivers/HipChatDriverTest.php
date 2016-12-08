@@ -22,6 +22,13 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_the_driver_name()
+    {
+        $driver = $this->getDriver([]);
+        $this->assertSame('HipChat', $driver->getName());
+    }
+
+    /** @test */
     public function it_matches_the_request()
     {
         $driver = $this->getDriver([

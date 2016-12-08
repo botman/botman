@@ -18,6 +18,8 @@ class HipChatDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'HipChat';
+
     /**
      * @param Request $request
      */
@@ -25,6 +27,16 @@ class HipChatDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('item'));
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**

@@ -18,6 +18,8 @@ class TelegramDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'Telegram';
+
     /**
      * @param Request $request
      */
@@ -25,6 +27,16 @@ class TelegramDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('message'));
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**

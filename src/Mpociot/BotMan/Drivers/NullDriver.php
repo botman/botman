@@ -27,6 +27,16 @@ class NullDriver extends Driver
     }
 
     /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return '';
+    }
+
+    /**
      * @param Message $message
      *
      * @return Answer

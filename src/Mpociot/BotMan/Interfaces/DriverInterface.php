@@ -41,4 +41,11 @@ interface DriverInterface
      * @return $this
      */
     public function reply($message, $matchingMessage, $additionalParameters = []);
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName();
 }

@@ -17,6 +17,8 @@ class FacebookDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'Facebook';
+
     /**
      * @param Request $request
      */
@@ -24,6 +26,16 @@ class FacebookDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make((array) $this->payload->get('entry')[0]);
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**

@@ -18,6 +18,8 @@ class BotFrameworkDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    const DRIVER_NAME = 'BotFramework';
+
     /**
      * @param Request $request
      */
@@ -25,6 +27,16 @@ class BotFrameworkDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->all());
+    }
+
+    /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
     }
 
     /**
