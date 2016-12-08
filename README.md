@@ -110,6 +110,8 @@ $botman->hears('hello', function (BotMan $bot) {
 $botman->listen();
 ```
 
+Make sure that your controller method doesn't use the CSRF token middleware.
+
 That's it.
 
 ## Configuration
