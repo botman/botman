@@ -224,6 +224,16 @@ $botman->hears('open the {doorType} doors', function(BotMan $bot, $doorType) {
 });
 ```
 
+### Fallback replies
+
+If you want to provide your bot users with a fallback reply, if they enter a command that you don't understand, you can use the `fallback` method on the BotMan instance.
+
+```php
+$botman->fallback(function(BotMan $bot) {
+    return $bot->reply('Sorry I do not know this command');
+});
+```
+
 ### Middleware
 
 The usage of custom middleware allows you to enrich the messages your bot received with additional information from third party services such as [wit.ai](http://wit.ai) or [api.ai](http://api.ai).
