@@ -101,7 +101,7 @@ Add your Facebook access token / Slack token to your `config/services.php`:
 Using it:
 
 ```php
-use Mpociot\BotMan;
+use Mpociot\BotMan\BotMan;
 
 $botman = app('botman');
 
