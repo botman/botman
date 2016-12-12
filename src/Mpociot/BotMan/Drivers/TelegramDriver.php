@@ -79,9 +79,9 @@ class TelegramDriver extends Driver
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
 
-            return [new Message($callback->get('data'), $callback->get('message')['chat']['id'], $callback->get('from')['id'], $callback->get('messsage'))];
+            return [new Message($callback->get('data'), $callback->get('from')['id'], $callback->get('message')['chat']['id'], $callback->get('messsage'))];
         } else {
-            return [new Message($this->event->get('text'), $this->event->get('chat')['id'], $this->event->get('from')['id'], $this->event)];
+            return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event)];
         }
     }
 
@@ -139,7 +139,7 @@ class TelegramDriver extends Driver
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge([
-            'chat_id' => $matchingMessage->getUser(),
+            'chat_id' => $matchingMessage->getChannel(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore

@@ -155,7 +155,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
             'entities' => [],
         ]);
-        $this->assertSame('chat_id', $driver->getMessages()[0]->getUser());
+        $this->assertSame('from_id', $driver->getMessages()[0]->getUser());
     }
 
     /** @test */
@@ -176,7 +176,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
             'entities' => [],
         ]);
-        $this->assertSame('from_id', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('chat_id', $driver->getMessages()[0]->getChannel());
     }
 
     /** @test */
@@ -204,7 +204,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'data' => 'FooBar',
         ]);
 
-        $this->assertSame('chat_id', $driver->getMessages()[0]->getUser());
+        $this->assertSame('from_id', $driver->getMessages()[0]->getUser());
     }
 
     /** @test */
@@ -232,7 +232,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'data' => 'FooBar',
         ]);
 
-        $this->assertSame('from_id', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('chat_id', $driver->getMessages()[0]->getChannel());
     }
 
     /** @test */
