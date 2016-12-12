@@ -64,6 +64,6 @@ class Curl implements HttpInterface
 
         $statusCode = $info['http_code'] === 0 ? 500 : $info['http_code'];
 
-        return new Response((string)$body, $statusCode, []);
+        return new Response((string) $body, $statusCode, []);
     }
 }

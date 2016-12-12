@@ -236,7 +236,7 @@ class BotMan
 
         foreach ($drivers as $driver) {
             $matchMessage = new Message('', '', $channel);
-            /** @var $driver Driver */
+            /* @var $driver Driver */
             $driver->reply($message, $matchMessage, []);
         }
 
