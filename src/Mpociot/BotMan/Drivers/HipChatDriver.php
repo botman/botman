@@ -115,6 +115,6 @@ class HipChatDriver extends Driver
      */
     public function isConfigured()
     {
-        return !empty($this->config->get('hipchat_urls'));
+        return ! empty($this->config->get('hipchat_urls'));
     }
 }

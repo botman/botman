@@ -172,7 +172,7 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
         $htmlInterface = m::mock(Curl::class);
 
         $driver = new HipChatDriver($request, [
-            'hipchat_urls' => ['1','2'],
+            'hipchat_urls' => ['1', '2'],
         ], $htmlInterface);
 
         $this->assertTrue($driver->isConfigured());
