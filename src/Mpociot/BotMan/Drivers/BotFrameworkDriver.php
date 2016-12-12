@@ -153,6 +153,14 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$token,
         ];
 
-        return $this->http->post($matchingMessage->getPayload()->get('serviceUrl').'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
+        return $this->http->post(Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'http://skype.botframework.com').'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !is_null($this->config->get('microsoft_app_id')) && !is_null($this->config->get('microsoft_app_key'));
     }
 }

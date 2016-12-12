@@ -73,4 +73,12 @@ class NullDriver extends Driver
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

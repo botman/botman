@@ -29,6 +29,6 @@ class BotManFactory
         $driverManager = new DriverManager($config, new Curl());
         $driver = $driverManager->getMatchingDriver($request);
 
-        return new BotMan($cache, $driver);
+        return new BotMan($cache, $driver, $config);
     }
 }

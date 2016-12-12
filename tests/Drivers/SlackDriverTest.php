@@ -401,4 +401,28 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ]]),
         ]);
     }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'token',
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => null,
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new SlackDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+    }
 }

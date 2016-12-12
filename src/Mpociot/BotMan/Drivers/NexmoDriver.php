@@ -65,7 +65,7 @@ class NexmoDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('text'), $this->event->get('msisdn'), $this->event->get('to'), $this->payload)];
+        return [new Message($this->event->get('text'), $this->event->get('to'), $this->event->get('msisdn'), $this->payload)];
     }
 
     /**
@@ -87,8 +87,8 @@ class NexmoDriver extends Driver
         $parameters = array_merge([
             'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
-            'to' => $matchingMessage->getUser(),
-            'from' => $matchingMessage->getChannel(),
+            'to' => $matchingMessage->getChannel(),
+            'from' => $matchingMessage->getUser(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
@@ -101,5 +101,13 @@ class NexmoDriver extends Driver
         }
 
         return $this->http->post('https://rest.nexmo.com/sms/json?'.http_build_query($parameters));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !is_null($this->config->get('nexmo_key')) && !is_null($this->config->get('nexmo_secret'));
     }
 }

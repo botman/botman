@@ -265,6 +265,8 @@ Single message replies to incoming commands can be sent using the `$bot->reply()
 Multi-message replies, particularly those that present questions for the end user to respond to,
 can be sent using the `$bot->startConversation()` function and the related conversation sub-functions. 
 
+Bots can originate messages - that is, send a message based on some internal logic or external stimulus - using `$bot->say()` method.
+
 
 ### Single Message Replies to Incoming Messages
 
@@ -471,6 +473,38 @@ public function askForDatabase()
 }
 ```
 
+### Originating Messages
+
+#### $bot->say()
+
+| Argument | Description
+|--- |---
+| message | _String_ or _Question_ The message you want to send
+| channel | _String_ A string containing the `channel` you want to send the message to.
+| driver | _Optional_ A DriverInterface class name to use when sending the message
+
+Simple example:
+
+```php
+$botman->say('Hello user', 'U123456789');
+```
+
+Specific driver example:
+
+```php
+$botman->say('Hello user', 'U123456789', FacebookDriver::class);
+```
+
+**Note:** The `channel` argument depends on the driver(s) you plan to use for sending messages.
+
+| Driver | Channel type
+|--- |---
+| `BotFrameworkDriver` | Skype / Framework User ID
+| `FacebookDriver` | Facebook User ID
+| `HipChatDriver` | HipChat User ID
+| `NexmoDriver` | Phone number
+| `SlackDriver` | Slack User/Channel ID
+| `TelegramDriver` | Telegram User ID
 
 ### Long running tasks
 

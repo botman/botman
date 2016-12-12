@@ -109,4 +109,12 @@ class HipChatDriver extends Driver
             return $this->http->post($apiURL, [], $parameters, $headers, true);
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !empty($this->config->get('hipchat_urls'));
+    }
 }
