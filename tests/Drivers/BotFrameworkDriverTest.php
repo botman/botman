@@ -245,4 +245,30 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1', $driver->getMessages()[0]->getChannel());
     }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new BotFrameworkDriver($request, [
+            'microsoft_app_id' => 'app_id',
+            'microsoft_app_key' => 'app_key',
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new BotFrameworkDriver($request, [
+            'microsoft_app_id' => null,
+            'microsoft_app_key' => null,
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new BotFrameworkDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+    }
 }

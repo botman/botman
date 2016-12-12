@@ -409,4 +409,28 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ]);
     }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => null,
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new TelegramDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+    }
 }

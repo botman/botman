@@ -28,6 +28,11 @@ interface DriverInterface
     public function isBot();
 
     /**
+     * @return bool
+     */
+    public function isConfigured();
+
+    /**
      * @param Message $matchingMessage
      *
      * @return Answer

@@ -156,4 +156,12 @@ class TelegramDriver extends Driver
 
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendMessage', [], $parameters);
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !is_null($this->config->get('telegram_token'));
+    }
 }

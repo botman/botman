@@ -150,4 +150,12 @@ class FacebookDriver extends Driver
 
         return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !is_null($this->config->get('facebook_token'));
+    }
 }

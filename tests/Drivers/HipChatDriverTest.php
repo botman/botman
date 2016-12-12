@@ -163,4 +163,28 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertSame('98765', $driver->getMessages()[0]->getChannel());
     }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new HipChatDriver($request, [
+            'hipchat_urls' => ['1','2'],
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new HipChatDriver($request, [
+            'hipchat_urls' => [],
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new HipChatDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+    }
 }

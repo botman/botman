@@ -7,6 +7,7 @@ use Mpociot\BotMan\Drivers\Driver;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -64,12 +65,14 @@ class BotMan
      * BotMan constructor.
      * @param CacheInterface $cache
      * @param Driver $driver
+     * @param array $config
      */
-    public function __construct(CacheInterface $cache, Driver $driver)
+    public function __construct(CacheInterface $cache, Driver $driver, $config = [])
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
+        $this->config = $config;
 
         $this->loadActiveConversation();
     }
@@ -209,9 +212,35 @@ class BotMan
             }
         }
 
-        $text = preg_replace('/\{(\w+?)\}/', '(.*)', $pattern);
+        $messageText = $message->getMessage();
+        $answerText = $this->getConversationAnswer()->getValue();
 
-        return preg_match('/'.$text.'/i', $message->getMessage(), $matches);
+        $text = '/'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'/i';
+
+        return preg_match($text, $messageText, $matches) || preg_match($text, $answerText, $matches);
+    }
+
+    /**
+     * @param string|Question $message
+     * @param string|array $channel
+     * @param DriverInterface|null $driver
+     * @return $this
+     */
+    public function say($message, $channel, $driver = null)
+    {
+        if (is_null($driver)) {
+            $drivers = DriverManager::getConfiguredDrivers($this->config);
+        } else {
+            $drivers = [$driver];
+        }
+
+        foreach ($drivers as $driver) {
+            $matchMessage = new Message('', '', $channel);
+            /** @var $driver Driver */
+            $driver->reply($message, $matchMessage, []);
+        }
+
+        return $this;
     }
 
     /**

@@ -102,4 +102,12 @@ class NexmoDriver extends Driver
 
         return $this->http->post('https://rest.nexmo.com/sms/json?'.http_build_query($parameters));
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return !is_null($this->config->get('nexmo_key')) && !is_null($this->config->get('nexmo_secret'));
+    }
 }

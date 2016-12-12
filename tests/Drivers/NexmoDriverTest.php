@@ -126,4 +126,30 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertSame('491762012309022505', $driver->getMessages()[0]->getChannel());
     }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new NexmoDriver($request, [
+            'nexmo_key' => 'key',
+            'nexmo_secret' => 'secret',
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new NexmoDriver($request, [
+            'nexmo_key' => null,
+            'nexmo_secret' => null,
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new NexmoDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+    }
 }

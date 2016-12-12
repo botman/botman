@@ -9,6 +9,7 @@ use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Drivers\FacebookDriver;
+use Symfony\Component\HttpFoundation\Request;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -284,5 +285,29 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('', '', '1234567890');
         $driver->reply($question, $message);
+    }
+
+    /** @test */
+    public function it_is_configured()
+    {
+        $request = m::mock(Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+        $htmlInterface = m::mock(Curl::class);
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'token',
+        ], $htmlInterface);
+
+        $this->assertTrue($driver->isConfigured());
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => null,
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
+
+        $driver = new FacebookDriver($request, [], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
     }
 }
