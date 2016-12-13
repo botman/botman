@@ -3,11 +3,11 @@
 namespace Mpociot\BotMan\Tests\Middleware;
 
 use Mockery as m;
-use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Middleware\Wit;
+use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 class WitTest extends PHPUnit_Framework_TestCase

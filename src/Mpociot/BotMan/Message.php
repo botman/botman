@@ -87,9 +87,10 @@ class Message
      */
     public function getExtras($key = null)
     {
-        if (!is_null($key)) {
+        if (! is_null($key)) {
             return Collection::make($this->extras)->get($key);
         }
+
         return $this->extras;
     }
 }

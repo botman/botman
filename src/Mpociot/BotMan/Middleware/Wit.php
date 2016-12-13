@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Middleware;
 
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
