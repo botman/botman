@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\DriverManager;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(0, DriverManager::getConfiguredDrivers([]));
 
         $this->assertCount(1, DriverManager::getConfiguredDrivers([
-            'slack_token' => 'foo'
+            'slack_token' => 'foo',
         ]));
 
         $this->assertCount(2, DriverManager::getConfiguredDrivers([

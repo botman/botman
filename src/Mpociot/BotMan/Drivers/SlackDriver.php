@@ -200,6 +200,6 @@ class SlackDriver extends Driver
      */
     public function isConfigured()
     {
-        return !is_null($this->config->get('slack_token'));
+        return ! is_null($this->config->get('slack_token'));
     }
 }
