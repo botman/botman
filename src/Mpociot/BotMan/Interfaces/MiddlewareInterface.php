@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Drivers\Driver;
 
 interface MiddlewareInterface
 {
