@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
+use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
 
 interface MiddlewareInterface
@@ -10,8 +11,9 @@ interface MiddlewareInterface
      * Handle / modify the message.
      *
      * @param Message $message
+     * @param Driver $driver
      */
-    public function handle(Message &$message);
+    public function handle(Message &$message, Driver $driver);
 
     /**
      * @param Message $message

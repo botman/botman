@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Middleware;
 
+use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
@@ -46,8 +47,9 @@ class Wit implements MiddlewareInterface
      * Handle / modify the message.
      *
      * @param Message $message
+     * @param Driver $driver
      */
-    public function handle(Message &$message)
+    public function handle(Message &$message, Driver $driver)
     {
         $response = $this->http->post('https://api.wit.ai/message?q='.urlencode($message->getMessage()), [], [], [
             'Authorization: Bearer '.$this->token,

@@ -2,6 +2,8 @@
 
 namespace Mpociot\BotMan;
 
+use Illuminate\Support\Collection;
+
 class Message
 {
     /** @var string */
@@ -80,10 +82,14 @@ class Message
     }
 
     /**
+     * @param string|null $key
      * @return array
      */
-    public function getExtras()
+    public function getExtras($key = null)
     {
+        if (!is_null($key)) {
+            return Collection::make($this->extras)->get($key);
+        }
         return $this->extras;
     }
 }

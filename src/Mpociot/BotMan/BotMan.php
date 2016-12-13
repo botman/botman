@@ -114,7 +114,7 @@ class BotMan
 
         foreach ($this->middleware as $middleware) {
             foreach ($messages as &$message) {
-                $middleware->handle($message);
+                $middleware->handle($message, $this->getDriver());
             }
         }
 

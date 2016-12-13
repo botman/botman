@@ -63,4 +63,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
             'intents' => [1, 2, 3],
         ], $message->getExtras());
     }
+
+    /** @test */
+    public function it_can_set_and_return_single_extra()
+    {
+        $message = new Message('', '', '');
+        $message->addExtras('intents', [1, 2, 3]);
+        $this->assertSame([1, 2, 3], $message->getExtras('intents'));
+
+        $this->assertNull($message->getExtras('not-set'));
+    }
 }

@@ -582,6 +582,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
+                'driver_name' => 'Slack',
                 'test' => 'successful',
             ], $bot->getMessage()->getExtras());
         });

@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Middleware;
 
 use Mockery as m;
+use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
@@ -28,7 +29,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ->andReturn($response);
 
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message);
+        $middleware->handle($message, m::mock(NullDriver::class));
 
         $this->assertSame([
             'entities' => ['foo' => 'bar'],
@@ -71,7 +72,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ->andReturn($response);
 
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message);
+        $middleware->handle($message, m::mock(NullDriver::class));
         $this->assertTrue($middleware->isMessageMatching($message, 'emotion'));
     }
 
@@ -111,7 +112,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ->andReturn($response);
 
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message);
+        $middleware->handle($message, m::mock(NullDriver::class));
         $this->assertFalse($middleware->isMessageMatching($message, 'emotion'));
     }
 
