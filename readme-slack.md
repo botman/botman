@@ -16,7 +16,7 @@ You have two possibilities to set up Slack to connect with BotMan
 
 **Pros:** All BotMan features available
 
-**Cons:** Pretty cumbersome to set up *Note:* Let the folks from [SlackHQ](https://twitter.com/slackhq) now this. If we make enough noise, they'll hopefully simplify the bot token creation process!
+**Cons:** Pretty cumbersome to set up *Note:* Let the folks from [SlackHQ](https://twitter.com/slackhq) know this. If we make enough noise, they'll hopefully simplify the bot token creation process!
 
 
 ## Usage with an outgoing webhook
