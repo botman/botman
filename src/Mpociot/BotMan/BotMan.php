@@ -215,7 +215,7 @@ class BotMan
         $messageText = $message->getMessage();
         $answerText = $this->getConversationAnswer()->getValue();
 
-        $text = '/'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'/i';
+        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
 
         return preg_match($text, $messageText, $matches) || preg_match($text, $answerText, $matches);
     }

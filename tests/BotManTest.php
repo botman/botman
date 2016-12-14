@@ -194,6 +194,25 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_does_not_hears_matching_commands_in_text()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'this',
+            ],
+        ]);
+
+        $botman->hears('hi', function ($bot) use (&$called) {
+            $called = true;
+        });
+        $botman->listen();
+        $this->assertFalse($called);
+    }
+
+    /** @test */
     public function it_hears_in_public_channel_only()
     {
         $called = false;
