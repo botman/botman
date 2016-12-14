@@ -110,7 +110,7 @@ class BotFrameworkDriver extends Driver
             'client_id' => $this->config->get('microsoft_app_id'),
             'client_secret' => $this->config->get('microsoft_app_key'),
             'grant_type' => 'client_credentials',
-            'scope' => 'https://graph.microsoft.com/.default',
+            'scope' => 'https://api.botframework.com/.default',
         ]);
         $responseData = json_decode($response->getContent());
 
