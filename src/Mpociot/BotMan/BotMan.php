@@ -180,7 +180,7 @@ class BotMan
             $callback = $messageData['callback'];
 
             foreach ($this->getMessages() as $message) {
-                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in'])) {
+                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
                     $this->message = $message;
                     $heardMessage = true;
                     $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
