@@ -106,11 +106,11 @@ class BotFrameworkDriver extends Driver
 
     public function getAccessToken()
     {
-        $response = $this->http->post('https://login.microsoftonline.com/common/oauth2/v2.0/token', [], [
+        $response = $this->http->post('https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token', [], [
             'client_id' => $this->config->get('microsoft_app_id'),
             'client_secret' => $this->config->get('microsoft_app_key'),
             'grant_type' => 'client_credentials',
-            'scope' => 'https://graph.microsoft.com/.default',
+            'scope' => 'https://api.botframework.com/.default',
         ]);
         $responseData = json_decode($response->getContent());
 
