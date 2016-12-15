@@ -12,6 +12,7 @@ use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
+use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
 
 class BotManTest extends PHPUnit_Framework_TestCase
 {
