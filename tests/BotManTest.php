@@ -6,10 +6,10 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 
