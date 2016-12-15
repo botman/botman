@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Added a new `Message` class to compose messages with images.
+- Image support is available for these drivers:
+    - Facebook
+    - Telegram
+    - Slack
+    - Microsoft Bot Framework
+
 ## [1.1.1]
 ### Changed
 - Fixed a bug where middleware `isMessageMatching` of `false` would still match the message.

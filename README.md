@@ -290,7 +290,7 @@ As a second parameter, you may also send any additional fields supported by Slac
 
 | Argument | Description
 |--- |---
-| reply | _String_ or _Question_ Outgoing response
+| reply | _String_ or _Message_ or _Question_ Outgoing response
 | additionalParameters | _Optional_ Array containing additional parameters
 
 Simple reply example:
@@ -301,6 +301,21 @@ $botman->hears('keyword', function (BotMan $bot) {
     // ...
 
     $bot->reply("Tell me more!");
+});
+```
+
+You can also compose your message using the `Mpociot\BotMan\Messages\Message` class to have a unified API to add images 
+to your chat messages. 
+
+```php
+use Mpociot\BotMan\Messages\Message;
+
+$botman->hears('keyword', function (BotMan $bot) {
+    // Build message object
+    $message = Message::create('This is my text')
+                ->image('http://www.some-url.com/image.jpg');
+    // Reply message object
+    $bot->reply($message);
 });
 ```
 
