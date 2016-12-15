@@ -1,9 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.1.0]
 ### Added
 - The `hears` method can now handle `ClassName@method` syntax.
+
+### Changed
+- Fixed a bug in combination with middleware classes and regular expression matches
 
 ## [1.0.1]
 ### Added
