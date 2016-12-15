@@ -337,6 +337,38 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reply_message_objects_with_image()
+    {
+        $responseData = [
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+                'text' => 'response',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/chat.postMessage', [], [
+                'token' => 'Foo',
+                'channel' => 'general',
+                'text' => 'Test',
+                'attachments' => json_encode(['image_url' => 'http://image.url/foo.png']),
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '', 'general');
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test','http://image.url/foo.png'), $message);
+    }
+
+    /** @test */
     public function it_can_reply_string_messages_for_outgoing_webhooks()
     {
         $request = new Request([], [

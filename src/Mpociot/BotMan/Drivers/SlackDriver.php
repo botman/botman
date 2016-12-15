@@ -146,6 +146,11 @@ class SlackDriver extends Driver
         if ($message instanceof Question) {
             $parameters['text'] = $this->format($message->getText());
             $parameters['attachments'] = json_encode([$message->toArray()]);
+        } elseif ($message instanceof IncomingMessage) {
+            $parameters['text'] = $message->getMessage();
+            if (!is_null($message->getImage())) {
+                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
+            }
         } else {
             $parameters['text'] = $this->format($message);
         }
@@ -174,6 +179,9 @@ class SlackDriver extends Driver
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
+            if (!is_null($message->getImage())) {
+                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
+            }
         } else {
             $parameters['text'] = $this->format($message);
         }

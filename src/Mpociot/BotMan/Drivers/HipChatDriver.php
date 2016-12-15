@@ -95,7 +95,7 @@ class HipChatDriver extends Driver
         if ($message instanceof Question) {
             $parameters['message'] = $message->getText();
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
+            $parameters['message'] = $message->getMessage();
         } else {
             $parameters['message'] = $message;
         }

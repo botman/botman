@@ -147,6 +147,7 @@ class FacebookDriver extends Driver
             $parameters['message'] = $this->convertQuestion($message);
         } elseif ($message instanceof IncomingMessage) {
             if (!is_null($message->getImage())) {
+                unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
                     'type' => 'image',
                     'payload' => [

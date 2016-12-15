@@ -147,6 +147,12 @@ class BotFrameworkDriver extends Driver
             ];
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
+            $parameters['attachments'] = [
+                [
+                    "contentType" => "image/png",
+                    "contentUrl" => $message->getImage()
+                ]
+            ];
         } else {
             $parameters['text'] = $message;
         }
