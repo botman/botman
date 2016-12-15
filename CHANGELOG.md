@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- The `hears` method can now handle `ClassName@method` syntax.
+
 ## [1.0.1]
 ### Added
 - Added `send` method to BotMan, to allow originating messages

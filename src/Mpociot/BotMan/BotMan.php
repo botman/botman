@@ -153,11 +153,11 @@ class BotMan
 
     /**
      * @param string $pattern the pattern to listen for
-     * @param Closure $callback the callback to execute
+     * @param Closure|string $callback the callback to execute. Either a closuer or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
      * @return $this
      */
-    public function hears($pattern, Closure $callback, $in = null)
+    public function hears($pattern, $callback, $in = null)
     {
         $this->listenTo[] = [
             'pattern' => $pattern,
@@ -178,6 +178,11 @@ class BotMan
         foreach ($this->listenTo as $messageData) {
             $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
+
+            if (! $callback instanceof Closure) {
+                list($class, $method) = explode('@', $callback);
+                $callback = [new $class, $method];
+            }
 
             foreach ($this->getMessages() as $message) {
                 if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {

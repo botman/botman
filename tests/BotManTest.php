@@ -6,6 +6,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
@@ -191,6 +192,21 @@ class BotManTest extends PHPUnit_Framework_TestCase
         });
         $botman->listen();
         $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_hears_matching_commands_without_closures()
+    {
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        TestClass::$called = false;
+        $botman->hears('foo', TestClass::class.'@foo');
+        $botman->listen();
+        $this->assertTrue(TestClass::$called);
     }
 
     /** @test */
