@@ -282,9 +282,9 @@ Messages sent using `$bot->reply()` are sent immediately. If multiple messages a
 and may be difficult for the user to process. We recommend using `$bot->startConversation()`
 if more than one message needs to be sent.
 
-You may pass either a string or a Question object to the function.
+You may pass either a string, a `Message` object or a `Question` object to the function.
 
-As a second parameter, you may also send any additional fields supported by Slack, Facebook Messenger or Telegram.
+As a second parameter, you may also send any additional fields to pass along the configured driver.
 
 #### $bot->reply()
 
