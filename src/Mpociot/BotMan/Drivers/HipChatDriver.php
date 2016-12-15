@@ -4,12 +4,12 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class HipChatDriver extends Driver
 {

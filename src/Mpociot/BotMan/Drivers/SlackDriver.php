@@ -4,12 +4,12 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackDriver extends Driver
 {
@@ -148,7 +148,7 @@ class SlackDriver extends Driver
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
-            if (!is_null($message->getImage())) {
+            if (! is_null($message->getImage())) {
                 $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
             }
         } else {
@@ -179,7 +179,7 @@ class SlackDriver extends Driver
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
-            if (!is_null($message->getImage())) {
+            if (! is_null($message->getImage())) {
                 $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
             }
         } else {

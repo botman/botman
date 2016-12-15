@@ -394,9 +394,9 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
                     'attachment' => [
                         'type' => 'image',
                         'payload' => [
-                            'url' => 'http://image.url//foo.png'
+                            'url' => 'http://image.url//foo.png',
                         ],
-                    ]
+                    ],
                 ],
                 'access_token' => 'Foo',
             ]);

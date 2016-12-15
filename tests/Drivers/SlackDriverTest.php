@@ -365,7 +365,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test','http://image.url/foo.png'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
     }
 
     /** @test */
