@@ -2,12 +2,11 @@
 
 namespace Mpociot\BotMan\Tests\Messages;
 
-use Mpociot\BotMan\Messages\Message;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Messages\Message;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {
-
     /** @test */
     public function it_can_be_created()
     {
@@ -33,5 +32,4 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = Message::create()->image('foo');
         $this->assertSame('foo', $message->getImage());
     }
-
 }

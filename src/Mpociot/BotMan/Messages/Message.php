@@ -38,6 +38,7 @@ class Message
     public function message($message)
     {
         $this->message = $message;
+
         return $this;
     }
 
@@ -48,6 +49,7 @@ class Message
     public function image($image)
     {
         $this->image = $image;
+
         return $this;
     }
 
