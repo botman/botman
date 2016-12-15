@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,13 +132,14 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
+        $endpoint = 'sendMessage';
         $parameters = array_merge([
             'chat_id' => $matchingMessage->getChannel(),
         ], $additionalParameters);
@@ -150,11 +152,19 @@ class TelegramDriver extends Driver
             $parameters['reply_markup'] = json_encode([
                 'inline_keyboard' => [$this->convertQuestion($message)],
             ], true);
+        } elseif ($message instanceof IncomingMessage) {
+            if (!is_null($message->getImage())) {
+                $endpoint = 'sendPhoto';
+                $parameters['photo'] = $message->getImage();
+                $parameters['caption'] = $message->getMessage();
+            } else {
+                $parameters['text'] = $message->getMessage();
+            }
         } else {
             $parameters['text'] = $message;
         }
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendMessage', [], $parameters);
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
     }
 
     /**

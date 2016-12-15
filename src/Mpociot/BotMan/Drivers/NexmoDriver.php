@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +78,7 @@ class NexmoDriver extends Driver
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return Response
@@ -96,6 +97,8 @@ class NexmoDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['text'] = $message->getText();
+        } elseif ($message instanceof IncomingMessage) {
+            $parameters['text'] = $message->getMessage();
         } else {
             $parameters['text'] = $message;
         }

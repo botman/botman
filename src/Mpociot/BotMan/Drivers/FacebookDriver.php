@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,7 +124,7 @@ class FacebookDriver extends Driver
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
@@ -144,6 +145,17 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
+        } elseif ($message instanceof IncomingMessage) {
+            if (!is_null($message->getImage())) {
+                $parameters['message']['attachment'] = [
+                    'type' => 'image',
+                    'payload' => [
+                        'url' => $message->getImage()
+                    ],
+                ];
+            } else {
+                $parameters['message']['text'] = $message->getMessage();
+            }
         }
 
         $parameters['access_token'] = $this->config->get('facebook_token');

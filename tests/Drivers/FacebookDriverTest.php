@@ -310,4 +310,105 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($driver->isConfigured());
     }
+
+    /** @test */
+    public function it_can_reply_message_objects()
+    {
+        $responseData = [
+            'object' => 'page',
+            'event' => [
+                [
+                    'messaging' => [
+                        [
+                            'sender' => [
+                                'id' => '1234567890',
+                            ],
+                            'recipient' => [
+                                'id' => '0987654321',
+                            ],
+                            'message' => [
+                                'text' => 'test',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890',
+                ],
+                'message' => [
+                    'text' => 'Test',
+                ],
+                'access_token' => 'Foo',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '', '1234567890');
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_image()
+    {
+        $responseData = [
+            'object' => 'page',
+            'event' => [
+                [
+                    'messaging' => [
+                        [
+                            'sender' => [
+                                'id' => '1234567890',
+                            ],
+                            'recipient' => [
+                                'id' => '0987654321',
+                            ],
+                            'message' => [
+                                'text' => 'test',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890',
+                ],
+                'message' => [
+                    'attachment' => [
+                        'type' => 'image',
+                        'payload' => [
+                            'url' => 'http://image.url//foo.png'
+                        ],
+                    ]
+                ],
+                'access_token' => 'Foo',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '', '1234567890');
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url//foo.png'), $message);
+    }
 }

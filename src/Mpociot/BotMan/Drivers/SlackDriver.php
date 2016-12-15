@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,7 +154,7 @@ class SlackDriver extends Driver
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
@@ -171,6 +172,8 @@ class SlackDriver extends Driver
         if ($message instanceof Question) {
             $parameters['text'] = '';
             $parameters['attachments'] = json_encode([$message->toArray()]);
+        } elseif ($message instanceof IncomingMessage) {
+            $parameters['text'] = $message->getMessage();
         } else {
             $parameters['text'] = $this->format($message);
         }

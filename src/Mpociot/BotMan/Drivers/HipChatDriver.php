@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +78,7 @@ class HipChatDriver extends Driver
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return Response|null
@@ -93,6 +94,8 @@ class HipChatDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $message->getText();
+        } elseif ($message instanceof IncomingMessage) {
+            $parameters['text'] = $message->getMessage();
         } else {
             $parameters['message'] = $message;
         }
