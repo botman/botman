@@ -16,7 +16,6 @@ class TestNoMatchMiddleware implements MiddlewareInterface
      */
     public function handle(Message &$message, Driver $driver)
     {
-
     }
 
     /**
