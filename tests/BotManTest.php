@@ -7,6 +7,7 @@ use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
+use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
@@ -631,13 +632,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
-                'text' => 'foo',
+                'text' => 'open the pod bay doors',
             ],
         ]);
-        $botman->middleware(new TestMiddleware());
+        $botman->middleware(new TestMatchMiddleware());
 
-        $botman->hears('successful', function ($bot) use (&$called) {
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called) {
             $called = true;
+            $this->assertSame('pod bay', $doorType);
         });
         $botman->listen();
         $this->assertTrue($called);

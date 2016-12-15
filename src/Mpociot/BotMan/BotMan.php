@@ -210,6 +210,13 @@ class BotMan
     protected function isMessageMatching(Message $message, $pattern, &$matches)
     {
         $matches = [];
+
+        $messageText = $message->getMessage();
+        $answerText = $this->getConversationAnswer()->getValue();
+
+        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
+        $matched = preg_match($text, $messageText, $matches) || preg_match($text, $answerText, $matches);
+
         // Try middleware first
         foreach ($this->middleware as $middleware) {
             if ($middleware->isMessageMatching($message, $pattern)) {
@@ -217,12 +224,7 @@ class BotMan
             }
         }
 
-        $messageText = $message->getMessage();
-        $answerText = $this->getConversationAnswer()->getValue();
-
-        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
-
-        return preg_match($text, $messageText, $matches) || preg_match($text, $answerText, $matches);
+        return $matched;
     }
 
     /**
