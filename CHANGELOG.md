@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.1]
+### Changed
+- Fixed a bug where middleware `isMessageMatching` of `false` would still match the message.
+
 ## [1.1.0]
 ### Added
 - The `hears` method can now handle `ClassName@method` syntax.

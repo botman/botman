@@ -13,6 +13,7 @@ use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
+use Mpociot\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
 class BotManTest extends PHPUnit_Framework_TestCase
 {
@@ -643,5 +644,24 @@ class BotManTest extends PHPUnit_Framework_TestCase
         });
         $botman->listen();
         $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_does_not_heat_when_middleware_does_not_match()
+    {
+        $called = false;
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'open the pod bay doors',
+            ],
+        ]);
+        $botman->middleware(new TestNoMatchMiddleware());
+
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called) {
+            $called = true;
+        });
+        $botman->listen();
+        $this->assertFalse($called);
     }
 }

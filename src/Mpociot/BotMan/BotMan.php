@@ -219,9 +219,7 @@ class BotMan
 
         // Try middleware first
         foreach ($this->middleware as $middleware) {
-            if ($middleware->isMessageMatching($message, $pattern)) {
-                return true;
-            }
+            return $middleware->isMessageMatching($message, $pattern);
         }
 
         return $matched;
