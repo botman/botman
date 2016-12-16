@@ -61,9 +61,10 @@ class Wit implements MiddlewareInterface
     /**
      * @param Message $message
      * @param string $test
+     * @param bool $regexMatched
      * @return bool
      */
-    public function isMessageMatching(Message $message, $test)
+    public function isMessageMatching(Message $message, $test, $regexMatched)
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 

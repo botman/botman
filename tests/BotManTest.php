@@ -629,7 +629,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_tries_to_match_with_middlewares()
     {
-        $called = false;
+        $called_one = false;
+        $called_two = false;
         $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
@@ -638,12 +639,18 @@ class BotManTest extends PHPUnit_Framework_TestCase
         ]);
         $botman->middleware(new TestMatchMiddleware());
 
-        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called) {
-            $called = true;
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
+            $called_one = true;
             $this->assertSame('pod bay', $doorType);
         });
+
+        $botman->hears('keyword', function ($bot) use (&$called_two) {
+            $called_two = true;
+        });
+
         $botman->listen();
-        $this->assertTrue($called);
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
     }
 
     /** @test */

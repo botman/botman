@@ -73,7 +73,7 @@ class WitTest extends PHPUnit_Framework_TestCase
 
         $middleware = new Wit('token', 0.5, $http);
         $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertTrue($middleware->isMessageMatching($message, 'emotion'));
+        $this->assertTrue($middleware->isMessageMatching($message, 'emotion', false));
     }
 
     /** @test */
@@ -113,7 +113,7 @@ class WitTest extends PHPUnit_Framework_TestCase
 
         $middleware = new Wit('token', 0.5, $http);
         $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertFalse($middleware->isMessageMatching($message, 'emotion'));
+        $this->assertFalse($middleware->isMessageMatching($message, 'emotion', false));
     }
 
     /** @test */

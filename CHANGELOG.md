@@ -10,6 +10,11 @@ All notable changes to this project will be documented in this file.
     - Slack
     - Microsoft Bot Framework
 
+### Changed
+- Middleware classes now receive a third parameter `$regexMatched` inside the `isMessageMatching` method. You can use
+this method to determine if the regular expression was also matched, in case you do not want to replace the complete
+`hears` logic, but only add custom logic to it. **Note:** This will require you to modify your custom middleware classes.
+
 ## [1.1.1]
 ### Changed
 - Fixed a bug where middleware `isMessageMatching` of `false` would still match the message.
