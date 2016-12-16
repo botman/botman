@@ -2,11 +2,10 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
-use Mockery as m;
+use Slack\RealTimeClient;
+use React\EventLoop\Factory;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
-use React\EventLoop\Factory;
-use Slack\RealTimeClient;
 
 class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -16,6 +15,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
         $client = new RealTimeClient($loop);
         $driver = new SlackRTMDriver([], $client);
         $client->emit('message', [$responseData]);
+
         return $driver;
     }
 
@@ -52,6 +52,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
     }
+
     /** @test */
     public function it_detects_bots()
     {
