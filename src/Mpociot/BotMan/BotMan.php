@@ -42,7 +42,7 @@ class BotMan
     /** @var array */
     protected $matches = [];
 
-    /** @var Driver */
+    /** @var DriverInterface */
     protected $driver;
 
     /** @var array */
@@ -64,10 +64,10 @@ class BotMan
     /**
      * BotMan constructor.
      * @param CacheInterface $cache
-     * @param Driver $driver
+     * @param DriverInterface $driver
      * @param array $config
      */
-    public function __construct(CacheInterface $cache, Driver $driver, $config = [])
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [])
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
