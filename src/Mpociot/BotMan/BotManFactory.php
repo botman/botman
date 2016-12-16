@@ -35,7 +35,7 @@ class BotManFactory
 
         return new BotMan($cache, $driver, $config);
     }
-    
+
     /**
      * Create a new BotMan instance.
      *
@@ -55,7 +55,7 @@ class BotManFactory
 
         $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config);
 
-        $client->on('message', function() use ($botman) {
+        $client->on('message', function () use ($botman) {
             $botman->loadActiveConversation();
             $botman->listen();
         });

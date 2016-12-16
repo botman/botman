@@ -217,7 +217,7 @@ class BotMan
         $answerText = $this->getConversationAnswer()->getValue();
 
         $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
-        $regexMatched = (bool)preg_match($text, $messageText, $matches) || (bool)preg_match($text, $answerText, $matches);
+        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
         foreach ($this->middleware as $middleware) {
@@ -390,7 +390,7 @@ class BotMan
     }
 
     /**
-     * Load driver on wakeup
+     * Load driver on wakeup.
      */
     public function __wakeup()
     {
@@ -403,6 +403,7 @@ class BotMan
     public function __sleep()
     {
         $this->driverName = $this->driver->getName();
+
         return [
             'payload',
             'event',

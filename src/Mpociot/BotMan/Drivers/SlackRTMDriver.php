@@ -5,10 +5,10 @@ namespace Mpociot\BotMan\Drivers;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriver implements DriverInterface
 {
@@ -31,7 +31,7 @@ class SlackRTMDriver implements DriverInterface
         $this->config = Collection::make($config);
         $this->client = $client;
 
-        $this->client->on('message', function($data){
+        $this->client->on('message', function ($data) {
             $this->event = Collection::make($data);
         });
     }
