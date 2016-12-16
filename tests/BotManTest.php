@@ -189,7 +189,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('foo', function ($bot) use (&$called) {
+        $botman->hears('Foo', function ($bot) use (&$called) {
             $called = true;
         });
         $botman->listen();

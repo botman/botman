@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.2.0]
 ### Added
 - Added the `SlackRTMDriver` to make use of the Slack Realtime API.
 - Added a new `Message` class to compose messages with images.
