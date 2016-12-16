@@ -215,7 +215,7 @@ class BotMan
         $answerText = $this->getConversationAnswer()->getValue();
 
         $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
-        $regexMatched = (bool)preg_match($text, $messageText, $matches) || (bool)preg_match($text, $answerText, $matches);
+        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
         foreach ($this->middleware as $middleware) {
