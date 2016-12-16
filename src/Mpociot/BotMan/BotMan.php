@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\BotMan\Drivers\Driver;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
@@ -25,6 +24,9 @@ class BotMan
 
     /** @var Message */
     protected $message;
+
+    /** @var string */
+    protected $driverName;
 
     /**
      * Messages to listen to.
@@ -96,7 +98,7 @@ class BotMan
     }
 
     /**
-     * @return Driver
+     * @return DriverInterface
      */
     public function getDriver()
     {
@@ -241,7 +243,7 @@ class BotMan
 
         foreach ($drivers as $driver) {
             $matchMessage = new Message('', '', $channel);
-            /* @var $driver Driver */
+            /* @var $driver DriverInterface */
             $driver->reply($message, $matchMessage, []);
         }
 
@@ -315,15 +317,15 @@ class BotMan
      * Look for active conversations and clear the payload
      * if a conversation is found.
      */
-    protected function loadActiveConversation()
+    public function loadActiveConversation()
     {
+        $this->loadedConversation = false;
         if ($this->isBot() === false) {
             foreach ($this->getMessages() as $message) {
                 if ($this->cache->has($message->getConversationIdentifier())) {
                     $convo = $this->cache->pull($message->getConversationIdentifier());
                     $next = false;
                     $parameters = [];
-
                     if (is_array($convo['next'])) {
                         foreach ($convo['next'] as $callback) {
                             if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
@@ -388,17 +390,27 @@ class BotMan
     }
 
     /**
+     * Load driver on wakeup
+     */
+    public function __wakeup()
+    {
+        $this->driver = DriverManager::loadFromName($this->driverName, $this->config);
+    }
+
+    /**
      * @return array
      */
     public function __sleep()
     {
+        $this->driverName = $this->driver->getName();
         return [
             'payload',
             'event',
-            'driver',
+            'driverName',
             'message',
             'cache',
             'matches',
+            'config',
         ];
     }
 }

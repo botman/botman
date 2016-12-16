@@ -2,14 +2,13 @@
 
 namespace Mpociot\BotMan;
 
-use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\SlackRTMDriver;
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Interfaces\CacheInterface;
-use React\EventLoop\Factory;
-use React\EventLoop\LoopInterface;
 use Slack\RealTimeClient;
+use Mpociot\BotMan\Http\Curl;
+use Illuminate\Support\Collection;
+use React\EventLoop\LoopInterface;
+use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\SlackRTMDriver;
+use Mpociot\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class BotManFactory
@@ -52,11 +51,12 @@ class BotManFactory
         }
 
         $client = new RealTimeClient($loop);
-        $client->setToken(Collection::make($config)->get('slack_bot_token'));
+        $client->setToken(Collection::make($config)->get('slack_token'));
 
         $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config);
 
         $client->on('message', function() use ($botman) {
+            $botman->loadActiveConversation();
             $botman->listen();
         });
 

@@ -2,6 +2,8 @@
 
 namespace Mpociot\BotMan\Tests;
 
+use Mpociot\BotMan\Drivers\NullDriver;
+use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\DriverManager;
@@ -19,6 +21,13 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_get_available_drivers()
     {
         $this->assertTrue(is_array(DriverManager::getAvailableDrivers()));
+    }
+
+    /** @test */
+    public function it_can_find_a_driver_by_name()
+    {
+        $this->assertInstanceOf(NullDriver::class, DriverManager::loadFromName('foo',[]));
+        $this->assertInstanceOf(SlackDriver::class, DriverManager::loadFromName('Slack',[]));
     }
 
     /** @test */

@@ -54,6 +54,30 @@ class DriverManager
     }
 
     /**
+     * Load a driver by using its name.
+     *
+     * @param string $name
+     * @param array $config
+     * @param Request|null $request
+     * @return mixed|Driver|NullDriver
+     */
+    public static function loadFromName($name, array $config, Request $request = null)
+    {
+        if (is_null($request)) {
+            $request = Request::createFromGlobals();
+        }
+        foreach (self::getAvailableDrivers() as $driver) {
+            /** @var Driver $driver */
+            $driver = new $driver($request, $config, new Curl());
+            if ($driver->getName() === $name) {
+                return $driver;
+            }
+        }
+
+        return new NullDriver($request, [], new Curl());
+    }
+
+    /**
      * @param array $config
      * @return array
      */

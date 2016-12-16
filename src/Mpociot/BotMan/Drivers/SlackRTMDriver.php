@@ -2,12 +2,12 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Slack\RealTimeClient;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 
 class SlackRTMDriver implements DriverInterface
@@ -18,7 +18,7 @@ class SlackRTMDriver implements DriverInterface
     /** @var RealTimeClient */
     protected $client;
 
-    const DRIVER_NAME = 'SlackRTM';
+    const DRIVER_NAME = 'Slack';
 
     /**
      * Driver constructor.
@@ -53,7 +53,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('user')) || ! is_null($this->event->get('team_domain'));
+        return false;
     }
 
     /**
@@ -84,7 +84,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function isBot()
     {
-        return false;
+        return $this->event->has('bot_id');
     }
 
     /**
@@ -111,6 +111,7 @@ class SlackRTMDriver implements DriverInterface
         } else {
             $parameters['text'] = $message;
         }
+
         $this->client->apiCall('chat.postMessage', $parameters);
     }
 
@@ -120,15 +121,5 @@ class SlackRTMDriver implements DriverInterface
     public function isConfigured()
     {
         return ! is_null($this->config->get('slack_token'));
-    }
-
-    /**
-     * The RTM API does not work with conversations yet.
-     *
-     * @return array
-     */
-    public function __sleep()
-    {
-        return ['event'];
     }
 }
