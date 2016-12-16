@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added the `SlackRTMDriver` to make use of the Slack Realtime API.
 - Added a new `Message` class to compose messages with images.
 - Image support is available for these drivers:
     - Facebook
