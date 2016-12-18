@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.1]
+### Added
+- Added support for Microsoft Bot Framework Web Chat
+
 ## [1.2.0]
 ### Added
 - Added the `SlackRTMDriver` to make use of the Slack Realtime API.

@@ -74,7 +74,7 @@ class BotFrameworkDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('text'), $this->event->get('conversation')['id'], $this->event->get('from')['id'], $this->payload)];
+        return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
     }
 
     /**
@@ -162,7 +162,15 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$token,
         ];
 
-        return $this->http->post(Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'http://skype.botframework.com').'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'http://skype.botframework.com');
+
+        if (strstr($apiURL, 'webchat.botframework')) {
+            $parameters['from'] = [
+                'id' => $this->config->get('microsoft_bot_handle'),
+            ];
+        }
+
+        return $this->http->post($apiURL.'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
     }
 
     /**

@@ -7,7 +7,7 @@ Place the URL that points to your BotMan logic / controller in this field.
 
 > If you are using Laravel Valet, you can get an external URL for testing using the `valet share` command.
 
-Take note of the App ID and App Key assigned to your new bot.
+Take note of your Bot handle, the App ID and App Key assigned to your new bot.
 
 > By default your bot will be configured to support the Skype channel but you'll need to add it as a contact on Skype in order to test it. You can do that from the developer portal by clicking the "Add to Skype" button in your bots profile page.
 
@@ -17,6 +17,7 @@ For Laravel, the app id and app key need to be in your `config/services.php` fil
 
 ```php
     'botman' => [
+        'microsoft_bot_handle' => 'YOUR-MICROSOFT-BOT-HANDLE',
         'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
         'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     ],
@@ -29,6 +30,7 @@ If you don't use Laravel, you can pass the Microsoft Bot Framework App ID and Ap
 
 ```php
 $botman = BotManFactory::create([
+    'microsoft_bot_handle' => 'YOUR-MICROSOFT-BOT-HANDLE',
     'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
     'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
 ]);
