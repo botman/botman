@@ -94,7 +94,7 @@ class SlackDriver extends Driver
         if (! $this->payload instanceof Collection && $this->isBot() === false) {
             $messageText = $this->event->get('text');
             if ($this->isSlashCommand()) {
-                $messageText = $this->event->get('command') . ' ' . $messageText;
+                $messageText = $this->event->get('command').' '.$messageText;
             }
         }
 
