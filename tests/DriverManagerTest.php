@@ -2,12 +2,12 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\FacebookDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
