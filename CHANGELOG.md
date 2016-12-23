@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.2]
+### Added
+- Added support for Slack slash commands. Just hear for the complete slash command `$bot->hears('/command foo', ...`.
+
+### Changed
+- Fixed an error when trying to originate a message using a specific driver name (Issue #70).
+
 ## [1.2.1]
 ### Added
 - Added support for Microsoft Bot Framework Web Chat
