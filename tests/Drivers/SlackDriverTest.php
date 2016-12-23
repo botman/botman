@@ -70,6 +70,26 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_matches_the_request_for_a_slash_command()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'command' => '/botman',
+            'text' => 'hello',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue($driver->matchesRequest());
+    }
+
+    /** @test */
     public function it_returns_the_message_object()
     {
         $driver = $this->getDriver([
@@ -99,6 +119,27 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+    }
+
+    /** @test */
+    public function it_returns_the_message_object_for_slash_commands()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'command' => '/botman',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $this->assertTrue(is_array($driver->getMessages()));
+        $this->assertSame('/botman Hi Julia', $driver->getMessages()[0]->getMessage());
     }
 
     /** @test */
@@ -381,6 +422,26 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'timestamp' => '1481125473.000011',
             'user_id' => 'U1234567890',
             'user_name' => 'marcel',
+            'text' => 'Hi Julia',
+        ]);
+        $driver = new SlackDriver($request, [], m::mock(Curl::class));
+        $driver->reply('test', $driver->getMessages()[0]);
+    }
+
+    /** @test */
+    public function it_can_reply_string_messages_for_slash_commands()
+    {
+        $request = new Request([], [
+            'token' => '1234567890',
+            'team_id' => 'T046C3T',
+            'team_domain' => 'botman',
+            'service_id' => '1234567890',
+            'channel_id' => 'C1234567890',
+            'channel_name' => 'botman',
+            'timestamp' => '1481125473.000011',
+            'user_id' => 'U1234567890',
+            'user_name' => 'marcel',
+            'command' => '/botman',
             'text' => 'Hi Julia',
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));

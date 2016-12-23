@@ -93,6 +93,9 @@ class SlackDriver extends Driver
         $messageText = '';
         if (! $this->payload instanceof Collection && $this->isBot() === false) {
             $messageText = $this->event->get('text');
+            if ($this->isSlashCommand()) {
+                $messageText = $this->event->get('command') . ' ' . $messageText;
+            }
         }
 
         $user_id = $this->event->get('user');
@@ -117,6 +120,14 @@ class SlackDriver extends Driver
     }
 
     /**
+     * @return bool
+     */
+    protected function isSlashCommand()
+    {
+        return $this->event->has('command');
+    }
+
+    /**
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
@@ -126,6 +137,8 @@ class SlackDriver extends Driver
     {
         if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
             $this->replyWithToken($message, $matchingMessage, $additionalParameters);
+        } elseif ($this->isSlashCommand()) {
+            $this->respondText($message, $matchingMessage, $additionalParameters);
         } else {
             $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
@@ -156,6 +169,29 @@ class SlackDriver extends Driver
         }
 
         Response::create(json_encode($parameters))->send();
+    }
+
+    /**
+     * @param string|Question $message
+     * @param Message $matchingMessage
+     * @param array $parameters
+     * @return $this
+     */
+    protected function respondText($message, $matchingMessage, $parameters = [])
+    {
+        /*
+         * If we send a Question with buttons, ignore
+         * the text and append the question.
+         */
+        if ($message instanceof Question) {
+            $text = $this->format($message->getText());
+        } elseif ($message instanceof IncomingMessage) {
+            $text = $message->getMessage();
+        } else {
+            $text = $this->format($message);
+        }
+
+        Response::create($text)->send();
     }
 
     /**
