@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Tests;
 
+use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\DriverManager;
@@ -28,6 +29,7 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(NullDriver::class, DriverManager::loadFromName('foo', []));
         $this->assertInstanceOf(SlackDriver::class, DriverManager::loadFromName('Slack', []));
+        $this->assertInstanceOf(FacebookDriver::class, DriverManager::loadFromName(FacebookDriver::class, []));
     }
 
     /** @test */

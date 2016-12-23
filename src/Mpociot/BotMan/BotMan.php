@@ -238,7 +238,7 @@ class BotMan
         if (is_null($driver)) {
             $drivers = DriverManager::getConfiguredDrivers($this->config);
         } else {
-            $drivers = [$driver];
+            $drivers = [DriverManager::loadFromName($driver, $this->config)];
         }
 
         foreach ($drivers as $driver) {

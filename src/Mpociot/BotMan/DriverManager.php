@@ -63,6 +63,13 @@ class DriverManager
      */
     public static function loadFromName($name, array $config, Request $request = null)
     {
+        /**
+         * Use the driver name constant if we try to load a driver by it's
+         * fully qualified class name.
+         */
+        if (class_exists($name) && is_subclass_of($name, Driver::class)) {
+            $name = $name::DRIVER_NAME;
+        }
         if (is_null($request)) {
             $request = Request::createFromGlobals();
         }
