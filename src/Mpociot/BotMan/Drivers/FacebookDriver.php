@@ -77,6 +77,8 @@ class FacebookDriver extends Driver
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            } elseif (isset($msg['postback'])) {
+                return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
 
             return new Message('', '', '');
