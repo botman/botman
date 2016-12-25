@@ -190,7 +190,13 @@ class BotMan
                 if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
                     $this->message = $message;
                     $heardMessage = true;
-                    $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
+                    $parameterNames = $this->compileParameterNames($pattern);
+                    $matches = array_slice($matches, 1);
+                    if (count($parameterNames) === count($matches)) {
+                        $parameters = array_combine($parameterNames, $matches);
+                    } else {
+                        $parameters = $matches;
+                    }
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
                     call_user_func_array($callback, $parameters);

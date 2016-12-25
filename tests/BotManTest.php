@@ -378,6 +378,27 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_allows_complex_regular_expressions()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'deploy site to dev',
+            ],
+        ]);
+
+        $botman->hears('deploy\s+([a-zA-Z]*)(?:\s*to\s*)?([a-zA-Z]*)?', function ($bot, $project, $env) use (&$called) {
+            $called = true;
+            $this->assertSame('site', $project);
+            $this->assertSame('dev', $env);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_returns_regular_expression_matches()
     {
         $called = false;
