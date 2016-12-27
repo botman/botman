@@ -24,6 +24,7 @@ For Laravel, the page access token needs to be in your `config/services.php` fil
 ```php
     'botman' => [
     	'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
+    	'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE',
     ],
 ```
 
@@ -35,6 +36,7 @@ If you don't use Laravel, you can pass the page access token to the `BotManFacto
 ```php
 $botman = BotManFactory::create([
     'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE',
 ]);
 ```
 
