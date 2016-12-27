@@ -54,11 +54,11 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        if (!$this->config->has('facebook_app_secret')) {
+        if (! $this->config->has('facebook_app_secret')) {
             return $this->event->has('messaging');
         }
 
-        return $this->signature == 'sha1=' . hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
+        return $this->signature == 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
     }
 
     /**
