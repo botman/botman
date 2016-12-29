@@ -145,6 +145,15 @@ use Mpociot\BotMan\Cache\SymfonyCache;
 $botman = BotManFactory::create($config, new SymfonyCache($symfonyCacheAdapter));
 ```
 
+#### CodeIgniter Cache
+Use any [CodeIgniter Cache](https://www.codeigniter.com/userguide3/libraries/caching.html) adapter by passing it to the factory:
+
+```php
+use Mpociot\BotMan\Cache\CodeIgniterCache;
+
+$botman = BotManFactory::create($config, new CodeIgniterCache($codeIgniterCache));
+```
+
 ## Connect with your messaging service
 
 After you've installed BotMan, the first thing you'll need to do is register your bot with a messaging platform, and get a few configuration options set. This will allow your bot to connect, send and receive messages.
