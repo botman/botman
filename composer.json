@@ -26,6 +26,7 @@
         "opis/closure": "^2.3"
     },
     "require-dev": {
+        "codeigniter/framework": "~3.0",
         "illuminate/support": "~5.0",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~5.0",

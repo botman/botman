@@ -50,7 +50,8 @@ $config = [
     'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ];
 
 // create an instance
@@ -96,7 +97,8 @@ Add your Facebook access token / Slack token to your `config/services.php`:
     'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ],
 ```
 
@@ -141,6 +143,15 @@ Use any [Symfony Cache](https://symfony.com/doc/current/components/cache.html) a
 use Mpociot\BotMan\Cache\SymfonyCache;
 
 $botman = BotManFactory::create($config, new SymfonyCache($symfonyCacheAdapter));
+```
+
+#### CodeIgniter Cache
+Use any [CodeIgniter Cache](https://www.codeigniter.com/userguide3/libraries/caching.html) adapter by passing it to the factory:
+
+```php
+use Mpociot\BotMan\Cache\CodeIgniterCache;
+
+$botman = BotManFactory::create($config, new CodeIgniterCache($codeIgniterCache));
 ```
 
 ## Connect with your messaging service
