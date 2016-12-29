@@ -1,8 +1,6 @@
 # BotMan with Slack
 
-**Note:**
-
-You have three possibilities to set up Slack to connect with BotMan.
+**Note:** You have three possibilities to set up Slack to connect with BotMan:
 
 #### Use a bot with the Slack Realtime API
 
@@ -10,26 +8,32 @@ You have three possibilities to set up Slack to connect with BotMan.
    * Your bot user will be a real bot and be able to join channels / talk to in direct messages
    * Very easy to set up
 
-> **Note:** Until now, you can not yet use  [interactive message buttons](https://api.slack.com/docs/message-buttons) with BotMan and Slack Realtime API.
+> **Note:** As of now, you can not yet use [interactive message buttons](https://api.slack.com/docs/message-buttons) with BotMan and Slack Realtime API.
 
+---
 
 #### Use an [outgoing webhook](https://api.slack.com/outgoing-webhooks)
  
-**Pros:** Very easy to set up
+**Pros:** 
+  * Very easy to set up
  
 **Cons:** 
   * You don't have a bot user in your channel / no direct messaging
   * You can not send and interact with [interactive message buttons](https://api.slack.com/docs/message-buttons)
   * Your bot will be limited to specific channels (those you set up when adding the outgoing webhook to your Slack team)
     
+---
+
 #### Use a bot in combination with the Slack Event API
 
-**Pros:** All BotMan features available
+**Pros:** 
+  * All BotMan features available
 
 **Cons:** 
   * Pretty cumbersome to set up *Note:* Let the folks from [SlackHQ](https://twitter.com/slackhq) know this. If we make enough noise, they'll hopefully simplify the bot token creation process!
   * Your bot user will appear offline
 
+---
 
 ## Usage with the Realtime API
 
