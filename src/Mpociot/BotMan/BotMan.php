@@ -74,7 +74,7 @@ class BotMan
      * @param array $config
      * @param BotManStorage $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [], BotManStorage $storage)
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, BotManStorage $storage)
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');

@@ -4,9 +4,9 @@ namespace Mpociot\BotMan\Tests\Storages;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Storages\Storage;
 use Mpociot\BotMan\Storages\BotManStorage;
 use Mpociot\BotMan\Storages\Drivers\FileStorage;
@@ -27,7 +27,7 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
         $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
         $storage = new BotManStorage($driver);
 
-        $message= m::mock(Message::class);
+        $message = m::mock(Message::class);
         $message->shouldReceive('getUser')->once()->andReturn('foo');
 
         $bot = m::mock(BotMan::class);
@@ -48,7 +48,7 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
         $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
         $storage = new BotManStorage($driver);
 
-        $message= m::mock(Message::class);
+        $message = m::mock(Message::class);
         $message->shouldReceive('getChannel')->once()->andReturn('foo');
 
         $bot = m::mock(BotMan::class);
@@ -69,7 +69,7 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
         $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
         $storage = new BotManStorage($driver);
 
-        $botDriver= m::mock(Driver::class);
+        $botDriver = m::mock(Driver::class);
         $botDriver->shouldReceive('getName')->once()->andReturn('foo');
 
         $bot = m::mock(BotMan::class);

@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Tests\Storages;
 
-use Mpociot\BotMan\Storages\Drivers\FileStorage;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class FileStorageTest extends PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class FileStorageTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($data->toArray(), [
             'key_one' => 'value_one',
-            'key_two' => 'value_two'
+            'key_two' => 'value_two',
         ]);
     }
 

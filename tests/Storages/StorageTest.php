@@ -66,7 +66,7 @@ class StorageTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($data->toArray(), [
             'key_one' => 'value_one',
-            'key_two' => 'value_two'
+            'key_two' => 'value_two',
         ]);
     }
 

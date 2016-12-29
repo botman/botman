@@ -7,7 +7,6 @@ use Mpociot\BotMan\Interfaces\StorageInterface;
 
 class FileStorage implements StorageInterface
 {
-
     /** @var string */
     private $path;
 
@@ -22,7 +21,7 @@ class FileStorage implements StorageInterface
      */
     protected function getFilename($key)
     {
-        return $this->path . DIRECTORY_SEPARATOR . $key . '.json';
+        return $this->path.DIRECTORY_SEPARATOR.$key.'.json';
     }
 
     /**
@@ -37,7 +36,7 @@ class FileStorage implements StorageInterface
 
         $saved = $this->get($key)->merge($data);
 
-        if (!is_dir(dirname($file))) {
+        if (! is_dir(dirname($file))) {
             mkdir(dirname($file), 0777, true);
         }
         file_put_contents($file, json_encode($saved->all()));
@@ -56,6 +55,7 @@ class FileStorage implements StorageInterface
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file), true);
         }
+
         return Collection::make($data);
     }
 
@@ -79,11 +79,12 @@ class FileStorage implements StorageInterface
      */
     public function all()
     {
-        $keys = glob($this->path . '/*.json');
+        $keys = glob($this->path.'/*.json');
         $data = [];
         foreach ($keys as $key) {
             $data[] = $this->get(basename($key, '.json'));
         }
+
         return $data;
     }
 }

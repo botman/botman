@@ -94,7 +94,7 @@ class CodeIgniterCacheTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('save')->once()->withArgs([
             'foo',
             'bar',
-            300
+            300,
         ]);
 
         $cache = new CodeIgniterCache($driver);
@@ -108,7 +108,7 @@ class CodeIgniterCacheTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('save')->once()->withArgs([
             'foo',
             'bar',
-            300
+            300,
         ]);
 
         $cache = new CodeIgniterCache($driver);
