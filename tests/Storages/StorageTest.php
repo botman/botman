@@ -30,9 +30,14 @@ class StorageTest extends PHPUnit_Framework_TestCase
     public function it_uses_the_default_key()
     {
         $this->storage->setDefaultKey('my_key');
-        $this->storage->save(['json' => 'encoded'], 'my_key');
+        $this->storage->save(['json' => 'encoded']);
+
         $data = $this->storage->get();
         $this->assertSame($data->toArray(), ['json' => 'encoded']);
+
+        $this->storage->delete();
+        $data = $this->storage->get();
+        $this->assertSame($data->toArray(), []);
     }
 
     /** @test */
