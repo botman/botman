@@ -2,20 +2,33 @@
 
 namespace Mpociot\BotMan\Storages;
 
+use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Interfaces\StorageInterface;
 
 class BotManStorage
 {
 
-    /** @var Storage */
+    /** @var StorageInterface */
     private $storage;
+
+    /** @var BotMan */
+    private $botman;
 
     /**
      * BotManStorage constructor.
-     * @param Storage $storage
+     * @param StorageInterface $storage
      */
-    public function __construct(Storage $storage)
+    public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
+    }
+
+    /**
+     * @param BotMan $botman
+     */
+    public function setBotman(BotMan $botman)
+    {
+        $this->botman = $botman;
     }
 
     /**
@@ -23,15 +36,9 @@ class BotManStorage
      */
     public function users()
     {
-        return $this->storage->setPrefix('user_');
-    }
-
-    /**
-     * @return Storage
-     */
-    public function teams()
-    {
-        return $this->storage->setPrefix('team_');
+        return (new Storage($this->storage))
+            ->setPrefix('user_')
+            ->setDefaultKey($this->botman->getMessage()->getUser());
     }
 
     /**
@@ -39,7 +46,9 @@ class BotManStorage
      */
     public function channel()
     {
-        return $this->storage->setPrefix('channel_');
+        return (new Storage($this->storage))
+            ->setPrefix('channel_')
+            ->setDefaultKey($this->botman->getMessage()->getChannel());
     }
 
     /**
@@ -47,6 +56,8 @@ class BotManStorage
      */
     public function driver()
     {
-        return $this->storage->setPrefix('driver_');
+        return (new Storage($this->storage))
+            ->setPrefix('driver_')
+            ->setDefaultKey($this->botman->getDriver()->getName());
     }
 }

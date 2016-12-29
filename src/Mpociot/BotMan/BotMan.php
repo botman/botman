@@ -58,7 +58,7 @@ class BotMan
     private $cache;
 
     /** @var BotManStorage */
-    public $storage;
+    protected $storage;
 
     /** @var bool */
     protected $loadedConversation = false;
@@ -427,5 +427,15 @@ class BotMan
             'matches',
             'config',
         ];
+    }
+
+    /**
+     * @return BotManStorage
+     */
+    public function getStorage()
+    {
+        $this->storage->setBotman($this);
+
+        return $this->storage;
     }
 }

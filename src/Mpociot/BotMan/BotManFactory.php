@@ -2,17 +2,17 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Interfaces\StorageInterface;
-use Mpociot\BotMan\Storages\BotManStorage;
-use Mpociot\BotMan\Storages\FileStorage;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
+use Mpociot\BotMan\Storages\BotManStorage;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Interfaces\StorageInterface;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class BotManFactory
 {

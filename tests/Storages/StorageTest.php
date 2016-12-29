@@ -2,23 +2,50 @@
 
 namespace Mpociot\BotMan\Tests\Storages;
 
-use Mpociot\BotMan\Storages\Drivers\FileStorage;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Storages\Storage;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
-class FileStorageTest extends PHPUnit_Framework_TestCase
+class StorageTest extends PHPUnit_Framework_TestCase
 {
-    /** @var FileStorage */
+    /** @var Storage */
     protected $storage;
+
+    /** @var FileStorage */
+    protected $driver;
 
     public function setUp()
     {
-        $this->storage = new FileStorage(__DIR__.'/../Fixtures/storage');
+        $this->driver = new FileStorage(__DIR__.'/../Fixtures/storage');
+        $this->storage = new Storage($this->driver);
         parent::setUp();
     }
 
     public function tearDown()
     {
         exec('rm -rf '.__DIR__.'/../Fixtures/storage/*.json');
+    }
+
+    /** @test */
+    public function it_uses_the_default_key()
+    {
+        $this->storage->setDefaultKey('my_key');
+        $this->storage->save(['json' => 'encoded'], 'my_key');
+        $data = $this->storage->get();
+        $this->assertSame($data->toArray(), ['json' => 'encoded']);
+    }
+
+    /** @test */
+    public function it_uses_the_prefix()
+    {
+        $this->storage->setPrefix('botman_');
+        $this->storage->save(['json' => 'encoded'], 'my_key');
+
+        $data = $this->driver->get('botman_my_key');
+        $this->assertSame($data->toArray(), ['json' => 'encoded']);
+
+        $data = $this->storage->get('my_key');
+        $this->assertSame($data->toArray(), ['json' => 'encoded']);
     }
 
     /** @test */

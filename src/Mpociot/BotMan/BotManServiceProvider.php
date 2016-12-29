@@ -4,7 +4,7 @@ namespace Mpociot\BotMan;
 
 use Mpociot\BotMan\Cache\LaravelCache;
 use Illuminate\Support\ServiceProvider;
-use Mpociot\BotMan\Storages\FileStorage;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class BotManServiceProvider extends ServiceProvider
 {

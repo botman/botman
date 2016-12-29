@@ -1,10 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Storages;
+namespace Mpociot\BotMan\Storages\Drivers;
 
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\StorageInterface;
 
-class FileStorage extends Storage
+class FileStorage implements StorageInterface
 {
 
     /** @var string */
@@ -27,10 +28,10 @@ class FileStorage extends Storage
     /**
      * Save an item in the storage with a specific key and data.
      *
-     * @param  string  $key
      * @param  array  $data
+     * @param  string  $key
      */
-    public function save($key, array $data)
+    public function save(array $data, $key)
     {
         $file = $this->getFilename($key);
 
