@@ -11,7 +11,7 @@ class CodeIgniterCache implements CacheInterface
      * @var array
      */
     private $cache;
-    
+
     /**
      * @param CI_Cache $driver
      */
@@ -59,6 +59,7 @@ class CodeIgniterCache implements CacheInterface
         if ($this->has($key)) {
             $cached = $this->cache->get($key);
             $this->cache->delete($key);
+
             return $cached;
         }
 
@@ -80,6 +81,7 @@ class CodeIgniterCache implements CacheInterface
         } else {
             $seconds = $minutes * 60;
         }
+
         $this->cache->save($key, $value, $seconds);
     }
 }
