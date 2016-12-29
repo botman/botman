@@ -7,7 +7,6 @@ use Mpociot\BotMan\Interfaces\StorageInterface;
 
 class BotManStorage
 {
-
     /** @var StorageInterface */
     private $storage;
 

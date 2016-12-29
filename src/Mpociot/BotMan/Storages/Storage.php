@@ -7,7 +7,6 @@ use Mpociot\BotMan\Interfaces\StorageInterface;
 
 class Storage implements StorageInterface
 {
-
     /** @var StorageInterface */
     protected $driver = '';
 
