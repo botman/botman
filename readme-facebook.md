@@ -17,6 +17,8 @@ To connect BotMan with your Facebook Messenger Bot, you first need to follow the
 
 Once you have obtained the page access token, place it in your BotMan configuration.
 
+If you want BotMan to automatically verify each incoming Facebook webhook, you can optionally place your app secret in the BotMan configuration array.
+
 ### Laravel
 
 For Laravel, the page access token needs to be in your `config/services.php` file
@@ -24,7 +26,7 @@ For Laravel, the page access token needs to be in your `config/services.php` fil
 ```php
     'botman' => [
     	'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
-    	'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE',
+    	'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE', // Optional - this is used to verify incoming API calls
     ],
 ```
 

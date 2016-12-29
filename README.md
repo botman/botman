@@ -51,7 +51,7 @@ $config = [
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE'
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ];
 
 // create an instance
@@ -98,7 +98,7 @@ Add your Facebook access token / Slack token to your `config/services.php`:
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE'
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ],
 ```
 
