@@ -4,6 +4,7 @@ namespace Mpociot\BotMan;
 
 use Mpociot\BotMan\Cache\LaravelCache;
 use Illuminate\Support\ServiceProvider;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class BotManServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,9 @@ class BotManServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('botman', function ($app) {
-            return BotManFactory::create(config('services.botman', []), new LaravelCache(), $app->make('request'));
+            $storage = new FileStorage(storage_path('botman'));
+
+            return BotManFactory::create(config('services.botman', []), new LaravelCache(), $app->make('request'), $storage);
         });
     }
 }

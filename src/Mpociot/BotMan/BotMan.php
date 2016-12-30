@@ -4,9 +4,11 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Opis\Closure\SerializableClosure;
+use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -14,7 +16,7 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
-    use VerifiesServices;
+    use VerifiesServices, ProvidesStorage;
 
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
@@ -56,6 +58,9 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
+    /** @var StorageInterface */
+    protected $storage;
+
     /** @var bool */
     protected $loadedConversation = false;
 
@@ -68,13 +73,15 @@ class BotMan
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
+     * @param StorageInterface $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [])
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
         $this->config = $config;
+        $this->storage = $storage;
 
         $this->loadActiveConversation();
     }
@@ -415,6 +422,7 @@ class BotMan
             'payload',
             'event',
             'driverName',
+            'storage',
             'message',
             'cache',
             'matches',
