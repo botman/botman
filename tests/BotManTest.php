@@ -34,6 +34,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->cache = new ArrayCache();
     }
 
+    protected function _throwException($message)
+    {
+        throw new \Exception($message);
+    }
+
     protected function getBot($responseData)
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
@@ -537,6 +542,44 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
         $this->assertSame('Hello again', $GLOBALS['answer']->getText());
         $this->assertTrue($GLOBALS['called']);
+    }
+
+    /** @test */
+    public function it_picks_up_conversations_using_this()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('called conversation');
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function () {
+        });
+        $botman->listen();
+
+        $conversation = new TestConversation();
+
+        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
+            $this->_throwException('called conversation');
+        });
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again',
+            ],
+        ]);
     }
 
     /** @test */
