@@ -300,7 +300,7 @@ class BotMan
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next)),
+            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next, true)),
         ], 30);
     }
 
@@ -314,7 +314,7 @@ class BotMan
     protected function prepareCallbacks(array $callbacks)
     {
         foreach ($callbacks as &$callback) {
-            $callback['callback'] = serialize(new SerializableClosure($callback['callback']));
+            $callback['callback'] = serialize(new SerializableClosure($callback['callback'], true));
         }
 
         return $callbacks;
