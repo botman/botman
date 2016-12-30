@@ -4,10 +4,11 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Opis\Closure\SerializableClosure;
-use Mpociot\BotMan\Storages\BotManStorage;
+use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -15,7 +16,7 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
-    use VerifiesServices;
+    use VerifiesServices, ProvidesStorage;
 
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
@@ -57,7 +58,7 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
-    /** @var BotManStorage */
+    /** @var StorageInterface */
     protected $storage;
 
     /** @var bool */
@@ -72,9 +73,9 @@ class BotMan
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
-     * @param BotManStorage $storage
+     * @param StorageInterface $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, BotManStorage $storage)
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
@@ -427,15 +428,5 @@ class BotMan
             'matches',
             'config',
         ];
-    }
-
-    /**
-     * @return BotManStorage
-     */
-    public function getStorage()
-    {
-        $this->storage->setBotman($this);
-
-        return $this->storage;
     }
 }

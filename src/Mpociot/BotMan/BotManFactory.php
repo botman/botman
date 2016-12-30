@@ -40,9 +40,7 @@ class BotManFactory
         $driverManager = new DriverManager($config, new Curl());
         $driver = $driverManager->getMatchingDriver($request);
 
-        $storage = new BotManStorage($storageDriver);
-
-        return new BotMan($cache, $driver, $config, $storage);
+        return new BotMan($cache, $driver, $config, $storageDriver);
     }
 
     /**
@@ -66,9 +64,7 @@ class BotManFactory
         $client = new RealTimeClient($loop);
         $client->setToken(Collection::make($config)->get('slack_token'));
 
-        $storage = new BotManStorage($storageDriver);
-
-        $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config, $storage);
+        $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config, $storageDriver);
 
         $client->on('message', function () use ($botman) {
             $botman->loadActiveConversation();

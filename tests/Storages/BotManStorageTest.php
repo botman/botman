@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Tests\Storages;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Drivers\Driver;
@@ -16,6 +17,24 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
     /** @var BotManStorage */
     protected $storage;
 
+    protected function getBot()
+    {
+        $data = [
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again',
+            ],
+        ];
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($data));
+
+        return BotManFactory::create([], null, $request);
+    }
+
+
     public function tearDown()
     {
         exec('rm -rf '.__DIR__.'/../Fixtures/storage/*.json');
@@ -24,63 +43,43 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_creates_an_user_storage()
     {
-        $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
-        $storage = new BotManStorage($driver);
+        $bot = $this->getBot();
+        $bot->hears('Hello again', function(){});
+        $bot->listen();
 
-        $message = m::mock(Message::class);
-        $message->shouldReceive('getUser')->once()->andReturn('foo');
+        $storage = $bot->userStorage();
 
-        $bot = m::mock(BotMan::class);
-        $bot->shouldReceive('getMessage')->once()->andReturn($message);
-
-        $storage->setBotman($bot);
-
-        $users = $storage->users();
-
-        $this->assertInstanceOf(Storage::class, $users);
-        $this->assertSame('user_', $users->getPrefix());
-        $this->assertSame('foo', $users->getDefaultKey());
+        $this->assertInstanceOf(Storage::class, $storage);
+        $this->assertSame('user_', $storage->getPrefix());
+        $this->assertSame('UX12345', $storage->getDefaultKey());
     }
 
     /** @test */
     public function it_creates_a_channel_storage()
     {
-        $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
-        $storage = new BotManStorage($driver);
+        $bot = $this->getBot();
+        $bot->hears('Hello again', function(){});
+        $bot->listen();
 
-        $message = m::mock(Message::class);
-        $message->shouldReceive('getChannel')->once()->andReturn('foo');
+        $storage = $bot->channelStorage();
 
-        $bot = m::mock(BotMan::class);
-        $bot->shouldReceive('getMessage')->once()->andReturn($message);
-
-        $storage->setBotman($bot);
-
-        $users = $storage->channel();
-
-        $this->assertInstanceOf(Storage::class, $users);
-        $this->assertSame('channel_', $users->getPrefix());
-        $this->assertSame('foo', $users->getDefaultKey());
+        $this->assertInstanceOf(Storage::class, $storage);
+        $this->assertSame('channel_', $storage->getPrefix());
+        $this->assertSame('general', $storage->getDefaultKey());
     }
 
     /** @test */
     public function it_creates_a_driver_storage()
     {
-        $driver = new FileStorage(__DIR__.'/../Fixtures/storage');
-        $storage = new BotManStorage($driver);
 
-        $botDriver = m::mock(Driver::class);
-        $botDriver->shouldReceive('getName')->once()->andReturn('foo');
+        $bot = $this->getBot();
+        $bot->hears('Hello again', function(){});
+        $bot->listen();
 
-        $bot = m::mock(BotMan::class);
-        $bot->shouldReceive('getDriver')->once()->andReturn($botDriver);
+        $storage = $bot->driverStorage();
 
-        $storage->setBotman($bot);
-
-        $users = $storage->driver();
-
-        $this->assertInstanceOf(Storage::class, $users);
-        $this->assertSame('driver_', $users->getPrefix());
-        $this->assertSame('foo', $users->getDefaultKey());
+        $this->assertInstanceOf(Storage::class, $storage);
+        $this->assertSame('driver_', $storage->getPrefix());
+        $this->assertSame('Slack', $storage->getDefaultKey());
     }
 }
