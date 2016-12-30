@@ -3,14 +3,10 @@
 namespace Mpociot\BotMan\Tests\Storages;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Storages\Storage;
 use Mpociot\BotMan\Storages\BotManStorage;
-use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class BotManStorageTest extends PHPUnit_Framework_TestCase
 {
@@ -34,7 +30,6 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
         return BotManFactory::create([], null, $request);
     }
 
-
     public function tearDown()
     {
         exec('rm -rf '.__DIR__.'/../Fixtures/storage/*.json');
@@ -44,7 +39,8 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
     public function it_creates_an_user_storage()
     {
         $bot = $this->getBot();
-        $bot->hears('Hello again', function(){});
+        $bot->hears('Hello again', function () {
+        });
         $bot->listen();
 
         $storage = $bot->userStorage();
@@ -58,7 +54,8 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
     public function it_creates_a_channel_storage()
     {
         $bot = $this->getBot();
-        $bot->hears('Hello again', function(){});
+        $bot->hears('Hello again', function () {
+        });
         $bot->listen();
 
         $storage = $bot->channelStorage();
@@ -71,9 +68,9 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_creates_a_driver_storage()
     {
-
         $bot = $this->getBot();
-        $bot->hears('Hello again', function(){});
+        $bot->hears('Hello again', function () {
+        });
         $bot->listen();
 
         $storage = $bot->driverStorage();

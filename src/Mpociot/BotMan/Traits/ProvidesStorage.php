@@ -6,7 +6,6 @@ use Mpociot\BotMan\Storages\Storage;
 
 trait ProvidesStorage
 {
-
     /**
      * @return Storage
      */
