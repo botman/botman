@@ -4,11 +4,9 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Opis\Closure\SerializableClosure;
-use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -16,7 +14,7 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
-    use VerifiesServices, ProvidesStorage;
+    use VerifiesServices;
 
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
@@ -58,9 +56,6 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
-    /** @var StorageInterface */
-    protected $storage;
-
     /** @var bool */
     protected $loadedConversation = false;
 
@@ -73,15 +68,13 @@ class BotMan
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
-     * @param StorageInterface $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [])
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
         $this->config = $config;
-        $this->storage = $storage;
 
         $this->loadActiveConversation();
     }
@@ -167,12 +160,25 @@ class BotMan
      * @return $this
      */
     public function hears($pattern, $callback, $in = null)
-    {
-        $this->listenTo[] = [
-            'pattern' => $pattern,
-            'callback' => $callback,
-            'in' => $in,
-        ];
+    {   
+
+        if (preg_match('||', $pattern)) {
+            $patterns = explode('||', $pattern);
+            var_dump($patterns);
+            foreach ($patterns as $pattern) {
+                $this->listenTo[] = [
+                    'pattern' => $pattern,
+                    'callback' => $callback,
+                    'in' => $in,
+                ];
+            }
+        } else {
+            $this->listenTo[] = [
+                'pattern' => $pattern,
+                'callback' => $callback,
+                'in' => $in,
+            ];
+        }
 
         return $this;
     }
@@ -197,13 +203,7 @@ class BotMan
                 if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
                     $this->message = $message;
                     $heardMessage = true;
-                    $parameterNames = $this->compileParameterNames($pattern);
-                    $matches = array_slice($matches, 1);
-                    if (count($parameterNames) === count($matches)) {
-                        $parameters = array_combine($parameterNames, $matches);
-                    } else {
-                        $parameters = $matches;
-                    }
+                    $parameters = array_combine($this->compileParameterNames($pattern), array_slice($matches, 1));
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
                     call_user_func_array($callback, $parameters);
@@ -222,23 +222,65 @@ class BotMan
      * @param array $matches
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches)
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $middleware=false)
     {
         $matches = [];
-
         $messageText = $message->getMessage();
         $answerText = $this->getConversationAnswer()->getValue();
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
-        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
-        // Try middleware first
-        foreach ($this->middleware as $middleware) {
-            return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+        if ($middleware) {
+            $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
+        } else {
+            $text = $this->getPatternByRule($pattern);
         }
 
+        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
+        if ($regexMatched) {
+            var_dump($text);
+        }
+        // Try middleware first
+        foreach ($this->middleware as $middleware) {
+            return $middleware->isMessageMatching($message, $pattern, $regexMatched, true);
+        }
+        
         return $regexMatched;
+    }
+
+    protected function getPatternByRule($pattern) {
+        $first = $pattern{0};
+        $last = substr($pattern, -1);
+
+        $text = ''.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'';
+          
+
+        if ($first == '*') {
+            $text = substr($text, 1);
+            $begin = '@.*';
+            $end = '$@';
+        }
+
+        if ($last == '*') {
+            $text = substr($text, 0, -1);
+            $begin = '@^';
+            $end = '.*@';
+        }
+
+        if (($last == '*') && ($first == '*')) {
+            $text = substr($text, 1, -1);
+            $begin = '@';
+            $end = '@';
+        }
+
+        if ( ($last != '*') && (($first != '*')) ) {
+            $begin = '/^';
+            $end = '$/i';
+        }
+
+
+        $text = $begin.$text.$end;
+        return $text;   
     }
 
     /**
@@ -307,7 +349,7 @@ class BotMan
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next, true)),
+            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next)),
         ], 30);
     }
 
@@ -321,7 +363,7 @@ class BotMan
     protected function prepareCallbacks(array $callbacks)
     {
         foreach ($callbacks as &$callback) {
-            $callback['callback'] = serialize(new SerializableClosure($callback['callback'], true));
+            $callback['callback'] = serialize(new SerializableClosure($callback['callback']));
         }
 
         return $callbacks;
@@ -422,7 +464,6 @@ class BotMan
             'payload',
             'event',
             'driverName',
-            'storage',
             'message',
             'cache',
             'matches',
@@ -430,3 +471,4 @@ class BotMan
         ];
     }
 }
+
