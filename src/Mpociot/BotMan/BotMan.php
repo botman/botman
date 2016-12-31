@@ -167,14 +167,25 @@ class BotMan
      * @return $this
      */
     public function hears($pattern, $callback, $in = null)
-    {
-        $this->listenTo[] = [
-            'pattern' => $pattern,
-            'callback' => $callback,
-            'in' => $in,
-        ];
+    {   
+        if (preg_match('||', $pattern)) {
+            $patterns = explode('||', $pattern);
+            foreach ($patterns as $pattern) {
+                $this->addPattern($pattern, $callback, $in);
+            }
+        } else {
+            $this->addPattern($pattern, $callback, $in);
+        }
 
         return $this;
+    }
+
+    public function addPattern($pattern, $callback, $in) {
+        $this->listenTo[] = [
+                    'pattern' => $pattern,
+                    'callback' => $callback,
+                    'in' => $in,
+                ];
     }
 
     /**
@@ -197,8 +208,10 @@ class BotMan
                 if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
                     $this->message = $message;
                     $heardMessage = true;
+
                     $parameterNames = $this->compileParameterNames($pattern);
                     $matches = array_slice($matches, 1);
+
                     if (count($parameterNames) === count($matches)) {
                         $parameters = array_combine($parameterNames, $matches);
                     } else {
@@ -222,23 +235,61 @@ class BotMan
      * @param array $matches
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches)
-    {
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $middleware=false)
+    {   
         $matches = [];
-
         $messageText = $message->getMessage();
         $answerText = $this->getConversationAnswer()->getValue();
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
-        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
+        if ($middleware) {
+            $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
+            $text = preg_replace('@(^\*|\*$)@', '', $text);
+        } else {
+            $text = $this->getPatternByRule($pattern);
+        }
 
+        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
+        
         // Try middleware first
         foreach ($this->middleware as $middleware) {
-            return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+            return $middleware->isMessageMatching($message, $pattern, $regexMatched, true);
         }
 
         return $regexMatched;
+    }
+
+     protected function getPatternByRule($pattern) {
+        $first = $pattern{0};
+        $last = substr($pattern, -1);
+
+        $text = ''.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'';
+          
+
+        if ($first == '*') {
+            $text = substr($text, 1);
+            $begin = '@.*';
+            $end = '$@';
+        }
+
+        if ($last == '*') {
+            $text = substr($text, 0, -1);
+            $begin = '@^';
+            $end = '.*@';
+        }
+
+        if (($last == '*') && ($first == '*')) {
+            $begin = '/';
+            $end = '/';
+        }
+
+        if ( ($last != '*') && (($first != '*')) ) {
+            $begin = '/^';
+            $end = '$/i';
+        }
+
+        $text = $begin.$text.$end;
+        return $text;   
     }
 
     /**
