@@ -253,7 +253,7 @@ You also can use '*' at begin or\and at end of the pattern, in this mode you can
 ```php
 
 $botman->hears('*middle*', function (BotMan $bot) {
-        $bot->reply('Any place for "middle" word!!!');
+        $bot->reply('Any place for this word!!!');
 });
 
 $botman->hears('start*', function (BotMan $bot) {
@@ -268,6 +268,10 @@ $botman->hears('*middle*||*finish||start*', function (BotMan $bot) {
         $bot->reply('This will work too!!!');
 });
 ```
+
+important! 
+* this functionality will not work for [Middleware](#middleware), in this case '*' from start and end will be removed automatically and it will be like simple keyword for BotMan.
+* also, if you use pattern with '*' at start and end, you need to be sure, that that bot's answer will not be matched to this pattern.
 
 ### Fallback replies
 
