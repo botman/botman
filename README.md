@@ -269,9 +269,10 @@ $botman->hears('*middle*||*finish||start*', function (BotMan $bot) {
 });
 ```
 
-important! 
-* this functionality will not work for [Middleware](#middleware), in this case '*' from start and end will be removed automatically and it will be like simple keyword for BotMan.
-* also, if you use pattern with '*' at start and end, you need to be sure, that that bot's answer will not be matched to this pattern.
+**important!** 
+
+> * this functionality will not work for [Middleware](#middleware), in this case '*' from start and end will be removed automatically and it will be like simple keyword for BotMan.
+> * also, if you use pattern with '*' at start and end, you need to be sure, that that bot's answer will not be matched to this pattern.
 
 ### Fallback replies
 
