@@ -240,6 +240,55 @@ $botman->hears('open the {doorType} doors', function(BotMan $bot, $doorType) {
 });
 ```
 
+For one naswer on different patterns you can use '||' delimeter:
+
+```php
+$botman->hears('hello||hi||hey||sup||yo||good morning||good evening||good afternoon', function (BotMan $bot) {
+        $bot->reply('Hello yourself.');
+});
+```
+
+Also you can have random different answers from array of messages:
+
+
+```php
+$botman->hears('hello||hi||hey||sup||yo||good morning||good evening||good afternoon', function (BotMan $bot) {
+        $bot->randomReply(
+            [
+                'Hello, boss!',
+                'Hey, how are you?',
+                'Hi There!',
+            ]
+        );
+});
+```
+
+You also can use '*' at begin or\and at end of the pattern, in this mode you can detect pattern in begin place only, in the end place only or in any location:
+
+```php
+
+$botman->hears('*middle*', function (BotMan $bot) {
+        $bot->reply('Any place for this word!!!');
+});
+
+$botman->hears('start*', function (BotMan $bot) {
+        $bot->reply('Only phrases with "start" at the begin');
+});
+
+$botman->hears('*finish', function (BotMan $bot) {
+        $bot->reply('"Finish" at the end only!');
+});
+
+$botman->hears('*middle*||*finish||start*', function (BotMan $bot) {
+        $bot->reply('This will work too!!!');
+});
+```
+
+**important!** 
+
+> * this functionality will not work for [Middleware](#middleware), in this case '*' from start and end will be removed automatically and it will be like simple keyword for BotMan.
+> * also, if you use pattern with '*' at start and end, you need to be sure, that that bot's answer will not be matched to this pattern.
+
 ### Fallback replies
 
 If you want to provide your bot users with a fallback reply, if they enter a command that you don't understand, you can use the `fallback` method on the BotMan instance.
