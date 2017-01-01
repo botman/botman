@@ -378,7 +378,7 @@ class BotMan
      */
     protected function isDriverValid($driverName, $allowedDrivers)
     {
-        if (!is_null($allowedDrivers)) {
+        if (! is_null($allowedDrivers)) {
             return Collection::make($allowedDrivers)->contains($driverName);
         }
 
