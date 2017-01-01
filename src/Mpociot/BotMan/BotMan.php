@@ -327,6 +327,11 @@ class BotMan
         return $this;
     }
 
+    public function randomReply(array $messages) {
+        $num = array_rand($messages);
+        $this->reply($messages[$num]);
+    }
+
     /**
      * @param string|Question $message
      * @param array $additionalParameters

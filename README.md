@@ -248,6 +248,21 @@ $botman->hears('hello||hi||hey||sup||yo||good morning||good evening||good aftern
 });
 ```
 
+Also you can have random different answers from array of messages:
+
+
+```php
+$botman->hears('hello||hi||hey||sup||yo||good morning||good evening||good afternoon', function (BotMan $bot) {
+        $bot->randomReply(
+            [
+                'Hello, boss!',
+                'Hey, how are you?',
+                'Hi There!',
+            ]
+        );
+});
+```
+
 You also can use '*' at begin or\and at end of the pattern, in this mode you can detect pattern in begin place only, in the end place only or in any location:
 
 ```php
