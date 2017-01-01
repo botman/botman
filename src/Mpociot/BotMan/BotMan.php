@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
@@ -164,17 +165,15 @@ class BotMan
      * @param string $pattern the pattern to listen for
      * @param Closure|string $callback the callback to execute. Either a closuer or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
-     * @return $this
+     * @return Command
      */
     public function hears($pattern, $callback, $in = null)
     {
-        $this->listenTo[] = [
-            'pattern' => $pattern,
-            'callback' => $callback,
-            'in' => $in,
-        ];
+        $command = new Command($pattern, $callback, $in);
 
-        return $this;
+        $this->listenTo[] = $command;
+
+        return $command;
     }
 
     /**
@@ -184,7 +183,8 @@ class BotMan
     public function listen()
     {
         $heardMessage = false;
-        foreach ($this->listenTo as $messageData) {
+        foreach ($this->listenTo as $command) {
+            $messageData = $command->toArray();
             $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
 
@@ -194,7 +194,11 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
+                if ($this->isMessageMatching($message, $pattern, $matches) &&
+                    $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
+                    $this->isChannelValid($message->getChannel(), $messageData['in']) &&
+                    $this->loadedConversation === false
+                ) {
                     $this->message = $message;
                     $heardMessage = true;
                     $parameterNames = $this->compileParameterNames($pattern);
@@ -365,6 +369,20 @@ class BotMan
                 }
             }
         }
+    }
+
+    /**
+     * @param string $driverName
+     * @param string|array $allowedDrivers
+     * @return bool
+     */
+    protected function isDriverValid($driverName, $allowedDrivers)
+    {
+        if (!is_null($allowedDrivers)) {
+            return Collection::make($allowedDrivers)->contains($driverName);
+        }
+
+        return true;
     }
 
     /**

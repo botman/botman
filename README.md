@@ -228,6 +228,22 @@ $botman->hears('keyword', function(BotMan $bot) {
 $botman->hears('keyword', 'MyClass@heardKeyword');
 ```
 
+You can restrict commands to specific messaging drivers, using the fluent API:
+
+```php
+// Restrict to Slack driver
+$botman->hears('keyword', function(BotMan $bot) {
+    // do something to respond to message
+    $bot->reply('You used a keyword!');
+})->driver(SlackDriver::DRIVER_NAME);
+
+// Restrict to Slack and Telegram driver
+$botman->hears('keyword', function(BotMan $bot) {
+    // do something to respond to message
+    $bot->reply('You used a keyword!');
+})->driver([SlackDriver::DRIVER_NAME, TelegramDriver::DRIVER_NAME]);
+```
+
 When using the built in regular expression matching, the results of the expression will be passed to the callback function. For example:
 
 ```php

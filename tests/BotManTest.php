@@ -6,6 +6,8 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\TelegramDriver;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
@@ -236,7 +238,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_hears_in_public_channel_only()
+    public function it_hears_for_specific_drivers_only()
     {
         $called = false;
 
@@ -250,7 +252,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::PUBLIC_CHANNEL);
+        })->driver(TelegramDriver::DRIVER_NAME);
         $botman->listen();
         $this->assertFalse($called);
 
@@ -266,7 +268,59 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::PUBLIC_CHANNEL);
+        })->driver(SlackDriver::DRIVER_NAME);
+        $botman->listen();
+        $this->assertTrue($called);
+
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->driver([TelegramDriver::DRIVER_NAME, SlackDriver::DRIVER_NAME]);
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_hears_in_public_channel_only()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'D12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->in(BotMan::PUBLIC_CHANNEL);
+        $botman->listen();
+        $this->assertFalse($called);
+
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->in(BotMan::PUBLIC_CHANNEL);
         $botman->listen();
         $this->assertTrue($called);
     }
@@ -286,7 +340,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::DIRECT_MESSAGE);
+        })->in(BotMan::DIRECT_MESSAGE);
         $botman->listen();
         $this->assertFalse($called);
 
@@ -302,7 +356,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::DIRECT_MESSAGE);
+        })->in(BotMan::DIRECT_MESSAGE);
         $botman->listen();
         $this->assertTrue($called);
     }
