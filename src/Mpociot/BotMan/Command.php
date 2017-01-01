@@ -65,5 +65,4 @@ class Command
             'in' => $this->in,
         ];
     }
-
 }
