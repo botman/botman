@@ -787,7 +787,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_does_not_heat_when_middleware_does_not_match()
+    public function it_does_not_hear_when_middleware_does_not_match()
     {
         $called = false;
         $botman = $this->getBot([
