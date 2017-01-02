@@ -12,8 +12,8 @@ use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 
 class DriverManager
 {

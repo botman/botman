@@ -1,4 +1,5 @@
 <?php
+
 namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\Answer;
@@ -8,7 +9,6 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 
 class TestDriver implements DriverInterface
 {
-
     /**
      * Determine if the request is for this driver.
      *

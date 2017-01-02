@@ -30,7 +30,7 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     {
         $count = count(DriverManager::getAvailableDrivers());
         DriverManager::loadDriver(TestDriver::class);
-        $this->assertSame($count+1, count(DriverManager::getAvailableDrivers()));
+        $this->assertSame($count + 1, count(DriverManager::getAvailableDrivers()));
     }
 
     /** @test */
