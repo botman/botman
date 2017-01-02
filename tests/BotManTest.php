@@ -9,6 +9,7 @@ use Mpociot\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
@@ -17,6 +18,10 @@ use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
+/**
+ * Class BotManTest
+ * @package Mpociot\BotMan\Tests
+ */
 class BotManTest extends PHPUnit_Framework_TestCase
 {
     /** @var MockInterface */
@@ -803,5 +808,82 @@ class BotManTest extends PHPUnit_Framework_TestCase
         });
         $botman->listen();
         $this->assertFalse($called);
+    }
+
+    /** @test */
+    public function it_can_reply_a_message()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs([
+                'foo',
+                null,
+                []
+            ]);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->shouldReceive('getDriver')
+            ->once()
+            ->andReturn($driver);
+
+        $botman->reply('foo', []);
+    }
+
+    /** @test */
+    public function it_can_reply_a_random_message()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with(m::anyOf('foo','bar','baz'),
+                null,
+                []
+            );
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->shouldReceive('getDriver')
+            ->once()
+            ->andReturn($driver);
+
+        $botman->randomReply(['foo', 'bar', 'baz'], []);
+    }
+
+    /** @test */
+    public function it_can_originate_messages_with_given_driver()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs(function($message, $match, $arguments) {
+                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+            });
+
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock->shouldReceive('loadFromName')
+            ->once()
+            ->with('Slack', [])
+            ->andReturn($driver);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
+    }
+
+    /** @test */
+    public function it_can_originate_messages_with_configured_drivers()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs(function($message, $match, $arguments) {
+                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+            });
+
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock->shouldReceive('getConfiguredDrivers')
+            ->andReturn([$driver]);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->say('foo', 'channel');
     }
 }

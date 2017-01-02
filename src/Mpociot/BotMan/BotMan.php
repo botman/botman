@@ -281,6 +281,15 @@ class BotMan
     }
 
     /**
+     * Return a random message
+     * @param array $messages
+     * @return $this
+     */
+    public function randomReply(array $messages) {
+        return $this->reply($messages[array_rand($messages)]);
+    }
+
+    /**
      * @param string|Question $message
      * @param array $additionalParameters
      * @return $this
