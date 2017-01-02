@@ -19,8 +19,7 @@ use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
 /**
- * Class BotManTest
- * @package Mpociot\BotMan\Tests
+ * Class BotManTest.
  */
 class BotManTest extends PHPUnit_Framework_TestCase
 {
@@ -819,7 +818,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->withArgs([
                 'foo',
                 null,
-                []
+                [],
             ]);
 
         $botman = m::mock(BotMan::class)->makePartial();
@@ -836,7 +835,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class);
         $driver->shouldReceive('reply')
             ->once()
-            ->with(m::anyOf('foo','bar','baz'),
+            ->with(m::anyOf('foo', 'bar', 'baz'),
                 null,
                 []
             );
@@ -855,7 +854,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class);
         $driver->shouldReceive('reply')
             ->once()
-            ->withArgs(function($message, $match, $arguments) {
+            ->withArgs(function ($message, $match, $arguments) {
                 return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
             });
 
@@ -875,7 +874,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class);
         $driver->shouldReceive('reply')
             ->once()
-            ->withArgs(function($message, $match, $arguments) {
+            ->withArgs(function ($message, $match, $arguments) {
                 return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
             });
 
