@@ -106,6 +106,14 @@ class BotMan
     }
 
     /**
+     * @param DriverInterface $driver
+     */
+    public function setDriver(DriverInterface $driver)
+    {
+        $this->driver = $driver;
+    }
+
+    /**
      * @return DriverInterface
      */
     public function getDriver()

@@ -8,11 +8,13 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
+use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
@@ -884,5 +886,20 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->say('foo', 'channel');
+    }
+
+    /** @test */
+    public function it_can_use_custom_drivers()
+    {
+        $driver = m::mock(TestDriver::class);
+        $driver->shouldReceive('reply')
+            ->once();
+
+        DriverManager::loadDriver(TestDriver::class);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->setDriver($driver);
+
+        $botman->reply('foo', []);
     }
 }
