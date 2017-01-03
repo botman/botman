@@ -336,9 +336,15 @@ class BotMan
 
     /**
      * @param Conversation $instance
+     * @param null|string $channel
+     * @param null|string $driver
      */
-    public function startConversation(Conversation $instance)
+    public function startConversation(Conversation $instance, $channel = null, $driver = null)
     {
+        if (! is_null($channel) && ! is_null($driver)) {
+            $this->message = new Message('', $channel, $channel);
+            $this->driver = DriverManager::loadFromName($driver, $this->config);
+        }
         $instance->setBot($this);
         $instance->run();
     }
