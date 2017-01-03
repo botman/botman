@@ -68,7 +68,7 @@ class Wit implements MiddlewareInterface
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
-        if (!empty($entities)) {
+        if (! empty($entities)) {
             foreach ($entities as $name => $entity) {
                 if ($name === 'intent') {
                     foreach ($entity as $item) {
