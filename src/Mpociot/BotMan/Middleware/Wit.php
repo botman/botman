@@ -68,11 +68,13 @@ class Wit implements MiddlewareInterface
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
-        foreach ($entities as $name => $entity) {
-            if ($name === 'intent') {
-                foreach ($entity as $item) {
-                    if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
-                        return true;
+        if (!empty($entities)) {
+            foreach ($entities as $name => $entity) {
+                if ($name === 'intent') {
+                    foreach ($entity as $item) {
+                        if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
+                            return true;
+                        }
                     }
                 }
             }
