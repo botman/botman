@@ -153,7 +153,8 @@ Use any [CodeIgniter Cache](https://www.codeigniter.com/userguide3/libraries/cac
 ```php
 use Mpociot\BotMan\Cache\CodeIgniterCache;
 
-$botman = BotManFactory::create($config, new CodeIgniterCache($codeIgniterCache));
+$this->load->driver('cache');
+$botman = BotManFactory::create($config, new CodeIgniterCache($this->cache->file));
 ```
 
 ## Connect with your messaging service
