@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
+
+## [1.3.0]
+### Added
 - Added WeChat messaging driver.
 - Added BotMan state methods to store user, channel or driver related data.
     - `$botman->userStorage()`

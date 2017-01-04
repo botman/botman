@@ -95,6 +95,19 @@ class TelegramDriver extends Driver
     }
 
     /**
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function types(Message $matchingMessage)
+    {
+        $parameters = [
+            'chat_id' => $matchingMessage->getChannel(),
+            'action' => 'typing',
+        ];
+        $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendChatAction', [], $parameters);
+    }
+
+    /**
      * Convert a Question object into a valid Facebook
      * quick reply response object.
      *

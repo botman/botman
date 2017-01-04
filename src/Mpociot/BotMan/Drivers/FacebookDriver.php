@@ -62,6 +62,23 @@ class FacebookDriver extends Driver
     }
 
     /**
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function types(Message $matchingMessage)
+    {
+        $parameters = [
+            'recipient' => [
+                'id' => $matchingMessage->getChannel(),
+            ],
+            'access_token' => $this->config->get('facebook_token'),
+            'sender_action' => 'typing_on',
+        ];
+
+        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
+    }
+
+    /**
      * @param  Message $message
      *
      * @return Answer
