@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Cache;
 
-use CI_Cache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 
 class CodeIgniterCache implements CacheInterface
