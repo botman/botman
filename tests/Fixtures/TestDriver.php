@@ -72,7 +72,6 @@ class TestDriver implements DriverInterface
      */
     public function types(Message $matchingMessage)
     {
-
     }
 
     /**
