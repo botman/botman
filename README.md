@@ -100,7 +100,9 @@ Add your Facebook access token / Slack token to your `config/services.php`:
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls,
+    'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
+    'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
 ],
 ```
 
