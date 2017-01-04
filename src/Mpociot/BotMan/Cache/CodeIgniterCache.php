@@ -15,7 +15,7 @@ class CodeIgniterCache implements CacheInterface
     /**
      * @param CI_Cache $driver
      */
-    public function __construct(CI_Cache $driver)
+    public function __construct($driver)
     {
         $this->cache = $driver;
     }
