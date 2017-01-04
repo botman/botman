@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Cache;
 
-use CI_Cache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 
 class CodeIgniterCache implements CacheInterface
@@ -13,9 +12,9 @@ class CodeIgniterCache implements CacheInterface
     private $cache;
 
     /**
-     * @param CI_Cache $driver
+     * @param array $driver
      */
-    public function __construct(CI_Cache $driver)
+    public function __construct($driver)
     {
         $this->cache = $driver;
     }
