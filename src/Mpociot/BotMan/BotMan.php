@@ -3,10 +3,13 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
+use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -14,7 +17,7 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
-    use VerifiesServices;
+    use VerifiesServices, ProvidesStorage;
 
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
@@ -56,6 +59,9 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
+    /** @var StorageInterface */
+    protected $storage;
+
     /** @var bool */
     protected $loadedConversation = false;
 
@@ -68,13 +74,15 @@ class BotMan
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
+     * @param StorageInterface $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [])
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
         $this->config = $config;
+        $this->storage = $storage;
 
         $this->loadActiveConversation();
     }
@@ -95,6 +103,14 @@ class BotMan
     public function fallback($callback)
     {
         $this->fallbackMessage = $callback;
+    }
+
+    /**
+     * @param DriverInterface $driver
+     */
+    public function setDriver(DriverInterface $driver)
+    {
+        $this->driver = $driver;
     }
 
     /**
@@ -157,17 +173,15 @@ class BotMan
      * @param string $pattern the pattern to listen for
      * @param Closure|string $callback the callback to execute. Either a closuer or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
-     * @return $this
+     * @return Command
      */
     public function hears($pattern, $callback, $in = null)
     {
-        $this->listenTo[] = [
-            'pattern' => $pattern,
-            'callback' => $callback,
-            'in' => $in,
-        ];
+        $command = new Command($pattern, $callback, $in);
 
-        return $this;
+        $this->listenTo[] = $command;
+
+        return $command;
     }
 
     /**
@@ -177,7 +191,8 @@ class BotMan
     public function listen()
     {
         $heardMessage = false;
-        foreach ($this->listenTo as $messageData) {
+        foreach ($this->listenTo as $command) {
+            $messageData = $command->toArray();
             $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
 
@@ -187,7 +202,11 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
+                if ($this->isMessageMatching($message, $pattern, $matches) &&
+                    $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
+                    $this->isChannelValid($message->getChannel(), $messageData['in']) &&
+                    $this->loadedConversation === false
+                ) {
                     $this->message = $message;
                     $heardMessage = true;
                     $parameterNames = $this->compileParameterNames($pattern);
@@ -270,6 +289,16 @@ class BotMan
     }
 
     /**
+     * Return a random message.
+     * @param array $messages
+     * @return $this
+     */
+    public function randomReply(array $messages)
+    {
+        return $this->reply($messages[array_rand($messages)]);
+    }
+
+    /**
      * @param string|Question $message
      * @param array $additionalParameters
      * @return $this
@@ -300,7 +329,7 @@ class BotMan
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next)),
+            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next, true)),
         ], 30);
     }
 
@@ -314,7 +343,7 @@ class BotMan
     protected function prepareCallbacks(array $callbacks)
     {
         foreach ($callbacks as &$callback) {
-            $callback['callback'] = serialize(new SerializableClosure($callback['callback']));
+            $callback['callback'] = serialize(new SerializableClosure($callback['callback'], true));
         }
 
         return $callbacks;
@@ -358,6 +387,20 @@ class BotMan
                 }
             }
         }
+    }
+
+    /**
+     * @param string $driverName
+     * @param string|array $allowedDrivers
+     * @return bool
+     */
+    protected function isDriverValid($driverName, $allowedDrivers)
+    {
+        if (! is_null($allowedDrivers)) {
+            return Collection::make($allowedDrivers)->contains($driverName);
+        }
+
+        return true;
     }
 
     /**
@@ -415,6 +458,7 @@ class BotMan
             'payload',
             'event',
             'driverName',
+            'storage',
             'message',
             'cache',
             'matches',

@@ -18,6 +18,12 @@ class FacebookDriver extends Driver
     /** @var Collection */
     protected $event;
 
+    /** @var string */
+    protected $signature;
+
+    /** @var string */
+    protected $content;
+
     const DRIVER_NAME = 'Facebook';
 
     /**
@@ -27,6 +33,8 @@ class FacebookDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make((array) $this->payload->get('entry')[0]);
+        $this->signature = $request->headers->get('X_HUB_SIGNATURE', '');
+        $this->content = $request->getContent();
     }
 
     /**
@@ -46,7 +54,11 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        return $this->event->has('messaging');
+        if (! $this->config->has('facebook_app_secret')) {
+            return $this->event->has('messaging');
+        }
+
+        return $this->signature == 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
     }
 
     /**

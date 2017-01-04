@@ -8,6 +8,7 @@ use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
+use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -22,6 +23,22 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_get_available_drivers()
     {
         $this->assertTrue(is_array(DriverManager::getAvailableDrivers()));
+    }
+
+    /** @test */
+    public function it_can_load_custom_drivers()
+    {
+        $count = count(DriverManager::getAvailableDrivers());
+        DriverManager::loadDriver(TestDriver::class);
+        $this->assertSame($count + 1, count(DriverManager::getAvailableDrivers()));
+    }
+
+    /** @test */
+    public function it_can_load_custom_drivers_from_name()
+    {
+        DriverManager::loadDriver(TestDriver::class);
+        $this->assertInstanceOf(TestDriver::class, DriverManager::loadFromName('Test', []));
+        $this->assertInstanceOf(TestDriver::class, DriverManager::loadFromName(TestDriver::class, []));
     }
 
     /** @test */

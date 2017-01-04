@@ -8,13 +8,21 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\NullDriver;
+use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
+use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
 use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
+/**
+ * Class BotManTest.
+ */
 class BotManTest extends PHPUnit_Framework_TestCase
 {
     /** @var MockInterface */
@@ -32,6 +40,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->cache = new ArrayCache();
+    }
+
+    protected function _throwException($message)
+    {
+        throw new \Exception($message);
     }
 
     protected function getBot($responseData)
@@ -231,7 +244,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_hears_in_public_channel_only()
+    public function it_hears_for_specific_drivers_only()
     {
         $called = false;
 
@@ -245,7 +258,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::PUBLIC_CHANNEL);
+        })->driver(TelegramDriver::DRIVER_NAME);
         $botman->listen();
         $this->assertFalse($called);
 
@@ -261,7 +274,59 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::PUBLIC_CHANNEL);
+        })->driver(SlackDriver::DRIVER_NAME);
+        $botman->listen();
+        $this->assertTrue($called);
+
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->driver([TelegramDriver::DRIVER_NAME, SlackDriver::DRIVER_NAME]);
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_hears_in_public_channel_only()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'D12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->in(BotMan::PUBLIC_CHANNEL);
+        $botman->listen();
+        $this->assertFalse($called);
+
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called) {
+            $called = true;
+        })->in(BotMan::PUBLIC_CHANNEL);
         $botman->listen();
         $this->assertTrue($called);
     }
@@ -281,7 +346,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::DIRECT_MESSAGE);
+        })->in(BotMan::DIRECT_MESSAGE);
         $botman->listen();
         $this->assertFalse($called);
 
@@ -297,7 +362,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        }, BotMan::DIRECT_MESSAGE);
+        })->in(BotMan::DIRECT_MESSAGE);
         $botman->listen();
         $this->assertTrue($called);
     }
@@ -540,6 +605,44 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_picks_up_conversations_using_this()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('called conversation');
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function () {
+        });
+        $botman->listen();
+
+        $conversation = new TestConversation();
+
+        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
+            $this->_throwException('called conversation');
+        });
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again',
+            ],
+        ]);
+    }
+
+    /** @test */
     public function it_picks_up_conversations_with_multiple_callbacks()
     {
         $GLOBALS['answer'] = '';
@@ -690,7 +793,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_does_not_heat_when_middleware_does_not_match()
+    public function it_does_not_hear_when_middleware_does_not_match()
     {
         $called = false;
         $botman = $this->getBot([
@@ -706,5 +809,97 @@ class BotManTest extends PHPUnit_Framework_TestCase
         });
         $botman->listen();
         $this->assertFalse($called);
+    }
+
+    /** @test */
+    public function it_can_reply_a_message()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs([
+                'foo',
+                null,
+                [],
+            ]);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->shouldReceive('getDriver')
+            ->once()
+            ->andReturn($driver);
+
+        $botman->reply('foo', []);
+    }
+
+    /** @test */
+    public function it_can_reply_a_random_message()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with(m::anyOf('foo', 'bar', 'baz'),
+                null,
+                []
+            );
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->shouldReceive('getDriver')
+            ->once()
+            ->andReturn($driver);
+
+        $botman->randomReply(['foo', 'bar', 'baz'], []);
+    }
+
+    /** @test */
+    public function it_can_originate_messages_with_given_driver()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+            });
+
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock->shouldReceive('loadFromName')
+            ->once()
+            ->with('Slack', [])
+            ->andReturn($driver);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
+    }
+
+    /** @test */
+    public function it_can_originate_messages_with_configured_drivers()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+            });
+
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock->shouldReceive('getConfiguredDrivers')
+            ->andReturn([$driver]);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->say('foo', 'channel');
+    }
+
+    /** @test */
+    public function it_can_use_custom_drivers()
+    {
+        $driver = m::mock(TestDriver::class);
+        $driver->shouldReceive('reply')
+            ->once();
+
+        DriverManager::loadDriver(TestDriver::class);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->setDriver($driver);
+
+        $botman->reply('foo', []);
     }
 }

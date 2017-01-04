@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Added BotMan state methods to store user, channel or driver related data.
+    - `$botman->userStorage()`
+    - `$botman->channelStorage()`
+    - `$botman->driverStorage()`
+    
+### Changed
+- Forced opis/closure `$this` scope serialization.
+
 ## [1.2.2]
 ### Added
 - Added support for Slack slash commands. Just hear for the complete slash command `$bot->hears('/command foo', ...`.

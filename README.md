@@ -50,7 +50,8 @@ $config = [
     'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ];
 
 // create an instance
@@ -96,7 +97,8 @@ Add your Facebook access token / Slack token to your `config/services.php`:
     'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
-    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE'
+    'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
 ],
 ```
 
@@ -143,6 +145,15 @@ use Mpociot\BotMan\Cache\SymfonyCache;
 $botman = BotManFactory::create($config, new SymfonyCache($symfonyCacheAdapter));
 ```
 
+#### CodeIgniter Cache
+Use any [CodeIgniter Cache](https://www.codeigniter.com/userguide3/libraries/caching.html) adapter by passing it to the factory:
+
+```php
+use Mpociot\BotMan\Cache\CodeIgniterCache;
+
+$botman = BotManFactory::create($config, new CodeIgniterCache($codeIgniterCache));
+```
+
 ## Connect with your messaging service
 
 After you've installed BotMan, the first thing you'll need to do is register your bot with a messaging platform, and get a few configuration options set. This will allow your bot to connect, send and receive messages.
@@ -172,6 +183,7 @@ Table of Contents
 * [Receiving Messages](#receiving-messages)
     * [Middleware](#middleware)
 * [Sending Messages](#sending-messages)
+* [Storing Information](#storing-information)
 
 ## Receiving Messages
 
@@ -214,6 +226,22 @@ $botman->hears('keyword', function(BotMan $bot) {
 });
 
 $botman->hears('keyword', 'MyClass@heardKeyword');
+```
+
+You can restrict commands to specific messaging drivers, using the fluent API:
+
+```php
+// Restrict to Slack driver
+$botman->hears('keyword', function(BotMan $bot) {
+    // do something to respond to message
+    $bot->reply('You used a keyword!');
+})->driver(SlackDriver::DRIVER_NAME);
+
+// Restrict to Slack and Telegram driver
+$botman->hears('keyword', function(BotMan $bot) {
+    // do something to respond to message
+    $bot->reply('You used a keyword!');
+})->driver([SlackDriver::DRIVER_NAME, TelegramDriver::DRIVER_NAME]);
 ```
 
 When using the built in regular expression matching, the results of the expression will be passed to the callback function. For example:
@@ -547,6 +575,49 @@ public function askDomainName()
     });
 }
 ```
+
+## Storing Information
+
+BotMan has a builtin storage system, which you can use to store user, team or driver specific information without having the need for conversations.
+By default, BotMan will use a simple JSON file storage to keep the data in the filesystem.
+
+To access the different storage types, BotMan provides these functions:
+
+`userStorage()` - Will give you a storage that automatically uses the current message user as the default key.
+`channelStorage()` - Will give you a storage that automatically uses the current message channel as the default key.
+`driverStorage()` - Will give you a storage that automatically uses the current driver name as the default key.
+
+### Example usage
+
+```php
+$botman->hears("forget me", function (BotMan $bot) {
+    // Delete all stored information. 
+    $bot->userStorage()->delete();
+});
+
+$botman->hears("call me {name}", function (BotMan $bot, $name) {
+    // Store information for the currently logged in user.
+    // You can also pass a user-id / key as a second parameter.
+    $bot->userStorage()->save([
+        'name' => $name
+    ]);
+
+    $bot->reply('I will call you '.$name);
+});
+
+$botman->hears("who am I", function (BotMan $bot) {
+    // Retrieve information for the currently logged in user.
+    // You can also pass a user-id / key as a second parameter.
+    $user = $bot->userStorage()->get();
+
+    if ($user->has('name')) {
+        $bot->reply('You are '.$user->get('name'));
+    } else {
+        $bot->reply('I do not know you yet.');
+    }
+});
+```
+
 
 ## License
 

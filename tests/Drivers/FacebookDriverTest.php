@@ -13,12 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
-    private function getDriver($responseData)
+    private function getDriver($responseData, array $config = ['facebook_token' => 'Foo'], $signature = '')
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn($responseData);
+        $request->headers->set('X_HUB_SIGNATURE', $signature);
 
-        return new FacebookDriver($request, [], new Curl());
+        return new FacebookDriver($request, $config, new Curl());
     }
 
     /** @test */
@@ -37,6 +38,23 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
 
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
         $driver = $this->getDriver($request);
+        $this->assertTrue($driver->matchesRequest());
+
+        $config = ['facebook_token' => 'Foo', 'facebook_app_secret' => 'Bar'];
+        $request = '{}';
+        $driver = $this->getDriver($request, $config);
+        $this->assertFalse($driver->matchesRequest());
+
+        $signature = 'Foo';
+        $config = ['facebook_token' => 'Foo', 'facebook_app_secret' => 'Bar'];
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
+        $driver = $this->getDriver($request, $config, $signature);
+        $this->assertFalse($driver->matchesRequest());
+
+        $signature = 'sha1=74432bfe572675092cc81b5ac903ff3f971b04e5';
+        $config = ['facebook_token' => 'Foo', 'facebook_app_secret' => 'Bar'];
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
+        $driver = $this->getDriver($request, $config, $signature);
         $this->assertTrue($driver->matchesRequest());
     }
 

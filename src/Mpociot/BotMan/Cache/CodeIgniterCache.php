@@ -2,19 +2,20 @@
 
 namespace Mpociot\BotMan\Cache;
 
+use CI_Cache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 
-class CodeigniterCache implements CacheInterface
+class CodeIgniterCache implements CacheInterface
 {
     /**
      * @var array
      */
     private $cache;
-    
+
     /**
-     * @param Cache $driver
+     * @param CI_Cache $driver
      */
-    public function __construct($driver)
+    public function __construct(CI_Cache $driver)
     {
         $this->cache = $driver;
     }
@@ -27,7 +28,7 @@ class CodeigniterCache implements CacheInterface
      */
     public function has($key)
     {
-        return $this->cache->get($key);
+        return $this->cache->get($key) !== false;
     }
 
     /**
@@ -39,7 +40,7 @@ class CodeigniterCache implements CacheInterface
      */
     public function get($key, $default = null)
     {
-        if ($this->cache->get($key)) {
+        if ($this->has($key)) {
             return $this->cache->get($key);
         }
 
@@ -55,9 +56,10 @@ class CodeigniterCache implements CacheInterface
      */
     public function pull($key, $default = null)
     {
-        if ($this->cache->get($key)) {
+        if ($this->has($key)) {
             $cached = $this->cache->get($key);
             $this->cache->delete($key);
+
             return $cached;
         }
 
@@ -74,6 +76,12 @@ class CodeigniterCache implements CacheInterface
      */
     public function put($key, $value, $minutes)
     {
-        $this->cache->save($key, $value, $minutes);
+        if ($minutes instanceof \Datetime) {
+            $seconds = $minutes->getTimestamp() - time();
+        } else {
+            $seconds = $minutes * 60;
+        }
+
+        $this->cache->save($key, $value, $seconds);
     }
 }
