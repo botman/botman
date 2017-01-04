@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added WeChat messaging driver.
 - Added BotMan state methods to store user, channel or driver related data.
     - `$botman->userStorage()`
     - `$botman->channelStorage()`
