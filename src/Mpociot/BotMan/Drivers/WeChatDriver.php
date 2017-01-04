@@ -27,7 +27,7 @@ class WeChatDriver extends Driver
     public function buildPayload(Request $request)
     {
         try {
-            $xml = simplexml_load_string($request->getContent(), "SimpleXMLElement", LIBXML_NOCDATA);
+            $xml = simplexml_load_string($request->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
             $json = json_encode($xml);
             $data = json_decode($json, true);
         } catch (\Exception $e) {
@@ -110,7 +110,7 @@ class WeChatDriver extends Driver
 
         if ($message instanceof Question) {
             $parameters['text'] = [
-                'content' => $message->getText()
+                'content' => $message->getText(),
             ];
         } elseif ($message instanceof IncomingMessage) {
             $parameters['msgtype'] = 'news';
@@ -121,11 +121,11 @@ class WeChatDriver extends Driver
             ];
 
             $parameters['news'] = [
-                'articles' => [$article]
+                'articles' => [$article],
             ];
         } else {
             $parameters['text'] = [
-                'content' => $message
+                'content' => $message,
             ];
         }
 

@@ -128,7 +128,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
             ->andReturn(new Response(json_encode([
-                'access_token' => 'SECRET_TOKEN'
+                'access_token' => 'SECRET_TOKEN',
             ])));
 
         $html->shouldReceive('post')
@@ -169,7 +169,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
             ->andReturn(new Response(json_encode([
-                'access_token' => 'SECRET_TOKEN'
+                'access_token' => 'SECRET_TOKEN',
             ])));
 
         $html->shouldReceive('post')
@@ -214,7 +214,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
             ->andReturn(new Response(json_encode([
-                'access_token' => 'SECRET_TOKEN'
+                'access_token' => 'SECRET_TOKEN',
             ])));
 
         $html->shouldReceive('post')
@@ -284,7 +284,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
             ->andReturn(new Response(json_encode([
-                'access_token' => 'SECRET_TOKEN'
+                'access_token' => 'SECRET_TOKEN',
             ])));
 
         $html->shouldReceive('post')
@@ -296,8 +296,8 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
                     'articles' => [
                         [
                             'title' => 'Test',
-                            'picurl' => null
-                        ]
+                            'picurl' => null,
+                        ],
                     ],
                 ],
             ], [], true);
@@ -330,7 +330,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
             ->andReturn(new Response(json_encode([
-                'access_token' => 'SECRET_TOKEN'
+                'access_token' => 'SECRET_TOKEN',
             ])));
 
         $html->shouldReceive('post')
@@ -342,8 +342,8 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
                     'articles' => [
                         [
                             'title' => 'Test',
-                            'picurl' => 'http://image.url/foo.png'
-                        ]
+                            'picurl' => 'http://image.url/foo.png',
+                        ],
                     ],
                 ],
             ], [], true);
