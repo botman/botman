@@ -28,7 +28,7 @@ class DriverManager
         BotFrameworkDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
-        WeChatDriver::class
+        WeChatDriver::class,
     ];
 
     /** @var array */

@@ -31,13 +31,13 @@ trait VerifiesServices
         }
 
         // WeChat verification
-        if ($request->get('signature') !== null && $request->get('timestamp') !== null && $request->get('nonce') !== null  && $request->get('echostr') !== null) {
-            $tmpArr = array($weChatVerification, $request->get('timestamp'), $request->get('nonce'));
+        if ($request->get('signature') !== null && $request->get('timestamp') !== null && $request->get('nonce') !== null && $request->get('echostr') !== null) {
+            $tmpArr = [$weChatVerification, $request->get('timestamp'), $request->get('nonce')];
             sort($tmpArr, SORT_STRING);
-            $tmpStr = implode( $tmpArr );
-            $tmpStr = sha1( $tmpStr );
+            $tmpStr = implode($tmpArr);
+            $tmpStr = sha1($tmpStr);
 
-            if( $tmpStr == $request->get('signature') ){
+            if ($tmpStr == $request->get('signature')) {
                 return Response::create($request->get('echostr'))->send();
             }
         }
