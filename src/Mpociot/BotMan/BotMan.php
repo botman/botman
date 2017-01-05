@@ -342,7 +342,7 @@ class BotMan
     public function startConversation(Conversation $instance, $channel = null, $driver = null)
     {
         if (! is_null($channel) && ! is_null($driver)) {
-            $this->message = new Message('', $channel, $channel);
+            $this->message = new Message('', '', $channel);
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
         $instance->setBot($this);
@@ -386,8 +386,8 @@ class BotMan
         $this->loadedConversation = false;
         if ($this->isBot() === false) {
             foreach ($this->getMessages() as $message) {
-                if ($this->cache->has($message->getConversationIdentifier())) {
-                    $convo = $this->cache->pull($message->getConversationIdentifier());
+                if ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier())) {
+                    $convo = $this->cache->pull($message->getConversationIdentifier(), $this->cache->pull($message->getOriginatedConversationIdentifier()));
                     $next = false;
                     $parameters = [];
                     if (is_array($convo['next'])) {
