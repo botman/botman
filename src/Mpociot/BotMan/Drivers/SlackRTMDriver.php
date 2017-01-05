@@ -130,6 +130,5 @@ class SlackRTMDriver implements DriverInterface
      */
     public function types(Message $matchingMessage)
     {
-
     }
 }
