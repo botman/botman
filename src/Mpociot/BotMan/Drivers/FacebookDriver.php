@@ -104,7 +104,7 @@ class FacebookDriver extends Driver
     {
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
-            if (isset($msg['message'])) {
+            if (isset($msg['message']) && isset($msg['message']['text'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             } elseif (isset($msg['postback'])) {
                 return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
