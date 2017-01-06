@@ -56,9 +56,9 @@ class ApiAi implements MiddlewareInterface
         ], true);
 
         $response = json_decode($response->getContent());
-        $reply = $response->result->speech ?? '';
-        $action = $response->result->action ?? '';
-        $intent = $response->result->metadata->intentName ?? '';
+        $reply = isset($response->result->speech) ? $response->result->speech : '';
+        $action = isset($response->result->action) ? $response->result->action : '';
+        $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
 
         $message->addExtras('apiReply', $reply);
         $message->addExtras('apiAction', $action);
