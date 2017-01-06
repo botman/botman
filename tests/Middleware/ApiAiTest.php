@@ -10,7 +10,7 @@ use Mpociot\BotMan\Middleware\ApiAi;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiaiTest extends PHPUnit_Framework_TestCase
+class ApiAiTest extends PHPUnit_Framework_TestCase
 {
     /** @test */
     public function it_adds_entities_to_the_message()
@@ -23,7 +23,7 @@ class ApiaiTest extends PHPUnit_Framework_TestCase
                 'speech' => 'api reply text',
                 'action' => 'api action name',
                 'metadata' => [
-                    'intentName' => 'name of the matched intent'
+                    'intentName' => 'name of the matched intent',
                 ],
             ],
         ];

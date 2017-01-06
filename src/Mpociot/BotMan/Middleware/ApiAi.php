@@ -49,7 +49,7 @@ class ApiAi implements MiddlewareInterface
         $response = $this->http->post($this->apiUrl, [], [
             'query' => [$message->getMessage()],
             'sessionId' => time(),
-            'lang' => 'en'
+            'lang' => 'en',
         ], [
             'Authorization: Bearer '.$this->token,
             'Content-Type: application/json; charset=utf-8',
@@ -76,5 +76,4 @@ class ApiAi implements MiddlewareInterface
     {
         return true;
     }
-
 }
