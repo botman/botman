@@ -67,6 +67,14 @@ class TestDriver implements DriverInterface
     }
 
     /**
+     * @param Message $matchingMessage
+     * @return string
+     */
+    public function types(Message $matchingMessage)
+    {
+    }
+
+    /**
      * Return the driver name.
      *
      * @return string

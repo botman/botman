@@ -18,7 +18,7 @@ class SlackRTMDriver implements DriverInterface
     /** @var RealTimeClient */
     protected $client;
 
-    const DRIVER_NAME = 'Slack';
+    const DRIVER_NAME = 'SlackRTM';
 
     /**
      * Driver constructor.
@@ -121,5 +121,14 @@ class SlackRTMDriver implements DriverInterface
     public function isConfigured()
     {
         return ! is_null($this->config->get('slack_token'));
+    }
+
+    /**
+     * Send a typing indicator.
+     * @param Message $matchingMessage
+     * @return mixed
+     */
+    public function types(Message $matchingMessage)
+    {
     }
 }

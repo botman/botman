@@ -53,4 +53,11 @@ interface DriverInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Send a typing indicator.
+     * @param Message $matchingMessage
+     * @return mixed
+     */
+    public function types(Message $matchingMessage);
 }
