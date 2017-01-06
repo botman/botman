@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
+- Added api.ai middleware.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
