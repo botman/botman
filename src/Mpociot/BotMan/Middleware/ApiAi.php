@@ -1,15 +1,15 @@
 <?php
+
 namespace Mpociot\BotMan\Middleware;
 
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
 {
-
     /** @var string */
     protected $token;
     /** @var HttpInterface */
@@ -47,12 +47,12 @@ class ApiAi implements MiddlewareInterface
     public function handle(Message &$message, Driver $driver)
     {
         $response = $this->http->post($this->apiUrl, [], [
-            'query'     => [$message->getMessage()],
+            'query' => [$message->getMessage()],
             'sessionId' => time(),
-            'lang'      => 'en'
+            'lang' => 'en'
         ], [
-            'Authorization: Bearer ' . $this->token,
-            'Content-Type: application/json; charset=utf-8'
+            'Authorization: Bearer '.$this->token,
+            'Content-Type: application/json; charset=utf-8',
         ], true);
 
         $response = json_decode($response->getContent());
@@ -76,4 +76,5 @@ class ApiAi implements MiddlewareInterface
     {
         return true;
     }
+
 }
