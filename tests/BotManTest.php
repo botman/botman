@@ -874,25 +874,25 @@ class BotManTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_originate_messages_with_additional_parameters()
     {
-        $botman = m::mock(BotMan::class)->makePartial();
-        $botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, [
-			      'message' => [
-              'attachment' => [
-                  'type' => 'template',
-                  'payload' => [
-                      'template_type' => 'button',
-      						    'text' => 'Please Click',
-      						    'buttons' => [
-                          [
-          							      'type' => 'postback',
-          							      'payload' => 'PAYLOAD',
-          							      'title' => 'Click Me',
-          						    ]
-                      ],
-  					      ],
-  				    ],
-			      ],
-		    ]);
+	$botman = m::mock(BotMan::class)->makePartial();
+	$botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, [
+		'message' => [
+			'attachment' => [
+				'type' => 'template',
+				'payload' => [
+					'template_type' => 'button',
+					'text' => 'Please Click',
+					'buttons' => [
+						[
+							'type' => 'postback',
+							'payload' => 'PAYLOAD',
+							'title' => 'Click Me',
+						],
+					],
+				],
+			],
+		],
+	]);
     }
 
     /** @test */
