@@ -53,9 +53,7 @@ class BotManFactory
      */
     public static function createForRTM(array $config, LoopInterface $loop, CacheInterface $cache = null, StorageInterface $storageDriver = null)
     {
-        if (empty($cache)) {
-            $cache = new ArrayCache();
-        }
+        $cache = new ArrayCache();
         if (empty($storageDriver)) {
             $storageDriver = new FileStorage(__DIR__);
         }

@@ -5,6 +5,7 @@ namespace Mpociot\BotMan;
 use Closure;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
+use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\CacheInterface;
@@ -351,21 +352,51 @@ class BotMan
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next, true)),
+            'next' => $this->prepareCallbacks($next),
         ], 30);
+    }
+
+    /**
+     * @param Closure $closure
+     * @return string
+     */
+    protected function serializeClosure(Closure $closure)
+    {
+        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+            return serialize(new SerializableClosure($closure, true));
+        }
+
+        return $closure;
+    }
+
+    /**
+     * @param mixed $closure
+     * @return string
+     */
+    protected function unserializeClosure($closure)
+    {
+        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+            return unserialize($closure);
+        }
+
+        return $closure;
     }
 
     /**
      * Prepare an array of pattern / callbacks before
      * caching them.
      *
-     * @param array $callbacks
+     * @param array|Closure $callbacks
      * @return array
      */
-    protected function prepareCallbacks(array $callbacks)
+    protected function prepareCallbacks($callbacks)
     {
-        foreach ($callbacks as &$callback) {
-            $callback['callback'] = serialize(new SerializableClosure($callback['callback'], true));
+        if (is_array($callbacks)) {
+            foreach ($callbacks as &$callback) {
+                $callback['callback'] = $this->serializeClosure($callback['callback']);
+            }
+        } else {
+            $callbacks = $this->serializeClosure($callbacks);
         }
 
         return $callbacks;
@@ -390,13 +421,13 @@ class BotMan
                                 $this->message = $message;
                                 $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
                                 $this->matches = $parameters;
-                                $next = unserialize($callback['callback']);
+                                $next = $this->unserializeClosure($callback['callback']);
                                 break;
                             }
                         }
                     } else {
                         $this->message = $message;
-                        $next = unserialize($convo['next']);
+                        $next = $this->unserializeClosure($convo['next']);
                     }
 
                     if (is_callable($next)) {
