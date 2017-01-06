@@ -10,6 +10,7 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
 {
+
     /** @var string */
     protected $token;
     /** @var HttpInterface */
@@ -47,18 +48,18 @@ class ApiAi implements MiddlewareInterface
     public function handle(Message &$message, Driver $driver)
     {
         $response = $this->http->post($this->apiUrl, [], [
-            'query' => [$message->getMessage()],
+            'query'     => [$message->getMessage()],
             'sessionId' => time(),
-            'lang' => 'en',
+            'lang'      => 'en',
         ], [
-            'Authorization: Bearer '.$this->token,
+            'Authorization: Bearer ' . $this->token,
             'Content-Type: application/json; charset=utf-8',
         ], true);
 
         $response = json_decode($response->getContent());
-        $reply = $response->result->speech ?? '';
-        $action = $response->result->action ?? '';
-        $intent = $response->result->metadata->intentName ?? '';
+        $reply = isset($response->result->speech) ? $response->result->speech : '';
+        $action = isset($response->result->action) ? $response->result->action : '';
+        $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
 
         $message->addExtras('apiReply', $reply);
         $message->addExtras('apiAction', $action);
