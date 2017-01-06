@@ -5,7 +5,7 @@
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 [![StyleCI](https://styleci.io/repos/65017574/shield?branch=master)](https://styleci.io/repos/65017574)
 
-BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com), [HipChat](http://hipchat.com) and [Facebook Messenger](http://messenger.com).
+BotMan is a framework agnostic PHP library that is designed to simplify the task of developing innovative bots for multiple messaging platforms, including [Slack](http://slack.com), [Telegram](http://telegram.me), [Microsoft Bot Framework](https://dev.botframework.com/), [Nexmo](https://nexmo.com), [HipChat](http://hipchat.com), [Facebook Messenger](http://messenger.com) and [WeChat](http://web.wechat.com).
 
 ```php
 $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
@@ -51,7 +51,9 @@ $config = [
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls,
+    'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
+    'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
 ];
 
 // create an instance
@@ -98,7 +100,9 @@ Add your Facebook access token / Slack token to your `config/services.php`:
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => 'YOUR-FACEBOOK-TOKEN-HERE',
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE' // Optional - this is used to verify incoming API calls,
+    'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
+    'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
 ],
 ```
 
@@ -167,6 +171,7 @@ You can support all messaging platforms using the exact same Bot-API.
 - [Setup and connect Nexmo](readme-nexmo.md)
 - [Setup and connect Slack](readme-slack.md)
 - [Setup and connect HipChat](readme-hipchat.md)
+- [Setup and connect WeChat](readme-wechat.md)
 
 ## Core Concepts
 

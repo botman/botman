@@ -278,6 +278,28 @@ class BotMan
     }
 
     /**
+     * @return $this
+     */
+    public function types()
+    {
+        $this->getDriver()->types($this->message);
+
+        return $this;
+    }
+
+    /**
+     * @param int $seconds Number of seconds to wait
+     * @return $this
+     */
+    public function typesAndWaits($seconds)
+    {
+        $this->getDriver()->types($this->message);
+        sleep($seconds);
+
+        return $this;
+    }
+
+    /**
      * @param string|Question $message
      * @param array $additionalParameters
      * @return $this
