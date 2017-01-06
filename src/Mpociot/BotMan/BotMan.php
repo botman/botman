@@ -257,9 +257,10 @@ class BotMan
      * @param string|Question $message
      * @param string|array $channel
      * @param DriverInterface|null $driver
+	 * @param array $additionalParameters
      * @return $this
      */
-    public function say($message, $channel, $driver = null)
+    public function say($message, $channel, $driver = null, $additionalParameters = [])
     {
         if (is_null($driver)) {
             $drivers = DriverManager::getConfiguredDrivers($this->config);
@@ -270,7 +271,7 @@ class BotMan
         foreach ($drivers as $driver) {
             $matchMessage = new Message('', '', $channel);
             /* @var $driver DriverInterface */
-            $driver->reply($message, $matchMessage, []);
+            $driver->reply($message, $matchMessage, $additionalParameters);
         }
 
         return $this;
