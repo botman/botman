@@ -257,7 +257,7 @@ class BotMan
      * @param string|Question $message
      * @param string|array $channel
      * @param DriverInterface|null $driver
-	 * @param array $additionalParameters
+     * @param array $additionalParameters
      * @return $this
      */
     public function say($message, $channel, $driver = null, $additionalParameters = [])
