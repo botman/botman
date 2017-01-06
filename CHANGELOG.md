@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
 - Fixed SlackRTM driver to respond using the RTM API (Fixes issues #99 and #67).
+- Moved listening to Facebook Postback payloads into a separate driver (FacebookPostbackDriver) so it does not interfere with normal user text
 
 ## [1.3.0]
 ### Added
