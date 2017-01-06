@@ -48,9 +48,9 @@ class ApiAi implements MiddlewareInterface
     public function handle(Message &$message, Driver $driver)
     {
         $response = $this->http->post($this->apiUrl, [], [
-            'query'     => [$message->getMessage()],
+            'query' => [$message->getMessage()],
             'sessionId' => time(),
-            'lang'      => 'en',
+            'lang' => 'en',
         ], [
             'Authorization: Bearer ' . $this->token,
             'Content-Type: application/json; charset=utf-8',
