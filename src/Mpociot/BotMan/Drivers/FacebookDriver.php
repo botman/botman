@@ -54,10 +54,18 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        if (! $this->config->has('facebook_app_secret')) {
-            return $this->event->has('messaging');
-        }
+        $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
+        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+            return (isset($msg['message']) && isset($msg['message']['text']));
+        });
+        return ! $messages->isEmpty() && $validSignature;
+    }
 
+    /**
+     * @return bool
+     */
+    protected function validateSignature()
+    {
         return $this->signature == 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
     }
 
@@ -106,8 +114,6 @@ class FacebookDriver extends Driver
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            } elseif (isset($msg['postback'])) {
-                return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
 
             return new Message('', '', '');

@@ -8,10 +8,10 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\FacebookDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
 
-class FacebookDriverTest extends PHPUnit_Framework_TestCase
+class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
 {
     private function getDriver($responseData, array $config = ['facebook_token' => 'Foo'], $signature = '')
     {
@@ -19,14 +19,14 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getContent')->andReturn($responseData);
         $request->headers->set('X_HUB_SIGNATURE', $signature);
 
-        return new FacebookDriver($request, $config, new Curl());
+        return new FacebookPostbackDriver($request, $config, new Curl());
     }
 
     /** @test */
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver('');
-        $this->assertSame('Facebook', $driver->getName());
+        $this->assertSame('FacebookPostback', $driver->getName());
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver($request);
         $this->assertFalse($driver->matchesRequest());
 
-        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
         $driver = $this->getDriver($request);
         $this->assertTrue($driver->matchesRequest());
 
@@ -55,21 +55,15 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $config = ['facebook_token' => 'Foo', 'facebook_app_secret' => 'Bar'];
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
         $driver = $this->getDriver($request, $config, $signature);
-        $this->assertTrue($driver->matchesRequest());
+        $this->assertFalse($driver->matchesRequest());
     }
 
     /** @test */
     public function it_returns_the_message()
     {
-        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
         $driver = $this->getDriver($request);
-
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
-
-        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{}]}]}';
-        $driver = $this->getDriver($request);
-
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('MY_PAYLOAD', $driver->getMessages()[0]->getMessage());
     }
 
     /** @test */
@@ -91,7 +85,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_the_user_id()
     {
-        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
         $driver = $this->getDriver($request);
 
         $this->assertSame('111899832631525', $driver->getMessages()[0]->getUser());
@@ -100,7 +94,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_the_channel_id()
     {
-        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
         $driver = $this->getDriver($request);
 
         $this->assertSame('1433960459967306', $driver->getMessages()[0]->getChannel());
@@ -146,7 +140,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], $html);
 
@@ -195,7 +189,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], $html);
 
@@ -211,7 +205,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode([]));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
@@ -240,7 +234,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode([]));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
@@ -297,7 +291,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn('[]');
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], $html);
 
@@ -312,19 +306,19 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request->shouldReceive('getContent')->andReturn('');
         $htmlInterface = m::mock(Curl::class);
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'token',
         ], $htmlInterface);
 
         $this->assertTrue($driver->isConfigured());
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => null,
         ], $htmlInterface);
 
         $this->assertFalse($driver->isConfigured());
 
-        $driver = new FacebookDriver($request, [], $htmlInterface);
+        $driver = new FacebookPostbackDriver($request, [], $htmlInterface);
 
         $this->assertFalse($driver->isConfigured());
     }
@@ -369,7 +363,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], $html);
 
@@ -422,7 +416,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
-        $driver = new FacebookDriver($request, [
+        $driver = new FacebookPostbackDriver($request, [
             'facebook_token' => 'Foo',
         ], $html);
 
