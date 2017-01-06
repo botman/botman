@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
-    
+
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
+- Fixed SlackRTM driver to respond using the RTM API (Fixes issues #99 and #67).
 
 ## [1.3.0]
 ### Added

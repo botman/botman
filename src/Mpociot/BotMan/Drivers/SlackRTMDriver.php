@@ -18,7 +18,7 @@ class SlackRTMDriver implements DriverInterface
     /** @var RealTimeClient */
     protected $client;
 
-    const DRIVER_NAME = 'Slack';
+    const DRIVER_NAME = 'SlackRTM';
 
     /**
      * Driver constructor.

@@ -23,7 +23,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver([]);
-        $this->assertSame('Slack', $driver->getName());
+        $this->assertSame('SlackRTM', $driver->getName());
     }
 
     /** @test */
