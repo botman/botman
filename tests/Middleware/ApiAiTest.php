@@ -35,7 +35,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->with('https://api.api.ai/v1/query', [], [
                 'query' => [$messageText],
                 'sessionId' => time(),
-                'lang' => 'en'
+                'lang' => 'en',
             ], [
                 'Authorization: Bearer token',
                 'Content-Type: application/json; charset=utf-8',
