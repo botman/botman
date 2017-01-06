@@ -10,7 +10,6 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
 {
-
     /** @var string */
     protected $token;
     /** @var HttpInterface */
@@ -52,7 +51,7 @@ class ApiAi implements MiddlewareInterface
             'sessionId' => time(),
             'lang' => 'en',
         ], [
-            'Authorization: Bearer ' . $this->token,
+            'Authorization: Bearer '.$this->token,
             'Content-Type: application/json; charset=utf-8',
         ], true);
 
