@@ -304,7 +304,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
                 'client_id' => 'app_id',
                 'client_secret' => 'app_key',
                 'grant_type' => 'client_credentials',
-                'scope' => 'https://api.botframework.com/.default'
+                'scope' => 'https://api.botframework.com/.default',
             ])
             ->andReturn(new Response(json_encode([
                 'access_token' => 'SECRET_TOKEN',
@@ -363,7 +363,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
                 'client_id' => 'app_id',
                 'client_secret' => 'app_key',
                 'grant_type' => 'client_credentials',
-                'scope' => 'https://api.botframework.com/.default'
+                'scope' => 'https://api.botframework.com/.default',
             ])
             ->andReturn(new Response(json_encode([
                 'access_token' => 'SECRET_TOKEN',
@@ -425,7 +425,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
                 'client_id' => 'app_id',
                 'client_secret' => 'app_key',
                 'grant_type' => 'client_credentials',
-                'scope' => 'https://api.botframework.com/.default'
+                'scope' => 'https://api.botframework.com/.default',
             ])
             ->andReturn(new Response(json_encode([
                 'access_token' => 'SECRET_TOKEN',
@@ -484,7 +484,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
                 'client_id' => 'app_id',
                 'client_secret' => 'app_key',
                 'grant_type' => 'client_credentials',
-                'scope' => 'https://api.botframework.com/.default'
+                'scope' => 'https://api.botframework.com/.default',
             ])
             ->andReturn(new Response(json_encode([
                 'access_token' => 'SECRET_TOKEN',
@@ -500,7 +500,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
                         'contentType' => 'image/png',
                         'contentUrl' => 'http://foo.com/bar.png',
                     ],
-                ]
+                ],
             ], [
                 'Content-Type:application/json',
                 'Authorization:Bearer SECRET_TOKEN',
