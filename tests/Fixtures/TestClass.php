@@ -12,4 +12,9 @@ class TestClass
     {
         self::$called = true;
     }
+
+    public function __invoke(BotMan $bot)
+    {
+        self::$called = true;
+    }
 }
