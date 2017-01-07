@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
@@ -12,7 +13,6 @@ use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use UnexpectedValueException;
 
 /**
  * Class BotMan.
