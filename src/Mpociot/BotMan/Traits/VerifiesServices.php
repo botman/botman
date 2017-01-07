@@ -13,15 +13,16 @@ trait VerifiesServices
      *
      * @param string $facebookVerification The Facebook verification string to match
      * @param string $weChatVerification The WeChat verification token to match
+     * @param string $slackVerification The Slack verification token to match
      * @return Response
      */
-    public function verifyServices($facebookVerification = null, $weChatVerification = null)
+    public function verifyServices($facebookVerification = null, $weChatVerification = null, $slackVerification = null)
     {
         $request = Request::createFromGlobals();
         $payload = Collection::make(json_decode($request->getContent(), true));
 
         // Slack verification
-        if ($payload->get('type') === 'url_verification') {
+        if ($payload->get('type') === 'url_verification' && $payload->get('token') === $slackVerification) {
             return Response::create($payload->get('challenge'))->send();
         }
 
