@@ -69,7 +69,7 @@ trait VerifiesServices
     public function verifyWeChatService($weChatVerification = null)
     {
         $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
-        
+
         // WeChat verification
         if ($request->get('signature') !== null && $request->get('timestamp') !== null && $request->get('nonce') !== null && $request->get('echostr') !== null) {
             $tmpArr = [$weChatVerification, $request->get('timestamp'), $request->get('nonce')];
