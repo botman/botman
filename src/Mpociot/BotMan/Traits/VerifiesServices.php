@@ -17,7 +17,7 @@ trait VerifiesServices
      */
     public function verifyServices($facebookVerification = null, $weChatVerification = null)
     {
-        $request = Request::createFromGlobals();
+        $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
         $payload = Collection::make(json_decode($request->getContent(), true));
 
         // Slack verification
