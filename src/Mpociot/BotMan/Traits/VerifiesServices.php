@@ -11,25 +11,64 @@ trait VerifiesServices
     /**
      * Verify service webhook URLs.
      *
-     * @param string $facebookVerification The Facebook verification string to match
-     * @param string $weChatVerification The WeChat verification token to match
-     * @param string $slackVerification The Slack verification token to match
-     * @return Response
+     * @param array $services The services and verification codes.
+     * @return Response|null
      */
-    public function verifyServices($facebookVerification = null, $weChatVerification = null, $slackVerification = null)
+    public function verifyServices(array $services = [])
+    {
+        foreach ($services as $service => $code) {
+            $method = camel_case("verify_{$service}_service");
+
+            $response = $this->$method($code);
+
+            if (!is_null($response)) {
+                return $response;
+            }
+        }
+    }
+
+    /**
+     * Verify Facebook's service webhook URLs.
+     *
+     * @param string $facebookVerification The Facebook verification code.
+     * @return Response|null
+     */
+    public function verifyFacebookService($facebookVerification = null)
     {
         $request = Request::createFromGlobals();
-        $payload = Collection::make(json_decode($request->getContent(), true));
-
-        // Slack verification
-        if ($payload->get('type') === 'url_verification' && $payload->get('token') === $slackVerification) {
-            return Response::create($payload->get('challenge'))->send();
-        }
 
         // Facebook verification
         if ($request->get('hub_mode') === 'subscribe' && $request->get('hub_verify_token') === $facebookVerification) {
             return Response::create($request->get('hub_challenge'))->send();
         }
+    }
+
+    /**
+     * Verify Facebook's service webhook URLs.
+     *
+     * @param string $slackVerification The Slack verification code.
+     * @return Response|null
+     */
+    public function verifySlackService($slackVerification = null)
+    {
+        $request = Request::createFromGlobals();
+        $payload = Collection::make(json_decode($request->getContent(), true));
+
+        // Slack verification
+        if ($payload->get('type') === 'url_verification' && $payload->get('token') == $slackVerification) {
+            return Response::create($payload->get('challenge'))->send();
+        }
+    }
+
+    /**
+     * Verify WeChat's service webhook URLs.
+     *
+     * @param string $weChatVerification The WeChat verification code.
+     * @return Response|null
+     */
+    public function verifyWeChatService($weChatVerification = null)
+    {
+        $request = Request::createFromGlobals();
 
         // WeChat verification
         if ($request->get('signature') !== null && $request->get('timestamp') !== null && $request->get('nonce') !== null && $request->get('echostr') !== null) {
