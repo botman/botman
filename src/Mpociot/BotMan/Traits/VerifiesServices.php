@@ -35,7 +35,7 @@ trait VerifiesServices
      */
     public function verifyFacebookService($facebookVerification = null)
     {
-        $request = Request::createFromGlobals();
+        $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
 
         // Facebook verification
         if ($request->get('hub_mode') === 'subscribe' && $request->get('hub_verify_token') === $facebookVerification) {
@@ -51,7 +51,7 @@ trait VerifiesServices
      */
     public function verifySlackService($slackVerification = null)
     {
-        $request = Request::createFromGlobals();
+        $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
         $payload = Collection::make(json_decode($request->getContent(), true));
 
         // Slack verification
@@ -68,8 +68,8 @@ trait VerifiesServices
      */
     public function verifyWeChatService($weChatVerification = null)
     {
-        $request = Request::createFromGlobals();
-
+        $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
+        
         // WeChat verification
         if ($request->get('signature') !== null && $request->get('timestamp') !== null && $request->get('nonce') !== null && $request->get('echostr') !== null) {
             $tmpArr = [$weChatVerification, $request->get('timestamp'), $request->get('nonce')];
