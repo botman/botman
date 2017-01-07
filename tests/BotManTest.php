@@ -225,6 +225,33 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_uses_invoke_method()
+    {
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        TestClass::$called = false;
+        $botman->hears('foo', TestClass::class);
+        $botman->listen();
+        $this->assertTrue(TestClass::$called);
+
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid hears action: [stdClass]');
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        $botman->hears('foo', \stdClass::class);
+        $botman->listen();
+    }
+
+    /** @test */
     public function it_does_not_hears_matching_commands_in_text()
     {
         $called = false;

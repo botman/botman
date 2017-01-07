@@ -2,13 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class FacebookPostbackDriver extends FacebookDriver
 {
@@ -33,8 +29,9 @@ class FacebookPostbackDriver extends FacebookDriver
     {
         $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
-            return (isset($msg['postback']) && isset($msg['postback']['payload']));
+            return isset($msg['postback']) && isset($msg['postback']['payload']);
         });
+
         return ! $messages->isEmpty() && $validSignature;
     }
 

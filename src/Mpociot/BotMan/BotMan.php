@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
@@ -198,6 +199,10 @@ class BotMan
             $callback = $messageData['callback'];
 
             if (! $callback instanceof Closure) {
+                if (strpos($callback, '@') === false) {
+                    $callback = $this->makeInvokableAction($callback);
+                }
+
                 list($class, $method) = explode('@', $callback);
                 $callback = [new $class, $method];
             }
@@ -474,6 +479,25 @@ class BotMan
         }
 
         return true;
+    }
+
+    /**
+     * Make an action for an invokable controller.
+     *
+     * @param string $action
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    protected function makeInvokableAction($action)
+    {
+        if (! method_exists($action, '__invoke')) {
+            throw new UnexpectedValueException(sprintf(
+                'Invalid hears action: [%s]', $action
+            ));
+        }
+
+        return $action.'@__invoke';
     }
 
     /**
