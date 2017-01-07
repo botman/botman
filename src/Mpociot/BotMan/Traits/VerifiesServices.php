@@ -21,7 +21,7 @@ trait VerifiesServices
 
             $response = $this->$method($code);
 
-            if (!is_null($response)) {
+            if (! is_null($response)) {
                 return $response;
             }
         }
