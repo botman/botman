@@ -12,6 +12,7 @@ use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use Mpociot\BotMan\Tests\Fixtures\TestDriver;
@@ -915,6 +916,30 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
+    }
+
+    /** @test */
+    public function it_can_originate_messages_with_additional_parameters()
+    {
+	$botman = m::mock(BotMan::class)->makePartial();
+	$botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, [
+		'message' => [
+			'attachment' => [
+				'type' => 'template',
+				'payload' => [
+					'template_type' => 'button',
+					'text' => 'Please Click',
+					'buttons' => [
+						[
+							'type' => 'postback',
+							'payload' => 'PAYLOAD',
+							'title' => 'Click Me',
+						],
+					],
+				],
+			],
+		],
+	]);
     }
 
     /** @test */
