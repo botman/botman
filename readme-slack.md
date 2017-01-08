@@ -31,7 +31,6 @@
 
 **Cons:** 
   * Pretty cumbersome to set up *Note:* Let the folks from [SlackHQ](https://twitter.com/slackhq) know this. If we make enough noise, they'll hopefully simplify the bot token creation process!
-  * Your bot user will appear offline
 
 ---
 
