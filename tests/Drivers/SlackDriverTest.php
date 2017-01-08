@@ -155,19 +155,6 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_does_not_return_messages_for_bots()
-    {
-        $driver = $this->getDriver([
-            'event' => [
-                'user' => 'U0X12345',
-                'bot_id' => 'foo',
-                'text' => 'Hi Julia',
-            ],
-        ]);
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
-    }
-
-    /** @test */
     public function it_detects_bots()
     {
         $driver = $this->getDriver([
