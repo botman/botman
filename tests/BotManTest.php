@@ -921,25 +921,25 @@ class BotManTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_originate_messages_with_additional_parameters()
     {
-	$botman = m::mock(BotMan::class)->makePartial();
-	$botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, [
-		'message' => [
-			'attachment' => [
-				'type' => 'template',
-				'payload' => [
-					'template_type' => 'button',
-					'text' => 'Please Click',
-					'buttons' => [
-						[
-							'type' => 'postback',
-							'payload' => 'PAYLOAD',
-							'title' => 'Click Me',
-						],
-					],
-				],
-			],
-		],
-	]);
+        $additionalParameters = [
+            'foo' => 'bar'
+        ];
+
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('reply')
+            ->once()
+            ->withArgs(function ($message, $match, $arguments) use($additionalParameters) {
+                return $message === 'foo' && $match->getChannel() === '1234567890' && $arguments === $additionalParameters;
+            });
+
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock->shouldReceive('loadFromName')
+            ->once()
+            ->with('Facebook', [])
+            ->andReturn($driver);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+    	$botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
     }
 
     /** @test */
