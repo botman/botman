@@ -208,7 +208,7 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                if (!$this->isBot() && 
+                if (! $this->isBot() && 
                     $this->isMessageMatching($message, $pattern, $matches) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['in']) &&
