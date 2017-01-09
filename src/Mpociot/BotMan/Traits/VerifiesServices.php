@@ -20,7 +20,7 @@ trait VerifiesServices
         if (!is_array($services)) {
             $services = ['facebook' => $services];
         }
-        $services['we_chat'] = $wheChatVerification;
+        $services['we_chat'] = $weChatVerification;
 
         foreach ($services as $service => $code) {
             $method = camel_case("verify_{$service}_service");
