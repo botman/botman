@@ -26,7 +26,7 @@ For Laravel, the page access token needs to be in your `config/services.php` fil
 ```php
     'botman' => [
     	'facebook_token' => 'YOUR-FACEBOOK-PAGE-TOKEN-HERE',
-    	'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE', // Optional - this is used to verify incoming API calls
+    	'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE', // This is used to verify incoming API calls
     ],
 ```
 
