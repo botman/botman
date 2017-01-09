@@ -219,7 +219,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'event' => [
                 'user' => 'U0X12345',
                 'text' => 'foo',
-                'bot_id' => '123'
+                'bot_id' => '123',
             ],
         ]);
 
@@ -922,13 +922,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_originate_messages_with_additional_parameters()
     {
         $additionalParameters = [
-            'foo' => 'bar'
+            'foo' => 'bar',
         ];
 
         $driver = m::mock(NullDriver::class);
         $driver->shouldReceive('reply')
             ->once()
-            ->withArgs(function ($message, $match, $arguments) use($additionalParameters) {
+            ->withArgs(function ($message, $match, $arguments) use ($additionalParameters) {
                 return $message === 'foo' && $match->getChannel() === '1234567890' && $arguments === $additionalParameters;
             });
 
@@ -939,7 +939,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn($driver);
 
         $botman = m::mock(BotMan::class)->makePartial();
-    	$botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
+        $botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
     }
 
     /** @test */
