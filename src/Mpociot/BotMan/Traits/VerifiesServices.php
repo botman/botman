@@ -14,8 +14,14 @@ trait VerifiesServices
      * @param array $services The services and verification codes.
      * @return Response|null
      */
-    public function verifyServices(array $services = [])
+    public function verifyServices($services = null, $weChatVerification = null)
     {
+        // fallback
+        if (!is_array($services)) {
+            $services = ['facebook' => $services];
+        }
+        $services['we_chat'] = $wheChatVerification;
+
         foreach ($services as $service => $code) {
             $method = camel_case("verify_{$service}_service");
 
