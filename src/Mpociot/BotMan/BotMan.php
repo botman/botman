@@ -90,11 +90,17 @@ class BotMan
     }
 
     /**
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareInterface|array $middleware
      */
-    public function middleware(MiddlewareInterface $middleware)
+    public function middleware($middleware)
     {
-        $this->middleware[] = $middleware;
+        if (!is_array($middleware)) {
+            $middleware = [$middleware];
+        }
+
+        $this->middleware = Collection::make($middleware)->filter(function($item) {
+            return $item instanceof MiddlewareInterface;
+        })->merge($this->middleware)->toArray();
     }
 
     /**

@@ -814,6 +814,26 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_applies_multiple_middlewares()
+    {
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+        $botman->middleware([new TestMiddleware()]);
+
+        $botman->hears('foo', function ($bot) {
+            $this->assertSame([
+                'driver_name' => 'Slack',
+                'test' => 'successful',
+            ], $bot->getMessage()->getExtras());
+        });
+        $botman->listen();
+    }
+
+    /** @test */
     public function it_tries_to_match_with_middlewares()
     {
         $called_one = false;
