@@ -899,11 +899,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
             $called_one = true;
             $this->assertSame('pod bay', $doorType);
-        })->middleware(new TestMatchMiddleware());;
+        })->middleware(new TestMatchMiddleware());
 
         $botman->hears('keyword', function ($bot) use (&$called_two) {
             $called_two = true;
-        })->middleware(new TestMatchMiddleware());;
+        })->middleware(new TestMatchMiddleware());
 
         $botman->listen();
         $this->assertTrue($called_one);
