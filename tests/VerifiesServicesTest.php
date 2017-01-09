@@ -76,7 +76,6 @@ class VerifiesServicesTest extends PHPUnit_Framework_TestCase
             'slack' => 'slack_token'
         ]);
 
-        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('slack_challenge', $response->getContent());
     }
 }
