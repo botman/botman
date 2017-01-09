@@ -2,6 +2,9 @@
 
 namespace Mpociot\BotMan;
 
+use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+
 class Command
 {
     /** @var string */
@@ -15,6 +18,9 @@ class Command
 
     /** @var string */
     protected $driver;
+
+    /** @var array */
+    protected $middleware = [];
 
     /**
      * Command constructor.
@@ -54,6 +60,23 @@ class Command
     }
 
     /**
+     * @param array|MiddlewareInterface $middleware
+     * @return $this
+     */
+    public function middleware($middleware)
+    {
+        if (!is_array($middleware)) {
+            $middleware = [$middleware];
+        }
+
+        $this->middleware = Collection::make($middleware)->filter(function($item) {
+            return $item instanceof MiddlewareInterface;
+        })->merge($this->middleware)->toArray();
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -62,6 +85,7 @@ class Command
             'pattern' => $this->pattern,
             'callback' => $this->callback,
             'driver' => $this->driver,
+            'middleware' => $this->middleware,
             'in' => $this->in,
         ];
     }

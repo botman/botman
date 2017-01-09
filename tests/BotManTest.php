@@ -814,6 +814,30 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_applies_middleware_only_on_specific_commands()
+    {
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) {
+            $this->assertSame([], $bot->getMessage()->getExtras());
+        });
+
+        $botman->hears('foo', function ($bot) {
+            $this->assertSame([
+                'driver_name' => 'Slack',
+                'test' => 'successful',
+            ], $bot->getMessage()->getExtras());
+        })->middleware(new TestMiddleware());
+
+        $botman->listen();
+    }
+
+    /** @test */
     public function it_applies_multiple_middlewares()
     {
         $botman = $this->getBot([
@@ -854,6 +878,32 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->hears('keyword', function ($bot) use (&$called_two) {
             $called_two = true;
         });
+
+        $botman->listen();
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
+    }
+
+    /** @test */
+    public function it_tries_to_match_with_command_specific_middlewares()
+    {
+        $called_one = false;
+        $called_two = false;
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'open the pod bay doors',
+            ],
+        ]);
+
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
+            $called_one = true;
+            $this->assertSame('pod bay', $doorType);
+        })->middleware(new TestMatchMiddleware());;
+
+        $botman->hears('keyword', function ($bot) use (&$called_two) {
+            $called_two = true;
+        })->middleware(new TestMatchMiddleware());;
 
         $botman->listen();
         $this->assertTrue($called_one);

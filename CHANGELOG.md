@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
 - Added api.ai middleware.
 - Added additional parameters to `$botman->say` method.
+- Added ability to load command-specific middleware: 
+```php
+$bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
+```
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.

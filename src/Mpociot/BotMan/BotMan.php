@@ -136,15 +136,19 @@ class BotMan
      */
     public function getMessages()
     {
-        $messages = $this->getDriver()->getMessages();
+        return $this->getDriver()->getMessages();
+    }
 
-        foreach ($this->middleware as $middleware) {
-            foreach ($messages as &$message) {
-                $middleware->handle($message, $this->getDriver());
-            }
+    /**
+     * @param Message $message
+     * @param array $middleware
+     * @return Message
+     */
+    protected function applyMiddleware(Message &$message, array $middleware) {
+        foreach ($middleware as $middle) {
+            $middle->handle($message, $this->getDriver());
         }
-
-        return $messages;
+        return $message;
     }
 
     /**
@@ -214,6 +218,9 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
+                $message = $this->applyMiddleware($message, $this->middleware);
+                $message = $this->applyMiddleware($message, $messageData['middleware']);
+
                 if (! $this->isBot() &&
                     $this->isMessageMatching($message, $pattern, $matches) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
