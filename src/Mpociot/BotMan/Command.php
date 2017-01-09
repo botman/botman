@@ -65,11 +65,11 @@ class Command
      */
     public function middleware($middleware)
     {
-        if (!is_array($middleware)) {
+        if (! is_array($middleware)) {
             $middleware = [$middleware];
         }
 
-        $this->middleware = Collection::make($middleware)->filter(function($item) {
+        $this->middleware = Collection::make($middleware)->filter(function ($item) {
             return $item instanceof MiddlewareInterface;
         })->merge($this->middleware)->toArray();
 
