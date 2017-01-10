@@ -74,7 +74,11 @@ class BotFrameworkDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
+        // replace bot's name for group chats and special characters that might be sent from Web Skype
+        $pattern = '/<at id=(.*?)at>[^(\x20-\x7F)\x0A]*\s*/';
+        $message = preg_replace($pattern, '', $this->event->get('text'));
+
+        return [new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
     }
 
     /**
