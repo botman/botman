@@ -94,11 +94,11 @@ class BotMan
      */
     public function middleware($middleware)
     {
-        if (!is_array($middleware)) {
+        if (! is_array($middleware)) {
             $middleware = [$middleware];
         }
 
-        $this->middleware = Collection::make($middleware)->filter(function($item) {
+        $this->middleware = Collection::make($middleware)->filter(function ($item) {
             return $item instanceof MiddlewareInterface;
         })->merge($this->middleware)->toArray();
     }
@@ -144,10 +144,12 @@ class BotMan
      * @param array $middleware
      * @return Message
      */
-    protected function applyMiddleware(Message &$message, array $middleware) {
+    protected function applyMiddleware(Message &$message, array $middleware)
+    {
         foreach ($middleware as $middle) {
             $middle->handle($message, $this->getDriver());
         }
+
         return $message;
     }
 
