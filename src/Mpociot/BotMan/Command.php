@@ -19,6 +19,9 @@ class Command
     /** @var string */
     protected $driver;
 
+    /** @var string */
+    protected $prefix = '';
+
     /** @var array */
     protected $middleware = [];
 
@@ -35,6 +38,26 @@ class Command
         $this->callback = $callback;
         $this->driver = $driver;
         $this->in = $in;
+    }
+
+    /**
+     * Apply possible group attributes.
+     * 
+     * @param  array  $attributes
+     */
+    public function applyGroupAttributes(array $attributes)
+    {
+        if (isset($attributes['middleware'])) {
+            $this->middleware($attributes['middleware']);
+        }
+
+        if (isset($attributes['driver'])) {
+            $this->driver($attributes['driver']);
+        }
+
+        if (isset($attributes['prefix'])) {
+            $this->prefix = $attributes['prefix'];
+        }
     }
 
     /**
@@ -82,7 +105,7 @@ class Command
     public function toArray()
     {
         return [
-            'pattern' => $this->pattern,
+            'pattern' => $this->prefix.$this->pattern,
             'callback' => $this->callback,
             'driver' => $this->driver,
             'middleware' => $this->middleware,

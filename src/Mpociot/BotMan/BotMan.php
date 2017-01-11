@@ -47,6 +47,9 @@ class BotMan
     protected $fallbackMessage;
 
     /** @var array */
+    protected $groupAttributes = [];
+
+    /** @var array */
     protected $matches = [];
 
     /** @var DriverInterface */
@@ -192,10 +195,26 @@ class BotMan
     public function hears($pattern, $callback, $in = null)
     {
         $command = new Command($pattern, $callback, $in);
+        $command->applyGroupAttributes($this->groupAttributes);
 
         $this->listenTo[] = $command;
 
         return $command;
+    }
+
+    /**
+     * Create a command group with shared attributes.
+     *
+     * @param  array  $attributes
+     * @param  \Closure  $callback
+     */
+    public function group(array $attributes, Closure $callback)
+    {
+        $this->groupAttributes = $attributes;
+
+        call_user_func($callback, $this);
+
+        $this->groupAttributes = [];
     }
 
     /**

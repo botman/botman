@@ -49,7 +49,11 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FacebookDriver::class, DriverManager::loadFromName(FacebookDriver::class, []));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function it_can_get_configured_drivers()
     {
         $this->assertCount(0, DriverManager::getConfiguredDrivers([]));

@@ -814,6 +814,89 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_group_commands_by_middleware()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'bar',
+            ],
+        ]);
+
+        $botman->group(['middleware' => new TestMiddleware()], function($botman) use (&$called) {
+            $botman->hears('bar', function($bot) use (&$called) {
+                $called = true;
+                $this->assertSame([
+                    'driver_name' => 'Slack',
+                    'test' => 'successful',
+                ], $bot->getMessage()->getExtras());
+            });
+        });
+
+        $botman->hears('foo', function ($bot) {
+            $this->assertSame([], $bot->getMessage()->getExtras());
+        });
+        $botman->listen();
+
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_can_group_commands_by_driver()
+    {
+        $calledSlack = false;
+        $calledTelegram = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'bar',
+            ],
+        ]);
+
+        $botman->group(['driver' => TelegramDriver::DRIVER_NAME], function($botman) use (&$calledTelegram) {
+            $botman->hears('bar', function($bot) use (&$calledTelegram) {
+                $calledTelegram = true;
+            });
+        });
+
+        $botman->group(['driver' => SlackDriver::DRIVER_NAME], function($botman) use (&$calledSlack) {
+            $botman->hears('bar', function($bot) use (&$calledSlack) {
+                $calledSlack = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($calledTelegram);
+        $this->assertTrue($calledSlack);
+    }
+
+    /** @test */
+    public function it_can_have_group_prefixes()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'hello bar',
+            ],
+        ]);
+
+        $botman->group(['prefix' => 'hello '], function($botman) use (&$called) {
+            $botman->hears('bar', function($bot) use (&$called) {
+                $called = true;
+            });
+        });
+        $botman->listen();
+        
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_applies_middleware_only_on_specific_commands()
     {
         $botman = $this->getBot([
@@ -968,7 +1051,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->randomReply(['foo', 'bar', 'baz'], []);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function it_can_originate_messages_with_given_driver()
     {
         $driver = m::mock(NullDriver::class);
@@ -988,7 +1075,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function it_can_originate_messages_with_additional_parameters()
     {
         $additionalParameters = [
@@ -1012,7 +1103,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function it_can_originate_messages_with_configured_drivers()
     {
         $driver = m::mock(NullDriver::class);
