@@ -121,7 +121,7 @@ class TelegramDriver extends Driver
                 [
                     'text' => (string) $button['text'],
                     'callback_data' => (string) $button['value'],
-                ]
+                ],
             ];
         });
 
