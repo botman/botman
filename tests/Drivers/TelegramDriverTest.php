@@ -346,16 +346,21 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                 'chat_id' => '12345',
                 'text' => 'How are you doing?',
                 'reply_markup' => json_encode([
-                    'inline_keyboard' => [[
+                    'inline_keyboard' => [
                         [
-                            'text' => 'Great',
-                            'callback_data' => 'great',
-                        ],
+                            [
+                                'text' => 'Great',
+                                'callback_data' => 'great',
+                            ]
+                        ]
+                        ,
                         [
-                            'text' => 'Good',
-                            'callback_data' => 'good',
+                            [
+                                'text' => 'Good',
+                                'callback_data' => 'good',
+                            ]
                         ],
-                    ]],
+                    ],
                 ], true),
             ]);
 

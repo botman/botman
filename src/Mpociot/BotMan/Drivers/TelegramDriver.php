@@ -118,8 +118,10 @@ class TelegramDriver extends Driver
     {
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
-                'text' => (string) $button['text'],
-                'callback_data' => (string) $button['value'],
+                [
+                    'text' => (string) $button['text'],
+                    'callback_data' => (string) $button['value'],
+                ]
             ];
         });
 
@@ -163,7 +165,7 @@ class TelegramDriver extends Driver
         if ($message instanceof Question) {
             $parameters['text'] = $message->getText();
             $parameters['reply_markup'] = json_encode([
-                'inline_keyboard' => [$this->convertQuestion($message)],
+                'inline_keyboard' => $this->convertQuestion($message),
             ], true);
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
