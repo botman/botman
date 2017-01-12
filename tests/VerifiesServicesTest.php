@@ -56,28 +56,6 @@ class VerifiesServicesTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('facebook_hub_challenge', $response->getContent());
     }
-    
-    /** @test */
-    public function it_can_verify_slack()
-    {
-        $data = [
-            'type' => 'url_verification',
-            'challenge' => 'slack_challenge',
-            'token' => 'slack_token',
-        ];
-        $request = m::mock(Request::class.'[getContent]');
-        $request->shouldReceive('getContent')
-            ->once()
-            ->andReturn(json_encode($data));
-
-        $verification = new VerifyServices();
-        $verification->request = new Request($data);
-        $response = $verification->verifyServices([
-            'slack' => 'slack_token'
-        ]);
-
-        $this->assertSame('slack_challenge', $response->getContent());
-    }
 }
 
 class VerifyServices
