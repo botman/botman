@@ -825,8 +825,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['middleware' => new TestMiddleware()], function($botman) use (&$called) {
-            $botman->hears('bar', function($bot) use (&$called) {
+        $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$called) {
+            $botman->hears('bar', function ($bot) use (&$called) {
                 $called = true;
                 $this->assertSame([
                     'driver_name' => 'Slack',
@@ -856,14 +856,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['driver' => TelegramDriver::DRIVER_NAME], function($botman) use (&$calledTelegram) {
-            $botman->hears('bar', function($bot) use (&$calledTelegram) {
+        $botman->group(['driver' => TelegramDriver::DRIVER_NAME], function ($botman) use (&$calledTelegram) {
+            $botman->hears('bar', function ($bot) use (&$calledTelegram) {
                 $calledTelegram = true;
             });
         });
 
-        $botman->group(['driver' => SlackDriver::DRIVER_NAME], function($botman) use (&$calledSlack) {
-            $botman->hears('bar', function($bot) use (&$calledSlack) {
+        $botman->group(['driver' => SlackDriver::DRIVER_NAME], function ($botman) use (&$calledSlack) {
+            $botman->hears('bar', function ($bot) use (&$calledSlack) {
                 $calledSlack = true;
             });
         });
@@ -886,13 +886,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['prefix' => 'hello '], function($botman) use (&$called) {
-            $botman->hears('bar', function($bot) use (&$called) {
+        $botman->group(['prefix' => 'hello '], function ($botman) use (&$called) {
+            $botman->hears('bar', function ($bot) use (&$called) {
                 $called = true;
             });
         });
         $botman->listen();
-        
+
         $this->assertTrue($called);
     }
 
