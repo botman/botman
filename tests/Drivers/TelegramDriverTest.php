@@ -351,14 +351,13 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                             [
                                 'text' => 'Great',
                                 'callback_data' => 'great',
-                            ]
-                        ]
-                        ,
+                            ],
+                        ],
                         [
                             [
                                 'text' => 'Good',
                                 'callback_data' => 'good',
-                            ]
+                            ],
                         ],
                     ],
                 ], true),
