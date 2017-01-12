@@ -29,7 +29,7 @@ class VerifiesServicesTest extends PHPUnit_Framework_TestCase
         $verification = new VerifyServices();
         $verification->request = new Request($data);
         $response = $verification->verifyServices([
-            'facebook' => 'facebook_token'
+            'facebook' => 'facebook_token',
         ]);
 
         $this->assertInstanceOf(Response::class, $response);

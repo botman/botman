@@ -17,7 +17,7 @@ trait VerifiesServices
     public function verifyServices($services = null, $weChatVerification = null)
     {
         // fallback
-        if (!is_array($services)) {
+        if (! is_array($services)) {
             $services = ['facebook' => $services];
         }
         $services['we_chat'] = $weChatVerification;
