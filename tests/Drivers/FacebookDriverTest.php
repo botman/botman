@@ -36,8 +36,9 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver($request);
         $this->assertFalse($driver->matchesRequest());
 
+        $signature = 'sha1='.hash_hmac('sha1', $request, '');
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
-        $driver = $this->getDriver($request);
+        $driver = $this->getDriver($request, ['facebook_token' => 'Foo'], $signature);
         $this->assertTrue($driver->matchesRequest());
 
         $config = ['facebook_token' => 'Foo', 'facebook_app_secret' => 'Bar'];
