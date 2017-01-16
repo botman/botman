@@ -500,7 +500,7 @@ class BotMan
      */
     protected function isChannelValid($givenChannel, $allowedChannel)
     {
-        return ($givenChannel == $allowedChannel || $allowedChannel === null);
+        return $givenChannel == $allowedChannel || $allowedChannel === null;
     }
 
     /**
