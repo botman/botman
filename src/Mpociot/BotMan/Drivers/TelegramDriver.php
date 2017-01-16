@@ -91,7 +91,7 @@ class TelegramDriver extends Driver
      */
     public function isBot()
     {
-        return $this->event->has('entities');
+        return false;
     }
 
     /**

@@ -116,25 +116,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertFalse($driver->isBot());
-
-        $driver = $this->getDriver([
-            'update_id' => '1234567890',
-            'message' => [
-                'message_id' => '123',
-                'from' => [
-                    'id' => 'from_id',
-                ],
-                'chat' => [
-                    'id' => 'chat_id',
-                ],
-                'date' => '1480369277',
-                'text' => 'Telegram Text',
-                'entities' => [
-                    'foo',
-                ],
-            ],
-        ]);
-        $this->assertTrue($driver->isBot());
     }
 
     /** @test */
