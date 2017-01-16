@@ -875,28 +875,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_have_group_prefixes()
-    {
-        $called = false;
-
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'hello bar',
-            ],
-        ]);
-
-        $botman->group(['prefix' => 'hello '], function ($botman) use (&$called) {
-            $botman->hears('bar', function ($bot) use (&$called) {
-                $called = true;
-            });
-        });
-        $botman->listen();
-
-        $this->assertTrue($called);
-    }
-
-    /** @test */
     public function it_applies_middleware_only_on_specific_commands()
     {
         $botman = $this->getBot([

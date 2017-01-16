@@ -19,9 +19,6 @@ class Command
     /** @var string */
     protected $driver;
 
-    /** @var string */
-    protected $prefix = '';
-
     /** @var array */
     protected $middleware = [];
 
@@ -53,10 +50,6 @@ class Command
 
         if (isset($attributes['driver'])) {
             $this->driver($attributes['driver']);
-        }
-
-        if (isset($attributes['prefix'])) {
-            $this->prefix = $attributes['prefix'];
         }
     }
 
@@ -105,7 +98,7 @@ class Command
     public function toArray()
     {
         return [
-            'pattern' => $this->prefix.$this->pattern,
+            'pattern' => $this->pattern,
             'callback' => $this->callback,
             'driver' => $this->driver,
             'middleware' => $this->middleware,
