@@ -870,13 +870,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['channel' => 'C12345'], function($botman) use (&$called_one) {
+        $botman->group(['channel' => 'C12345'], function ($botman) use (&$called_one) {
             $botman->hears('foo', function ($bot) use (&$called_one) {
                 $called_one = true;
             });
         });
 
-        $botman->group(['channel' => 'C123456'], function($botman) use (&$called_two) {
+        $botman->group(['channel' => 'C123456'], function ($botman) use (&$called_two) {
             $botman->hears('foo', function ($bot) use (&$called_two) {
                 $called_two = true;
             });
