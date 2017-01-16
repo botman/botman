@@ -70,10 +70,6 @@ class BotMan
     /** @var bool */
     protected $loadedConversation = false;
 
-    const DIRECT_MESSAGE = 'direct_message';
-
-    const PUBLIC_CHANNEL = 'public_channel';
-
     /**
      * BotMan constructor.
      * @param CacheInterface $cache
@@ -245,7 +241,7 @@ class BotMan
                 if (! $this->isBot() &&
                     $this->isMessageMatching($message, $pattern, $matches) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->isChannelValid($message->getChannel(), $messageData['in']) &&
+                    $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
                     $this->message = $message;
@@ -504,17 +500,7 @@ class BotMan
      */
     protected function isChannelValid($givenChannel, $allowedChannel)
     {
-        /*
-         * If the Slack channel starts with a "D" it's a direct message,
-         * if it starts with a "C" it is a public channel.
-         */
-        if ($allowedChannel === self::DIRECT_MESSAGE) {
-            return strtolower($givenChannel[0]) === 'd';
-        } elseif ($allowedChannel === self::PUBLIC_CHANNEL) {
-            return strtolower($givenChannel[0]) === 'c';
-        }
-
-        return true;
+        return ($givenChannel == $allowedChannel || $allowedChannel === null);
     }
 
     /**

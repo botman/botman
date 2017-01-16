@@ -10,12 +10,16 @@ All notable changes to this project will be documented in this file.
 ```php
 $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 ```
+- Added ability to listen only on specific drivers or channels.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
 - Fixed SlackRTM driver to respond using the RTM API (Fixes issues #99 and #67).
 - Moved listening to Facebook Postback payloads into a separate driver (FacebookPostbackDriver) so it does not interfere with normal user text
 - Correctly handle Skype group chats #128
+
+### Removed
+- Removed ability to only listen to direct messages / public channels as this was a relic of the old `slackbot` package.
 
 ## [1.3.0]
 ### Added

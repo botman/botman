@@ -226,7 +226,6 @@ BotMan provides a `hears()` function, which will listen to specific patterns in 
 |--- |---
 | pattern | A string with a regular expressions to match
 | callback | Callback function or `Classname@method` notation that receives a BotMan object, as well as additional matching regular expression parameters
-| in | Defines where the Bot should listen for this message. Can be either `BotMan::DIRECT_MESSAGE` or `BotMan::PUBLIC_CHANNEL`
 
 ```php
 $botman->hears('keyword', function(BotMan $bot) {

@@ -344,78 +344,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_hears_in_public_channel_only()
-    {
-        $called = false;
-
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'D12345',
-                'text' => 'foo',
-            ],
-        ]);
-
-        $botman->hears('foo', function ($bot) use (&$called) {
-            $called = true;
-        })->in(BotMan::PUBLIC_CHANNEL);
-        $botman->listen();
-        $this->assertFalse($called);
-
-        $called = false;
-
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'C12345',
-                'text' => 'foo',
-            ],
-        ]);
-
-        $botman->hears('foo', function ($bot) use (&$called) {
-            $called = true;
-        })->in(BotMan::PUBLIC_CHANNEL);
-        $botman->listen();
-        $this->assertTrue($called);
-    }
-
-    /** @test */
-    public function it_hears_in_private_channel_only()
-    {
-        $called = false;
-
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-                'channel' => 'C12345',
-            ],
-        ]);
-
-        $botman->hears('foo', function ($bot) use (&$called) {
-            $called = true;
-        })->in(BotMan::DIRECT_MESSAGE);
-        $botman->listen();
-        $this->assertFalse($called);
-
-        $called = false;
-
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-                'channel' => 'D12345',
-            ],
-        ]);
-
-        $botman->hears('foo', function ($bot) use (&$called) {
-            $called = true;
-        })->in(BotMan::DIRECT_MESSAGE);
-        $botman->listen();
-        $this->assertTrue($called);
-    }
-
-    /** @test */
     public function it_passes_itself_to_the_closure()
     {
         $called = false;
@@ -896,6 +824,68 @@ class BotManTest extends PHPUnit_Framework_TestCase
         })->middleware(new TestMiddleware());
 
         $botman->listen();
+    }
+
+    /** @test */
+    public function it_only_listens_on_specific_channels()
+    {
+        $called_one = false;
+        $called_two = false;
+        $called_group = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called_one) {
+            $called_one = true;
+        })->channel('C12345');
+
+        $botman->hears('foo', function ($bot) use (&$called_two) {
+            $called_two = true;
+        })->channel('C123456');
+
+        $botman->listen();
+
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
+    }
+
+    /** @test */
+    public function it_only_listens_on_specific_channels_in_group()
+    {
+        $called_one = false;
+        $called_two = false;
+        $called_group = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'C12345',
+                'text' => 'foo',
+            ],
+        ]);
+
+        $botman->group(['channel' => 'C12345'], function($botman) use (&$called_one) {
+            $botman->hears('foo', function ($bot) use (&$called_one) {
+                $called_one = true;
+            });
+        });
+
+        $botman->group(['channel' => 'C123456'], function($botman) use (&$called_two) {
+            $botman->hears('foo', function ($bot) use (&$called_two) {
+                $called_two = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
     }
 
     /** @test */
