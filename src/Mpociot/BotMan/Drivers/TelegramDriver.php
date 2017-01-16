@@ -80,7 +80,7 @@ class TelegramDriver extends Driver
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
 
-            return [new Message($callback->get('data'), $callback->get('from')['id'], $callback->get('message')['chat']['id'], $callback->get('messsage'))];
+            return [new Message($callback->get('data'), $callback->get('from')['id'], $callback->get('message')['chat']['id'], $callback->get('message'))];
         } else {
             return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event)];
         }

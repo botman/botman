@@ -217,6 +217,36 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_payload_from_interactive_messages()
+    {
+        $payload = [
+            'message_id' => '123',
+            'from' => [
+                'id' => 'from_id',
+            ],
+            'chat' => [
+                'id' => 'chat_id',
+            ],
+            'date' => '1480369277',
+            'text' => 'Telegram Text',
+        ];
+
+        $driver = $this->getDriver([
+            'update_id' => '1234567890',
+            'callback_query' => [
+                'id' => '11717237123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'message' => $payload,
+            ],
+            'data' => 'FooBar',
+        ]);
+
+        $this->assertSame($payload, $driver->getMessages()[0]->getPayload());
+    }
+
+    /** @test */
     public function it_returns_answer_from_interactive_messages_and_edits_original_message()
     {
         $responseData = [
