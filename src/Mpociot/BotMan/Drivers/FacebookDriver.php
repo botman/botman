@@ -54,37 +54,11 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
-        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
-            return isset($msg['message']) && isset($msg['message']['text']);
-        });
+        if (! $this->config->has('facebook_app_secret')) {
+            return $this->event->has('messaging');
+        }
 
-        return ! $messages->isEmpty() && $validSignature;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function validateSignature()
-    {
-        return hash_equals($this->signature, 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
-    }
-
-    /**
-     * @param Message $matchingMessage
-     * @return void
-     */
-    public function types(Message $matchingMessage)
-    {
-        $parameters = [
-            'recipient' => [
-                'id' => $matchingMessage->getChannel(),
-            ],
-            'access_token' => $this->config->get('facebook_token'),
-            'sender_action' => 'typing_on',
-        ];
-
-        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
+        return $this->signature == 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
     }
 
     /**
@@ -113,8 +87,10 @@ class FacebookDriver extends Driver
     {
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
-            if (isset($msg['message']) && isset($msg['message']['text'])) {
+            if (isset($msg['message'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            } elseif (isset($msg['postback'])) {
+                return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
 
             return new Message('', '', '');
@@ -190,6 +166,14 @@ class FacebookDriver extends Driver
                     'type' => 'image',
                     'payload' => [
                         'url' => $message->getImage(),
+                    ],
+                ];
+            } elseif(! is_null($message->getVideo())) {
+                unset($parameters['message']['text']);
+                $parameters['message']['attachment'] = [
+                    'type' => 'video',
+                    'payload' => [
+                        'url' => $message->getVideo(),
                     ],
                 ];
             } else {
