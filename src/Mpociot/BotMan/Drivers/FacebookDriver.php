@@ -218,4 +218,3 @@ class FacebookDriver extends Driver
         return ! is_null($this->config->get('facebook_token'));
     }
 }
-0
