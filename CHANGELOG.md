@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 ```
 - Added ability to listen only on specific drivers or channels.
+- Added `repeat()` method to conversation objects to repeat the last asked question.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
