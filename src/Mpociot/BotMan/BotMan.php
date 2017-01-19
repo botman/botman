@@ -397,7 +397,7 @@ class BotMan
             'question' => serialize($question),
             'additionalParameters' => serialize($additionalParameters),
             'next' => $this->prepareCallbacks($next),
-            'time' => time()
+            'time' => time(),
         ], 30);
     }
 
@@ -411,6 +411,7 @@ class BotMan
         if (is_null($message)) {
             $message = $this->getMessage();
         }
+
         return $this->cache->get($message->getConversationIdentifier());
     }
 
