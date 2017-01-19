@@ -86,6 +86,5 @@ class TestDriver implements DriverInterface
 
     public function dummyMethod()
     {
-        
     }
 }
