@@ -12,4 +12,9 @@ class TestConversation extends Conversation
     public function run()
     {
     }
+
+    protected function _throwException($message)
+    {
+        throw new \Exception($message);
+    }
 }

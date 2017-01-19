@@ -43,11 +43,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->cache = new ArrayCache();
     }
 
-    protected function _throwException($message)
-    {
-        throw new \Exception($message);
-    }
-
     protected function getBot($responseData)
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');

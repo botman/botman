@@ -33,6 +33,9 @@ class BotMan
     /** @var string */
     protected $driverName;
 
+    /** @var array|null */
+    protected $currentConversationData;
+
     /**
      * Messages to listen to.
      * @var array
@@ -384,13 +387,47 @@ class BotMan
     /**
      * @param Conversation $instance
      * @param array|Closure $next
+     * @param string|Question $question
+     * @param array $additionalParameters
      */
-    public function storeConversation(Conversation $instance, $next)
+    public function storeConversation(Conversation $instance, $next, $question = null, $additionalParameters = [])
     {
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
+            'question' => serialize($question),
+            'additionalParameters' => serialize($additionalParameters),
             'next' => $this->prepareCallbacks($next),
+            'time' => time()
         ], 30);
+    }
+
+    /**
+     * Get a stored conversation array from the cache for a given message.
+     * @param null|Message $message
+     * @return array
+     */
+    public function getStoredConversation($message = null)
+    {
+        if (is_null($message)) {
+            $message = $this->getMessage();
+        }
+        return $this->cache->get($message->getConversationIdentifier());
+    }
+
+    /**
+     * Remove a stored conversation array from the cache for a given message.
+     * @param null|Message $message
+     * @return array
+     */
+    public function removeStoredConversation($message = null)
+    {
+        /*
+         * Only remove it from the cache if it was not modified
+         * after we loaded the data from the cache.
+         */
+        if ($this->getStoredConversation($message) == $this->currentConversationData) {
+            $this->cache->pull($this->message->getConversationIdentifier());
+        }
     }
 
     /**
@@ -449,13 +486,14 @@ class BotMan
         if ($this->isBot() === false) {
             foreach ($this->getMessages() as $message) {
                 if ($this->cache->has($message->getConversationIdentifier())) {
-                    $convo = $this->cache->pull($message->getConversationIdentifier());
+                    $convo = $this->getStoredConversation($message);
                     $next = false;
                     $parameters = [];
                     if (is_array($convo['next'])) {
                         foreach ($convo['next'] as $callback) {
                             if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
                                 $this->message = $message;
+                                $this->currentConversationData = $convo;
                                 $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
                                 $this->matches = $parameters;
                                 $next = $this->unserializeClosure($callback['callback']);
@@ -464,15 +502,20 @@ class BotMan
                         }
                     } else {
                         $this->message = $message;
+                        $this->currentConversationData = $convo;
                         $next = $this->unserializeClosure($convo['next']);
                     }
 
                     if (is_callable($next)) {
+                        if ($next instanceof SerializableClosure) {
+                            $next = $next->getClosure()->bindTo($convo['conversation'], $convo['conversation']);
+                        }
                         array_unshift($parameters, $this->getConversationAnswer());
                         array_push($parameters, $convo['conversation']);
                         call_user_func_array($next, $parameters);
                         // Mark conversation as loaded to avoid triggering the fallback method
                         $this->loadedConversation = true;
+                        $this->removeStoredConversation();
                     }
                 }
             }
