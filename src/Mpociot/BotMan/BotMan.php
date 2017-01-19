@@ -591,6 +591,20 @@ class BotMan
     }
 
     /**
+     * @param string $name
+     * @param mixed $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->getDriver(), $name)) {
+            return call_user_func_array([$this->getDriver(), $name], $arguments);
+        }
+
+        throw new \BadMethodCallException('Method ['.$name.'] does not exit.');
+    }
+
+    /**
      * @return array
      */
     public function __sleep()

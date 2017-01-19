@@ -1102,4 +1102,20 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->reply('foo', []);
     }
+
+    /** @test */
+    public function it_passes_unknown_methods_to_the_driver()
+    {
+        $driver = m::mock(TestDriver::class);
+        $driver->shouldReceive('dummyMethod')
+            ->once()
+            ->with('bar', 'baz');
+
+        DriverManager::loadDriver(TestDriver::class);
+
+        $botman = $this->getBot('');
+        $botman->setDriver($driver);
+
+        $botman->dummyMethod('bar', 'baz');
+    }
 }

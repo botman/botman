@@ -83,4 +83,9 @@ class TestDriver implements DriverInterface
     {
         return 'Test';
     }
+
+    public function dummyMethod()
+    {
+        
+    }
 }
