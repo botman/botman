@@ -2,13 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Illuminate\Support\Collection;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Template;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 class FacebookDriver extends Driver
 {
@@ -31,10 +32,10 @@ class FacebookDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = Collection::make((array) $this->payload->get('entry')[0]);
+        $this->payload   = new ParameterBag((array) json_decode($request->getContent(), true));
+        $this->event     = Collection::make((array) $this->payload->get('entry')[0]);
         $this->signature = $request->headers->get('X_HUB_SIGNATURE', '');
-        $this->content = $request->getContent();
+        $this->content   = $request->getContent();
     }
 
     /**
@@ -54,12 +55,12 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
-        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+        $validSignature = !$this->config->has('facebook_app_secret') || $this->validateSignature();
+        $messages       = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['text']);
         });
 
-        return ! $messages->isEmpty() && $validSignature;
+        return !$messages->isEmpty() && $validSignature;
     }
 
     /**
@@ -67,7 +68,7 @@ class FacebookDriver extends Driver
      */
     protected function validateSignature()
     {
-        return hash_equals($this->signature, 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
+        return hash_equals($this->signature, 'sha1=' . hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
     }
 
     /**
@@ -77,10 +78,10 @@ class FacebookDriver extends Driver
     public function types(Message $matchingMessage)
     {
         $parameters = [
-            'recipient' => [
+            'recipient'     => [
                 'id' => $matchingMessage->getChannel(),
             ],
-            'access_token' => $this->config->get('facebook_token'),
+            'access_token'  => $this->config->get('facebook_token'),
             'sender_action' => 'typing_on',
         ];
 
@@ -146,17 +147,19 @@ class FacebookDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $questionData = $question->toArray();
-        $replies = Collection::make($question->getButtons())->map(function ($button) {
+        $buttonArray  = $question->getButtons();
+
+        $replies = Collection::make($buttonArray)->map(function ($button) {
             return [
                 'content_type' => 'text',
-                'title' => $button['text'],
-                'payload' => $button['value'],
-                'image_url' => $button['image_url'],
+                'title'        => $button['text'],
+                'payload'      => $button['value'],
+                'image_url'    => $button['image_url'],
             ];
         });
 
         return [
-            'text' => $questionData['text'],
+            'text'          => $questionData['text'],
             'quick_replies' => $replies->toArray(),
         ];
     }
@@ -173,7 +176,7 @@ class FacebookDriver extends Driver
             'recipient' => [
                 'id' => $matchingMessage->getChannel(),
             ],
-            'message' => [
+            'message'   => [
                 'text' => $message,
             ],
         ], $additionalParameters);
@@ -183,19 +186,22 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
+        } elseif ($message instanceof Template) {
+            $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
-            if (! is_null($message->getImage())) {
+            /** @todo add Audio & File content_types **/
+            if (!is_null($message->getImage())) {
                 unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
-                    'type' => 'image',
+                    'type'    => 'image',
                     'payload' => [
                         'url' => $message->getImage(),
                     ],
                 ];
-            } elseif (! is_null($message->getVideo())) {
+            } elseif (!is_null($message->getVideo())) {
                 unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
-                    'type' => 'video',
+                    'type'    => 'video',
                     'payload' => [
                         'url' => $message->getVideo(),
                     ],
@@ -207,7 +213,7 @@ class FacebookDriver extends Driver
 
         $parameters['access_token'] = $this->config->get('facebook_token');
 
-        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
+        return $this->http->post('https://graph.facebook.com/v2.8/me/messages', [], $parameters);
     }
 
     /**
@@ -215,6 +221,6 @@ class FacebookDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('facebook_token'));
+        return !is_null($this->config->get('facebook_token'));
     }
 }

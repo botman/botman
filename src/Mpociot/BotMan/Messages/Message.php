@@ -21,7 +21,7 @@ class Message
     public function __construct($message = null, $image = null)
     {
         $this->message = $message;
-        $this->image = $image;
+        $this->image   = $image;
     }
 
     /**
@@ -35,59 +35,29 @@ class Message
     }
 
     /**
-     * @param string $message
-     * @return $this
+     * Shorter version of setter/getter methods
+     * $Message->video($video);
+     * will set $this->video object and
+     * $Message->getVideo();
+     * will return $this->video object
+     *
+     * @param string $methodName
+     * @param array #arguments
+     * @return Mixed
      */
-    public function message($message)
+    public function __call($methodName, $arguments)
     {
-        $this->message = $message;
-
-        return $this;
+        // if get<Method> is requested
+        if (strpos($methodName, "get") !== false) {
+            $normilizedMethodName = strtolower(str_replace("get", "", $methodName));
+            // check if object is set and return
+            if (isset($this->{$normilizedMethodName})) {
+                return $this->{$normilizedMethodName};
+            }
+        } else {
+            $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
+            return $this;
+        }
     }
-
-    /**
-     * @param string $image
-     * @return $this
-     */
-    public function image($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @param string $video
-     * @return $this
-     */
-    public function video($video)
-    {
-        $this->video = $video;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVideo()
-    {
-        return $this->video;
-    }
+   
 }
