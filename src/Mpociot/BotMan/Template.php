@@ -44,6 +44,7 @@ class Template implements JsonSerializable
     public function __call($methodName, $arguments)
     {
         $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
+
         return $this;
     }
 
