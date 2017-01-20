@@ -66,4 +66,4 @@ class Message
  * @method string getMessage()
  * @method string getImage()
  * @method string getVideo()
-*/
+ */
