@@ -18,8 +18,6 @@ class Element implements JsonSerializable
     private $webview_height_ratio = 'full';
 
     /**
-     * @param string $text
-     *
      * @return static
      */
     public static function create($title)

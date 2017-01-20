@@ -18,8 +18,6 @@ class Template implements JsonSerializable
     private $webview_height_ratio = 'full';
 
     /**
-     * @param string $text
-     *
      * @return static
      */
     public static function create($template_type = 'generic')
@@ -60,7 +58,6 @@ class Template implements JsonSerializable
     }
 
     /**
-     * @param Button $button
      * @return $this
      */
     public function addElement(Element $element)

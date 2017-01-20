@@ -56,7 +56,7 @@ class FacebookDriver extends Driver
     public function matchesRequest()
     {
         $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
-        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+        $messages = Collection::make($this->event->get('messaging'))->filter(function($msg) {
             return isset($msg['message']) && isset($msg['message']['text']);
         });
 
@@ -113,7 +113,7 @@ class FacebookDriver extends Driver
     public function getMessages()
     {
         $messages = Collection::make($this->event->get('messaging'));
-        $messages = $messages->transform(function ($msg) {
+        $messages = $messages->transform(function($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
@@ -149,7 +149,7 @@ class FacebookDriver extends Driver
         $questionData = $question->toArray();
         $buttonArray = $question->getButtons();
 
-        $replies = Collection::make($buttonArray)->map(function ($button) {
+        $replies = Collection::make($buttonArray)->map(function($button) {
             return [
                 'content_type' => 'text',
                 'title' => $button['text'],
@@ -190,7 +190,7 @@ class FacebookDriver extends Driver
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             /* @todo add Audio & File content_types */
-            if (! is_null($message->getImage())) {
+            if ( ! is_null($message->getImage())) {
                 unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
                     'type' => 'image',
@@ -198,7 +198,7 @@ class FacebookDriver extends Driver
                         'url' => $message->getImage(),
                     ],
                 ];
-            } elseif (! is_null($message->getVideo())) {
+            } elseif ( ! is_null($message->getVideo())) {
                 unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
                     'type' => 'video',
