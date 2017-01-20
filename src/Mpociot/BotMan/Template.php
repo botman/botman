@@ -96,7 +96,7 @@ class Template implements JsonSerializable
                 'type' => 'template',
                 'payload' => [
                     'template_type' => isset($this->template_type) ? $this->template_type : 'generic',
-                    'elements' => $this->elements
+                    'elements' => $this->elements,
                 ],
             ],
         ];

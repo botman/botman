@@ -56,7 +56,7 @@ class Message
             }
         } else {
             $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
-            
+
             return $this;
         }
     }
