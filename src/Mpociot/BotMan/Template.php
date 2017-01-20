@@ -91,15 +91,15 @@ class Template implements JsonSerializable
      */
     public function toArray()
     {
-        return array(
-            'attachment' => array(
-                'type'    => 'template',
-                'payload' => array(
+        return [
+            'attachment' => [
+                'type' => 'template',
+                'payload' => [
                     'template_type' => isset($this->template_type) ? $this->template_type : 'generic',
-                    'elements'      => $this->elements
-                ),
-            ),
-        );
+                    'elements' => $this->elements
+                ],
+            ],
+        ];
     }
 
     /**

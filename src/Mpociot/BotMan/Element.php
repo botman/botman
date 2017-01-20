@@ -44,6 +44,7 @@ class Element implements JsonSerializable
     public function __call($methodName, $arguments)
     {
         $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
+
         return $this;
     }
 
@@ -57,6 +58,7 @@ class Element implements JsonSerializable
 
         return $this;
     }
+
     /**
      * @param Button $button
      * @return $this
@@ -91,17 +93,17 @@ class Element implements JsonSerializable
     public function toArray()
     {
         return array(
-            'title'          => isset($this->title) ? $this->title : '',
-            'image_url'      => isset($this->image_url) ? $this->image_url : '',
-            'subtitle'       => isset($this->subtitle) ? $this->subtitle : '',
+            'title' => isset($this->title) ? $this->title : '',
+            'image_url' => isset($this->image_url) ? $this->image_url : '',
+            'subtitle' => isset($this->subtitle) ? $this->subtitle : '',
             'default_action' => array(
-                'type'                 => 'web_url',
-                'url'                  => isset($this->url) ? $this->url : '',
+                'type' => 'web_url',
+                'url' => isset($this->url) ? $this->url : '',
                 'messenger_extensions' => isset($this->messenger_extensions) ? $this->messenger_extensions : 'true',
                 'webview_height_ratio' => isset($this->webview_height_ratio) ? $this->webview_height_ratio : 'compact',
-                'fallback_url'         => isset($this->fallback_url) ? $this->fallback_url : $this->url,
+                'fallback_url' => isset($this->fallback_url) ? $this->fallback_url : $this->url,
             ),
-            'buttons'        => $this->buttons,
+            'buttons' => $this->buttons,
         );
     }
 
