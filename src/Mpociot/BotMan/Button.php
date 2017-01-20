@@ -18,6 +18,15 @@ class Button implements JsonSerializable
     /** @var string */
     protected $image_url;
 
+    /** @var string */
+    protected $type;
+
+    /** @var string */
+    protected $url;
+
+    /** @var string */
+    protected $title;
+
     /**
      * @param string $text
      *
