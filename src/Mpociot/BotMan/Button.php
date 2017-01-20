@@ -37,14 +37,15 @@ class Button implements JsonSerializable
     }
 
     /**
-     * Shorter version of setter method
+     * Shorter version of setter method.
      * @param string $methodName
      * @param array #arguments
-     * @return Object
+     * @return object
      */
     public function __call($methodName, $arguments)
     {
         $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
+
         return $this;
     }
 
@@ -68,17 +69,17 @@ class Button implements JsonSerializable
     {
         if (isset($this->url)) {
             return [
-                "type"  => isset($this->type) ? $this->type : "web_url",
-                "url"   => $this->url,
-                "title" => isset($this->title) ? $this->title : $this->text,
+                'type' => isset($this->type) ? $this->type : 'web_url',
+                'url' => $this->url,
+                'title' => isset($this->title) ? $this->title : $this->text,
             ];
         } else {
             return [
-                'name'      => isset($this->name) ? $this->name : $this->text,
-                'text'      => $this->text,
+                'name' => isset($this->name) ? $this->name : $this->text,
+                'text' => $this->text,
                 'image_url' => $this->image_url,
-                'type'      => 'button',
-                'value'     => $this->value,
+                'type' => 'button',
+                'value' => $this->value,
             ];
         }
     }

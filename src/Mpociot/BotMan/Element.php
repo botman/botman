@@ -15,7 +15,7 @@ class Element implements JsonSerializable
     /** @var object */
     protected $buttons;
 
-    private $webview_height_ratio = "full";
+    private $webview_height_ratio = 'full';
 
     /**
      * @param string $text
@@ -36,10 +36,10 @@ class Element implements JsonSerializable
     }
 
     /**
-     * Shorter version of setter method
+     * Shorter version of setter method.
      * @param string $methodName
      * @param array $arguments
-     * @return this
+     * @return $this
      */
     public function __call($methodName, $arguments)
     {
@@ -91,17 +91,17 @@ class Element implements JsonSerializable
     public function toArray()
     {
         return array(
-            "title"          => isset($this->title) ? $this->title : "",
-            "image_url"      => isset($this->image_url) ? $this->image_url : "",
-            "subtitle"       => isset($this->subtitle) ? $this->subtitle : "",
-            "default_action" => array(
-                "type"                 => "web_url",
-                "url"                  => isset($this->url) ? $this->url : "",
-                "messenger_extensions" => isset($this->messenger_extensions) ? $this->messenger_extensions : "true",
-                "webview_height_ratio" => isset($this->webview_height_ratio) ? $this->webview_height_ratio : "compact",
-                "fallback_url"         => isset($this->fallback_url) ? $this->fallback_url : $this->url,
+            'title'          => isset($this->title) ? $this->title : '',
+            'image_url'      => isset($this->image_url) ? $this->image_url : '',
+            'subtitle'       => isset($this->subtitle) ? $this->subtitle : '',
+            'default_action' => array(
+                'type'                 => 'web_url',
+                'url'                  => isset($this->url) ? $this->url : '',
+                'messenger_extensions' => isset($this->messenger_extensions) ? $this->messenger_extensions : 'true',
+                'webview_height_ratio' => isset($this->webview_height_ratio) ? $this->webview_height_ratio : 'compact',
+                'fallback_url'         => isset($this->fallback_url) ? $this->fallback_url : $this->url,
             ),
-            "buttons"        => $this->buttons,
+            'buttons'        => $this->buttons,
         );
     }
 

@@ -21,7 +21,7 @@ class Message
     public function __construct($message = null, $image = null)
     {
         $this->message = $message;
-        $this->image   = $image;
+        $this->image = $image;
     }
 
     /**
@@ -39,17 +39,17 @@ class Message
      * $Message->video($video);
      * will set $this->video object and
      * $Message->getVideo();
-     * will return $this->video object
+     * will return $this->video object.
      *
      * @param string $methodName
      * @param array #arguments
-     * @return Mixed
+     * @return mixed
      */
     public function __call($methodName, $arguments)
     {
         // if get<Method> is requested
-        if (strpos($methodName, "get") !== false) {
-            $normilizedMethodName = strtolower(str_replace("get", "", $methodName));
+        if (strpos($methodName, 'get') !== false) {
+            $normilizedMethodName = strtolower(str_replace('get', '', $methodName));
             // check if object is set and return
             if (isset($this->{$normilizedMethodName})) {
                 return $this->{$normilizedMethodName};
@@ -59,5 +59,4 @@ class Message
             return $this;
         }
     }
-   
 }

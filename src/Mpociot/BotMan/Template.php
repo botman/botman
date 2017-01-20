@@ -15,14 +15,14 @@ class Template implements JsonSerializable
     /** @var string */
     protected $name;
 
-    private $webview_height_ratio = "full";
+    private $webview_height_ratio = 'full';
 
     /**
      * @param string $text
      *
      * @return static
      */
-    public static function create($template_type = "generic")
+    public static function create($template_type = 'generic')
     {
         return new static($template_type);
     }
@@ -36,10 +36,10 @@ class Template implements JsonSerializable
     }
 
     /**
-     * Shorter version of setter method
+     * Shorter version of setter method.
      * @param string $methodName
      * @param array $arguments
-     * @return this
+     * @return $this
      */
     public function __call($methodName, $arguments)
     {
@@ -92,11 +92,11 @@ class Template implements JsonSerializable
     public function toArray()
     {
         return array(
-            "attachment" => array(
-                "type"    => "template",
-                "payload" => array(
-                    "template_type" => isset($this->template_type) ? $this->template_type : "generic",
-                    "elements"      => $this->elements
+            'attachment' => array(
+                'type'    => 'template',
+                'payload' => array(
+                    'template_type' => isset($this->template_type) ? $this->template_type : 'generic',
+                    'elements'      => $this->elements
                 ),
             ),
         );
