@@ -42,7 +42,7 @@ class Message
      * will return $this->video object.
      *
      * @param string $methodName
-     * @param array #arguments
+     * @param array $arguments
      * @return mixed
      */
     public function __call($methodName, $arguments)
