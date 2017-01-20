@@ -2,6 +2,11 @@
 
 namespace Mpociot\BotMan\Messages;
 
+/**
+ * @method string getMessage()
+ * @method string getImage()
+ * @method string getVideo()
+ */
 class Message
 {
     /** @var string */
@@ -61,9 +66,3 @@ class Message
         }
     }
 }
-
-/*
- * @method string getMessage()
- * @method string getImage()
- * @method string getVideo()
- */
