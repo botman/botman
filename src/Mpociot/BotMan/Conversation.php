@@ -43,12 +43,15 @@ abstract class Conversation
 
     /**
      * Repeat the previously asked question.
-     * @return $this
+     * @param string|Question $question
      */
-    public function repeat()
+    public function repeat($question = '')
     {
         $conversation = $this->bot->getStoredConversation();
-        $this->ask(unserialize($conversation['question']), unserialize($conversation['next'])->getClosure(), unserialize($conversation['additionalParameters']));
+        if (! $question instanceof Question && ! $question) {
+            $question = unserialize($conversation['question']);
+        }
+        $this->ask($question, unserialize($conversation['next'])->getClosure(), unserialize($conversation['additionalParameters']));
     }
 
     /**

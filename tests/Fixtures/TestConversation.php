@@ -16,6 +16,9 @@ class TestConversation extends Conversation
             if ($answer->getText() === 'repeat') {
                 $this->repeat();
             }
+            if ($answer->getText() === 'repeat_modified') {
+                $this->repeat('This is a modified test question');
+            }
         });
     }
 

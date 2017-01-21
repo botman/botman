@@ -1155,15 +1155,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         /*
          * Now that the first message is saved, fake a reply
          */
-        $data = [
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'repeat',
-            ],
-        ];
-        $botman = $this->getBot($data);
+        $botman = $this->getBot([]);
 
         $driver->shouldReceive('getConversationAnswer')
             ->andReturn(Answer::create('repeat'));
@@ -1174,6 +1166,54 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('reply')
             ->once()
             ->with('This is a test question', m::type(Message::class), []);
+
+        $botman->setDriver($driver);
+
+        $botman->listen();
+    }
+
+    /** @test */
+    public function it_can_repeat_a_modified_question()
+    {
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a test question', m::type(Message::class), []);
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([]);
+
+        $driver->shouldReceive('getConversationAnswer')
+            ->andReturn(Answer::create('repeat_modified'));
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('repeat_modified', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a modified test question', m::type(Message::class), []);
 
         $botman->setDriver($driver);
 
