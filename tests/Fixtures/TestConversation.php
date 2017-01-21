@@ -12,7 +12,7 @@ class TestConversation extends Conversation
      */
     public function run()
     {
-        $this->ask('This is a test question', function(Answer $answer) {
+        $this->ask('This is a test question', function (Answer $answer) {
             if ($answer->getText() === 'repeat') {
                 $this->repeat();
             }
