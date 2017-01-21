@@ -6,6 +6,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
@@ -568,6 +569,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hello again',
             ],
         ]);
+        $botman->listen();
 
         $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
         $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
@@ -611,6 +613,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hello again',
             ],
         ]);
+        $botman->listen();
     }
 
     /** @test */
@@ -662,6 +665,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'token_one',
             ],
         ]);
+        $botman->listen();
 
         $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
         $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
@@ -711,6 +715,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'call me Heisenberg',
             ],
         ]);
+        $botman->listen();
 
         $this->assertSame('Heisenberg', $GLOBALS['answer']);
         $this->assertTrue($GLOBALS['called']);
@@ -1117,5 +1122,61 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->dummyMethod('bar', 'baz');
+    }
+
+    /** @test */
+    public function it_can_repeat_a_question()
+    {
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a test question', m::type(Message::class), []);
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $data = [
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'repeat',
+            ],
+        ];
+        $botman = $this->getBot($data);
+
+        $driver->shouldReceive('getConversationAnswer')
+            ->andReturn(Answer::create('repeat'));
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('repeat', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a test question', m::type(Message::class), []);
+
+        $botman->setDriver($driver);
+
+        $botman->listen();
     }
 }

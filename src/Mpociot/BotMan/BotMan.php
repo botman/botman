@@ -87,8 +87,6 @@ class BotMan
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
-
-        $this->loadActiveConversation();
     }
 
     /**
@@ -222,6 +220,8 @@ class BotMan
      */
     public function listen()
     {
+        $this->loadActiveConversation();
+
         $heardMessage = false;
         foreach ($this->listenTo as $command) {
             $messageData = $command->toArray();
