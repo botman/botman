@@ -12,8 +12,20 @@ class Element implements JsonSerializable
     /** @var string */
     protected $image_url;
 
+    /** @var string */
+    protected $subtitle;
+
+    /** @var string */
+    protected $url;
+
+    /** @var string */
+    protected $fallback_url;
+
     /** @var object */
     protected $buttons;
+
+    /** @var string */
+    protected $messenger_extensions;
 
     private $webview_height_ratio = 'full';
 
