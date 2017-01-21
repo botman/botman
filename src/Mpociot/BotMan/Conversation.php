@@ -43,7 +43,7 @@ abstract class Conversation
 
     /**
      * Repeat the previously asked question.
-     * @param string $question
+     * @param string|Question $question
      */
     public function repeat($question = '')
     {
