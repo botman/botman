@@ -598,6 +598,8 @@ class BotMan
     public function __call($name, $arguments)
     {
         if (method_exists($this->getDriver(), $name)) {
+            // Add the current message to the passed arguments
+            array_push($arguments, $this->getMessage());
             return call_user_func_array([$this->getDriver(), $name], $arguments);
         }
 

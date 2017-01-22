@@ -1114,7 +1114,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(TestDriver::class);
         $driver->shouldReceive('dummyMethod')
             ->once()
-            ->with('bar', 'baz');
+            ->with('bar', 'baz', m::type(Message::class));
 
         DriverManager::loadDriver(TestDriver::class);
 

@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
+use Illuminate\Support\Collection;
 use Mockery as m;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
@@ -511,6 +512,52 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'image_url' => 'imageurl',
             ]]),
         ]);
+    }
+
+    /** @test */
+    public function it_can_reply_in_threads()
+    {
+        $responseData = [
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+                'text' => 'response',
+                'ts' => '1234.5678'
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/chat.postMessage', [], [
+                'token' => 'Foo',
+                'channel' => 'general',
+                'text' => 'Test',
+                'username' => 'ReplyBot',
+                'thread_ts' => '1234.5678',
+                'icon_emoji' => ':dash:',
+                'attachments' => json_encode([[
+                    'image_url' => 'imageurl',
+                ]]),
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('response', '', 'general', Collection::make([
+            'ts' => '1234.5678'
+        ]));
+        $driver->replyInThread('Test', [
+            'username' => 'ReplyBot',
+            'icon_emoji' => ':dash:',
+            'attachments' => json_encode([[
+                'image_url' => 'imageurl',
+            ]]),
+        ], $message);
     }
 
     /** @test */
