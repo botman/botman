@@ -172,6 +172,10 @@ class TelegramDriver extends Driver
                 $endpoint = 'sendPhoto';
                 $parameters['photo'] = $message->getImage();
                 $parameters['caption'] = $message->getMessage();
+            } elseif (! is_null($message->getVideo())) {
+                $endpoint = 'sendVideo';
+                $parameters['video'] = $message->getVideo();
+                $parameters['caption'] = $message->getMessage();
             } else {
                 $parameters['text'] = $message->getMessage();
             }

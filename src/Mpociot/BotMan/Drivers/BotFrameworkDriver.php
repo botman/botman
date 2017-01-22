@@ -159,6 +159,13 @@ class BotFrameworkDriver extends Driver
                         'contentUrl' => $message->getImage(),
                     ],
                 ];
+            } elseif (! is_null($message->getVideo())) {
+                $parameters['attachments'] = [
+                    [
+                        'contentType' => 'video/mp4',
+                        'contentUrl' => $message->getVideo(),
+                    ],
+                ];
             }
         } else {
             $parameters['text'] = $message;

@@ -192,6 +192,14 @@ class FacebookDriver extends Driver
                         'url' => $message->getImage(),
                     ],
                 ];
+            } elseif (! is_null($message->getVideo())) {
+                unset($parameters['message']['text']);
+                $parameters['message']['attachment'] = [
+                    'type' => 'video',
+                    'payload' => [
+                        'url' => $message->getVideo(),
+                    ],
+                ];
             } else {
                 $parameters['message']['text'] = $message->getMessage();
             }

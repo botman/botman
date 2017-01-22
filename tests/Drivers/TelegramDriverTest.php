@@ -523,4 +523,42 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         $message = $driver->getMessages()[0];
         $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
     }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_video()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendVideo', [], [
+                'chat_id' => '12345',
+                'video' => 'http://image.url/foo.mp4',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message);
+    }
 }

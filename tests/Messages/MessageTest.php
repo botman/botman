@@ -32,4 +32,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = Message::create()->image('foo');
         $this->assertSame('foo', $message->getImage());
     }
+
+    /** @test */
+    public function it_can_set_a_videoimage()
+    {
+        $message = Message::create()->video('foo');
+        $this->assertSame('foo', $message->getVideo());
+    }
 }
