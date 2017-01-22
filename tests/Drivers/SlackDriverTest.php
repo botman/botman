@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
-use Illuminate\Support\Collection;
 use Mockery as m;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -522,7 +522,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'user' => 'U0X12345',
                 'channel' => 'general',
                 'text' => 'response',
-                'ts' => '1234.5678'
+                'ts' => '1234.5678',
             ],
         ];
 
@@ -549,7 +549,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('response', '', 'general', Collection::make([
-            'ts' => '1234.5678'
+            'ts' => '1234.5678',
         ]));
         $driver->replyInThread('Test', [
             'username' => 'ReplyBot',

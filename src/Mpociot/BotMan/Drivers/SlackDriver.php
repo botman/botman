@@ -150,9 +150,10 @@ class SlackDriver extends Driver
      * @param $matchingMessage
      * @return $this
      */
-    public function replyInThread($message, $additionalParameters = [], $matchingMessage)
+    public function replyInThread($message, $additionalParameters, $matchingMessage)
     {
         $additionalParameters['thread_ts'] = $matchingMessage->getPayload()->get('ts');
+
         return $this->reply($message, $matchingMessage, $additionalParameters);
     }
 
