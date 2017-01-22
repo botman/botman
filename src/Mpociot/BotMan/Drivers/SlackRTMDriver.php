@@ -121,9 +121,10 @@ class SlackRTMDriver implements DriverInterface
      * @param $matchingMessage
      * @return SlackRTMDriver
      */
-    public function replyInThread($message, $additionalParameters = [], $matchingMessage)
+    public function replyInThread($message, $additionalParameters, $matchingMessage)
     {
         $additionalParameters['thread_ts'] = $matchingMessage->getPayload()->get('ts');
+
         return $this->reply($message, $matchingMessage, $additionalParameters);
     }
 
