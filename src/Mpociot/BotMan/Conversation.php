@@ -51,7 +51,12 @@ abstract class Conversation
         if (! $question instanceof Question && ! $question) {
             $question = unserialize($conversation['question']);
         }
-        $this->ask($question, unserialize($conversation['next'])->getClosure(), unserialize($conversation['additionalParameters']));
+        $next = $conversation['next'];
+        $additionalParameters = unserialize($conversation['additionalParameters']);
+        if (is_string($next)) {
+            $next = unserialize($next)->getClosure();
+        }
+        $this->ask($question, $next, $additionalParameters);
     }
 
     /**

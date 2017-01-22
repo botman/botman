@@ -64,7 +64,6 @@ class BotManFactory
         $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config, $storageDriver);
 
         $client->on('message', function () use ($botman) {
-            $botman->loadActiveConversation();
             $botman->listen();
         });
 

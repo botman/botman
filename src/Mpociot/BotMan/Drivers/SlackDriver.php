@@ -2,14 +2,15 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Question;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackDriver extends Driver
 {
@@ -147,7 +148,7 @@ class SlackDriver extends Driver
     /**
      * @param $message
      * @param array $additionalParameters
-     * @param $matchingMessage
+     * @param Message $matchingMessage
      * @return $this
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage)

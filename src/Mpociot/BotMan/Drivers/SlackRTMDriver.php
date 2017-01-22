@@ -2,13 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Slack\RealTimeClient;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Question;
+use Slack\RealTimeClient;
 
 class SlackRTMDriver implements DriverInterface
 {
@@ -118,7 +119,7 @@ class SlackRTMDriver implements DriverInterface
     /**
      * @param $message
      * @param array $additionalParameters
-     * @param $matchingMessage
+     * @param Message $matchingMessage
      * @return SlackRTMDriver
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage)
