@@ -66,7 +66,7 @@ class Message
      */
     public function getConversationIdentifier()
     {
-        return 'conversation:'.$this->getUser().'-'.$this->getChannel();
+        return 'conversation-'.$this->getUser().'-'.$this->getChannel();
     }
 
     /**

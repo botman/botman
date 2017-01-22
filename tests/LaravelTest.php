@@ -41,7 +41,7 @@ class LaravelTest extends TestCase
         $bot = app('botman');
         $bot->hears('foo', function () {
         });
-        BotMan::storeConversation($conversation, function ($answer) use ($bot) {
+        BotMan::storeConversation($conversation, function ($answer) {
         });
 
         $cached = Cache::get('conversation:-');

@@ -397,7 +397,7 @@ class BotMan
             'question' => serialize($question),
             'additionalParameters' => serialize($additionalParameters),
             'next' => $this->prepareCallbacks($next),
-            'time' => time(),
+            'time' => microtime(),
         ], 30);
     }
 
@@ -426,7 +426,7 @@ class BotMan
          * Only remove it from the cache if it was not modified
          * after we loaded the data from the cache.
          */
-        if ($this->getStoredConversation($message) == $this->currentConversationData) {
+        if ($this->getStoredConversation($message)['time'] == $this->currentConversationData['time']) {
             $this->cache->pull($this->message->getConversationIdentifier());
         }
     }
@@ -509,7 +509,9 @@ class BotMan
 
                     if (is_callable($next)) {
                         if ($next instanceof SerializableClosure) {
-                            $next = $next->getClosure()->bindTo($convo['conversation'], $convo['conversation']);
+                            $conversation = $convo['conversation'];
+                            $conversation->setBot($this);
+                            $next = $next->getClosure()->bindTo($conversation, $conversation);
                         }
                         array_unshift($parameters, $this->getConversationAnswer());
                         array_push($parameters, $convo['conversation']);
@@ -583,14 +585,6 @@ class BotMan
     }
 
     /**
-     * Load driver on wakeup.
-     */
-    public function __wakeup()
-    {
-        $this->driver = DriverManager::loadFromName($this->driverName, $this->config);
-    }
-
-    /**
      * @param string $name
      * @param mixed $arguments
      * @return mixed
@@ -605,24 +599,5 @@ class BotMan
         }
 
         throw new \BadMethodCallException('Method ['.$name.'] does not exit.');
-    }
-
-    /**
-     * @return array
-     */
-    public function __sleep()
-    {
-        $this->driverName = $this->driver->getName();
-
-        return [
-            'payload',
-            'event',
-            'driverName',
-            'storage',
-            'message',
-            'cache',
-            'matches',
-            'config',
-        ];
     }
 }

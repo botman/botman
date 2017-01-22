@@ -497,9 +497,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->storeConversation($conversation, function ($answer) {
         });
 
-        $this->assertTrue($this->cache->has('conversation:UX12345-general'));
+        $this->assertTrue($this->cache->has('conversation-UX12345-general'));
 
-        $cached = $this->cache->get('conversation:UX12345-general');
+        $cached = $this->cache->get('conversation-UX12345-general');
 
         $this->assertSame($conversation, $cached['conversation']);
 
