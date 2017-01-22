@@ -357,6 +357,19 @@ $botman->hears('keyword', function (BotMan $bot) {
 });
 ```
 
+or even video.
+```php
+use Mpociot\BotMan\Messages\Message;
+
+$botman->hears('keyword', function (BotMan $bot) {
+    // Build message object
+    $message = Message::create("Big Buck Bunny")
+                ->video( "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" );
+    // Reply message object
+    $botman->reply($message);
+});
+```
+
 
 Slack-specific fields and attachments:
 
