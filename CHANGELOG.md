@@ -12,6 +12,7 @@ $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 ```
 - Added ability to listen only on specific drivers or channels.
 - Added `repeat()` method to conversation objects to repeat the last asked question.
+- [SlackDriver, SlackRTMDriver] added `replyInThread` method for Slacks new [threaded messaging](https://api.slack.com/docs/message-threading#threads_party) feature.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.
