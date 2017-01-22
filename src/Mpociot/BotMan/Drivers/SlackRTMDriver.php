@@ -2,14 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Collection;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
-use Mpociot\BotMan\Question;
 use Slack\RealTimeClient;
+use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Question;
+use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriver implements DriverInterface
 {
