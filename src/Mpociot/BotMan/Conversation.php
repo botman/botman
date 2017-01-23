@@ -49,7 +49,7 @@ abstract class Conversation
     {
         $conversation = $this->bot->getStoredConversation();
 
-        if (!$question instanceof Question && !$question) {
+        if (! $question instanceof Question && ! $question) {
             $question = unserialize($conversation['question']);
         }
 
