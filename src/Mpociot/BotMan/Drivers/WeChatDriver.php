@@ -27,7 +27,7 @@ class WeChatDriver extends Driver
     public function buildPayload(Request $request)
     {
         try {
-            $xml = simplexml_load_string($request->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
+            $xml = @simplexml_load_string($request->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
             $json = json_encode($xml);
             $data = json_decode($json, true);
         } catch (\Exception $e) {

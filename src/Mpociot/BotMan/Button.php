@@ -18,6 +18,15 @@ class Button implements JsonSerializable
     /** @var string */
     protected $image_url;
 
+    /** @var string */
+    protected $type;
+
+    /** @var string */
+    protected $url;
+
+    /** @var string */
+    protected $title;
+
     /**
      * @param string $text
      *
@@ -37,27 +46,14 @@ class Button implements JsonSerializable
     }
 
     /**
-     * Set the button value.
-     *
-     * @param string $value
-     * @return $this
+     * Shorter version of setter method.
+     * @param string $methodName
+     * @param array #arguments
+     * @return object
      */
-    public function value($value)
+    public function __call($methodName, $arguments)
     {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set the button name (defaults to button text).
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function name($name)
-    {
-        $this->name = $name;
+        $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
 
         return $this;
     }
@@ -80,13 +76,21 @@ class Button implements JsonSerializable
      */
     public function toArray()
     {
-        return [
-            'name' => isset($this->name) ? $this->name : $this->text,
-            'text' => $this->text,
-            'image_url' => $this->image_url,
-            'type' => 'button',
-            'value' => $this->value,
-        ];
+        if (isset($this->url)) {
+            return [
+                'type' => isset($this->type) ? $this->type : 'web_url',
+                'url' => $this->url,
+                'title' => isset($this->title) ? $this->title : $this->text,
+            ];
+        } else {
+            return [
+                'name' => isset($this->name) ? $this->name : $this->text,
+                'text' => $this->text,
+                'image_url' => $this->image_url,
+                'type' => 'button',
+                'value' => $this->value,
+            ];
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Mpociot\BotMan\Drivers;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Template;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -146,7 +147,9 @@ class FacebookDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $questionData = $question->toArray();
-        $replies = Collection::make($question->getButtons())->map(function ($button) {
+        $buttonArray = $question->getButtons();
+
+        $replies = Collection::make($buttonArray)->map(function ($button) {
             return [
                 'content_type' => 'text',
                 'title' => $button['text'],
@@ -183,7 +186,10 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
+        } elseif ($message instanceof Template) {
+            $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
+            /* @todo add Audio & File content_types */
             if (! is_null($message->getImage())) {
                 unset($parameters['message']['text']);
                 $parameters['message']['attachment'] = [
