@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan;
+namespace Mpociot\BotMan\Facebook;
 
 use JsonSerializable;
 
@@ -13,21 +13,13 @@ class Element implements JsonSerializable
     protected $image_url;
 
     /** @var string */
+    protected $item_url;
+
+    /** @var string */
     protected $subtitle;
-
-    /** @var string */
-    protected $url;
-
-    /** @var string */
-    protected $fallback_url;
 
     /** @var object */
     protected $buttons;
-
-    /** @var string */
-    protected $messenger_extensions;
-
-    private $webview_height_ratio = 'full';
 
     /**
      * @return static
@@ -46,14 +38,23 @@ class Element implements JsonSerializable
     }
 
     /**
-     * Shorter version of setter method.
-     * @param string $methodName
-     * @param array $arguments
+     * @param string $title
      * @return $this
      */
-    public function __call($methodName, $arguments)
+    public function title($title)
     {
-        $this->{$methodName} = isset($arguments[0]) ? $arguments[0] : $arguments;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @param string $subtitle
+     * @return $this
+     */
+    public function subtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
 
         return $this;
     }
@@ -70,10 +71,21 @@ class Element implements JsonSerializable
     }
 
     /**
-     * @param Button $button
+     * @param string $item_url
      * @return $this
      */
-    public function addButton(Button $button)
+    public function itemUrl($item_url)
+    {
+        $this->item_url = $item_url;
+
+        return $this;
+    }
+
+    /**
+     * @param ElementButton $button
+     * @return $this
+     */
+    public function addButton(ElementButton $button)
     {
         $this->buttons[] = $button->toArray();
 
@@ -88,7 +100,7 @@ class Element implements JsonSerializable
     {
         if (isset($buttons) && is_array($buttons)) {
             foreach ($buttons as $button) {
-                if ($button instanceof Button) {
+                if ($button instanceof ElementButton) {
                     $this->buttons[] = $button->toArray();
                 }
             }
@@ -103,16 +115,10 @@ class Element implements JsonSerializable
     public function toArray()
     {
         return [
-            'title' => isset($this->title) ? $this->title : '',
-            'image_url' => isset($this->image_url) ? $this->image_url : '',
-            'subtitle' => isset($this->subtitle) ? $this->subtitle : '',
-            'default_action' => [
-                'type' => 'web_url',
-                'url' => isset($this->url) ? $this->url : '',
-                'messenger_extensions' => isset($this->messenger_extensions) ? $this->messenger_extensions : 'true',
-                'webview_height_ratio' => isset($this->webview_height_ratio) ? $this->webview_height_ratio : 'compact',
-                'fallback_url' => isset($this->fallback_url) ? $this->fallback_url : $this->url,
-            ],
+            'title' => $this->title,
+            'image_url' => $this->image_url,
+            'item_url' => $this->item_url,
+            'subtitle' => $this->subtitle,
             'buttons' => $this->buttons,
         ];
     }

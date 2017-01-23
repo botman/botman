@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan;
+namespace Mpociot\BotMan\Facebook;
 
 use JsonSerializable;
 
