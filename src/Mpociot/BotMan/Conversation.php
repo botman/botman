@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Illuminate\Support\Collection;
 
 /**
  * Class Conversation.
@@ -59,7 +60,7 @@ abstract class Conversation
         if (is_string($next)) {
             $next = unserialize($next)->getClosure();
         } elseif (is_array($next)) {
-            $next = collect($next)->map(function ($callback) {
+            $next = Collection::make($next)->map(function ($callback) {
                 $callback['callback'] = unserialize($callback['callback'])->getClosure();
 
                 return $callback;
