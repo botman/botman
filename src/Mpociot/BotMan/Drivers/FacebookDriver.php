@@ -6,6 +6,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Facebook\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
@@ -146,6 +147,7 @@ class FacebookDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $questionData = $question->toArray();
+
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
                 'content_type' => 'text',
@@ -183,6 +185,8 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
+        } elseif ($message instanceof Template) {
+            $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
                 unset($parameters['message']['text']);
