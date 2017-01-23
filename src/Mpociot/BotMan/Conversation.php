@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Illuminate\Support\Collection;
 
 /**
  * Class Conversation.
@@ -48,13 +49,22 @@ abstract class Conversation
     public function repeat($question = '')
     {
         $conversation = $this->bot->getStoredConversation();
+
         if (! $question instanceof Question && ! $question) {
             $question = unserialize($conversation['question']);
         }
+
         $next = $conversation['next'];
         $additionalParameters = unserialize($conversation['additionalParameters']);
+
         if (is_string($next)) {
             $next = unserialize($next)->getClosure();
+        } elseif (is_array($next)) {
+            $next = Collection::make($next)->map(function ($callback) {
+                $callback['callback'] = unserialize($callback['callback'])->getClosure();
+
+                return $callback;
+            })->toArray();
         }
         $this->ask($question, $next, $additionalParameters);
     }
