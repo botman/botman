@@ -108,7 +108,7 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * Convert a Question object into a valid Facebook
+     * Convert a Question object into a valid
      * quick reply response object.
      *
      * @param Question $question
@@ -129,7 +129,7 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * Removes the inlince keyboard from an interactive
+     * Removes the inline keyboard from an interactive
      * message.
      * @param  int $chatId
      * @param  int $messageId
