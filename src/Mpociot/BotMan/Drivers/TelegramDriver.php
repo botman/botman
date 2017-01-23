@@ -108,7 +108,7 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * Convert a Question object into a valid Facebook
+     * Convert a Question object into a valid
      * quick reply response object.
      *
      * @param Question $question
