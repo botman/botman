@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -90,6 +91,15 @@ class BotFrameworkDriver extends Driver
     }
 
     /**
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getChannel(), null, null, Collection::make($matchingMessage->getPayload())->get('from')['name']);
+    }
+
+    /**
      * Convert a Question object into a valid Facebook
      * quick reply response object.
      *
@@ -130,8 +140,6 @@ class BotFrameworkDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $token = $this->getAccessToken();
-
         $parameters = array_merge([
             'type' => 'message',
         ], $additionalParameters);
@@ -173,7 +181,7 @@ class BotFrameworkDriver extends Driver
 
         $headers = [
             'Content-Type:application/json',
-            'Authorization:Bearer '.$token,
+            'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
         $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'https://skype.botframework.com');

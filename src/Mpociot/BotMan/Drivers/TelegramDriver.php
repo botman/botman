@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -38,6 +39,24 @@ class TelegramDriver extends Driver
     public function getName()
     {
         return self::DRIVER_NAME;
+    }
+
+    /**
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        $parameters = [
+            'chat_id' => $matchingMessage->getChannel(),
+            'user_id' => $matchingMessage->getUser(),
+        ];
+
+        $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getChatMember', [], $parameters);
+        $responseData = json_decode($response->getContent(), true);
+        $userData = Collection::make($responseData['result']['user']);
+
+        return new User($userData->get('id'), $userData->get('first_name'), $userData->get('last_name'), $userData->get('username'));
     }
 
     /**
