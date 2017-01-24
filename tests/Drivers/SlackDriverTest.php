@@ -155,6 +155,27 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
     }
 
+    
+
+    /** @test */
+    public function it_returns_the_user_object()
+    {
+        $driver = $this->getDriver([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $message = $driver->getMessages()[0];
+        $user = $driver->getUser($message);
+        
+        $this->assertSame($user->getId(), 'U0X12345');
+        $this->assertNull($user->getFirstName());
+        $this->assertNull($user->getLastName());
+        $this->assertNull($user->getUsername());
+    }
+
     /** @test */
     public function it_detects_bots()
     {

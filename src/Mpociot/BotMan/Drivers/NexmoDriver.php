@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -28,6 +29,15 @@ class NexmoDriver extends Driver
     {
         $this->payload = $request->request->all();
         $this->event = Collection::make($this->payload);
+    }
+
+    /**
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getChannel());
     }
 
     /**

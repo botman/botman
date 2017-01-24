@@ -15,6 +15,7 @@ $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 - [SlackDriver, SlackRTMDriver] added `replyInThread` method for Slacks new [threaded messaging](https://api.slack.com/docs/message-threading#threads_party) feature.
 - Added video message to Facebook, BotFramework and Telegram drivers.
 - Added Facebook [template support](https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template).
+- Added `$botman->getUser()` method to retrieve general user information.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.

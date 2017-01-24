@@ -6,6 +6,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -64,6 +65,18 @@ class WeChatDriver extends Driver
     public function getConversationAnswer(Message $message)
     {
         return Answer::create($message->getMessage());
+    }
+
+    /**
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        $response = $this->http->post('https://api.wechat.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$matchingMessage->getChannel().'&lang=en_US', [], [], [], true);
+        $responseData = json_decode($response->getContent());
+
+        return new User($matchingMessage->getChannel(), null, null, $responseData->nickname);
     }
 
     /**

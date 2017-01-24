@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -143,5 +144,15 @@ class SlackRTMDriver implements DriverInterface
      */
     public function types(Message $matchingMessage)
     {
+    }
+
+    /**
+     * Retrieve User information
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getUser());
     }
 }
