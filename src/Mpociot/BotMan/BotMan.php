@@ -607,13 +607,13 @@ class BotMan
         $this->driver = DriverManager::loadFromName($this->driverName, $this->config);
     }
 
-
     /**
      * @return array
      */
     public function __sleep()
     {
         $this->driverName = $this->driver->getName();
+
         return [
             'payload',
             'event',
