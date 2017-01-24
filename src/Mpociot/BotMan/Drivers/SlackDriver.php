@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -261,5 +262,15 @@ class SlackDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('slack_token'));
+    }
+
+    /**
+     * Retrieve User information
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getUser());
     }
 }

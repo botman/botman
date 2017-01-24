@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -80,5 +81,15 @@ class NullDriver extends Driver
     public function isConfigured()
     {
         return false;
+    }
+
+    /**
+     * Retrieve User information
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User();
     }
 }

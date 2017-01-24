@@ -128,6 +128,28 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_the_user_object()
+    {
+        $driver = $this->getDriver([
+            'msisdn' => '491762012309022505',
+            'to' => '4176260130298',
+            'messageId' => '0C000000075069C7',
+            'text' => 'Hi Julia',
+            'type' => 'text',
+            'keyword' => 'HEY',
+            'message_timestamp' => '2016-11-30 19:27:46',
+        ]);
+
+        $message = $driver->getMessages()[0];
+        $user = $driver->getUser($message);
+        
+        $this->assertSame($user->getId(), '491762012309022505');
+        $this->assertNull($user->getFirstName());
+        $this->assertNull($user->getLastName());
+        $this->assertNull($user->getUsername());
+    }
+
+    /** @test */
     public function it_is_configured()
     {
         $request = m::mock(Request::class.'[getContent]');
