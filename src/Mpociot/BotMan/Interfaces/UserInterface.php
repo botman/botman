@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Interfaces;
 
 interface UserInterface
 {
-
     /**
      * @return string
      */

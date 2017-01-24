@@ -142,7 +142,7 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $user = $driver->getUser($message);
-        
+
         $this->assertSame($user->getId(), '491762012309022505');
         $this->assertNull($user->getFirstName());
         $this->assertNull($user->getLastName());
