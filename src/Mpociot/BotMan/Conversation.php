@@ -85,15 +85,4 @@ abstract class Conversation
      * @return mixed
      */
     abstract public function run();
-
-    /**
-     * @return array
-     */
-    public function __sleep()
-    {
-        $properties = get_object_vars($this);
-        unset($properties['bot']);
-
-        return array_keys($properties);
-    }
 }

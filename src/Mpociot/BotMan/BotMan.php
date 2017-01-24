@@ -509,9 +509,7 @@ class BotMan
 
                     if (is_callable($next)) {
                         if ($next instanceof SerializableClosure) {
-                            $conversation = $convo['conversation'];
-                            $conversation->setBot($this);
-                            $next = $next->getClosure()->bindTo($conversation, $conversation);
+                            $next = $next->getClosure()->bindTo($convo['conversation'], $convo['conversation']);
                         }
                         array_unshift($parameters, $this->getConversationAnswer());
                         array_push($parameters, $convo['conversation']);
@@ -599,5 +597,32 @@ class BotMan
         }
 
         throw new \BadMethodCallException('Method ['.$name.'] does not exit.');
+    }
+
+    /**
+     * Load driver on wakeup.
+     */
+    public function __wakeup()
+    {
+        $this->driver = DriverManager::loadFromName($this->driverName, $this->config);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        $this->driverName = $this->driver->getName();
+        return [
+            'payload',
+            'event',
+            'driverName',
+            'storage',
+            'message',
+            'cache',
+            'matches',
+            'config',
+        ];
     }
 }
