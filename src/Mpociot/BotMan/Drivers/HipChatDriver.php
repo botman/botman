@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -119,5 +120,17 @@ class HipChatDriver extends Driver
     public function isConfigured()
     {
         return ! empty($this->config->get('hipchat_urls'));
+    }
+
+    /**
+     * Retrieve User information
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        $payload = $matchingMessage->getPayload();
+
+        return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null, $payload->get('message')['from']['mention_name']);
     }
 }

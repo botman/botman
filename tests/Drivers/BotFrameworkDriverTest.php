@@ -120,6 +120,19 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_the_user_object()
+    {
+        $driver = $this->getDriver($this->getResponseData());
+        $message = $driver->getMessages()[0];
+        $user = $driver->getUser($message);
+        
+        $this->assertSame($user->getId(), '29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1');
+        $this->assertNull($user->getFirstName());
+        $this->assertNull($user->getLastName());
+        $this->assertSame($user->getUsername(), 'Julia');
+    }
+
+    /** @test */
     public function it_returns_the_user_id()
     {
         $driver = $this->getDriver($this->getResponseData());

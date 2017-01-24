@@ -14,6 +14,7 @@ $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 - Added `repeat()` method to conversation objects to repeat the last asked question.
 - [SlackDriver, SlackRTMDriver] added `replyInThread` method for Slacks new [threaded messaging](https://api.slack.com/docs/message-threading#threads_party) feature.
 - Added video message to Facebook, BotFramework and Telegram drivers.
+- Added `$botman->getUser()` method to retrieve general user information.
 
 ### Changed
 - Fixed an error that occured when responding to the Facebook driver with thumbs up.

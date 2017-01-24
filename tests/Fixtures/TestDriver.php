@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Tests\Fixtures;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -86,5 +87,15 @@ class TestDriver implements DriverInterface
 
     public function dummyMethod()
     {
+    }
+
+    /**
+     * Retrieve User information
+     * @param Message $matchingMessage
+     * @return UserInterface
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User();
     }
 }

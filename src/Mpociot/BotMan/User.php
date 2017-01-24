@@ -2,7 +2,9 @@
 
 namespace Mpociot\BotMan;
 
-class User
+use Mpociot\BotMan\Interfaces\UserInterface;
+
+class User implements UserInterface
 {
     /** @var string */
     protected $id;
@@ -23,7 +25,7 @@ class User
      * @param $last_name
      * @param $username
      */
-    public function __construct($id, $first_name, $last_name, $username)
+    public function __construct($id = null, $first_name = null, $last_name = null, $username = null)
     {
         $this->id = $id;
         $this->first_name = $first_name;

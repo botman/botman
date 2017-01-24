@@ -81,6 +81,36 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_the_user_object()
+    {
+        $driver = $this->getDriver([
+            'event' => 'room_message',
+            'item' => [
+                'message' => [
+                    'from' => [
+                        'id' => '12345',
+                        'name' => 'Marcel',
+                        'mention_name' => 'Marcel_Pociot'
+                    ],
+                    'message' => 'Hi Julia',
+                ],
+                'room' => [
+                    'id' => '98765',
+                ],
+            ],
+            'webhook_id' => '11223344',
+        ]);
+
+        $message = $driver->getMessages()[0];
+        $user = $driver->getUser($message);
+
+        $this->assertSame($user->getId(), '12345');
+        $this->assertSame($user->getFirstName(), 'Marcel');
+        $this->assertNull($user->getLastName());
+        $this->assertSame($user->getUsername(), 'Marcel_Pociot');
+    }
+
+    /** @test */
     public function it_returns_the_message_text()
     {
         $driver = $this->getDriver([
