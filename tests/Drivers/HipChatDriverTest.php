@@ -90,7 +90,7 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
                     'from' => [
                         'id' => '12345',
                         'name' => 'Marcel',
-                        'mention_name' => 'Marcel_Pociot'
+                        'mention_name' => 'Marcel_Pociot',
                     ],
                     'message' => 'Hi Julia',
                 ],

@@ -224,7 +224,7 @@ class FacebookDriver extends Driver
     }
 
     /**
-     * Retrieve User information
+     * Retrieve User information.
      * @param Message $matchingMessage
      * @return User
      */

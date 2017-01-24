@@ -90,7 +90,7 @@ class TestDriver implements DriverInterface
     }
 
     /**
-     * Retrieve User information
+     * Retrieve User information.
      * @param Message $matchingMessage
      * @return UserInterface
      */

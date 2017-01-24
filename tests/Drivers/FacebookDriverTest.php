@@ -80,7 +80,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $user = $driver->getUser($message);
-        
+
         $this->assertSame($user->getId(), '1433960459967306');
         $this->assertNull($user->getFirstName());
         $this->assertNull($user->getLastName());
