@@ -596,7 +596,7 @@ class BotMan
             return call_user_func_array([$this->getDriver(), $name], $arguments);
         }
 
-        throw new \BadMethodCallException('Method ['.$name.'] does not exit.');
+        throw new \BadMethodCallException('Method ['.$name.'] does not exist.');
     }
 
     /**
