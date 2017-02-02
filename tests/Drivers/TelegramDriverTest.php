@@ -273,7 +273,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $html = m::mock(Curl::class);
         $html->shouldReceive('post')
-            ->once()
+            ->twice()
             ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/editMessageReplyMarkup', [], [
                 'chat_id' => 'chat_id',
                 'message_id' => '123',
@@ -289,6 +289,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $this->assertSame('FooBar', $driver->getConversationAnswer($message)->getText());
+        $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
     }
 
     /** @test */

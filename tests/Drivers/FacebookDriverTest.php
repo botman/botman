@@ -246,6 +246,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame('Red', $driver->getConversationAnswer($message)->getText());
+        $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
         $this->assertSame('DEVELOPER_DEFINED_PAYLOAD', $driver->getConversationAnswer($message)->getValue());
     }
 

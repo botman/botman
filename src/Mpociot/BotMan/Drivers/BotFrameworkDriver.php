@@ -62,10 +62,11 @@ class BotFrameworkDriver extends Driver
 
             return Answer::create($message->getMessage())
                 ->setInteractiveReply(true)
+                ->setMessage($message)
                 ->setValue($matches[1]);
         }
 
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**

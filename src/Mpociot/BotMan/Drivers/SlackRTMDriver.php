@@ -63,7 +63,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($this->event->get('text'));
+        return Answer::create($this->event->get('text'))->setMessage($message);
     }
 
     /**

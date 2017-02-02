@@ -64,7 +64,7 @@ class WeChatDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**

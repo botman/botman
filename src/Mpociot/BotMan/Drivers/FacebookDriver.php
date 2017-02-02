@@ -99,11 +99,12 @@ class FacebookDriver extends Driver
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
             return Answer::create($message->getMessage())
+                ->setMessage($message)
                 ->setInteractiveReply(true)
                 ->setValue($payload['message']['quick_reply']['payload']);
         }
 
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**

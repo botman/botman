@@ -83,10 +83,11 @@ class TelegramDriver extends Driver
 
             return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
+                ->setMessage($message)
                 ->setValue($callback->get('data'));
         }
 
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**

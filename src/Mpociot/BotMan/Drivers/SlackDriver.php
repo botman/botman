@@ -78,10 +78,11 @@ class SlackDriver extends Driver
             return Answer::create($this->payload['actions'][0]['name'])
                 ->setInteractiveReply(true)
                 ->setValue($this->payload['actions'][0]['value'])
+                ->setMessage($message)
                 ->setCallbackId($this->payload['callback_id']);
         }
 
-        return Answer::create($this->event->get('text'));
+        return Answer::create($this->event->get('text'))->setMessage($message);
     }
 
     /**

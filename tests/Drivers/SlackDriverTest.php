@@ -271,6 +271,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('response', 'U0X12345', 'general');
         $this->assertSame('response', $driver->getConversationAnswer($message)->getText());
+        $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
     }
 
     /** @test */

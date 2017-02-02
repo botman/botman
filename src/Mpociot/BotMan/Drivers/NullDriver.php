@@ -44,7 +44,7 @@ class NullDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create('');
+        return Answer::create('')->setMessage($message);
     }
 
     /**

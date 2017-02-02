@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests;
 
 use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 
 class AnswerTest extends PHPUnit_Framework_TestCase
@@ -60,5 +61,15 @@ class AnswerTest extends PHPUnit_Framework_TestCase
     {
         $answer = new Answer('foo');
         $this->assertSame('foo', (string) $answer);
+    }
+
+    /** @test */
+    public function it_returns_the_message_object()
+    {
+        $message = new Message('foo', 'bar', 'baz');
+
+        $answer = new Answer('foo');
+        $answer->setMessage($message);
+        $this->assertSame($message, $answer->getMessage());
     }
 }
