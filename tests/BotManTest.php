@@ -318,7 +318,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        })->driver(SlackDriver::DRIVER_NAME);
+        })->driver(SlackDriver::class);
         $botman->listen();
         $this->assertTrue($called);
 

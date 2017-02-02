@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Command
@@ -66,7 +67,12 @@ class Command
      */
     public function driver($driver)
     {
-        $this->driver = $driver;
+        $this->driver = Collection::make($driver)->transform(function($driver) {
+            if (class_exists($driver) && is_subclass_of($driver, DriverInterface::class)) {
+                $driver = rtrim(basename(str_replace('\\', '/', $driver)), 'Driver');
+            }
+            return $driver;
+        });
 
         return $this;
     }
