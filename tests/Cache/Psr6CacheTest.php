@@ -5,8 +5,8 @@ namespace Mpociot\BotMan\Tests;
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Mpociot\BotMan\Cache\Psr6Cache;
+use Psr\Cache\CacheItemPoolInterface;
 
 class Psr6CacheTest extends PHPUnit_Framework_TestCase
 {

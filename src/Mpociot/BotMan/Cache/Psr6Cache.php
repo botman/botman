@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Cache;
 
-use Mpociot\BotMan\Interfaces\CacheInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Mpociot\BotMan\Interfaces\CacheInterface;
 
 class Psr6Cache implements CacheInterface
 {
