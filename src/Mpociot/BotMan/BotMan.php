@@ -383,9 +383,15 @@ class BotMan
 
     /**
      * @param Conversation $instance
+     * @param null|string $channel
+     * @param null|string $driver
      */
-    public function startConversation(Conversation $instance)
+    public function startConversation(Conversation $instance, $channel = null, $driver = null)
     {
+        if (! is_null($channel) && ! is_null($driver)) {
+            $this->message = new Message('', '', $channel);
+            $this->driver = DriverManager::loadFromName($driver, $this->config);
+        }
         $instance->setBot($this);
         $instance->run();
     }
@@ -418,7 +424,7 @@ class BotMan
             $message = $this->getMessage();
         }
 
-        return $this->cache->get($message->getConversationIdentifier());
+        return $this->cache->get($message->getConversationIdentifier(), $this->cache->get($message->getOriginatedConversationIdentifier()));
     }
 
     /**
@@ -492,7 +498,7 @@ class BotMan
         $this->loadedConversation = false;
         if ($this->isBot() === false) {
             foreach ($this->getMessages() as $message) {
-                if ($this->cache->has($message->getConversationIdentifier())) {
+                if ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier())) {
                     $convo = $this->getStoredConversation($message);
                     $next = false;
                     $parameters = [];

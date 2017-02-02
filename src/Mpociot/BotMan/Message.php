@@ -70,6 +70,14 @@ class Message
     }
 
     /**
+     * @return string
+     */
+    public function getOriginatedConversationIdentifier()
+    {
+        return 'conversation:-'.$this->getChannel();
+    }
+
+    /**
      * @param string $key
      * @param mixed $value
      * @return Message

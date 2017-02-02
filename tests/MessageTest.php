@@ -43,6 +43,13 @@ class MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_return_the_originated_conversation_identifier()
+    {
+        $message = new Message('', 'user', 'channel');
+        $this->assertSame('conversation:-channel', $message->getOriginatedConversationIdentifier());
+    }
+
+    /** @test */
     public function it_can_return_the_payload()
     {
         $message = new Message('', '', '', 'payload');
