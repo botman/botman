@@ -436,6 +436,26 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_allows_regular_expressions_with_range_quantifier()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'look at order #123456789',
+            ],
+        ]);
+
+        $botman->hears('.*?#(\d{8,9})\b.*', function ($bot, $orderId) use (&$called) {
+            $called = true;
+            $this->assertSame('123456789', $orderId);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_returns_regular_expression_matches()
     {
         $called = false;

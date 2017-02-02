@@ -21,6 +21,12 @@ class BotMan
 {
     use VerifiesServices, ProvidesStorage;
 
+    /**
+     * regular expression to capture named parameters but not quantifiers
+     * captures {name}, but not {1}, {1,}, or {1,2}.
+     */
+    const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -176,7 +182,7 @@ class BotMan
      */
     protected function compileParameterNames($value)
     {
-        preg_match_all('/\{(.*?)\}/', $value, $matches);
+        preg_match_all(self::PARAM_NAME_REGEX, $value, $matches);
 
         return array_map(function ($m) {
             return trim($m, '?');
@@ -282,7 +288,7 @@ class BotMan
         $answerText = $this->getConversationAnswer()->getValue();
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
+        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/i';
         $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
@@ -596,7 +602,7 @@ class BotMan
             return call_user_func_array([$this->getDriver(), $name], $arguments);
         }
 
-        throw new \BadMethodCallException('Method ['.$name.'] does not exit.');
+        throw new \BadMethodCallException('Method ['.$name.'] does not exist.');
     }
 
     /**

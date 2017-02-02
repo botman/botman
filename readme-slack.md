@@ -51,11 +51,13 @@ require 'vendor/autoload.php';
 
 use Mpociot\BotMan\BotManFactory;
 use React\EventLoop\Factory;
+use Slack\RealTimeClient;
 
 $loop = Factory::create();
-$botman = BotManFactory::createForRTM([
+$client = new RealTimeClient($loop);
+$botman = BotManFactory::createUsingRTM([
     'slack_token' => 'YOUR-SLACK-BOT-TOKEN'
-], $loop);
+], $client);
 
 $botman->hears('keyword', function($bot) {
     $bot->reply('I heard you! :)');

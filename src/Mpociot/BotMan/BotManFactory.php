@@ -53,12 +53,31 @@ class BotManFactory
      */
     public static function createForRTM(array $config, LoopInterface $loop, CacheInterface $cache = null, StorageInterface $storageDriver = null)
     {
-        $cache = new ArrayCache();
+        $client = new RealTimeClient($loop);
+
+        return self::createUsingRTM($config, $client, $cache, $storageDriver);
+    }
+
+    /**
+     * Create a new BotMan instance.
+     *
+     * @param array $config
+     * @param RealTimeClient $client
+     * @param CacheInterface $cache
+     * @param StorageInterface $storageDriver
+     * @return BotMan
+     * @internal param LoopInterface $loop
+     */
+    public static function createUsingRTM(array $config, RealTimeClient $client, CacheInterface $cache = null, StorageInterface $storageDriver = null)
+    {
+        if (empty($cache)) {
+            $cache = new ArrayCache();
+        }
+
         if (empty($storageDriver)) {
             $storageDriver = new FileStorage(__DIR__);
         }
 
-        $client = new RealTimeClient($loop);
         $client->setToken(Collection::make($config)->get('slack_token'));
 
         $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config, $storageDriver);
