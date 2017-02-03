@@ -74,7 +74,7 @@ class Message
      */
     public function getOriginatedConversationIdentifier()
     {
-        return 'conversation:-'.$this->getChannel();
+        return 'conversation--'.$this->getChannel();
     }
 
     /**
