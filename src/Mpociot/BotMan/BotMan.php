@@ -27,6 +27,11 @@ class BotMan
      */
     const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
 
+    /** 
+     * Pattern that messages use to identify image uploads.
+     */
+    const IMAGE_PATTERN = '%%%_IMAGE_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -203,6 +208,11 @@ class BotMan
         $this->listenTo[] = $command;
 
         return $command;
+    }
+
+    public function receivesImage($callback)
+    {
+        return $this->hears(self::IMAGE_PATTERN, $callback);
     }
 
     /**
