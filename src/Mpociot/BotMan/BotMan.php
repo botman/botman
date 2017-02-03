@@ -424,14 +424,19 @@ class BotMan
             $message = $this->getMessage();
         }
 
-        return $this->cache->get($message->getConversationIdentifier(), $this->cache->get($message->getOriginatedConversationIdentifier()));
+        $conversation = $this->cache->get($message->getConversationIdentifier());
+        if (is_null($conversation)) {
+            $conversation = $this->cache->get($message->getOriginatedConversationIdentifier());
+        }
+
+        return $conversation;
     }
 
-    /**
+    *
      * Remove a stored conversation array from the cache for a given message.
      * @param null|Message $message
      * @return array
-     */
+     
     public function removeStoredConversation($message = null)
     {
         /*
