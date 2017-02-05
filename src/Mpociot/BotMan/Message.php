@@ -66,7 +66,7 @@ class Message
      */
     public function getConversationIdentifier()
     {
-        return 'conversation-'.$this->getUser().'-'.$this->getChannel();
+        return 'conversation-'.sha1($this->getUser()).'-'.sha1($this->getChannel());
     }
 
     /**
@@ -74,7 +74,7 @@ class Message
      */
     public function getOriginatedConversationIdentifier()
     {
-        return 'conversation--'.$this->getChannel();
+        return 'conversation--'.sha1($this->getChannel());
     }
 
     /**
