@@ -19,7 +19,7 @@ class ApiAi implements MiddlewareInterface
     /** @var string */
     protected $apiUrl = 'https://api.api.ai/v1/query';
 
-    /** @var boolean */
+    /** @var bool */
     protected $listenForAction = false;
 
     /**
@@ -45,7 +45,7 @@ class ApiAi implements MiddlewareInterface
 
     /**
      * Restrict the middleware to only listen for API.ai actions.
-     * @param  boolean $listen
+     * @param  bool $listen
      * @return $this
      */
     public function listenForAction($listen = true)
