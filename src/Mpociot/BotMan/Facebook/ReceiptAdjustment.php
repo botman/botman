@@ -6,7 +6,6 @@ use JsonSerializable;
 
 class ReceiptAdjustment implements JsonSerializable
 {
-
     /** @var string */
     protected $name;
 

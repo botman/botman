@@ -60,6 +60,17 @@ class ReceiptTemplate implements JsonSerializable
     }
 
     /**
+     * @param $name
+     * @return $this
+     */
+    public function merchantName($name)
+    {
+        $this->merchant_name = $name;
+
+        return $this;
+    }
+
+    /**
      * @param $orderNumber
      * @return $this
      */
@@ -109,7 +120,7 @@ class ReceiptTemplate implements JsonSerializable
      */
     public function timestamp($timestamp)
     {
-        $this->order_number = $timestamp;
+        $this->timestamp = $timestamp;
 
         return $this;
     }

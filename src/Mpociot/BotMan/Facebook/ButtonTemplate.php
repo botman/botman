@@ -6,13 +6,11 @@ use JsonSerializable;
 
 class ButtonTemplate implements JsonSerializable
 {
-
     /** @var  string */
     protected $text;
 
     /** @var array */
     protected $buttons = [];
-
 
     /**
      * @param $text
@@ -23,7 +21,8 @@ class ButtonTemplate implements JsonSerializable
         return new static($text);
     }
 
-    public function __construct($text) {
+    public function __construct($text)
+    {
         $this->text = $text;
     }
 
@@ -45,14 +44,13 @@ class ButtonTemplate implements JsonSerializable
     public function addButtons(array $buttons)
     {
         foreach ($buttons as $button) {
-            if ($button instanceof Element) {
-                $this->$buttons[] = $button->toArray();
+            if ($button instanceof ElementButton) {
+                $this->buttons[] = $button->toArray();
             }
         }
 
         return $this;
     }
-
 
     /**
      * @return array

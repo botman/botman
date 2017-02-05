@@ -22,6 +22,7 @@ class Element implements JsonSerializable
     protected $buttons;
 
     /**
+     * @param $title
      * @return static
      */
     public static function create($title)

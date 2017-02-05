@@ -6,7 +6,6 @@ use JsonSerializable;
 
 class ReceiptSummary implements JsonSerializable
 {
-
     /** @var integer */
     protected $subtotal;
 
@@ -80,7 +79,7 @@ class ReceiptSummary implements JsonSerializable
             'subtotal' => $this->subtotal,
             'shipping_cost' => $this->shipping_cost,
             'total_tax' => $this->total_tax,
-            'total_cost' => $this->total_cost
+            'total_cost' => $this->total_cost,
         ];
     }
 

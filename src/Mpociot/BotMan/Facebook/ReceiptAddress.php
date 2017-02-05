@@ -104,12 +104,12 @@ class ReceiptAddress implements JsonSerializable
     public function toArray()
     {
         return [
-            'street_1'    => $this->street_1,
-            'street_2'    => $this->street_2,
-            'city'        => $this->city,
+            'street_1' => $this->street_1,
+            'street_2' => $this->street_2,
+            'city' => $this->city,
             'postal_code' => $this->postal_code,
-            'state'       => $this->state,
-            'country'     => $this->country
+            'state' => $this->state,
+            'country' => $this->country,
         ];
     }
 
