@@ -4,49 +4,17 @@ namespace Mpociot\BotMan\Facebook;
 
 use JsonSerializable;
 
-class Template implements JsonSerializable
+class GenericTemplate implements JsonSerializable
 {
-    /** @var string */
-    protected $template_type = 'generic';
-
-    /** @var string */
-    protected $text;
-
-    /** @var string */
-    protected $value;
-
-    /** @var string */
-    protected $name;
-
     /** @var array */
     protected $elements = [];
 
     /**
-     * @param string $template_type The PHP template type to use
      * @return static
      */
-    public static function create($template_type = 'generic')
+    public static function create()
     {
-        return new static($template_type);
-    }
-
-    /**
-     * @param string $template_type The PHP template type to use
-     */
-    public function __construct($template_type)
-    {
-        $this->template_type = $template_type;
-    }
-
-    /**
-     * @param string $image_url
-     * @return $this
-     */
-    public function image($image_url)
-    {
-        $this->image_url = $image_url;
-
-        return $this;
+        return new static;
     }
 
     /**
@@ -84,7 +52,7 @@ class Template implements JsonSerializable
             'attachment' => [
                 'type' => 'template',
                 'payload' => [
-                    'template_type' => $this->template_type,
+                    'template_type' => 'generic',
                     'elements' => $this->elements,
                 ],
             ],

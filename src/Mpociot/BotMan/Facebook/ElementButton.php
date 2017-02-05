@@ -5,17 +5,19 @@ namespace Mpociot\BotMan\Facebook;
 class ElementButton
 {
     /** @var string */
+    protected $title;
+
+    /** @var string */
     protected $type = 'web_url';
 
     /** @var string */
     protected $url;
 
     /** @var string */
-    protected $title;
+    protected $payload;
 
     /**
      * @param string $title
-     *
      * @return static
      */
     public static function create($title)
@@ -33,7 +35,6 @@ class ElementButton
 
     /**
      * Set the button URL.
-     *
      * @param string $url
      * @return $this
      */
@@ -46,7 +47,6 @@ class ElementButton
 
     /**
      * Set the button type.
-     *
      * @param string $type
      * @return $this
      */
@@ -58,15 +58,33 @@ class ElementButton
     }
 
     /**
+     * @param $payload
+     * @return $this
+     */
+    public function payload($payload)
+    {
+        $this->payload = $payload;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
     {
-        return [
+        $buttonArray = [
             'type' => $this->type,
-            'url' => $this->url,
             'title' => $this->title,
         ];
+
+        if ($this->type === 'postback') {
+            $buttonArray['payload'] = $this->payload;
+        } else {
+            $buttonArray['url'] = $this->url;
+        }
+
+        return $buttonArray;
     }
 
     /**

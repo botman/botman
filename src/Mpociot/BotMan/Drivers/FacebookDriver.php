@@ -7,7 +7,10 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Facebook\Template;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
+use Mpociot\BotMan\Facebook\GenericTemplate;
+use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
@@ -25,6 +28,14 @@ class FacebookDriver extends Driver
 
     /** @var string */
     protected $content;
+
+    /** @var array */
+    protected $templates = [
+        ButtonTemplate::class,
+        GenericTemplate::class,
+        ListTemplate::class,
+        ReceiptTemplate::class,
+    ];
 
     const DRIVER_NAME = 'Facebook';
 
@@ -74,7 +85,7 @@ class FacebookDriver extends Driver
 
     /**
      * @param Message $matchingMessage
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function types(Message $matchingMessage)
     {
@@ -187,7 +198,7 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
-        } elseif ($message instanceof Template) {
+        } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
