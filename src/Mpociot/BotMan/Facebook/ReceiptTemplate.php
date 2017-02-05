@@ -6,26 +6,25 @@ use JsonSerializable;
 
 class ReceiptTemplate implements JsonSerializable
 {
-
-    /** @var  string */
+    /** @var string */
     protected $recipient_name;
 
-    /** @var  string */
+    /** @var string */
     protected $merchant_name;
 
-    /** @var  string */
+    /** @var string */
     protected $order_number;
 
-    /** @var  string */
+    /** @var string */
     protected $currency;
 
-    /** @var  string */
+    /** @var string */
     protected $payment_method;
 
-    /** @var  string */
+    /** @var string */
     protected $order_url;
 
-    /** @var  string */
+    /** @var string */
     protected $timestamp;
 
     /** @var array */
@@ -219,9 +218,9 @@ class ReceiptTemplate implements JsonSerializable
                     'elements' => $this->elements,
                     'address' => $this->address,
                     'summary' => $this->summary,
-                    'adjustments' => $this->adjustments
+                    'adjustments' => $this->adjustments,
                 ],
-            ]
+            ],
         ];
     }
 

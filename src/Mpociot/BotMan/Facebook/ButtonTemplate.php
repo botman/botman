@@ -6,7 +6,7 @@ use JsonSerializable;
 
 class ButtonTemplate implements JsonSerializable
 {
-    /** @var  string */
+    /** @var string */
     protected $text;
 
     /** @var array */

@@ -9,7 +9,7 @@ class ReceiptAdjustment implements JsonSerializable
     /** @var string */
     protected $name;
 
-    /** @var integer */
+    /** @var int */
     protected $amount;
 
     /**

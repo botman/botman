@@ -6,16 +6,16 @@ use JsonSerializable;
 
 class ReceiptSummary implements JsonSerializable
 {
-    /** @var integer */
+    /** @var int */
     protected $subtotal;
 
-    /** @var integer */
+    /** @var int */
     protected $shipping_cost;
 
-    /** @var integer */
+    /** @var int */
     protected $total_tax;
 
-    /** @var integer */
+    /** @var int */
     protected $total_cost;
 
     /**

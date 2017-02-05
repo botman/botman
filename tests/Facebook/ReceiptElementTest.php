@@ -3,9 +3,8 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptElement;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\ReceiptElement;
 
 class ReceiptElementTest extends PHPUnit_Framework_TestCase
 {
@@ -81,5 +80,3 @@ class ReceiptElementTest extends PHPUnit_Framework_TestCase
         $this->assertSame('http://botman.io/img/botman-body.png', Arr::get($element->toArray(), 'image_url'));
     }
 }
-
-

@@ -3,13 +3,12 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
-use Mpociot\BotMan\Facebook\ButtonTemplate;
-use Mpociot\BotMan\Facebook\ElementButton;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\ElementButton;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
 
 class ButtonTemplateTest extends PHPUnit_Framework_TestCase
 {
-
     /** @test */
     public function it_can_be_created()
     {

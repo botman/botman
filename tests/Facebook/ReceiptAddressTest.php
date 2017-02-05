@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\ReceiptAddress;
 
 class ReceiptAddressTest extends PHPUnit_Framework_TestCase
 {
@@ -81,5 +81,3 @@ class ReceiptAddressTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Botland', Arr::get($address->toArray(), 'country'));
     }
 }
-
-

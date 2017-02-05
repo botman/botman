@@ -3,12 +3,12 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptAdjustment;
 use Mpociot\BotMan\Facebook\ReceiptElement;
 use Mpociot\BotMan\Facebook\ReceiptSummary;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
-use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\ReceiptAdjustment;
 
 class ReceiptTemplateTest extends PHPUnit_Framework_TestCase
 {

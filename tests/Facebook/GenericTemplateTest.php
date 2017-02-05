@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Facebook\Element;
 use Mpociot\BotMan\Facebook\GenericTemplate;
-use PHPUnit_Framework_TestCase;
 
 class GenericTemplateTest extends PHPUnit_Framework_TestCase
 {

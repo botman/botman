@@ -3,10 +3,10 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
-use Mpociot\BotMan\Facebook\Element;
-use Mpociot\BotMan\Facebook\ElementButton;
-use Mpociot\BotMan\Facebook\ListTemplate;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\Element;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ElementButton;
 
 class ListTemplateTest extends PHPUnit_Framework_TestCase
 {

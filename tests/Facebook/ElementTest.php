@@ -3,12 +3,9 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Facebook\Element;
 use Mpociot\BotMan\Facebook\ElementButton;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptElement;
-use Mpociot\BotMan\Facebook\ReceiptSummary;
-use PHPUnit_Framework_TestCase;
 
 class ElementTest extends PHPUnit_Framework_TestCase
 {

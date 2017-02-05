@@ -2,15 +2,15 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Facebook\ButtonTemplate;
-use Mpociot\BotMan\Facebook\ListTemplate;
-use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
+use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
@@ -34,7 +34,7 @@ class FacebookDriver extends Driver
         ButtonTemplate::class,
         GenericTemplate::class,
         ListTemplate::class,
-        ReceiptTemplate::class
+        ReceiptTemplate::class,
     ];
 
     const DRIVER_NAME = 'Facebook';

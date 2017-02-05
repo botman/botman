@@ -3,9 +3,8 @@
 namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptAdjustment;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\ReceiptAdjustment;
 
 class ReceiptAdjustmentTest extends PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Http;
 
-use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Response;
 

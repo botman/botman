@@ -6,7 +6,6 @@ use JsonSerializable;
 
 class ListTemplate implements JsonSerializable
 {
-
     /** @var array */
     protected $elements = [];
 
@@ -85,7 +84,7 @@ class ListTemplate implements JsonSerializable
                     'elements' => $this->elements,
                     'buttons' => [
                         $this->globalButton,
-                    ]
+                    ],
                 ],
             ],
         ];
