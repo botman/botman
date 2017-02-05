@@ -13,6 +13,9 @@ class ElementButton
     /** @var string */
     protected $title;
 
+    /** @var string */
+    protected $payload;
+
     /**
      * @param string $title
      *
@@ -57,16 +60,35 @@ class ElementButton
         return $this;
     }
 
+
+    /**
+     * @param $payload
+     * @return $this
+     */
+    public function payload($payload)
+    {
+        $this->payload = $payload;
+
+        return $this;
+    }
+
     /**
      * @return array
      */
     public function toArray()
     {
-        return [
+        $buttonArray = [
             'type' => $this->type,
-            'url' => $this->url,
             'title' => $this->title,
         ];
+
+        if($this->type === 'postback') {
+            $buttonArray['payload'] = $this->payload;
+        } else {
+            $buttonArray['url'] = $this->url;
+        }
+
+        return $buttonArray;
     }
 
     /**

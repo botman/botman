@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Http;
 
+use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,6 +14,8 @@ class Curl implements HttpInterface
     public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = [], $asJSON = false)
     {
         $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        Log::info('params: ' , $postParameters);
 
         curl_setopt($request, CURLOPT_POST, count($postParameters));
         if ($asJSON === true) {
@@ -61,6 +64,8 @@ class Curl implements HttpInterface
         $info = curl_getinfo($request);
 
         curl_close($request);
+
+        Log::info('CURL body: ' . $body);
 
         $statusCode = $info['http_code'] === 0 ? 500 : $info['http_code'];
 

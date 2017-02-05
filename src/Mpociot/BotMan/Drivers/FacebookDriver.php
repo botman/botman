@@ -2,12 +2,17 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Illuminate\Support\Facades\Log;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ReceiptAdjustment;
+use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Facebook\Template;
+use Mpociot\BotMan\Facebook\GenericTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
@@ -187,7 +192,12 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
-        } elseif ($message instanceof Template) {
+        } elseif ($message instanceof GenericTemplate ||
+            $message instanceof ListTemplate ||
+        $message instanceof  ButtonTemplate ||
+    $message instanceof ReceiptTemplate ||
+        $message instanceof ReceiptAdjustment) {
+
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
