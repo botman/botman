@@ -12,10 +12,15 @@ class ApiAi implements MiddlewareInterface
 {
     /** @var string */
     protected $token;
+
     /** @var HttpInterface */
     protected $http;
+
     /** @var string */
     protected $apiUrl = 'https://api.api.ai/v1/query';
+
+    /** @var boolean */
+    protected $listenForAction = false;
 
     /**
      * Wit constructor.
@@ -36,6 +41,18 @@ class ApiAi implements MiddlewareInterface
     public static function create($token)
     {
         return new static($token, new Curl());
+    }
+
+    /**
+     * Restrict the middleware to only listen for API.ai actions.
+     * @param  boolean $listen
+     * @return $this
+     */
+    public function listenForAction($listen = true)
+    {
+        $this->listenForAction = $listen;
+
+        return $this;
     }
 
     /**
@@ -74,6 +91,10 @@ class ApiAi implements MiddlewareInterface
      */
     public function isMessageMatching(Message $message, $test, $regexMatched)
     {
+        if ($this->listenForAction) {
+            return $message->getExtras()['apiAction'] === $test;
+        }
+
         return true;
     }
 }
