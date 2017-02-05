@@ -15,8 +15,6 @@ class Curl implements HttpInterface
     {
         $request = $this->prepareRequest($url, $urlParameters, $headers);
 
-        Log::info('params: ' , $postParameters);
-
         curl_setopt($request, CURLOPT_POST, count($postParameters));
         if ($asJSON === true) {
             curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($postParameters));
@@ -64,8 +62,6 @@ class Curl implements HttpInterface
         $info = curl_getinfo($request);
 
         curl_close($request);
-
-        Log::info('CURL body: ' . $body);
 
         $statusCode = $info['http_code'] === 0 ? 500 : $info['http_code'];
 
