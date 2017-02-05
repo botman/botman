@@ -424,7 +424,12 @@ class BotMan
             $message = $this->getMessage();
         }
 
-        return $this->cache->get($message->getConversationIdentifier(), $this->cache->get($message->getOriginatedConversationIdentifier()));
+        $conversation = $this->cache->get($message->getConversationIdentifier());
+        if (is_null($conversation)) {
+            $conversation = $this->cache->get($message->getOriginatedConversationIdentifier());
+        }
+
+        return $conversation;
     }
 
     /**
