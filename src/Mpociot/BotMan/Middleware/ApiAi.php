@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Middleware;
 
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
@@ -59,9 +59,9 @@ class ApiAi implements MiddlewareInterface
      * Handle / modify the message.
      *
      * @param Message $message
-     * @param Driver $driver
+     * @param DriverInterface $driver
      */
-    public function handle(Message &$message, Driver $driver)
+    public function handle(Message &$message, DriverInterface $driver)
     {
         $response = $this->http->post($this->apiUrl, [], [
             'query' => [$message->getMessage()],
