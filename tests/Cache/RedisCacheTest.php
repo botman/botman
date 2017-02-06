@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests;
 
 use Redis;
-use Mpociot\BotMan\Cache\RedisCache;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Cache\RedisCache;
 
 class RedisCacheTest extends PHPUnit_Framework_TestCase
 {
