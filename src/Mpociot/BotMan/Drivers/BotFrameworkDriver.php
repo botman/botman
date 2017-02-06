@@ -185,7 +185,7 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'https://skype.botframework.com');
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
 
         if (strstr($apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
