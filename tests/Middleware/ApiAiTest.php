@@ -25,6 +25,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
+                'parameters' => [
+                    'param1' => 'value',
+                ],
             ],
         ];
         $response = new Response(json_encode($apiResponse));
@@ -49,6 +52,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             'apiReply' => 'api reply text',
             'apiAction' => 'api action name',
             'apiIntent' => 'name of the matched intent',
+            'apiParameters' => ['param1' => 'value'],
         ], $message->getExtras());
     }
 
