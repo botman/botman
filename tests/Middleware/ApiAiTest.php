@@ -27,7 +27,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 ],
                 'parameters' => [
                     'param1' => 'value',
-                ]
+                ],
             ],
         ];
         $response = new Response(json_encode($apiResponse));
