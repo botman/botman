@@ -26,7 +26,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                     'intentName' => 'name of the matched intent',
                 ],
                 'parameters' => [
-                    'param1' => 'value'
+                    'param1' => 'value',
                 ]
             ],
         ];
