@@ -6,6 +6,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mpociot/botman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mpociot/botman/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 [![StyleCI](https://styleci.io/repos/65017574/shield?branch=master)](https://styleci.io/repos/65017574)
+[![Slack](https://rauchg-slackin-jtdkltstsj.now.sh)](https://rauchg-slackin-jtdkltstsj.now.sh/badge.svg)
 
 ## About BotMan
 
