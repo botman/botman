@@ -10,8 +10,8 @@ use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\StorageInterface;
+use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**

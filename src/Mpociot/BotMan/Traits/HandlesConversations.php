@@ -12,7 +12,6 @@ use Mpociot\BotMan\Drivers\SlackRTMDriver;
 
 trait HandlesConversations
 {
-
     /**
      * @param Conversation $instance
      * @param null|string $channel
