@@ -46,7 +46,7 @@ class StorageTest extends PHPUnit_Framework_TestCase
         $this->storage->setPrefix('botman_');
         $this->storage->save(['json' => 'encoded'], 'my_key');
 
-        $data = $this->driver->get('botman_my_key');
+        $data = $this->driver->get(sha1('botman_my_key'));
         $this->assertSame($data->toArray(), ['json' => 'encoded']);
 
         $data = $this->storage->get('my_key');
