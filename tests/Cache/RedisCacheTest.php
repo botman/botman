@@ -7,13 +7,17 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Cache\RedisCache;
 
+/**
+ * @group integration
+ */
 class RedisCacheTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
         $redis = new Redis();
         $redis->connect('127.0.0.1');
-        $redis->flushAll();
+        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
+        $redis->eval($script);
     }
 
     /** @test */
@@ -21,14 +25,14 @@ class RedisCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 1);
-        $this->assertTrue($cache->has('foo'));
+        static::assertTrue($cache->has('foo'));
     }
 
     /** @test */
     public function has_not()
     {
         $cache = new RedisCache();
-        $this->assertFalse($cache->has('foo'));
+        static::assertFalse($cache->has('foo'));
     }
 
     /** @test */
@@ -36,15 +40,15 @@ class RedisCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 5);
-        $this->assertTrue($cache->has('foo'));
-        $this->assertEquals('bar', $cache->get('foo'));
+        static::assertTrue($cache->has('foo'));
+        static::assertEquals('bar', $cache->get('foo'));
     }
 
     /** @test */
     public function get_non_existing_key()
     {
         $cache = new RedisCache();
-        $this->assertNull($cache->get('foo'));
+        static::assertNull($cache->get('foo'));
     }
 
     /** @test */
@@ -52,23 +56,23 @@ class RedisCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 5);
-        $this->assertTrue($cache->has('foo'));
-        $this->assertEquals('bar', $cache->pull('foo'));
-        $this->assertFalse($cache->has('foo'));
-        $this->assertNull($cache->get('foo'));
+        static::assertTrue($cache->has('foo'));
+        static::assertEquals('bar', $cache->pull('foo'));
+        static::assertFalse($cache->has('foo'));
+        static::assertNull($cache->get('foo'));
     }
 
     /** @test */
     public function pull_non_existing_key()
     {
         $cache = new RedisCache();
-        $this->assertNull($cache->pull('foo'));
+        static::assertNull($cache->pull('foo'));
     }
 
     /** @test */
     public function pull_non_existing_key_with_default_value()
     {
         $cache = new ArrayCache();
-        $this->assertEquals('bar', $cache->pull('foo', 'bar'));
+        static::assertEquals('bar', $cache->pull('foo', 'bar'));
     }
 }
