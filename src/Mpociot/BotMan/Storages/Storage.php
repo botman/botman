@@ -31,7 +31,7 @@ class Storage implements StorageInterface
      */
     protected function getKey($key)
     {
-        return $this->prefix.$key;
+        return sha1($this->prefix.$key);
     }
 
     /**

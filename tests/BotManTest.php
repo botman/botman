@@ -15,6 +15,7 @@ use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
+use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
 use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
@@ -517,9 +518,10 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->storeConversation($conversation, function ($answer) {
         });
 
-        $this->assertTrue($this->cache->has('conversation-UX12345-general'));
+        $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
+        $this->assertTrue($this->cache->has($cacheKey));
 
-        $cached = $this->cache->get('conversation-UX12345-general');
+        $cached = $this->cache->get($cacheKey);
 
         $this->assertSame($conversation, $cached['conversation']);
 
@@ -1142,6 +1144,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->dummyMethod('bar', 'baz');
+    }
+
+    /** @test */
+    public function it_retrieves_the_user()
+    {
+        $botman = $this->getBot('');
+        $this->assertInstanceOf(UserInterface::class, $botman->getUser());
     }
 
     /** @test */

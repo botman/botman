@@ -4,22 +4,25 @@ namespace Mpociot\BotMan\Facebook;
 
 use JsonSerializable;
 
-class Element implements JsonSerializable
+class ReceiptElement implements JsonSerializable
 {
     /** @var string */
     protected $title;
 
     /** @var string */
-    protected $image_url;
-
-    /** @var string */
-    protected $item_url;
-
-    /** @var string */
     protected $subtitle;
 
-    /** @var object */
-    protected $buttons;
+    /** @var int */
+    protected $quantity;
+
+    /** @var int */
+    protected $price = 0;
+
+    /** @var string */
+    protected $currency;
+
+    /** @var string */
+    protected $image_url;
 
     /**
      * @param $title
@@ -39,23 +42,45 @@ class Element implements JsonSerializable
     }
 
     /**
-     * @param string $title
-     * @return $this
-     */
-    public function title($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
      * @param string $subtitle
      * @return $this
      */
     public function subtitle($subtitle)
     {
         $this->subtitle = $subtitle;
+
+        return $this;
+    }
+
+    /**
+     * @param $quantity
+     * @return $this
+     */
+    public function quantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @param $price
+     * @return $this
+     */
+    public function price($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @param $currency
+     * @return $this
+     */
+    public function currency($currency)
+    {
+        $this->currency = $currency;
 
         return $this;
     }
@@ -72,55 +97,17 @@ class Element implements JsonSerializable
     }
 
     /**
-     * @param string $item_url
-     * @return $this
-     */
-    public function itemUrl($item_url)
-    {
-        $this->item_url = $item_url;
-
-        return $this;
-    }
-
-    /**
-     * @param ElementButton $button
-     * @return $this
-     */
-    public function addButton(ElementButton $button)
-    {
-        $this->buttons[] = $button->toArray();
-
-        return $this;
-    }
-
-    /**
-     * @param array $buttons
-     * @return $this
-     */
-    public function addButtons(array $buttons)
-    {
-        if (isset($buttons) && is_array($buttons)) {
-            foreach ($buttons as $button) {
-                if ($button instanceof ElementButton) {
-                    $this->buttons[] = $button->toArray();
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
         return [
             'title' => $this->title,
-            'image_url' => $this->image_url,
-            'item_url' => $this->item_url,
             'subtitle' => $this->subtitle,
-            'buttons' => $this->buttons,
+            'quantity' => $this->quantity,
+            'price' => $this->price,
+            'currency' => $this->currency,
+            'image_url' => $this->image_url,
         ];
     }
 

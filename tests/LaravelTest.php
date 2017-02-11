@@ -44,7 +44,7 @@ class LaravelTest extends TestCase
         BotMan::storeConversation($conversation, function ($answer) {
         });
 
-        $cached = Cache::get('conversation--');
+        $cached = Cache::get('conversation-'.sha1(null).'-'.sha1(null));
         $this->assertEquals($conversation, $cached['conversation']);
         $this->assertTrue(is_string($cached['next']));
     }

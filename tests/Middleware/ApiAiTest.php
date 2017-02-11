@@ -25,6 +25,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
+                'parameters' => [
+                    'param1' => 'value',
+                ],
             ],
         ];
         $response = new Response(json_encode($apiResponse));
@@ -49,7 +52,37 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             'apiReply' => 'api reply text',
             'apiAction' => 'api action name',
             'apiIntent' => 'name of the matched intent',
+            'apiParameters' => ['param1' => 'value'],
         ], $message->getExtras());
+    }
+
+    /** @test */
+    public function it_matches_messages()
+    {
+        $messageText = 'my_api_ai_action_name';
+        $message = new Message($messageText, '', '');
+
+        $apiResponse = [
+            'result' => [
+                'speech' => 'api reply text',
+                'action' => 'my_api_ai_action_name',
+                'metadata' => [
+                    'intentName' => 'name of the matched intent',
+                ],
+            ],
+        ];
+        $response = new Response(json_encode($apiResponse));
+
+        $http = m::mock(Curl::class);
+        $http->shouldReceive('post')
+            ->once()
+            ->andReturn($response);
+
+        $middleware = new ApiAi('token', $http);
+        $middleware->listenForAction();
+        $middleware->handle($message, m::mock(NullDriver::class));
+        $this->assertTrue($middleware->isMessageMatching($message, $messageText, false));
+        $this->assertFalse($middleware->isMessageMatching($message, 'some_other_action', false));
     }
 
     /** @test */

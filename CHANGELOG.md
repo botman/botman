@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.4.0]
 ### Added
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
 - Added api.ai middleware.
@@ -24,6 +24,7 @@ $bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
 - Correctly handle Skype group chats #128
 - Telegram - Fixed empty button callback payload #138
 - Telegram - Fixed questions not working when the message type is an entity (url, email, etc) #139
+- The MiddlewareInterface now uses the DriverInterface instead of the abstract Driver class
 
 ### Removed
 - Removed ability to only listen to direct messages / public channels as this was a relic of the old `slackbot` package.

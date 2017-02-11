@@ -189,8 +189,13 @@ class TelegramDriver extends Driver
             ], true);
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
-                $endpoint = 'sendPhoto';
-                $parameters['photo'] = $message->getImage();
+                if (strtolower(pathinfo($message->getImage(), PATHINFO_EXTENSION)) === 'gif') {
+                    $endpoint = 'sendDocument';
+                    $parameters['document'] = $message->getImage();
+                } else {
+                    $endpoint = 'sendPhoto';
+                    $parameters['photo'] = $message->getImage();
+                }
                 $parameters['caption'] = $message->getMessage();
             } elseif (! is_null($message->getVideo())) {
                 $endpoint = 'sendVideo';

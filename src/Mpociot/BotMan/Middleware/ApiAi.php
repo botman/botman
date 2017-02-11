@@ -4,18 +4,23 @@ namespace Mpociot\BotMan\Middleware;
 
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
 {
     /** @var string */
     protected $token;
+
     /** @var HttpInterface */
     protected $http;
+
     /** @var string */
     protected $apiUrl = 'https://api.api.ai/v1/query';
+
+    /** @var bool */
+    protected $listenForAction = false;
 
     /**
      * Wit constructor.
@@ -39,12 +44,24 @@ class ApiAi implements MiddlewareInterface
     }
 
     /**
+     * Restrict the middleware to only listen for API.ai actions.
+     * @param  bool $listen
+     * @return $this
+     */
+    public function listenForAction($listen = true)
+    {
+        $this->listenForAction = $listen;
+
+        return $this;
+    }
+
+    /**
      * Handle / modify the message.
      *
      * @param Message $message
-     * @param Driver $driver
+     * @param DriverInterface $driver
      */
-    public function handle(Message &$message, Driver $driver)
+    public function handle(Message &$message, DriverInterface $driver)
     {
         $response = $this->http->post($this->apiUrl, [], [
             'query' => [$message->getMessage()],
@@ -59,10 +76,12 @@ class ApiAi implements MiddlewareInterface
         $reply = isset($response->result->speech) ? $response->result->speech : '';
         $action = isset($response->result->action) ? $response->result->action : '';
         $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
+        $parameters = isset($response->result->parameters) ? (array) $response->result->parameters : [];
 
         $message->addExtras('apiReply', $reply);
         $message->addExtras('apiAction', $action);
         $message->addExtras('apiIntent', $intent);
+        $message->addExtras('apiParameters', $parameters);
     }
 
     /**
@@ -74,6 +93,10 @@ class ApiAi implements MiddlewareInterface
      */
     public function isMessageMatching(Message $message, $test, $regexMatched)
     {
+        if ($this->listenForAction) {
+            return $message->getExtras()['apiAction'] === $test;
+        }
+
         return true;
     }
 }
