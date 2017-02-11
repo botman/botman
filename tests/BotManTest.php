@@ -16,6 +16,7 @@ use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
+use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
 use Mpociot\BotMan\Tests\Fixtures\TestConversation;
@@ -1143,6 +1144,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->dummyMethod('bar', 'baz');
+    }
+
+    /** @test */
+    public function it_retrieves_the_user()
+    {
+        $botman = $this->getBot('');
+        $this->assertInstanceOf(UserInterface::class, $botman->getUser());
     }
 
     /** @test */

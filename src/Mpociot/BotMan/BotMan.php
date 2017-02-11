@@ -9,6 +9,7 @@ use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
+use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
@@ -173,6 +174,14 @@ class BotMan
     public function isBot()
     {
         return $this->getDriver()->isBot();
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser()
+    {
+        return $this->getDriver()->getUser($this->getMessage());
     }
 
     /**
