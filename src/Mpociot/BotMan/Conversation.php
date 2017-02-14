@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
