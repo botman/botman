@@ -1271,4 +1271,24 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->listen();
     }
+
+    /** @test */
+    public function it_checks_that_all_middleware_match()
+    {
+        $called_one = false;
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'open the pod bay doors',
+            ],
+        ]);
+        $botman->middleware([new TestMatchMiddleware(), new TestNoMatchMiddleware()]);
+
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
+            $called_one = true;
+        });
+
+        $botman->listen();
+        $this->assertFalse($called_one);
+    }
 }

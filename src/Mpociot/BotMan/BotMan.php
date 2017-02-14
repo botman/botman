@@ -304,8 +304,10 @@ class BotMan
 
         // Try middleware first
         $mergedMiddleware = array_merge($this->middleware, $messageMiddleware);
-        foreach ($mergedMiddleware as $middleware) {
-            return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+        if (count($mergedMiddleware)) {
+            return Collection::make($mergedMiddleware)->reject(function($middleware) use($message, $pattern, $regexMatched) {
+                return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+            })->isEmpty() === true;
         }
 
         return $regexMatched;

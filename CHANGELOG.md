@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Added
+
+### Changed
+- Fixed a bug with multiple middlewares (#209)
+
 ## [1.4.0]
 ### Added
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
