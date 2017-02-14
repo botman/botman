@@ -291,7 +291,7 @@ class BotMan
      * @param array $messageMiddleware
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = array())
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = [])
     {
         $matches = [];
 
