@@ -258,7 +258,7 @@ class BotMan
                 $message = $this->applyMiddleware($message, $messageData['middleware']);
 
                 if (! $this->isBot() &&
-                    $this->isMessageMatching($message, $pattern, $matches) &&
+                    $this->isMessageMatching($message, $pattern, $matches, $messageData['middleware']) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
@@ -288,9 +288,10 @@ class BotMan
      * @param Message $message
      * @param string $pattern
      * @param array $matches
+     * @param array $messageMiddleware
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches)
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = array())
     {
         $matches = [];
 
@@ -302,7 +303,8 @@ class BotMan
         $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
-        foreach ($this->middleware as $middleware) {
+        $mergedMiddleware = array_merge($this->middleware, $messageMiddleware);
+        foreach ($mergedMiddleware as $middleware) {
             return $middleware->isMessageMatching($message, $pattern, $regexMatched);
         }
 

@@ -771,12 +771,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
-                'text' => 'bar',
+                'text' => 'successful',
             ],
         ]);
 
         $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$called) {
-            $botman->hears('bar', function ($bot) use (&$called) {
+            $botman->hears('successful', function ($bot) use (&$called) {
                 $called = true;
                 $this->assertSame([
                     'driver_name' => 'Slack',
@@ -791,6 +791,29 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
 
         $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_can_match_grouped_middleware_commands()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'bar',
+            ],
+        ]);
+
+        $botman->group(['middleware' => new TestNoMatchMiddleware()], function ($botman) use (&$called) {
+            $botman->hears('bar', function ($bot) use (&$called) {
+                $called = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($called);
     }
 
     /** @test */
