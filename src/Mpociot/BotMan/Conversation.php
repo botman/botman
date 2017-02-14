@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
@@ -80,6 +81,26 @@ abstract class Conversation
         $this->bot->reply($message, $additionalParameters);
 
         return $this;
+    }
+
+    /**
+     * Should the conversation be skipped (temporarily).
+     * @param  Message $message
+     * @return bool
+     */
+    public function skipConversation(Message $message)
+    {
+        //
+    }
+
+    /**
+     * Should the conversation be removed and stopped (permanently).
+     * @param  Message $message
+     * @return bool
+     */
+    public function stopConversation(Message $message)
+    {
+        //
     }
 
     /**

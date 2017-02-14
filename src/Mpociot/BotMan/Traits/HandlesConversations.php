@@ -137,6 +137,17 @@ trait HandlesConversations
             foreach ($this->getMessages() as $message) {
                 if ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier())) {
                     $convo = $this->getStoredConversation($message);
+
+                    if ($convo['conversation']->stopConversation($message) === true) {
+                        $this->message = $message;
+                        $this->currentConversationData = $convo;
+                        $this->removeStoredConversation();
+                        break;
+                    }
+                    if ($convo['conversation']->skipConversation($message) === true) {
+                        break;
+                    }
+
                     $next = false;
                     $parameters = [];
                     if (is_array($convo['next'])) {

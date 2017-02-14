@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Added
+- Added ability to either temporarily skip conversations or completely stop them using the `skipConversation` and `stopConversation` methods on the conversation object.
 
 ### Changed
 - Fixed a bug with multiple middlewares (#209)
