@@ -1334,12 +1334,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('skip_keyword', function($bot) use (&$called) {
+        $botman->hears('skip_keyword', function ($bot) use (&$called) {
             $called = true;
         });
 
         $botman->listen();
-        
+
         $this->assertTrue($called);
 
         $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
@@ -1358,7 +1358,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('repeat', function($bot) use (&$called) {
+        $botman->hears('repeat', function ($bot) use (&$called) {
             $called = true;
         });
 
@@ -1409,7 +1409,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('stop_keyword', function($bot) use (&$called) {
+        $botman->hears('stop_keyword', function ($bot) use (&$called) {
             $called = true;
         });
         $botman->listen();
@@ -1433,7 +1433,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->hears('repeat', function($bot) use (&$called) {
+        $botman->hears('repeat', function ($bot) use (&$called) {
             $called = true;
         });
 
