@@ -93,7 +93,7 @@ abstract class Conversation
     public function __sleep()
     {
         $properties = get_object_vars($this);
-        if ($this instanceof ShouldQueue) {
+        if (! $this instanceof ShouldQueue) {
             unset($properties['bot']);
         }
         return array_keys($properties);

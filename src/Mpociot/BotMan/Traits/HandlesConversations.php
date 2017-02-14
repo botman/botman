@@ -159,7 +159,7 @@ trait HandlesConversations
                     if (is_callable($next)) {
                         if ($next instanceof SerializableClosure) {
                             $conversation = $convo['conversation'];
-                            if ($conversation instanceof ShouldQueue) {
+                            if (! $conversation instanceof ShouldQueue) {
                                 $conversation->setBot($this);
                             }
                             $next = $next->getClosure()->bindTo($conversation, $conversation);
