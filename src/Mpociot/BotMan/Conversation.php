@@ -4,6 +4,7 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 /**
  * Class Conversation.
@@ -85,4 +86,16 @@ abstract class Conversation
      * @return mixed
      */
     abstract public function run();
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        $properties = get_object_vars($this);
+        if ($this instanceof ShouldQueue) {
+            unset($properties['bot']);
+        }
+        return array_keys($properties);
+    }
 }

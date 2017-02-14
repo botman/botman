@@ -9,6 +9,7 @@ use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\DriverManager;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
+use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 trait HandlesConversations
 {
@@ -157,7 +158,11 @@ trait HandlesConversations
 
                     if (is_callable($next)) {
                         if ($next instanceof SerializableClosure) {
-                            $next = $next->getClosure()->bindTo($convo['conversation'], $convo['conversation']);
+                            $conversation = $convo['conversation'];
+                            if ($conversation instanceof ShouldQueue) {
+                                $conversation->setBot($this);
+                            }
+                            $next = $next->getClosure()->bindTo($conversation, $conversation);
                         }
                         array_unshift($parameters, $this->getConversationAnswer());
                         array_push($parameters, $convo['conversation']);
