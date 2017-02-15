@@ -15,6 +15,7 @@ use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
 
@@ -26,6 +27,7 @@ class DriverManager
     protected static $drivers = [
         SlackDriver::class,
         FacebookDriver::class,
+        FacebookImageDriver::class,
         FacebookPostbackDriver::class,
         TelegramPhotoDriver::class,
         TelegramDriver::class,

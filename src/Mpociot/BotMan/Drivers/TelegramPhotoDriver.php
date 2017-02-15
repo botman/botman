@@ -40,9 +40,9 @@ class TelegramPhotoDriver extends TelegramDriver
     /**
      * Retrieve a image from an incoming message
      * @param  Message $matchingMessage
-     * @return string A download for the image file.
+     * @return array A download for the image file.
      */
-    public function getImage(Message $matchingMessage)
+    public function getImages(Message $matchingMessage)
     {
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
             'file_id' => $matchingMessage->getPayload()->get('photo')[3]['file_id']
@@ -50,6 +50,6 @@ class TelegramPhotoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return 'https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path;
+        return ['https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path];
     }
 }
