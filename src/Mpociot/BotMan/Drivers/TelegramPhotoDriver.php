@@ -3,15 +3,8 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
-use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class TelegramPhotoDriver extends TelegramDriver
 {
@@ -24,7 +17,7 @@ class TelegramPhotoDriver extends TelegramDriver
      */
     public function matchesRequest()
     {
-        return (! is_null($this->event->get('from')) && ! is_null($this->event->get('photo')));
+        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('photo'));
     }
 
     /**
@@ -38,14 +31,14 @@ class TelegramPhotoDriver extends TelegramDriver
     }
 
     /**
-     * Retrieve a image from an incoming message
+     * Retrieve a image from an incoming message.
      * @param  Message $matchingMessage
      * @return array A download for the image file.
      */
     public function getImages(Message $matchingMessage)
     {
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
-            'file_id' => $matchingMessage->getPayload()->get('photo')[3]['file_id']
+            'file_id' => $matchingMessage->getPayload()->get('photo')[3]['file_id'],
         ]);
 
         $path = json_decode($response->getContent());
