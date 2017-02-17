@@ -44,6 +44,11 @@ class BotMan
      */
     const ATTACHMENT_PATTERN = '%%%_ATTACHMENT_%%%';
 
+    /**
+     * Pattern that messages use to identify location attachment.
+     */
+    const LOCATION_PATTERN = '%%%_LOCATION_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -261,6 +266,17 @@ class BotMan
     public function receivesAttachment($callback)
     {
         return $this->hears(self::ATTACHMENT_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for location attachment.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesLocation($callback)
+    {
+        return $this->hears(self::LOCATION_PATTERN, $callback);
     }
 
     /**
