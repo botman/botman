@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -37,6 +36,8 @@ class FacebookDriver extends Driver
         ListTemplate::class,
         ReceiptTemplate::class,
     ];
+
+    protected $facebookProfileEndpoint = 'https://graph.facebook.com/v2.6/';
 
     const DRIVER_NAME = 'Facebook';
 
@@ -243,9 +244,9 @@ class FacebookDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
+        $profileData = $this->http->get($this->facebookProfileEndpoint . $matchingMessage->getChannel() . '?fields=first_name,last_name&access_token=' . $this->config->get('facebook_token'));
 
-        $profileData = json_decode(file_get_contents('https://graph.facebook.com/v2.6/' . $matchingMessage->getChannel() . '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' . $this->config->get('facebook_token')));
-
+        $profileData = json_decode($profileData->getContent());
         $firstName = isset($profileData->first_name) ? $profileData->first_name : '';
         $lastName = isset($profileData->last_name) ? $profileData->last_name : '';
 

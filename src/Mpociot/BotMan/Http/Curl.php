@@ -8,6 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 class Curl implements HttpInterface
 {
     /**
+     * @param $url
+     * @param array $urlParameters
+     * @return Response
+     */
+    public function get($url, array $urlParameters = [])
+    {
+        $request = $this->prepareRequest($url, $urlParameters);
+
+        return $this->executeRequest($request);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = [], $asJSON = false)
