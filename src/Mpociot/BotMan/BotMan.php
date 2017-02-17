@@ -225,11 +225,23 @@ class BotMan
         return $command;
     }
 
+    /**
+     * Listening for image files
+     *
+     * @param $callback
+     * @return Command
+     */
     public function receivesImage($callback)
     {
         return $this->hears(self::IMAGE_PATTERN, $callback);
     }
 
+    /**
+     * Listening for audio files
+     *
+     * @param $callback
+     * @return Command
+     */
     public function receivesAudio($callback)
     {
         return $this->hears(self::AUDIO_PATTERN, $callback);
