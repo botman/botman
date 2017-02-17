@@ -245,8 +245,8 @@ class FacebookDriver extends Driver
         $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
 
         $profileData = json_decode($profileData->getContent());
-        $firstName = isset($profileData->first_name) ? $profileData->first_name : '';
-        $lastName = isset($profileData->last_name) ? $profileData->last_name : '';
+        $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
+        $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
 
         return new User($matchingMessage->getChannel(), $firstName, $lastName);
     }
