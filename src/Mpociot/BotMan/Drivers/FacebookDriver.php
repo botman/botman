@@ -82,7 +82,8 @@ class FacebookDriver extends Driver
      */
     protected function validateSignature()
     {
-        return hash_equals($this->signature, 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
+        return hash_equals($this->signature,
+            'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
     }
 
     /**
@@ -104,17 +105,13 @@ class FacebookDriver extends Driver
 
     /**
      * @param  Message $message
-     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message)
     {
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
-            return Answer::create($message->getMessage())
-                ->setMessage($message)
-                ->setInteractiveReply(true)
-                ->setValue($payload['message']['quick_reply']['payload']);
+            return Answer::create($message->getMessage())->setMessage($message)->setInteractiveReply(true)->setValue($payload['message']['quick_reply']['payload']);
         }
 
         return Answer::create($message->getMessage())->setMessage($message);
@@ -239,12 +236,13 @@ class FacebookDriver extends Driver
 
     /**
      * Retrieve User information.
+     *
      * @param Message $matchingMessage
      * @return User
      */
     public function getUser(Message $matchingMessage)
     {
-        $profileData = $this->http->get($this->facebookProfileEndpoint . $matchingMessage->getChannel() . '?fields=first_name,last_name&access_token=' . $this->config->get('facebook_token'));
+        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
 
         $profileData = json_decode($profileData->getContent());
         $firstName = isset($profileData->first_name) ? $profileData->first_name : '';
