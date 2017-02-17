@@ -2,13 +2,23 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
+use Slack\File;
+use Mockery as m;
 use Slack\RealTimeClient;
+use Mpociot\BotMan\Message;
 use React\EventLoop\Factory;
 use PHPUnit_Framework_TestCase;
+use React\Promise\FulfilledPromise;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
+use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+    }
+
     private function getDriver($responseData = [], $htmlInterface = null)
     {
         $loop = Factory::create();
@@ -87,5 +97,35 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
             'channel' => 'general',
         ]);
         $this->assertSame('general', $driver->getMessages()[0]->getChannel());
+    }
+
+    /** @test */
+    public function it_calls_files_upload_api()
+    {
+        $filePath = __FILE__;
+
+        $channelId = str_random();
+
+        $loop = Factory::create();
+
+        $client = new RealTimeClient($loop);
+
+        $clientMock = m::mock($client);
+
+        $clientMock->shouldReceive('fileUpload')
+            ->with(m::on(function (File $file) use ($filePath) {
+                return $file->getPath() === $filePath;
+            }), [$channelId])
+            ->once()
+            ->andReturn(new FulfilledPromise([]));
+
+        $driver = new SlackRTMDriver([], $clientMock);
+
+        $message = IncomingMessage::create('File')
+            ->filePath($filePath);
+
+        $matchingMessage = new Message('A command', 'U0X12345', $channelId);
+
+        $driver->reply($message, $matchingMessage);
     }
 }
