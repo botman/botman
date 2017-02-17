@@ -226,7 +226,7 @@ class BotMan
     }
 
     /**
-     * Listening for image files
+     * Listening for image files.
      *
      * @param $callback
      * @return Command
@@ -237,7 +237,7 @@ class BotMan
     }
 
     /**
-     * Listening for audio files
+     * Listening for audio files.
      *
      * @param $callback
      * @return Command
