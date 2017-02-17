@@ -19,6 +19,7 @@ use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
+use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
 
 class DriverManager
 {
@@ -31,6 +32,7 @@ class DriverManager
         FacebookImageDriver::class,
         FacebookAudioDriver::class,
         FacebookPostbackDriver::class,
+        FacebookAttachmentDriver::class,
         TelegramPhotoDriver::class,
         TelegramDriver::class,
         BotFrameworkDriver::class,

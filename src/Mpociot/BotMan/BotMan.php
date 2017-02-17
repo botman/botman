@@ -39,6 +39,11 @@ class BotMan
      */
     const AUDIO_PATTERN = '%%%_AUDIO_%%%';
 
+    /**
+     * Pattern that messages use to identify attachments uploads.
+     */
+    const ATTACHMENT_PATTERN = '%%%_ATTACHMENT_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -245,6 +250,17 @@ class BotMan
     public function receivesAudio($callback)
     {
         return $this->hears(self::AUDIO_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for file attachments.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesAttachment($callback)
+    {
+        return $this->hears(self::ATTACHMENT_PATTERN, $callback);
     }
 
     /**
