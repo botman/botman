@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -28,6 +29,7 @@ class DriverManager
         SlackDriver::class,
         FacebookDriver::class,
         FacebookImageDriver::class,
+        FacebookAudioDriver::class,
         FacebookPostbackDriver::class,
         TelegramPhotoDriver::class,
         TelegramDriver::class,

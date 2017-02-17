@@ -34,6 +34,11 @@ class BotMan
      */
     const IMAGE_PATTERN = '%%%_IMAGE_%%%';
 
+    /**
+     * Pattern that messages use to identify audio uploads.
+     */
+    const AUDIO_PATTERN = '%%%_AUDIO_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -223,6 +228,11 @@ class BotMan
     public function receivesImage($callback)
     {
         return $this->hears(self::IMAGE_PATTERN, $callback);
+    }
+
+    public function receivesAudio($callback)
+    {
+        return $this->hears(self::AUDIO_PATTERN, $callback);
     }
 
     /**
