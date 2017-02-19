@@ -18,7 +18,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $driverName = 'TEST-DRIVER';
         $messageChannel = '123456789';
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '',$messageChannel);
+        $message = new Message($messageText, '', $messageChannel);
 
         $apiResponse = [
             'result' => [
@@ -39,7 +39,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.api.ai/v1/query', [], [
                 'query' => [$messageText],
-                'sessionId' => sha1($driverName . $messageChannel),
+                'sessionId' => sha1($driverName.$messageChannel),
                 'lang' => 'en',
             ], [
                 'Authorization: Bearer token',
