@@ -38,7 +38,7 @@ class TelegramPhotoDriver extends TelegramDriver
     public function getMessages()
     {
         $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
-        $message->setImage($this->getImage());
+        $message->setImages($this->getImages());
         return [$message];
     }
 
@@ -47,7 +47,7 @@ class TelegramPhotoDriver extends TelegramDriver
      * @param  Message $matchingMessage
      * @return array A download for the image file.
      */
-    private function getImage()
+    private function getImages()
     {
         $photos = $this->event->get('photo');
         $largetstPhoto = array_pop($photos);

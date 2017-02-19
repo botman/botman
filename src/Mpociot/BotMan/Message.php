@@ -15,8 +15,8 @@ class Message
     /** @var string */
     protected $channel;
 
-    /** @var string */
-    protected $image;
+    /** @var array */
+    protected $images = [];
 
     /** @var mixed */
     protected $payload;
@@ -107,19 +107,19 @@ class Message
 
     /**
      * Returns the message image URL
-     * @return string|null
+     * @return array
      */
-    public function getImage()
+    public function getImages()
     {
-        return $this->image;
+        return $this->images;
     }
 
     /**
-     * Sets the message image
-     * @param string $image The image URL
+     * Sets the message images
+     * @param array $images The image URLs
      */
-    public function setImage($image)
+    public function setImages($images)
     {
-        $this->image = $image;
+        $this->images = $images;
     }
 }
