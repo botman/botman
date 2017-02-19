@@ -39,6 +39,7 @@ class TelegramPhotoDriver extends TelegramDriver
     {
         $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setImages($this->getImages());
+
         return [$message];
     }
 

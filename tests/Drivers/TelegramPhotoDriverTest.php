@@ -44,7 +44,7 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
                 'chat' => [
                     'id' => 'chat_id',
                 ],
-                'text' => 'Hallo'
+                'text' => 'Hallo',
             ],
         ]);
         $this->assertFalse($driver->matchesRequest());
@@ -61,8 +61,8 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
                 ],
                 'photo' => [
                     [
-                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC'
-                    ]
+                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+                    ],
                 ],
             ],
         ]);
@@ -76,7 +76,7 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
         $htmlInterface = m::mock(Curl::class);
         $htmlInterface->shouldReceive('get')
             ->with('https://api.telegram.org/bot/getFile', [
-                'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC'
+                'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
             ])
             ->andReturn($response);
 
@@ -92,8 +92,8 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
                 ],
                 'photo' => [
                     [
-                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC'
-                    ]
+                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+                    ],
                 ],
             ],
         ], $htmlInterface);
@@ -107,7 +107,7 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
         $htmlInterface = m::mock(Curl::class);
         $htmlInterface->shouldReceive('get')
             ->with('https://api.telegram.org/bot/getFile', [
-                'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC'
+                'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
             ])
             ->andReturn($response);
 
@@ -123,8 +123,8 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
                 ],
                 'photo' => [
                     [
-                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC'
-                    ]
+                        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+                    ],
                 ],
             ],
         ], $htmlInterface);

@@ -106,7 +106,7 @@ class Message
     }
 
     /**
-     * Returns the message image URL
+     * Returns the message image URL.
      * @return array
      */
     public function getImages()
@@ -115,7 +115,7 @@ class Message
     }
 
     /**
-     * Sets the message images
+     * Sets the message images.
      * @param array $images The image URLs
      */
     public function setImages($images)
