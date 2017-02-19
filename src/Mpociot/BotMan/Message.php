@@ -21,8 +21,17 @@ class Message
     /** @var array */
     protected $extras = [];
 
-    /** @var string */
+    /** @var array */
+    private $images;
+
+    /** @var array */
     private $audio;
+
+    /** @var array */
+    private $attachments;
+
+    /** @var array */
+    private $location;
 
     public function __construct($message, $user, $channel, $payload = null)
     {
@@ -106,18 +115,66 @@ class Message
     }
 
     /**
-     * @param $audio
+     * @param array $images
      */
-    public function setAudio($audio)
+    public function setImages(array $images)
+    {
+        $this->images = $images;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param array $audio
+     */
+    public function setAudio(array $audio)
     {
         $this->audio = $audio;
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getAudio()
     {
         return $this->audio;
+    }
+
+    /**
+     * @param array $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->attachments = $attachments;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param array $location
+     */
+    public function setLocation(array $location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

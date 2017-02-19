@@ -5,7 +5,6 @@ namespace Mpociot\BotMan\Drivers;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
 
 class FacebookImageDriver extends FacebookDriver
 {
@@ -52,7 +51,10 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            return new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setImages($this->getImagesUrls($msg));
+
+            return $message;
         })->toArray();
 
         if (count($messages) === 0) {
@@ -63,14 +65,13 @@ class FacebookImageDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve a image from an incoming message.
-     * @param  Message $matchingMessage
+     * Retrieve image urls from an incoming message.
+     *
+     * @param array $message
      * @return array A download for the image file.
      */
-    public function getImages(Message $matchingMessage)
+    public function getImagesUrls(array $message)
     {
-        $messageData = $matchingMessage->getPayload();
-
-        return Collection::make($messageData['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
     }
 }

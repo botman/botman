@@ -51,7 +51,10 @@ class FacebookAttachmentDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            return new Message(BotMan::ATTACHMENT_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(BotMan::ATTACHMENT_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setAttachments($this->getAttachmentsUrls($msg));
+
+            return $message;
         })->toArray();
 
         if (count($messages) === 0) {
@@ -63,13 +66,12 @@ class FacebookAttachmentDriver extends FacebookDriver
 
     /**
      * Retrieve attachment file from an incoming message.
-     * @param  Message $matchingMessage
+     *
+     * @param array $messages
      * @return array A download for the attachment file.
      */
-    public function getAttachment(Message $matchingMessage)
+    public function getAttachmentsUrls(array $messages)
     {
-        $messageData = $matchingMessage->getPayload();
-
-        return Collection::make($messageData['message']['attachments'])->where('type', 'file')->pluck('payload.url')->toArray();
+        return Collection::make($messages['message']['attachments'])->where('type', 'file')->pluck('payload.url')->toArray();
     }
 }

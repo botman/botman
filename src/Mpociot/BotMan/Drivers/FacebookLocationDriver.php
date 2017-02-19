@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
@@ -51,7 +52,10 @@ class FacebookLocationDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            return new Message(BotMan::LOCATION_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(BotMan::LOCATION_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setLocation($this->getLocation($msg));
+
+            return $message;
         })->toArray();
 
         if (count($messages) === 0) {
@@ -63,13 +67,12 @@ class FacebookLocationDriver extends FacebookDriver
 
     /**
      * Retrieve location from an incoming message.
-     * @param  Message $matchingMessage
+     *
+     * @param array $messages
      * @return array A download for the attachment location.
      */
-    public function getLocation(Message $matchingMessage)
+    public function getLocation(array $messages)
     {
-        $messageData = $matchingMessage->getPayload();
-
-        return Collection::make($messageData['message']['attachments'])->where('type', 'location')->pluck('payload.coordinates')->first();
+        return Collection::make($messages['message']['attachments'])->where('type', 'location')->first();
     }
 }

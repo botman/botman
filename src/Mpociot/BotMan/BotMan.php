@@ -241,7 +241,7 @@ class BotMan
      * @param $callback
      * @return Command
      */
-    public function receivesImage($callback)
+    public function receivesImages($callback)
     {
         return $this->hears(self::IMAGE_PATTERN, $callback);
     }
@@ -263,7 +263,7 @@ class BotMan
      * @param $callback
      * @return Command
      */
-    public function receivesAttachment($callback)
+    public function receivesAttachments($callback)
     {
         return $this->hears(self::ATTACHMENT_PATTERN, $callback);
     }
