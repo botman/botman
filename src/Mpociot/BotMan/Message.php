@@ -15,6 +15,9 @@ class Message
     /** @var string */
     protected $channel;
 
+    /** @var string */
+    protected $image;
+
     /** @var mixed */
     protected $payload;
 
@@ -100,5 +103,23 @@ class Message
         }
 
         return $this->extras;
+    }
+
+    /**
+     * Returns the message image URL
+     * @return string|null
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Sets the message image
+     * @param string $image The image URL
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 }

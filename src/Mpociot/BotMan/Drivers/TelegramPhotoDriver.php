@@ -18,6 +18,16 @@ class TelegramPhotoDriver extends TelegramDriver
     const DRIVER_NAME = 'TelegramPhoto';
 
     /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::DRIVER_NAME;
+    }
+
+    /**
      * Determine if the request is for this driver.
      *
      * @return bool
@@ -34,7 +44,9 @@ class TelegramPhotoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        return [new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event)];
+        $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message->setImage($this->getImage());
+        return [$message];
     }
 
     /**
@@ -42,10 +54,12 @@ class TelegramPhotoDriver extends TelegramDriver
      * @param  Message $matchingMessage
      * @return array A download for the image file.
      */
-    public function getImages(Message $matchingMessage)
+    private function getImage()
     {
+        $photos = $this->event->get('photo');
+        $largetstPhoto = array_pop($photos);
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
-            'file_id' => $matchingMessage->getPayload()->get('photo')[3]['file_id']
+            'file_id' => $largetstPhoto['file_id']
         ]);
 
         $path = json_decode($response->getContent());
