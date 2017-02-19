@@ -1,6 +1,52 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Added
+- Added ability to either temporarily skip conversations or completely stop them using the `skipConversation` and `stopConversation` methods on the conversation object.
+
+### Changed
+- Fixed a bug with multiple middlewares (#209)
+
+## [1.4.0]
+### Added
+- Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.
+- Added api.ai middleware.
+- Added additional parameters to `$botman->say` method.
+- Added ability to load command-specific middleware: 
+```php
+$bot->hears('foo', function($bot){})->middleware(new TestMiddleware());
+```
+- Added ability to listen only on specific drivers or channels.
+- Added `repeat()` method to conversation objects to repeat the last asked question.
+- [SlackDriver, SlackRTMDriver] added `replyInThread` method for Slacks new [threaded messaging](https://api.slack.com/docs/message-threading#threads_party) feature.
+- Added video message to Facebook, BotFramework and Telegram drivers.
+- Added Facebook [template support](https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template).
+- Added `$botman->getUser()` method to retrieve general user information.
+
+### Changed
+- Fixed an error that occured when responding to the Facebook driver with thumbs up.
+- Fixed SlackRTM driver to respond using the RTM API (Fixes issues #99 and #67).
+- Moved listening to Facebook Postback payloads into a separate driver (FacebookPostbackDriver) so it does not interfere with normal user text
+- Correctly handle Skype group chats #128
+- Telegram - Fixed empty button callback payload #138
+- Telegram - Fixed questions not working when the message type is an entity (url, email, etc) #139
+- The MiddlewareInterface now uses the DriverInterface instead of the abstract Driver class
+
+### Removed
+- Removed ability to only listen to direct messages / public channels as this was a relic of the old `slackbot` package.
+
+## [1.3.0]
+### Added
+- Added WeChat messaging driver.
+- Added BotMan state methods to store user, channel or driver related data.
+    - `$botman->userStorage()`
+    - `$botman->channelStorage()`
+    - `$botman->driverStorage()`
+    
+### Changed
+- Forced opis/closure `$this` scope serialization.
+
 ## [1.2.2]
 ### Added
 - Added support for Slack slash commands. Just hear for the complete slash command `$bot->hears('/command foo', ...`.

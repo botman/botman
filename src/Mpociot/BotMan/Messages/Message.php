@@ -10,6 +10,12 @@ class Message
     /** @var string */
     protected $image;
 
+    /** @var string */
+    protected $video;
+
+    /** @var string */
+    protected $filePath;
+
     /**
      * Message constructor.
      * @param string $message
@@ -54,6 +60,28 @@ class Message
     }
 
     /**
+     * @param string $video
+     * @return $this
+     */
+    public function video($video)
+    {
+        $this->video = $video;
+
+        return $this;
+    }
+
+    /**
+     * @param string $filePath
+     * @return $this
+     */
+    public function filePath($filePath)
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getMessage()
@@ -67,5 +95,21 @@ class Message
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVideo()
+    {
+        return $this->video;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
     }
 }

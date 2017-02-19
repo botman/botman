@@ -2,10 +2,15 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
+use Mpociot\BotMan\Facebook\GenericTemplate;
+use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
@@ -23,6 +28,16 @@ class FacebookDriver extends Driver
 
     /** @var string */
     protected $content;
+
+    /** @var array */
+    protected $templates = [
+        ButtonTemplate::class,
+        GenericTemplate::class,
+        ListTemplate::class,
+        ReceiptTemplate::class,
+    ];
+
+    protected $facebookProfileEndpoint = 'https://graph.facebook.com/v2.6/';
 
     const DRIVER_NAME = 'Facebook';
 
@@ -54,28 +69,52 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
-        if (! $this->config->has('facebook_app_secret')) {
-            return $this->event->has('messaging');
-        }
+        $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
+        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+            return isset($msg['message']) && isset($msg['message']['text']);
+        });
 
-        return $this->signature == 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret'));
+        return ! $messages->isEmpty() && $validSignature;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function validateSignature()
+    {
+        return hash_equals($this->signature,
+            'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
+    }
+
+    /**
+     * @param Message $matchingMessage
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function types(Message $matchingMessage)
+    {
+        $parameters = [
+            'recipient' => [
+                'id' => $matchingMessage->getChannel(),
+            ],
+            'access_token' => $this->config->get('facebook_token'),
+            'sender_action' => 'typing_on',
+        ];
+
+        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
     }
 
     /**
      * @param  Message $message
-     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message)
     {
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
-            return Answer::create($message->getMessage())
-                ->setInteractiveReply(true)
-                ->setValue($payload['message']['quick_reply']['payload']);
+            return Answer::create($message->getMessage())->setMessage($message)->setInteractiveReply(true)->setValue($payload['message']['quick_reply']['payload']);
         }
 
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**
@@ -87,10 +126,8 @@ class FacebookDriver extends Driver
     {
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
-            if (isset($msg['message'])) {
+            if (isset($msg['message']) && isset($msg['message']['text'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            } elseif (isset($msg['postback'])) {
-                return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
             }
 
             return new Message('', '', '');
@@ -122,6 +159,7 @@ class FacebookDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $questionData = $question->toArray();
+
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
                 'content_type' => 'text',
@@ -159,6 +197,8 @@ class FacebookDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $this->convertQuestion($message);
+        } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
+            $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getImage())) {
                 unset($parameters['message']['text']);
@@ -166,6 +206,14 @@ class FacebookDriver extends Driver
                     'type' => 'image',
                     'payload' => [
                         'url' => $message->getImage(),
+                    ],
+                ];
+            } elseif (! is_null($message->getVideo())) {
+                unset($parameters['message']['text']);
+                $parameters['message']['attachment'] = [
+                    'type' => 'video',
+                    'payload' => [
+                        'url' => $message->getVideo(),
                     ],
                 ];
             } else {
@@ -184,5 +232,22 @@ class FacebookDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('facebook_token'));
+    }
+
+    /**
+     * Retrieve User information.
+     *
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
+
+        $profileData = json_decode($profileData->getContent());
+        $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
+        $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
+
+        return new User($matchingMessage->getChannel(), $firstName, $lastName);
     }
 }

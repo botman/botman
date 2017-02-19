@@ -116,25 +116,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertFalse($driver->isBot());
-
-        $driver = $this->getDriver([
-            'update_id' => '1234567890',
-            'message' => [
-                'message_id' => '123',
-                'from' => [
-                    'id' => 'from_id',
-                ],
-                'chat' => [
-                    'id' => 'chat_id',
-                ],
-                'date' => '1480369277',
-                'text' => 'Telegram Text',
-                'entities' => [
-                    'foo',
-                ],
-            ],
-        ]);
-        $this->assertTrue($driver->isBot());
     }
 
     /** @test */
@@ -236,6 +217,36 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_payload_from_interactive_messages()
+    {
+        $payload = [
+            'message_id' => '123',
+            'from' => [
+                'id' => 'from_id',
+            ],
+            'chat' => [
+                'id' => 'chat_id',
+            ],
+            'date' => '1480369277',
+            'text' => 'Telegram Text',
+        ];
+
+        $driver = $this->getDriver([
+            'update_id' => '1234567890',
+            'callback_query' => [
+                'id' => '11717237123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'message' => $payload,
+            ],
+            'data' => 'FooBar',
+        ]);
+
+        $this->assertSame($payload, $driver->getMessages()[0]->getPayload());
+    }
+
+    /** @test */
     public function it_returns_answer_from_interactive_messages_and_edits_original_message()
     {
         $responseData = [
@@ -262,7 +273,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $html = m::mock(Curl::class);
         $html->shouldReceive('post')
-            ->once()
+            ->twice()
             ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/editMessageReplyMarkup', [], [
                 'chat_id' => 'chat_id',
                 'message_id' => '123',
@@ -278,6 +289,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $this->assertSame('FooBar', $driver->getConversationAnswer($message)->getText());
+        $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
     }
 
     /** @test */
@@ -346,16 +358,20 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                 'chat_id' => '12345',
                 'text' => 'How are you doing?',
                 'reply_markup' => json_encode([
-                    'inline_keyboard' => [[
+                    'inline_keyboard' => [
                         [
-                            'text' => 'Great',
-                            'callback_data' => 'great',
+                            [
+                                'text' => 'Great',
+                                'callback_data' => 'great',
+                            ],
                         ],
                         [
-                            'text' => 'Good',
-                            'callback_data' => 'good',
+                            [
+                                'text' => 'Good',
+                                'callback_data' => 'good',
+                            ],
                         ],
-                    ]],
+                    ],
                 ], true),
             ]);
 
@@ -507,5 +523,81 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_gif_image()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendDocument', [], [
+                'chat_id' => '12345',
+                'document' => 'http://image.url/foo.gif',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.gif'), $message);
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_video()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendVideo', [], [
+                'chat_id' => '12345',
+                'video' => 'http://image.url/foo.mp4',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message);
     }
 }

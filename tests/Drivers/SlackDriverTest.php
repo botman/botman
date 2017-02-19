@@ -8,6 +8,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -155,16 +156,22 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_does_not_return_messages_for_bots()
+    public function it_returns_the_user_object()
     {
         $driver = $this->getDriver([
             'event' => [
                 'user' => 'U0X12345',
-                'bot_id' => 'foo',
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
+
+        $message = $driver->getMessages()[0];
+        $user = $driver->getUser($message);
+
+        $this->assertSame($user->getId(), 'U0X12345');
+        $this->assertNull($user->getFirstName());
+        $this->assertNull($user->getLastName());
+        $this->assertNull($user->getUsername());
     }
 
     /** @test */
@@ -264,6 +271,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('response', 'U0X12345', 'general');
         $this->assertSame('response', $driver->getConversationAnswer($message)->getText());
+        $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
     }
 
     /** @test */
@@ -524,6 +532,52 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'image_url' => 'imageurl',
             ]]),
         ]);
+    }
+
+    /** @test */
+    public function it_can_reply_in_threads()
+    {
+        $responseData = [
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+                'text' => 'response',
+                'ts' => '1234.5678',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/chat.postMessage', [], [
+                'token' => 'Foo',
+                'channel' => 'general',
+                'text' => 'Test',
+                'username' => 'ReplyBot',
+                'thread_ts' => '1234.5678',
+                'icon_emoji' => ':dash:',
+                'attachments' => json_encode([[
+                    'image_url' => 'imageurl',
+                ]]),
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('response', '', 'general', Collection::make([
+            'ts' => '1234.5678',
+        ]));
+        $driver->replyInThread('Test', [
+            'username' => 'ReplyBot',
+            'icon_emoji' => ':dash:',
+            'attachments' => json_encode([[
+                'image_url' => 'imageurl',
+            ]]),
+        ], $message);
     }
 
     /** @test */

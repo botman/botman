@@ -48,7 +48,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
             ->with($question, []);
         $bot->shouldReceive('storeConversation')
             ->once()
-            ->with($conversation, $closure);
+            ->with($conversation, $closure, $question, []);
 
         $conversation->setBot($bot);
         $conversation->ask($question, $closure);
@@ -73,7 +73,7 @@ class ConversationTest extends PHPUnit_Framework_TestCase
             ->with($question, []);
         $bot->shouldReceive('storeConversation')
             ->once()
-            ->with($conversation, m::type('array'));
+            ->with($conversation, m::type('array'), $question, []);
 
         $conversation->setBot($bot);
         $conversation->ask($question, [

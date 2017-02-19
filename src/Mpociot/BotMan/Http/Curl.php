@@ -8,6 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 class Curl implements HttpInterface
 {
     /**
+     * @param $url
+     * @param array $urlParameters
+     * @return Response
+     */
+    public function get($url, array $urlParameters = [])
+    {
+        $request = $this->prepareRequest($url, $urlParameters);
+
+        return $this->executeRequest($request);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = [], $asJSON = false)
@@ -44,7 +56,7 @@ class Curl implements HttpInterface
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($request, CURLINFO_HEADER_OUT, true);
-        curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($request, CURLOPT_SSL_VERIFYPEER, true);
 
         return $request;
     }

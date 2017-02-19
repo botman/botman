@@ -7,12 +7,15 @@ use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\NexmoDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Drivers\WeChatDriver;
 use Mpociot\BotMan\Drivers\HipChatDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
+use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
 
 class DriverManager
 {
@@ -22,10 +25,12 @@ class DriverManager
     protected static $drivers = [
         SlackDriver::class,
         FacebookDriver::class,
+        FacebookPostbackDriver::class,
         TelegramDriver::class,
         BotFrameworkDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
+        WeChatDriver::class,
     ];
 
     /** @var array */
@@ -64,6 +69,13 @@ class DriverManager
     public static function loadFromName($name, array $config, Request $request = null)
     {
         /*
+        * Use the driver class basename without "Driver" if we're dealing with a
+        * DriverInterface object.
+        */
+        if (class_exists($name) && is_subclass_of($name, DriverInterface::class)) {
+            $name = rtrim(basename(str_replace('\\', '/', $name)), 'Driver');
+        }
+        /*
          * Use the driver name constant if we try to load a driver by it's
          * fully qualified class name.
          */
@@ -100,6 +112,16 @@ class DriverManager
         }
 
         return $drivers;
+    }
+
+    /**
+     * Append a driver to the list of loadable drivers.
+     *
+     * @param string $driver Driver class name
+     */
+    public static function loadDriver($driver)
+    {
+        self::$drivers[] = $driver;
     }
 
     /**

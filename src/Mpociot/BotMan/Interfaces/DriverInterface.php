@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
+use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,13 @@ interface DriverInterface
     public function isConfigured();
 
     /**
+     * Retrieve User information.
+     * @param Message $matchingMessage
+     * @return UserInterface
+     */
+    public function getUser(Message $matchingMessage);
+
+    /**
      * @param Message $matchingMessage
      *
      * @return Answer
@@ -53,4 +61,11 @@ interface DriverInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Send a typing indicator.
+     * @param Message $matchingMessage
+     * @return mixed
+     */
+    public function types(Message $matchingMessage);
 }

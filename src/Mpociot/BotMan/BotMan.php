@@ -3,10 +3,15 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Opis\Closure\SerializableClosure;
+use UnexpectedValueException;
+use Illuminate\Support\Collection;
+use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
+use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Interfaces\StorageInterface;
+use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 /**
@@ -14,7 +19,15 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
  */
 class BotMan
 {
-    use VerifiesServices;
+    use VerifiesServices,
+        ProvidesStorage,
+        HandlesConversations;
+
+    /**
+     * regular expression to capture named parameters but not quantifiers
+     * captures {name}, but not {1}, {1,}, or {1,2}.
+     */
+    const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
 
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
@@ -28,6 +41,9 @@ class BotMan
     /** @var string */
     protected $driverName;
 
+    /** @var array|null */
+    protected $currentConversationData;
+
     /**
      * Messages to listen to.
      * @var array
@@ -40,6 +56,9 @@ class BotMan
      * @var callable|null
      */
     protected $fallbackMessage;
+
+    /** @var array */
+    protected $groupAttributes = [];
 
     /** @var array */
     protected $matches = [];
@@ -56,35 +75,40 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
+    /** @var StorageInterface */
+    protected $storage;
+
     /** @var bool */
     protected $loadedConversation = false;
-
-    const DIRECT_MESSAGE = 'direct_message';
-
-    const PUBLIC_CHANNEL = 'public_channel';
 
     /**
      * BotMan constructor.
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
+     * @param StorageInterface $storage
      */
-    public function __construct(CacheInterface $cache, DriverInterface $driver, $config = [])
+    public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
         $this->cache = $cache;
         $this->message = new Message('', '', '');
         $this->driver = $driver;
         $this->config = $config;
-
-        $this->loadActiveConversation();
+        $this->storage = $storage;
     }
 
     /**
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareInterface|array $middleware
      */
-    public function middleware(MiddlewareInterface $middleware)
+    public function middleware($middleware)
     {
-        $this->middleware[] = $middleware;
+        if (! is_array($middleware)) {
+            $middleware = [$middleware];
+        }
+
+        $this->middleware = Collection::make($middleware)->filter(function ($item) {
+            return $item instanceof MiddlewareInterface;
+        })->merge($this->middleware)->toArray();
     }
 
     /**
@@ -95,6 +119,14 @@ class BotMan
     public function fallback($callback)
     {
         $this->fallbackMessage = $callback;
+    }
+
+    /**
+     * @param DriverInterface $driver
+     */
+    public function setDriver(DriverInterface $driver)
+    {
+        $this->driver = $driver;
     }
 
     /**
@@ -112,15 +144,21 @@ class BotMan
      */
     public function getMessages()
     {
-        $messages = $this->getDriver()->getMessages();
+        return $this->getDriver()->getMessages();
+    }
 
-        foreach ($this->middleware as $middleware) {
-            foreach ($messages as &$message) {
-                $middleware->handle($message, $this->getDriver());
-            }
+    /**
+     * @param Message $message
+     * @param array $middleware
+     * @return Message
+     */
+    protected function applyMiddleware(Message &$message, array $middleware)
+    {
+        foreach ($middleware as $middle) {
+            $middle->handle($message, $this->getDriver());
         }
 
-        return $messages;
+        return $message;
     }
 
     /**
@@ -140,13 +178,21 @@ class BotMan
     }
 
     /**
+     * @return UserInterface
+     */
+    public function getUser()
+    {
+        return $this->getDriver()->getUser($this->getMessage());
+    }
+
+    /**
      * Get the parameter names for the route.
      *
      * @return array
      */
     protected function compileParameterNames($value)
     {
-        preg_match_all('/\{(.*?)\}/', $value, $matches);
+        preg_match_all(self::PARAM_NAME_REGEX, $value, $matches);
 
         return array_map(function ($m) {
             return trim($m, '?');
@@ -155,19 +201,33 @@ class BotMan
 
     /**
      * @param string $pattern the pattern to listen for
-     * @param Closure|string $callback the callback to execute. Either a closuer or a Class@method notation
+     * @param Closure|string $callback the callback to execute. Either a closure or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
-     * @return $this
+     * @return Command
      */
     public function hears($pattern, $callback, $in = null)
     {
-        $this->listenTo[] = [
-            'pattern' => $pattern,
-            'callback' => $callback,
-            'in' => $in,
-        ];
+        $command = new Command($pattern, $callback, $in);
+        $command->applyGroupAttributes($this->groupAttributes);
 
-        return $this;
+        $this->listenTo[] = $command;
+
+        return $command;
+    }
+
+    /**
+     * Create a command group with shared attributes.
+     *
+     * @param  array  $attributes
+     * @param  \Closure  $callback
+     */
+    public function group(array $attributes, Closure $callback)
+    {
+        $this->groupAttributes = $attributes;
+
+        call_user_func($callback, $this);
+
+        $this->groupAttributes = [];
     }
 
     /**
@@ -176,18 +236,33 @@ class BotMan
      */
     public function listen()
     {
+        $this->loadActiveConversation();
+
         $heardMessage = false;
-        foreach ($this->listenTo as $messageData) {
+        foreach ($this->listenTo as $command) {
+            $messageData = $command->toArray();
             $pattern = $messageData['pattern'];
             $callback = $messageData['callback'];
 
             if (! $callback instanceof Closure) {
+                if (strpos($callback, '@') === false) {
+                    $callback = $this->makeInvokableAction($callback);
+                }
+
                 list($class, $method) = explode('@', $callback);
                 $callback = [new $class, $method];
             }
 
             foreach ($this->getMessages() as $message) {
-                if ($this->isMessageMatching($message, $pattern, $matches) && $this->isChannelValid($message->getChannel(), $messageData['in']) && $this->loadedConversation === false) {
+                $message = $this->applyMiddleware($message, $this->middleware);
+                $message = $this->applyMiddleware($message, $messageData['middleware']);
+
+                if (! $this->isBot() &&
+                    $this->isMessageMatching($message, $pattern, $matches, $messageData['middleware']) &&
+                    $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
+                    $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
+                    $this->loadedConversation === false
+                ) {
                     $this->message = $message;
                     $heardMessage = true;
                     $parameterNames = $this->compileParameterNames($pattern);
@@ -213,9 +288,10 @@ class BotMan
      * @param Message $message
      * @param string $pattern
      * @param array $matches
+     * @param array $messageMiddleware
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches)
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = [])
     {
         $matches = [];
 
@@ -223,12 +299,15 @@ class BotMan
         $answerText = $this->getConversationAnswer()->getValue();
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace('/\{(\w+?)\}/', '(.*)', $pattern).'$/i';
+        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/i';
         $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
-        foreach ($this->middleware as $middleware) {
-            return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+        $mergedMiddleware = array_merge($this->middleware, $messageMiddleware);
+        if (count($mergedMiddleware)) {
+            return Collection::make($mergedMiddleware)->reject(function ($middleware) use ($message, $pattern, $regexMatched) {
+                return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+            })->isEmpty() === true;
         }
 
         return $regexMatched;
@@ -238,9 +317,10 @@ class BotMan
      * @param string|Question $message
      * @param string|array $channel
      * @param DriverInterface|null $driver
+     * @param array $additionalParameters
      * @return $this
      */
-    public function say($message, $channel, $driver = null)
+    public function say($message, $channel, $driver = null, $additionalParameters = [])
     {
         if (is_null($driver)) {
             $drivers = DriverManager::getConfiguredDrivers($this->config);
@@ -251,8 +331,30 @@ class BotMan
         foreach ($drivers as $driver) {
             $matchMessage = new Message('', '', $channel);
             /* @var $driver DriverInterface */
-            $driver->reply($message, $matchMessage, []);
+            $driver->reply($message, $matchMessage, $additionalParameters);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function types()
+    {
+        $this->getDriver()->types($this->message);
+
+        return $this;
+    }
+
+    /**
+     * @param int $seconds Number of seconds to wait
+     * @return $this
+     */
+    public function typesAndWaits($seconds)
+    {
+        $this->getDriver()->types($this->message);
+        sleep($seconds);
 
         return $this;
     }
@@ -270,6 +372,16 @@ class BotMan
     }
 
     /**
+     * Return a random message.
+     * @param array $messages
+     * @return $this
+     */
+    public function randomReply(array $messages)
+    {
+        return $this->reply($messages[array_rand($messages)]);
+    }
+
+    /**
      * @param string|Question $message
      * @param array $additionalParameters
      * @return $this
@@ -284,80 +396,17 @@ class BotMan
     }
 
     /**
-     * @param Conversation $instance
+     * @param string $driverName
+     * @param string|array $allowedDrivers
+     * @return bool
      */
-    public function startConversation(Conversation $instance)
+    protected function isDriverValid($driverName, $allowedDrivers)
     {
-        $instance->setBot($this);
-        $instance->run();
-    }
-
-    /**
-     * @param Conversation $instance
-     * @param array|Closure $next
-     */
-    public function storeConversation(Conversation $instance, $next)
-    {
-        $this->cache->put($this->message->getConversationIdentifier(), [
-            'conversation' => $instance,
-            'next' => is_array($next) ? $this->prepareCallbacks($next) : serialize(new SerializableClosure($next)),
-        ], 30);
-    }
-
-    /**
-     * Prepare an array of pattern / callbacks before
-     * caching them.
-     *
-     * @param array $callbacks
-     * @return array
-     */
-    protected function prepareCallbacks(array $callbacks)
-    {
-        foreach ($callbacks as &$callback) {
-            $callback['callback'] = serialize(new SerializableClosure($callback['callback']));
+        if (! is_null($allowedDrivers)) {
+            return Collection::make($allowedDrivers)->contains($driverName);
         }
 
-        return $callbacks;
-    }
-
-    /**
-     * Look for active conversations and clear the payload
-     * if a conversation is found.
-     */
-    public function loadActiveConversation()
-    {
-        $this->loadedConversation = false;
-        if ($this->isBot() === false) {
-            foreach ($this->getMessages() as $message) {
-                if ($this->cache->has($message->getConversationIdentifier())) {
-                    $convo = $this->cache->pull($message->getConversationIdentifier());
-                    $next = false;
-                    $parameters = [];
-                    if (is_array($convo['next'])) {
-                        foreach ($convo['next'] as $callback) {
-                            if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
-                                $this->message = $message;
-                                $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
-                                $this->matches = $parameters;
-                                $next = unserialize($callback['callback']);
-                                break;
-                            }
-                        }
-                    } else {
-                        $this->message = $message;
-                        $next = unserialize($convo['next']);
-                    }
-
-                    if (is_callable($next)) {
-                        array_unshift($parameters, $this->getConversationAnswer());
-                        array_push($parameters, $convo['conversation']);
-                        call_user_func_array($next, $parameters);
-                        // Mark conversation as loaded to avoid triggering the fallback method
-                        $this->loadedConversation = true;
-                    }
-                }
-            }
-        }
+        return true;
     }
 
     /**
@@ -367,17 +416,26 @@ class BotMan
      */
     protected function isChannelValid($givenChannel, $allowedChannel)
     {
-        /*
-         * If the Slack channel starts with a "D" it's a direct message,
-         * if it starts with a "C" it is a public channel.
-         */
-        if ($allowedChannel === self::DIRECT_MESSAGE) {
-            return strtolower($givenChannel[0]) === 'd';
-        } elseif ($allowedChannel === self::PUBLIC_CHANNEL) {
-            return strtolower($givenChannel[0]) === 'c';
+        return $givenChannel == $allowedChannel || $allowedChannel === null;
+    }
+
+    /**
+     * Make an action for an invokable controller.
+     *
+     * @param string $action
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    protected function makeInvokableAction($action)
+    {
+        if (! method_exists($action, '__invoke')) {
+            throw new UnexpectedValueException(sprintf(
+                'Invalid hears action: [%s]', $action
+            ));
         }
 
-        return true;
+        return $action.'@__invoke';
     }
 
     /**
@@ -394,6 +452,23 @@ class BotMan
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->getDriver(), $name)) {
+            // Add the current message to the passed arguments
+            array_push($arguments, $this->getMessage());
+
+            return call_user_func_array([$this->getDriver(), $name], $arguments);
+        }
+
+        throw new \BadMethodCallException('Method ['.$name.'] does not exist.');
     }
 
     /**
@@ -415,6 +490,7 @@ class BotMan
             'payload',
             'event',
             'driverName',
+            'storage',
             'message',
             'cache',
             'matches',

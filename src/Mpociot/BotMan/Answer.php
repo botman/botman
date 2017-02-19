@@ -13,6 +13,9 @@ class Answer
     /** @var string */
     protected $callbackId;
 
+    /** @var Message */
+    protected $message;
+
     /** @var bool */
     protected $isInteractiveReply = false;
 
@@ -112,6 +115,25 @@ class Answer
     public function setInteractiveReply($interactiveReply)
     {
         $this->isInteractiveReply = $interactiveReply;
+
+        return $this;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param Message $message
+     * @return $this
+     */
+    public function setMessage(Message $message)
+    {
+        $this->message = $message;
 
         return $this;
     }

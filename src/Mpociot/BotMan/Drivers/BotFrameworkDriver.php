@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -61,10 +62,11 @@ class BotFrameworkDriver extends Driver
 
             return Answer::create($message->getMessage())
                 ->setInteractiveReply(true)
+                ->setMessage($message)
                 ->setValue($matches[1]);
         }
 
-        return Answer::create($message->getMessage());
+        return Answer::create($message->getMessage())->setMessage($message);
     }
 
     /**
@@ -74,7 +76,11 @@ class BotFrameworkDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
+        // replace bot's name for group chats and special characters that might be sent from Web Skype
+        $pattern = '/<at id=(.*?)at>[^(\x20-\x7F)\x0A]*\s*/';
+        $message = preg_replace($pattern, '', $this->event->get('text'));
+
+        return [new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
     }
 
     /**
@@ -83,6 +89,15 @@ class BotFrameworkDriver extends Driver
     public function isBot()
     {
         return false;
+    }
+
+    /**
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getChannel(), null, null, Collection::make($matchingMessage->getPayload())->get('from')['name']);
     }
 
     /**
@@ -126,8 +141,6 @@ class BotFrameworkDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $token = $this->getAccessToken();
-
         $parameters = array_merge([
             'type' => 'message',
         ], $additionalParameters);
@@ -147,22 +160,32 @@ class BotFrameworkDriver extends Driver
             ];
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
-            $parameters['attachments'] = [
-                [
-                    'contentType' => 'image/png',
-                    'contentUrl' => $message->getImage(),
-                ],
-            ];
+
+            if (! is_null($message->getImage())) {
+                $parameters['attachments'] = [
+                    [
+                        'contentType' => 'image/png',
+                        'contentUrl' => $message->getImage(),
+                    ],
+                ];
+            } elseif (! is_null($message->getVideo())) {
+                $parameters['attachments'] = [
+                    [
+                        'contentType' => 'video/mp4',
+                        'contentUrl' => $message->getVideo(),
+                    ],
+                ];
+            }
         } else {
             $parameters['text'] = $message;
         }
 
         $headers = [
             'Content-Type:application/json',
-            'Authorization:Bearer '.$token,
+            'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', 'https://skype.botframework.com');
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
 
         if (strstr($apiURL, 'webchat.botframework')) {
             $parameters['from'] = [

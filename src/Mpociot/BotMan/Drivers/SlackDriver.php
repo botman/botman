@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -77,10 +78,11 @@ class SlackDriver extends Driver
             return Answer::create($this->payload['actions'][0]['name'])
                 ->setInteractiveReply(true)
                 ->setValue($this->payload['actions'][0]['value'])
+                ->setMessage($message)
                 ->setCallbackId($this->payload['callback_id']);
         }
 
-        return Answer::create($this->event->get('text'));
+        return Answer::create($this->event->get('text'))->setMessage($message);
     }
 
     /**
@@ -91,7 +93,7 @@ class SlackDriver extends Driver
     public function getMessages()
     {
         $messageText = '';
-        if (! $this->payload instanceof Collection && $this->isBot() === false) {
+        if (! $this->payload instanceof Collection) {
             $messageText = $this->event->get('text');
             if ($this->isSlashCommand()) {
                 $messageText = $this->event->get('command').' '.$messageText;
@@ -142,6 +144,19 @@ class SlackDriver extends Driver
         } else {
             $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
+    }
+
+    /**
+     * @param $message
+     * @param array $additionalParameters
+     * @param Message $matchingMessage
+     * @return $this
+     */
+    public function replyInThread($message, $additionalParameters, $matchingMessage)
+    {
+        $additionalParameters['thread_ts'] = $matchingMessage->getPayload()->get('ts');
+
+        return $this->reply($message, $matchingMessage, $additionalParameters);
     }
 
     /**
@@ -248,5 +263,15 @@ class SlackDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('slack_token'));
+    }
+
+    /**
+     * Retrieve User information.
+     * @param Message $matchingMessage
+     * @return User
+     */
+    public function getUser(Message $matchingMessage)
+    {
+        return new User($matchingMessage->getUser());
     }
 }

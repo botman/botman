@@ -1,5 +1,8 @@
 language: php
 
+services:
+  - redis-server
+
 php:
   - 5.6
   - 7.0
@@ -14,6 +17,7 @@ script:
 
 before_install:
   - pip install --user codecov
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 after_success:
   - codecov
