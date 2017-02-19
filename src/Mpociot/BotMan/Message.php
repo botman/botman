@@ -21,6 +21,9 @@ class Message
     /** @var array */
     protected $extras = [];
 
+    /** @var string */
+    private $audio;
+
     public function __construct($message, $user, $channel, $payload = null)
     {
         $this->message = $message;
@@ -100,5 +103,21 @@ class Message
         }
 
         return $this->extras;
+    }
+
+    /**
+     * @param $audio
+     */
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAudio()
+    {
+        return $this->audio;
     }
 }

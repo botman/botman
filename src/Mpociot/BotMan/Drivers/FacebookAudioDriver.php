@@ -51,7 +51,10 @@ class FacebookAudioDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            return new Message(BotMan::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(BotMan::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setAudio($this->getAudioUrls($msg));
+
+            return $message;
         })->toArray();
 
         if (count($messages) === 0) {
@@ -62,14 +65,13 @@ class FacebookAudioDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve audio file from an incoming message.
-     * @param  Message $matchingMessage
+     * Retrieve audio file urls from an incoming message.
+     *
+     * @param array $message
      * @return array A download for the audio file.
      */
-    public function getAudio(Message $matchingMessage)
+    public function getAudioUrls(array $message)
     {
-        $messageData = $matchingMessage->getPayload();
-
-        return Collection::make($messageData['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
     }
 }
