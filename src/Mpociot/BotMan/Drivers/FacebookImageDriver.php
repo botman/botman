@@ -35,6 +35,7 @@ class FacebookImageDriver extends FacebookDriver
                     return $attachment['type'] === 'image';
                 })->isEmpty() === false;
             }
+
             return false;
         });
 
@@ -49,10 +50,10 @@ class FacebookImageDriver extends FacebookDriver
     public function getMessages()
     {
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
-                return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
-            })->transform(function ($msg) {
-                return new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            })->toArray();
+            return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
+        })->transform(function ($msg) {
+            return new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+        })->toArray();
 
         if (count($messages) === 0) {
             return [new Message('', '', '')];
@@ -62,13 +63,14 @@ class FacebookImageDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve a image from an incoming message
+     * Retrieve a image from an incoming message.
      * @param  Message $matchingMessage
      * @return array A download for the image file.
      */
     public function getImages(Message $matchingMessage)
     {
         $messageData = $matchingMessage->getPayload();
+
         return Collection::make($messageData['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
     }
 }

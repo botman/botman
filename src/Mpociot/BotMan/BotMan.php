@@ -29,7 +29,7 @@ class BotMan
      */
     const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
 
-    /** 
+    /**
      * Pattern that messages use to identify image uploads.
      */
     const IMAGE_PATTERN = '%%%_IMAGE_%%%';
