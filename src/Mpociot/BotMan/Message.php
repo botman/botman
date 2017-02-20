@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Location;
 
 class Message
 {
@@ -33,8 +34,8 @@ class Message
     /** @var array */
     private $attachments = [];
 
-    /** @var array */
-    private $location = [];
+    /** @var Location */
+    private $location;
 
     public function __construct($message, $user, $channel, $payload = null)
     {
@@ -184,15 +185,15 @@ class Message
     }
 
     /**
-     * @param array $location
+     * @param Location $location
      */
-    public function setLocation(array $location)
+    public function setLocation(Location $location)
     {
         $this->location = $location;
     }
 
     /**
-     * @return array
+     * @return Location
      */
     public function getLocation()
     {

@@ -43,6 +43,12 @@ class FacebookImageDriverTest extends PHPUnit_Framework_TestCase
                                             'url' => 'http://facebookimage.com/image.png',
                                         ],
                                     ],
+                                    [
+                                        'type' => 'image',
+                                        'payload' => [
+                                            'url' => 'http://facebookimage.com/imageX.png',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -135,6 +141,7 @@ class FacebookImageDriverTest extends PHPUnit_Framework_TestCase
         $messages = $driver->getMessages();
         $images = $messages[0]->getImages();
 
+        $this->assertCount(2, $images);
         $this->assertTrue(is_array($images));
         $this->assertEquals('http://facebookimage.com/image.png', $images[0]);
     }

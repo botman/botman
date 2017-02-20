@@ -6,6 +6,7 @@ use Mockery as m;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 
@@ -138,9 +139,8 @@ class FacebookLocationDriverTest extends PHPUnit_Framework_TestCase
         $messages = $driver->getMessages();
         $location = $messages[0]->getLocation();
 
-        $this->assertTrue(is_array($location));
-        $this->assertTrue(isset($location['coordinates']));
-        $this->assertTrue(isset($location['coordinates']['lat']));
-        $this->assertTrue(isset($location['coordinates']['long']));
+        $this->assertInstanceOf(Location::class, $location);
+        $this->assertSame(37.483872693672, $location->getLatitude());
+        $this->assertSame(-122.14900441942, $location->getLongitude());
     }
 }
