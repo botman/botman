@@ -40,6 +40,7 @@ class TelegramLocationDriver extends TelegramDriver
     {
         $message = new Message(BotMan::LOCATION_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setLocation(new Location($this->event->get('location')['latitude'], $this->event->get('location')['longitude']));
+
         return [$message];
     }
 }

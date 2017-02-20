@@ -3,13 +3,11 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\TelegramLocationDriver;
 
 class TelegramLocationDriverTest extends PHPUnit_Framework_TestCase
@@ -39,7 +37,7 @@ class TelegramLocationDriverTest extends PHPUnit_Framework_TestCase
                 ],
                 'location' => [
                     'latitude' => 41.123987123,
-                    'longitude' => -122.123854248
+                    'longitude' => -122.123854248,
                 ],
             ],
         ];
