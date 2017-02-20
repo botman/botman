@@ -79,14 +79,17 @@ class BotManFactory
         }
 
         $client->setToken(Collection::make($config)->get('slack_token'));
-
-        $botman = new BotMan($cache, new SlackRTMDriver($config, $client), $config, $storageDriver);
+        
+        $driver = new SlackRTMDriver($config, $client);
+        $botman = new BotMan($cache, $driver, $config, $storageDriver);
 
         $client->on('message', function () use ($botman) {
             $botman->listen();
         });
 
-        $client->connect();
+        $client->connect()->then(function() use ($driver){
+            $driver->connected();
+        });
 
         return $botman;
     }
