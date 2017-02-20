@@ -338,6 +338,22 @@ class BotMan
     }
 
     /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function ask($question, $next, $additionalParameters = [])
+    {
+        $this->reply($question, $additionalParameters);
+        $this->storeConversation(new class extends Conversation {
+            public function run(){}
+        }, $next, $question, $additionalParameters);
+
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function types()

@@ -8,6 +8,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
@@ -1440,5 +1441,50 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
 
         $this->assertTrue($called);
+    }
+
+
+
+    /** @test */
+    public function it_can_create_conversations_on_the_fly()
+    {
+        $GLOBALS['answer'] = null;
+        $GLOBALS['conversation'] = null;
+        $GLOBALS['called'] = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->ask('How are you doing?', function($answer, $conversation) {
+                $GLOBALS['called'] = true;
+                $GLOBALS['answer'] = $answer;
+                $GLOBALS['conversation'] = $conversation;
+            });
+        });
+        $botman->listen();
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Great!',
+            ],
+        ]);
+        $botman->listen();
+
+        $this->assertTrue($GLOBALS['called']);
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertInstanceOf(Conversation::class, $GLOBALS['conversation']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('Great!', $GLOBALS['answer']->getText());
     }
 }
