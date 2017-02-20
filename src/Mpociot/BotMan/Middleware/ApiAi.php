@@ -65,7 +65,7 @@ class ApiAi implements MiddlewareInterface
     {
         $response = $this->http->post($this->apiUrl, [], [
             'query' => [$message->getMessage()],
-            'sessionId' => substr(sha1($message->getChannel()), 0, 36),
+            'sessionId' => md5($message->getChannel()),
             'lang' => 'en',
         ], [
             'Authorization: Bearer '.$this->token,
