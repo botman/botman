@@ -12,7 +12,7 @@ class TestClass
 
     public function __construct(BotMan $bot)
     {
-    	$this->botman = $bot;
+        $this->botman = $bot;
     }
 
     public function foo()
