@@ -13,6 +13,9 @@ class Message
     /** @var string */
     protected $video;
 
+    /** @var string */
+    private $audio;
+
     /**
      * Message constructor.
      * @param string $message
@@ -89,5 +92,15 @@ class Message
     public function getVideo()
     {
         return $this->video;
+    }
+
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+    }
+
+    public function getAudio()
+    {
+        return $this->audio;
     }
 }

@@ -34,6 +34,26 @@ class BotMan
      */
     const IMAGE_PATTERN = '%%%_IMAGE_%%%';
 
+    /**
+     * Pattern that messages use to identify video uploads.
+     */
+    const VIDEO_PATTERN = '%%%_VIDEO_%%%';
+
+    /**
+     * Pattern that messages use to identify audio uploads.
+     */
+    const AUDIO_PATTERN = '%%%_AUDIO_%%%';
+
+    /**
+     * Pattern that messages use to identify attachments uploads.
+     */
+    const ATTACHMENT_PATTERN = '%%%_ATTACHMENT_%%%';
+
+    /**
+     * Pattern that messages use to identify location attachment.
+     */
+    const LOCATION_PATTERN = '%%%_LOCATION_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -220,9 +240,59 @@ class BotMan
         return $command;
     }
 
-    public function receivesImage($callback)
+    /**
+     * Listening for image files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesImages($callback)
     {
         return $this->hears(self::IMAGE_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for image files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesVideos($callback)
+    {
+        return $this->hears(self::VIDEO_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for audio files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesAudio($callback)
+    {
+        return $this->hears(self::AUDIO_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for file attachments.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesAttachments($callback)
+    {
+        return $this->hears(self::ATTACHMENT_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for location attachment.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesLocation($callback)
+    {
+        return $this->hears(self::LOCATION_PATTERN, $callback);
     }
 
     /**

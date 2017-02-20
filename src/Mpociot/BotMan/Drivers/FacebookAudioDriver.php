@@ -6,9 +6,9 @@ use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 
-class FacebookImageDriver extends FacebookDriver
+class FacebookAudioDriver extends FacebookDriver
 {
-    const DRIVER_NAME = 'FacebookImage';
+    const DRIVER_NAME = 'FacebookAudio';
 
     /**
      * Return the driver name.
@@ -31,7 +31,7 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments'])) {
                 return Collection::make($msg['message']['attachments'])->filter(function ($attachment) {
-                    return $attachment['type'] === 'image';
+                    return $attachment['type'] === 'audio';
                 })->isEmpty() === false;
             }
 
@@ -51,8 +51,8 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            $message->setImages($this->getImagesUrls($msg));
+            $message = new Message(BotMan::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setAudio($this->getAudioUrls($msg));
 
             return $message;
         })->toArray();
@@ -65,13 +65,13 @@ class FacebookImageDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve image urls from an incoming message.
+     * Retrieve audio file urls from an incoming message.
      *
      * @param array $message
-     * @return array A download for the image file.
+     * @return array A download for the audio file.
      */
-    public function getImagesUrls(array $message)
+    public function getAudioUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
     }
 }
