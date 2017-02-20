@@ -251,7 +251,7 @@ class BotMan
                 }
 
                 list($class, $method) = explode('@', $callback);
-                $callback = [new $class, $method];
+                $callback = [new $class($this), $method];
             }
 
             foreach ($this->getMessages() as $message) {

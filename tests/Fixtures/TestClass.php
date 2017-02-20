@@ -8,7 +8,14 @@ class TestClass
 {
     public static $called = false;
 
-    public function foo(BotMan $bot)
+    private $botman;
+
+    public function __construct(BotMan $bot)
+    {
+    	$this->botman = $bot;
+    }
+
+    public function foo()
     {
         self::$called = true;
     }
