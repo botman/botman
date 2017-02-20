@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
@@ -73,6 +72,6 @@ class FacebookLocationDriver extends FacebookDriver
      */
     public function getLocation(array $messages)
     {
-        return Collection::make($messages['message']['attachments'])->where('type', 'location')->first();
+        return Collection::make($messages['message']['attachments'])->where('type', 'location')->pluck('payload')->first();
     }
 }
