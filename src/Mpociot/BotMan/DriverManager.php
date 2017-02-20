@@ -19,9 +19,9 @@ use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
-use Mpociot\BotMan\Drivers\TelegramLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
+use Mpociot\BotMan\Drivers\TelegramLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
 
 class DriverManager
