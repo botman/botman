@@ -13,6 +13,7 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Conversations\InlineConversation;
 
 /**
  * Class BotMan.
@@ -346,11 +347,7 @@ class BotMan
     public function ask($question, $next, $additionalParameters = [])
     {
         $this->reply($question, $additionalParameters);
-        $this->storeConversation(new class extends Conversation {
-            public function run()
-            {
-            }
-        }, $next, $question, $additionalParameters);
+        $this->storeConversation(new InlineConversation, $next, $question, $additionalParameters);
 
         return $this;
     }
