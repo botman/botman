@@ -42,7 +42,7 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
-     * Connected event
+     * Connected event.
      */
     public function connected()
     {
