@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
@@ -102,7 +103,7 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
-     * @param string|Question $message
+     * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return $this
@@ -114,10 +115,19 @@ class SlackRTMDriver implements DriverInterface
             'as_user' => true,
         ], $additionalParameters);
 
+        $fileToUpload = null;
+
         if ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
             if (! is_null($message->getImage())) {
                 $parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
+            }
+
+            if (! empty($message->getFilePath()) && file_exists($message->getFilePath())) {
+                $fileToUpload = (new File())
+                    ->setTitle(basename($message->getFilePath()))
+                    ->setPath($message->getFilePath())
+                    ->setInitialComment($message->getMessage());
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';
@@ -126,7 +136,13 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message;
         }
 
-        $this->client->apiCall('chat.postMessage', $parameters);
+        if (empty($fileToUpload)) {
+            $this->client->apiCall('chat.postMessage', $parameters);
+        } else {
+            $this->client->fileUpload($fileToUpload, [$matchingMessage->getChannel()]);
+        }
+
+        return $this;
     }
 
     /**
