@@ -15,23 +15,24 @@ class Message
     /** @var string */
     protected $channel;
 
+    /** @var array */
+    protected $images = [];
+
     /** @var mixed */
     protected $payload;
 
     /** @var array */
     protected $extras = [];
 
-    /** @var array */
-    private $images;
 
     /** @var array */
-    private $audio;
+    private $audio =[];
 
     /** @var array */
-    private $attachments;
+    private $attachments = [];
 
     /** @var array */
-    private $location;
+    private $location =[];
 
     public function __construct($message, $user, $channel, $payload = null)
     {
@@ -123,6 +124,7 @@ class Message
     }
 
     /**
+     * Returns the message image URL.
      * @return array
      */
     public function getImages()
