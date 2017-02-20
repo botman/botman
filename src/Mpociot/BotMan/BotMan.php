@@ -35,6 +35,11 @@ class BotMan
     const IMAGE_PATTERN = '%%%_IMAGE_%%%';
 
     /**
+     * Pattern that messages use to identify video uploads.
+     */
+    const VIDEO_PATTERN = '%%%_VIDEO_%%%';
+
+    /**
      * Pattern that messages use to identify audio uploads.
      */
     const AUDIO_PATTERN = '%%%_AUDIO_%%%';
@@ -244,6 +249,17 @@ class BotMan
     public function receivesImages($callback)
     {
         return $this->hears(self::IMAGE_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for image files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesVideos($callback)
+    {
+        return $this->hears(self::VIDEO_PATTERN, $callback);
     }
 
     /**

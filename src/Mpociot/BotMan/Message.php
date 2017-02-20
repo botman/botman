@@ -18,6 +18,9 @@ class Message
     /** @var array */
     protected $images = [];
 
+    /** @var array */
+    protected $videos = [];
+
     /** @var mixed */
     protected $payload;
 
@@ -129,6 +132,23 @@ class Message
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * @param array $videos
+     */
+    public function setVideos(array $videos)
+    {
+        $this->videos = $videos;
+    }
+
+    /**
+     * Returns the message video URLs.
+     * @return array
+     */
+    public function getVideos()
+    {
+        return $this->videos;
     }
 
     /**

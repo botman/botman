@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -31,6 +32,7 @@ class DriverManager
         SlackDriver::class,
         FacebookDriver::class,
         FacebookImageDriver::class,
+        FacebookVideoDriver::class,
         FacebookAudioDriver::class,
         FacebookPostbackDriver::class,
         FacebookAttachmentDriver::class,
