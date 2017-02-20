@@ -3,13 +3,14 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
 
-class FacebookAttachmentDriverTest extends PHPUnit_Framework_TestCase
+class FacebookImageDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Get correct Facebook request data for location
@@ -38,9 +39,9 @@ class FacebookAttachmentDriverTest extends PHPUnit_Framework_TestCase
                                 "seq" => 297,
                                 "attachments" => [
                                     [
-                                        "type" => "file",
+                                        "type" => "image",
                                         "payload" => [
-                                            "url" => "http://facebookattachmenturl.com",
+                                            "url" => "http://facebookimage.com/image.png",
                                         ],
                                     ],
                                 ],
@@ -60,14 +61,14 @@ class FacebookAttachmentDriverTest extends PHPUnit_Framework_TestCase
             $htmlInterface = m::mock(Curl::class);
         }
 
-        return new FacebookAttachmentDriver($request, [], $htmlInterface);
+        return new FacebookImageDriver($request, [], $htmlInterface);
     }
 
     /** @test */
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver([]);
-        $this->assertSame('FacebookAttachment', $driver->getName());
+        $this->assertSame('FacebookImage', $driver->getName());
     }
 
     /**
@@ -133,9 +134,9 @@ class FacebookAttachmentDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->getCorrectRequestData());
         $messages = $driver->getMessages();
-        $attachments = $messages[0]->getAttachments();
+        $images = $messages[0]->getImages();
 
-        $this->assertTrue(is_array($attachments));
-        $this->assertEquals('http://facebookattachmenturl.com', $attachments[0]);
+        $this->assertTrue(is_array($images));
+        $this->assertEquals('http://facebookimage.com/image.png', $images[0]);
     }
 }
