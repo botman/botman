@@ -15,8 +15,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_adds_entities_to_the_message()
     {
+        $messageChannel = '1234567890';
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '', '');
+        $message = new Message($messageText, '', $messageChannel);
 
         $apiResponse = [
             'result' => [
@@ -37,7 +38,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('https://api.api.ai/v1/query', [], [
                 'query' => [$messageText],
-                'sessionId' => time(),
+                'sessionId' => sha1($messageChannel),
                 'lang' => 'en',
             ], [
                 'Authorization: Bearer token',
