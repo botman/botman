@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -18,6 +17,7 @@ use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\FacebookImageDriver;
+use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
 use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
