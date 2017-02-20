@@ -347,7 +347,9 @@ class BotMan
     {
         $this->reply($question, $additionalParameters);
         $this->storeConversation(new class extends Conversation {
-            public function run(){}
+            public function run()
+            {
+            }
         }, $next, $question, $additionalParameters);
 
         return $this;

@@ -1443,8 +1443,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($called);
     }
 
-
-
     /** @test */
     public function it_can_create_conversations_on_the_fly()
     {
@@ -1461,7 +1459,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         ]);
 
         $botman->hears('Hi Julia', function ($bot) {
-            $bot->ask('How are you doing?', function($answer, $conversation) {
+            $bot->ask('How are you doing?', function ($answer, $conversation) {
                 $GLOBALS['called'] = true;
                 $GLOBALS['answer'] = $answer;
                 $GLOBALS['conversation'] = $conversation;
