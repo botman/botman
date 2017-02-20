@@ -3,45 +3,44 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
+use Mpociot\BotMan\Drivers\FacebookImageDriver;
 
 class FacebookImageDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Get correct Facebook request data for location
+     * Get correct Facebook request data for images.
      *
      * @return array
      */
     private function getCorrectRequestData()
     {
         return [
-            "object" => "page",
-            "entry" => [
+            'object' => 'page',
+            'entry' => [
                 [
-                    "id" => "PAGE_ID",
-                    "time" => 1472672934319,
-                    "messaging" => [
+                    'id' => 'PAGE_ID',
+                    'time' => 1472672934319,
+                    'messaging' => [
                         [
-                            "sender" => [
-                                "id" => "USER_ID",
+                            'sender' => [
+                                'id' => 'USER_ID',
                             ],
-                            "recipient" => [
-                                "id" => "PAGE_ID",
+                            'recipient' => [
+                                'id' => 'PAGE_ID',
                             ],
-                            "timestamp" => 1472672934259,
-                            "message" => [
-                                "mid" => "mid.1472672934017:db566db5104b5b5c08",
-                                "seq" => 297,
-                                "attachments" => [
+                            'timestamp' => 1472672934259,
+                            'message' => [
+                                'mid' => 'mid.1472672934017:db566db5104b5b5c08',
+                                'seq' => 297,
+                                'attachments' => [
                                     [
-                                        "type" => "image",
-                                        "payload" => [
-                                            "url" => "http://facebookimage.com/image.png",
+                                        'type' => 'image',
+                                        'payload' => [
+                                            'url' => 'http://facebookimage.com/image.png',
                                         ],
                                     ],
                                 ],
@@ -77,28 +76,28 @@ class FacebookImageDriverTest extends PHPUnit_Framework_TestCase
     public function it_matches_the_request()
     {
         $driver = $this->getDriver([
-            "object" => "page",
-            "entry" => [
+            'object' => 'page',
+            'entry' => [
                 [
-                    "id" => "PAGE_ID",
-                    "time" => 1472672934319,
-                    "messaging" => [
+                    'id' => 'PAGE_ID',
+                    'time' => 1472672934319,
+                    'messaging' => [
                         [
-                            "sender" => [
-                                "id" => "USER_ID",
+                            'sender' => [
+                                'id' => 'USER_ID',
                             ],
-                            "recipient" => [
-                                "id" => "PAGE_ID",
+                            'recipient' => [
+                                'id' => 'PAGE_ID',
                             ],
-                            "timestamp" => 1472672934259,
-                            "message" => [
-                                "mid" => "mid.1472672934017:db566db5104b5b5c08",
-                                "seq" => 297,
-                                "attachments" => [
+                            'timestamp' => 1472672934259,
+                            'message' => [
+                                'mid' => 'mid.1472672934017:db566db5104b5b5c08',
+                                'seq' => 297,
+                                'attachments' => [
                                     [
-                                        "type" => "audio",
-                                        "payload" => [
-                                            "url" => "http://facebookattachmenturl.com",
+                                        'type' => 'audio',
+                                        'payload' => [
+                                            'url' => 'http://facebookattachmenturl.com',
                                         ],
                                     ],
                                 ],

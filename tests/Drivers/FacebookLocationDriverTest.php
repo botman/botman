@@ -12,37 +12,37 @@ use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 class FacebookLocationDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Get correct Facebook request data for location
+     * Get correct Facebook request data for location.
      *
      * @return array
      */
     private function getCorrectRequestData()
     {
         return [
-            "object" => "page",
-            "entry" => [
+            'object' => 'page',
+            'entry' => [
                 [
-                    "id" => "PAGE_ID",
-                    "time" => 1472672934319,
-                    "messaging" => [
+                    'id' => 'PAGE_ID',
+                    'time' => 1472672934319,
+                    'messaging' => [
                         [
-                            "sender" => [
-                                "id" => "USER_ID",
+                            'sender' => [
+                                'id' => 'USER_ID',
                             ],
-                            "recipient" => [
-                                "id" => "PAGE_ID",
+                            'recipient' => [
+                                'id' => 'PAGE_ID',
                             ],
-                            "timestamp" => 1472672934259,
-                            "message" => [
-                                "mid" => "mid.1472672934017:db566db5104b5b5c08",
-                                "seq" => 297,
-                                "attachments" => [
+                            'timestamp' => 1472672934259,
+                            'message' => [
+                                'mid' => 'mid.1472672934017:db566db5104b5b5c08',
+                                'seq' => 297,
+                                'attachments' => [
                                     [
-                                        "type" => "location",
-                                        "payload" => [
-                                            "coordinates" => [
-                                                "lat" => 37.483872693672,
-                                                "long" => -122.14900441942,
+                                        'type' => 'location',
+                                        'payload' => [
+                                            'coordinates' => [
+                                                'lat' => 37.483872693672,
+                                                'long' => -122.14900441942,
                                             ],
                                         ],
                                     ],
@@ -79,28 +79,28 @@ class FacebookLocationDriverTest extends PHPUnit_Framework_TestCase
     public function it_matches_the_request()
     {
         $driver = $this->getDriver([
-            "object" => "page",
-            "entry" => [
+            'object' => 'page',
+            'entry' => [
                 [
-                    "id" => "PAGE_ID",
-                    "time" => 1472672934319,
-                    "messaging" => [
+                    'id' => 'PAGE_ID',
+                    'time' => 1472672934319,
+                    'messaging' => [
                         [
-                            "sender" => [
-                                "id" => "USER_ID",
+                            'sender' => [
+                                'id' => 'USER_ID',
                             ],
-                            "recipient" => [
-                                "id" => "PAGE_ID",
+                            'recipient' => [
+                                'id' => 'PAGE_ID',
                             ],
-                            "timestamp" => 1472672934259,
-                            "message" => [
-                                "mid" => "mid.1472672934017:db566db5104b5b5c08",
-                                "seq" => 297,
-                                "attachments" => [
+                            'timestamp' => 1472672934259,
+                            'message' => [
+                                'mid' => 'mid.1472672934017:db566db5104b5b5c08',
+                                'seq' => 297,
+                                'attachments' => [
                                     [
-                                        "type" => "attachment",
-                                        "payload" => [
-                                            "url" => "http://facebookattachmenturl.com",
+                                        'type' => 'attachment',
+                                        'payload' => [
+                                            'url' => 'http://facebookattachmenturl.com',
                                         ],
                                     ],
                                 ],

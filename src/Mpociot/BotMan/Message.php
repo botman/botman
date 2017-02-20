@@ -24,15 +24,14 @@ class Message
     /** @var array */
     protected $extras = [];
 
-
     /** @var array */
-    private $audio =[];
+    private $audio = [];
 
     /** @var array */
     private $attachments = [];
 
     /** @var array */
-    private $location =[];
+    private $location = [];
 
     public function __construct($message, $user, $channel, $payload = null)
     {

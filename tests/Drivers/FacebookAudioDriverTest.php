@@ -3,18 +3,16 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Drivers\FacebookAudioDriver;
-use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
+use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 
 class FacebookAudioDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Get correct Facebook request data for location
+     * Get correct Facebook request data for audio.
      *
      * @return array
      */
