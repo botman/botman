@@ -332,7 +332,6 @@ class BotMan
                 list($class, $method) = explode('@', $callback);
                 $callback = [new $class, $method];
             }
-
             foreach ($this->getMessages() as $message) {
                 $message = $this->applyMiddleware($message, $this->middleware);
                 $message = $this->applyMiddleware($message, $messageData['middleware']);

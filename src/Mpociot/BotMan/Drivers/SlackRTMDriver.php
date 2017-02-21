@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -77,6 +78,22 @@ class SlackRTMDriver implements DriverInterface
         $user_id = $this->event->get('user');
         $channel_id = $this->event->get('channel');
 
+        if ($this->event->get('subtype') === 'file_share') {
+            $file = Collection::make($this->event->get('file'));
+
+            if (strstr($file->get('mimetype'), 'image')) {
+                $message = new Message(BotMan::IMAGE_PATTERN, $user_id, $channel_id, $this->event);
+                $message->setImages([$file->get('permalink')]);
+            } elseif (strstr($file->get('mimetype'), 'audio')) {
+                $message = new Message(BotMan::AUDIO_PATTERN, $user_id, $channel_id, $this->event);
+                $message->setAudio([$file->get('permalink')]);
+            } else {
+                $message = new Message(BotMan::ATTACHMENT_PATTERN, $user_id, $channel_id, $this->event);
+                $message->setAttachments([$file->get('permalink')]);
+            }
+
+            return [$message];
+        }
         return [new Message($messageText, $user_id, $channel_id, $this->event)];
     }
 
@@ -85,7 +102,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function isBot()
     {
-        return $this->event->has('bot_id');
+        return $this->event->has('bot_id') && !is_null($this->event->get('bot_id'));
     }
 
     /**
