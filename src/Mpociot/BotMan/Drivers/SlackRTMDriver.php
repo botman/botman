@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
@@ -97,6 +97,7 @@ class SlackRTMDriver implements DriverInterface
 
             return [$message];
         }
+
         return [new Message($messageText, $user_id, $channel_id, $this->event)];
     }
 
@@ -105,7 +106,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function isBot()
     {
-        return $this->event->has('bot_id') && !is_null($this->event->get('bot_id'));
+        return $this->event->has('bot_id') && ! is_null($this->event->get('bot_id'));
     }
 
     /**
