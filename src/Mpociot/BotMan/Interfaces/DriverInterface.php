@@ -31,6 +31,11 @@ interface DriverInterface
     /**
      * @return bool
      */
+    public function isUsingReactPHP();
+
+    /**
+     * @return bool
+     */
     public function isConfigured();
 
     /**

@@ -86,7 +86,7 @@ trait HandlesConversations
      */
     protected function serializeClosure(Closure $closure)
     {
-        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+        if ($this->getDriver()->isUsingReactPHP() === false) {
             return serialize(new SerializableClosure($closure, true));
         }
 

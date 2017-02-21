@@ -41,6 +41,14 @@ class TestDriver implements DriverInterface
     /**
      * @return bool
      */
+    public function isUsingReactPHP()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function isConfigured()
     {
         return true;

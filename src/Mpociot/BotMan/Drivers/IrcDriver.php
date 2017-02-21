@@ -3,37 +3,45 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\User;
-use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Phergie\Irc\Client\React\Client;
+use Phergie\Irc\Client\React\WriteStream;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
-class SlackRTMDriver implements DriverInterface
+class IrcDriver implements DriverInterface
 {
     /** @var Collection */
     protected $event;
 
-    /** @var RealTimeClient */
+    /** @var Client */
     protected $client;
 
-    const DRIVER_NAME = 'SlackRTM';
+    /** @var WriteStream */
+    protected $write;
+
+    const DRIVER_NAME = 'Irc';
 
     /**
      * Driver constructor.
      * @param array $config
-     * @param RealTimeClient $client
+     * @param Client $client
      */
-    public function __construct(array $config, RealTimeClient $client)
+    public function __construct(array $config, Client $client)
     {
         $this->event = Collection::make();
         $this->config = Collection::make($config);
         $this->client = $client;
 
-        $this->client->on('message', function ($data) {
-            $this->event = Collection::make($data);
+        $this->client->on('irc.received', function($message, $write, $connection, $logger) {
+            $event = Collection::make($message);
+            if ($event->get('command') === 'PRIVMSG') {
+                $this->event = $event;
+                $this->write = $write;
+            }
         });
     }
 
@@ -47,9 +55,6 @@ class SlackRTMDriver implements DriverInterface
         return self::DRIVER_NAME;
     }
 
-    /**
-     * @return bool
-     */
     public function isUsingReactPHP()
     {
         return true;
@@ -81,9 +86,9 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getMessages()
     {
-        $messageText = $this->event->get('text');
-        $user_id = $this->event->get('user');
-        $channel_id = $this->event->get('channel');
+        $messageText = $this->event->get('params')['text'];
+        $user_id = $this->event->get('nick');
+        $channel_id = $this->event->get('params')['receivers'];
 
         return [new Message($messageText, $user_id, $channel_id, $this->event)];
     }
@@ -104,37 +109,18 @@ class SlackRTMDriver implements DriverInterface
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
-            'channel' => $matchingMessage->getChannel(),
-            'as_user' => true,
-        ], $additionalParameters);
 
         if ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
+            $text = $message->getMessage();
             if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
+                //$parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
             }
         } elseif ($message instanceof Question) {
-            $parameters['text'] = '';
-            $parameters['attachments'] = json_encode([$message->toArray()]);
         } else {
-            $parameters['text'] = $message;
+            $text = $message;
         }
 
-        $this->client->apiCall('chat.postMessage', $parameters);
-    }
-
-    /**
-     * @param $message
-     * @param array $additionalParameters
-     * @param Message $matchingMessage
-     * @return SlackRTMDriver
-     */
-    public function replyInThread($message, $additionalParameters, $matchingMessage)
-    {
-        $additionalParameters['thread_ts'] = $matchingMessage->getPayload()->get('ts');
-
-        return $this->reply($message, $matchingMessage, $additionalParameters);
+        $this->write->ircPrivmsg($matchingMessage->getChannel(), $text);
     }
 
     /**

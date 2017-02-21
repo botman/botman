@@ -30,6 +30,14 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isUsingReactPHP()
+    {
+        return false;
+    }
+
+    /**
      * @param Message $matchingMessage
      * @return void
      */
