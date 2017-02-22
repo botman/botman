@@ -137,7 +137,7 @@ class SlackRTMDriver implements DriverInterface
         }
 
         if (empty($fileToUpload)) {
-            $this->client->apiCall('chat.postMessage', $parameters);
+            $this->client->apiCall('chat.postMessage', $parameters, false, false);
         } else {
             $this->client->fileUpload($fileToUpload, [$matchingMessage->getChannel()]);
         }
