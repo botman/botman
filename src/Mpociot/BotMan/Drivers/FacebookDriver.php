@@ -179,7 +179,7 @@ class FacebookDriver extends Driver
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
