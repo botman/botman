@@ -20,6 +20,7 @@ class Answer
     protected $isInteractiveReply = false;
 
     /**
+     * @param string $text
      * @return static
      */
     public static function create($text = '')

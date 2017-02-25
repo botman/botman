@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
 
 class FacebookPostbackDriver extends FacebookDriver
 {
