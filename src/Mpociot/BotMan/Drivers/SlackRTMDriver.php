@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Slack\User as SlackUser;
 use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
@@ -184,12 +183,13 @@ class SlackRTMDriver implements DriverInterface
     public function getUser(Message $matchingMessage)
     {
         $user = null;
-        $this->client->getUserById($matchingMessage->getUser())->then(function($_user) use (&$user) {
+        $this->client->getUserById($matchingMessage->getUser())->then(function ($_user) use (&$user) {
             $user = $_user;
         });
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername());
         }
+
         return new User($matchingMessage->getUser());
     }
 
