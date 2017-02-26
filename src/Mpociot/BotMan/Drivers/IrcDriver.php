@@ -36,7 +36,7 @@ class IrcDriver implements DriverInterface
         $this->config = Collection::make($config);
         $this->client = $client;
 
-        $this->client->on('irc.received', function($message, $write, $connection, $logger) {
+        $this->client->on('irc.received', function ($message, $write, $connection, $logger) {
             $event = Collection::make($message);
             if ($event->get('command') === 'PRIVMSG') {
                 $this->event = $event;
@@ -109,7 +109,6 @@ class IrcDriver implements DriverInterface
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-
         if ($message instanceof IncomingMessage) {
             $text = $message->getMessage();
             if (! is_null($message->getImage())) {
