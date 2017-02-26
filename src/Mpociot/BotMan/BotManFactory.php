@@ -2,14 +2,14 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\IrcDriver;
-use Phergie\Irc\Client\React\Client;
-use Phergie\Irc\Connection;
 use Slack\RealTimeClient;
+use Phergie\Irc\Connection;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Phergie\Irc\Client\React\Client;
+use Mpociot\BotMan\Drivers\IrcDriver;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -142,7 +142,7 @@ class BotManFactory
 
         $botman = new BotMan($cache, new IrcDriver($config, $client), $config, $storageDriver);
 
-        $client->on('irc.received', function($message, $write, $connection, $logger) use ($botman, $channels) {
+        $client->on('irc.received', function ($message, $write, $connection, $logger) use ($botman, $channels) {
             if (isset($message['code']) && ($message['code'] === 'RPL_ENDOFMOTD' || $message['code'] === 'ERR_NOMOTD')) {
                 $write->ircJoin($channels);
             }
