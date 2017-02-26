@@ -67,7 +67,6 @@ trait HandlesConversations
     /**
      * Remove a stored conversation array from the cache for a given message.
      * @param null|Message $message
-     * @return array
      */
     public function removeStoredConversation($message = null)
     {
