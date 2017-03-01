@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\ApiDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -31,6 +32,7 @@ class DriverManager
         NexmoDriver::class,
         HipChatDriver::class,
         WeChatDriver::class,
+        ApiDriver::class
     ];
 
     /** @var array */
