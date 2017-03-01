@@ -133,7 +133,7 @@ class SlackDriver extends Driver
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return $this|void
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
@@ -213,7 +213,7 @@ class SlackDriver extends Driver
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return Response
      */
     protected function replyWithToken($message, $matchingMessage, $additionalParameters = [])
     {

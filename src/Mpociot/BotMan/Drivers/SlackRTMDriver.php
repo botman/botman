@@ -182,6 +182,32 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getUser(Message $matchingMessage)
     {
+        $user = null;
+        $this->client->getUserById($matchingMessage->getUser())->then(function ($_user) use (&$user) {
+            $user = $_user;
+        });
+        if (! is_null($user)) {
+            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername());
+        }
+
         return new User($matchingMessage->getUser());
+    }
+
+    /**
+     * Retrieve Channel information.
+     * @param Message $matchingMessage
+     * @return \Slack\Channel
+     */
+    public function getChannel(Message $matchingMessage)
+    {
+        return $this->client->getChannelById($matchingMessage->getChannel());
+    }
+
+    /**
+     * @return RealTimeClient
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }
