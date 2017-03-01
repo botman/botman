@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\ApiDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Drivers\ApiDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\NexmoDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;

@@ -21,7 +21,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class ApiDriver extends Driver
 {
-
     /** @var Collection|ParameterBag */
     protected $payload;
 
@@ -49,6 +48,7 @@ class ApiDriver extends Driver
 
     /**
      * Return the driver name.
+     *
      * @return string
      */
     public function getName()
@@ -58,6 +58,7 @@ class ApiDriver extends Driver
 
     /**
      * Determine if the request is for this driver.
+     *
      * @return bool
      */
     public function matchesRequest()
@@ -76,6 +77,7 @@ class ApiDriver extends Driver
 
     /**
      * Retrieve the chat message.
+     *
      * @return array
      */
     public function getMessages()
@@ -110,13 +112,13 @@ class ApiDriver extends Driver
 
             $replyData = [
                 'status' => 200,
-                'messages' => $messages
+                'messages' => $messages,
             ];
 
             Response::create(json_encode($replyData), 200, [
                 'Content-Type' => 'application/json',
                 'Access-Control-Allow-Credentials' => true,
-                'Access-Control-Allow-Origin' => '*'
+                'Access-Control-Allow-Origin' => '*',
             ])->send();
         }
     }
@@ -131,6 +133,7 @@ class ApiDriver extends Driver
 
     /**
      * Retrieve User information.
+     *
      * @param Message $matchingMessage
      * @return UserInterface
      */
@@ -141,6 +144,7 @@ class ApiDriver extends Driver
 
     /**
      * Build API reply
+     *
      * @param $messages
      * @return array
      */
@@ -155,12 +159,11 @@ class ApiDriver extends Driver
             } else {
                 $reply = [
                     'type' => 'text',
-                    'text' => str_replace('##end##', '', $message)
+                    'text' => str_replace('##end##', '', $message),
                 ];
             }
 
             return $reply;
-
         })->toArray();
 
         return $replyData;
@@ -168,6 +171,7 @@ class ApiDriver extends Driver
 
     /**
      * Check if this is the last reply of multiple ones
+     *
      * @param $message
      * @return bool|mixed
      */
@@ -180,11 +184,11 @@ class ApiDriver extends Driver
         }
 
         return strpos($message, '##end##') !== false;
-
     }
 
     /**
      * Pull cached replies
+     *
      * @param $message
      * @return array
      */
@@ -200,6 +204,7 @@ class ApiDriver extends Driver
 
     /**
      * Build reply payload for a Question object
+     *
      * @param Question $message
      * @return array
      */
@@ -208,17 +213,17 @@ class ApiDriver extends Driver
         $questionsData = $message->toArray();
         $reply = [
             'type' => 'text',
-            'text' => str_replace('##end##', '', $questionsData['text'])
+            'text' => str_replace('##end##', '', $questionsData['text']),
         ];
 
-        if ( ! empty($message->getButtons())) {
+        if (! empty($message->getButtons())) {
             $reply['type'] = 'buttons';
 
             $reply['buttons'] = Collection::make($message->getButtons())->map(function ($button) {
                 return [
                     'text' => $button['text'],
                     'keyword' => $button['value'],
-                    'imageUrl' => $button['image_url']
+                    'imageUrl' => $button['image_url'],
                 ];
             })->toArray();
         }
@@ -238,7 +243,7 @@ class ApiDriver extends Driver
                 $returnArray = [
                     'type' => $button['type'] === 'web_url' ? 'url' : 'postback',
                     'text' => $button['title'],
-                    'keyword' => $button['payload'] ?? null
+                    'keyword' => $button['payload'] ?: null,
                 ];
 
                 if (isset($button['url'])) {
@@ -250,7 +255,7 @@ class ApiDriver extends Driver
         } else {
             $reply = [
                 'status' => 500,
-                'message' => 'unknown tempalte'
+                'message' => 'unknown tempalte',
             ];
         }
 
