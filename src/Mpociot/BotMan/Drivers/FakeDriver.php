@@ -2,11 +2,11 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\User;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
@@ -40,6 +40,24 @@ class FakeDriver implements DriverInterface
     private $botMessages = [];
     /** @var bool */
     private $botIsTyping = false;
+
+    /**
+     * @return FakeDriver
+     */
+    public static function create()
+    {
+        return new static;
+    }
+
+    /**
+     * @return FakeDriver
+     */
+    public static function createInactive()
+    {
+        $driver = new static;
+        $driver->isConfigured = false;
+        return $driver;
+    }
 
     public function matchesRequest()
     {

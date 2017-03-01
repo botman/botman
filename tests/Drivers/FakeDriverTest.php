@@ -6,20 +6,15 @@ use Mockery as m;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Button;
 use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
-use Mpociot\BotMan\Http\Curl;
-use PHPUnit_Framework_TestCase;
-use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
-use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Message;
+use PHPUnit_Framework_TestCase;
 
 /**
- * @covers FakeDriver
- * @covers ProxyDriver
+ * @covers \Mpociot\BotMan\Drivers\FakeDriver
+ * @covers \Mpociot\BotMan\Drivers\ProxyDriver
  */
 class FakeDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -33,11 +28,22 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         DriverManager::loadDriver(ProxyDriver::class);
     }
 
+    public static function tearDownAfterClass()
+    {
+        DriverManager::unloadDriver(ProxyDriver::class);
+    }
+
+
     protected function setUp()
     {
         $this->fakeDriver = new FakeDriver();
         ProxyDriver::setInstance($this->fakeDriver);
         $this->botman = BotManFactory::create([]);
+    }
+
+    protected function tearDown()
+    {
+        ProxyDriver::setInstance(FakeDriver::createInactive());
     }
 
     private function getDriver()
