@@ -1,13 +1,14 @@
 <?php
+
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Http\Curl;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 
 /**
- * A driver that acts as a proxy for a global driver instance. Useful for mock/fake drivers in integration tests
+ * A driver that acts as a proxy for a global driver instance. Useful for mock/fake drivers in integration tests.
  */
 final class ProxyDriver implements DriverInterface
 {
@@ -17,7 +18,7 @@ final class ProxyDriver implements DriverInterface
     private static $instance;
 
     /**
-     * Set driver instance to be used
+     * Set driver instance to be used.
      *
      * @param DriverInterface $driver
      */
@@ -34,6 +35,7 @@ final class ProxyDriver implements DriverInterface
         if (self::$instance === null) {
             self::$instance = new NullDriver(new Request, [], new Curl);
         }
+
         return self::$instance;
     }
 
@@ -81,5 +83,4 @@ final class ProxyDriver implements DriverInterface
     {
         return self::instance()->types($matchingMessage);
     }
-
 }

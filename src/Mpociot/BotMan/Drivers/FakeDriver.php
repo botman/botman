@@ -2,14 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Mpociot\BotMan\User;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 
 /**
- * A fake driver for tests. Must be used with ProxyDriver
+ * A fake driver for tests. Must be used with ProxyDriver.
  *
  * Example to set it up in a unit test:
  *
@@ -36,9 +36,9 @@ class FakeDriver implements DriverInterface
     /** @var bool */
     public $isConfigured = true;
 
-    /** @var array  */
+    /** @var array */
     private $botMessages = [];
-    /** @var bool  */
+    /** @var bool */
     private $botIsTyping = false;
 
     public function matchesRequest()
@@ -74,6 +74,7 @@ class FakeDriver implements DriverInterface
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $this->botMessages[] = $message;
+
         return $this;
     }
 
@@ -88,7 +89,7 @@ class FakeDriver implements DriverInterface
     }
 
     /**
-     * Returns true if types() has been called
+     * Returns true if types() has been called.
      *
      * @return bool
      */
@@ -98,7 +99,7 @@ class FakeDriver implements DriverInterface
     }
 
     /**
-     * Returns array of messages from bot
+     * Returns array of messages from bot.
      *
      * @return string[]|Question[]
      */
@@ -108,7 +109,7 @@ class FakeDriver implements DriverInterface
     }
 
     /**
-     * Clear received messages from bot
+     * Clear received messages from bot.
      */
     public function resetBotMessages()
     {
