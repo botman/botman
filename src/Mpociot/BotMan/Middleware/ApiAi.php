@@ -94,7 +94,8 @@ class ApiAi implements MiddlewareInterface
     public function isMessageMatching(Message $message, $test, $regexMatched)
     {
         if ($this->listenForAction) {
-            return $message->getExtras()['apiAction'] === $test;
+            $pattern = '/^'.$test.'$/i';
+            return (bool) preg_match($pattern, $message->getExtras()['apiAction']);
         }
 
         return true;
