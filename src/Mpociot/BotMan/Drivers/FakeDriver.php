@@ -2,11 +2,11 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
-use Mpociot\BotMan\User;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
@@ -56,6 +56,7 @@ class FakeDriver implements DriverInterface
     {
         $driver = new static;
         $driver->isConfigured = false;
+
         return $driver;
     }
 

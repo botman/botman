@@ -125,7 +125,7 @@ class DriverManager
     }
 
     /**
-     * Remove a driver from the list of loadable drivers
+     * Remove a driver from the list of loadable drivers.
      *
      * @param string $driver Driver class name
      */

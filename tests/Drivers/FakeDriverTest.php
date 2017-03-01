@@ -2,15 +2,14 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
-use Mockery as m;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Message;
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
-use Mpociot\BotMan\Message;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @covers \Mpociot\BotMan\Drivers\FakeDriver
@@ -32,7 +31,6 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     {
         DriverManager::unloadDriver(ProxyDriver::class);
     }
-
 
     protected function setUp()
     {
@@ -61,7 +59,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_captures_messages()
     {
-        $this->botman->hears('Hello', function(BotMan $bot) {
+        $this->botman->hears('Hello', function (BotMan $bot) {
             $bot->reply('World!');
         });
 
@@ -71,13 +69,14 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
             ['World!'],
             $this->fakeDriver->getBotMessages()
         );
+
         return $this->fakeDriver;
     }
 
     /** @test */
     public function it_captures_typing()
     {
-        $this->botman->hears('Hello', function(BotMan $bot) {
+        $this->botman->hears('Hello', function (BotMan $bot) {
             $bot->types();
         });
 
@@ -86,6 +85,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         static::assertTrue(
             $this->fakeDriver->isBotTyping()
         );
+
         return $this->fakeDriver;
     }
 
@@ -115,7 +115,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     public function it_can_identify_itself_as_bot()
     {
         $this->fakeDriver->isBot = true;
-        $this->botman->hears('Hello', function(BotMan $bot) {
+        $this->botman->hears('Hello', function (BotMan $bot) {
             $bot->reply('World!');
         });
 
@@ -127,8 +127,8 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_works_with_questions_and_answers()
     {
-        $this->botman->hears('Hello', function(BotMan $bot) {
-            $bot->ask('Who are you?', function(Answer $answer) use ($bot) {
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->ask('Who are you?', function (Answer $answer) use ($bot) {
                 $bot->reply(sprintf('Hello, %s', $answer->getText()));
             });
         });
