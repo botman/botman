@@ -125,6 +125,18 @@ class DriverManager
     }
 
     /**
+     * Remove a driver from the list of loadable drivers.
+     *
+     * @param string $driver Driver class name
+     */
+    public static function unloadDriver($driver)
+    {
+        foreach (array_keys(self::$drivers, $driver) as $key) {
+            unset(self::$drivers[$key]);
+        }
+    }
+
+    /**
      * @param Request $request
      * @return Driver
      */

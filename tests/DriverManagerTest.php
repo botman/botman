@@ -12,6 +12,11 @@ use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
+    protected function tearDown()
+    {
+        DriverManager::unloadDriver(TestDriver::class);
+    }
+
     /** @test */
     public function it_can_be_created()
     {

@@ -1152,6 +1152,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->reply('foo', []);
+
+        DriverManager::unloadDriver(TestDriver::class);
     }
 
     /** @test */
@@ -1168,6 +1170,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->dummyMethod('bar', 'baz');
+
+        DriverManager::unloadDriver(TestDriver::class);
     }
 
     /** @test */
