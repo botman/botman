@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Arr;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Mpociot\BotMan\Facebook\ListTemplate;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
@@ -26,6 +26,9 @@ class ApiDriver extends Driver
 
     /** @var Collection */
     protected $event;
+
+    /** @var array */
+    protected $replies = [];
 
     /** @var array */
     protected $templates = [
@@ -104,23 +107,28 @@ class ApiDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $cachedReplies = $this->getCachedMessages($message);
+        $this->replies[] = $message;
+    }
 
-        if ($this->isLastReply($message)) {
-            Cache::forget($this->event->get('userId'));
-            $messages = $this->buildReply($cachedReplies);
+    /**
+     * Send all pending replies and reset them.
+     */
+    protected function sendResponse()
+    {
+        $messages = $this->buildReply($this->replies);
 
-            $replyData = [
-                'status' => 200,
-                'messages' => $messages,
-            ];
+        $this->replies = [];
 
-            Response::create(json_encode($replyData), 200, [
-                'Content-Type' => 'application/json',
-                'Access-Control-Allow-Credentials' => true,
-                'Access-Control-Allow-Origin' => '*',
-            ])->send();
-        }
+        $replyData = [
+            'status' => 200,
+            'messages' => $messages,
+        ];
+
+        Response::create(json_encode($replyData), 200, [
+            'Content-Type' => 'application/json',
+            'Access-Control-Allow-Credentials' => true,
+            'Access-Control-Allow-Origin' => '*',
+        ])->send();
     }
 
     /**
@@ -167,39 +175,6 @@ class ApiDriver extends Driver
         })->toArray();
 
         return $replyData;
-    }
-
-    /**
-     * Check if this is the last reply of multiple ones
-     *
-     * @param $message
-     * @return bool|mixed
-     */
-    public function isLastReply($message)
-    {
-        if ($message instanceof Question) {
-            $message = $message->toArray()['text'];
-        } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
-            $message = Arr::get($message->toArray(), 'attachment.payload.text');
-        }
-
-        return strpos($message, '##end##') !== false;
-    }
-
-    /**
-     * Pull cached replies
-     *
-     * @param $message
-     * @return array
-     */
-    private function getCachedMessages($message)
-    {
-        $userId = $this->event->get('userId');
-        $cachedReplies = Cache::pull($userId);
-        $cachedReplies[] = $message;
-        Cache::put($userId, $cachedReplies, 100);
-
-        return $cachedReplies;
     }
 
     /**
@@ -260,5 +235,15 @@ class ApiDriver extends Driver
         }
 
         return $reply;
+    }
+
+    /**
+     * Send pending replies.
+     */
+    public function __destruct()
+    {
+        if (count($this->replies)) {
+            $this->sendResponse();
+        }
     }
 }
