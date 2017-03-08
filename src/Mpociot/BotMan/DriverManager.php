@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\TelegramVideoDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -39,6 +40,7 @@ class DriverManager
         FacebookAttachmentDriver::class,
         FacebookLocationDriver::class,
         TelegramPhotoDriver::class,
+        TelegramVideoDriver::class,
         TelegramLocationDriver::class,
         TelegramDriver::class,
         BotFrameworkDriver::class,
