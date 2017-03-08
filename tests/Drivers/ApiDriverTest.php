@@ -92,6 +92,7 @@ class ApiDriverTest extends PHPUnit_Framework_TestCase
 
         $driver->reply('Test one From API', $message);
         $driver->reply('Test two From API', $message);
+        $driver->afterAllMessages();
 
         $this->expectOutputString('{"status":200,"messages":[{"type":"text","text":"Test one From API"},{"type":"text","text":"Test two From API"}]}');
     }
