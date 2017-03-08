@@ -44,8 +44,11 @@ abstract class Driver implements DriverInterface
      */
     abstract public function buildPayload(Request $request);
 
-    public function afterAllMessages()
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
     {
-        // Define if something should be done after handling all messages
+
     }
 }
