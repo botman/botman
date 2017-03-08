@@ -240,7 +240,7 @@ class ApiDriver extends Driver
     /**
      * Send pending replies.
      */
-    public function __destruct()
+    public function afterAllMessages()
     {
         if (count($this->replies)) {
             $this->sendResponse();

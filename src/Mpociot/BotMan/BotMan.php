@@ -284,6 +284,8 @@ class BotMan
             $this->message = $this->getMessages()[0];
             call_user_func($this->fallbackMessage, $this);
         }
+
+        $this->driver->afterAllMessages();
     }
 
     /**
