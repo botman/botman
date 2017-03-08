@@ -167,7 +167,7 @@ class ApiDriver extends Driver
             } else {
                 $reply = [
                     'type' => 'text',
-                    'text' => str_replace('##end##', '', $message),
+                    'text' => $message,
                 ];
             }
 
@@ -188,7 +188,7 @@ class ApiDriver extends Driver
         $questionsData = $message->toArray();
         $reply = [
             'type' => 'text',
-            'text' => str_replace('##end##', '', $questionsData['text']),
+            'text' => $questionsData['text'],
         ];
 
         if (! empty($message->getButtons())) {
@@ -212,7 +212,7 @@ class ApiDriver extends Driver
 
         if ($message instanceof ButtonTemplate) {
             $reply['type'] = 'buttonlist';
-            $reply['text'] = str_replace('##end##', '', Arr::get($message->toArray(), 'attachment.payload.text'));
+            $reply['text'] = Arr::get($message->toArray(), 'attachment.payload.text');
             $reply['buttons'] = Collection::make(Arr::get($message->toArray(),
                 'attachment.payload.buttons'))->map(function ($button) {
                 $returnArray = [
@@ -230,7 +230,7 @@ class ApiDriver extends Driver
         } else {
             $reply = [
                 'status' => 500,
-                'message' => 'unknown tempalte',
+                'message' => 'unknown template',
             ];
         }
 
