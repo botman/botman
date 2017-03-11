@@ -27,7 +27,8 @@ class TelegramAttachmentDriver extends TelegramDriver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('document')) && !in_array(substr($this->event->get('document')['mime_type'], 0, 5), ['image', 'video', 'audio']);
+        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('document')) && ! in_array(substr($this->event->get('document')['mime_type'],
+                0, 5), ['image', 'video', 'audio']);
     }
 
     /**
@@ -37,7 +38,8 @@ class TelegramAttachmentDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::ATTACHMENT_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(BotMan::ATTACHMENT_PATTERN, $this->event->get('from')['id'],
+            $this->event->get('chat')['id'], $this->event);
         $message->setAttachments($this->getAttachments());
 
         return [$message];
@@ -45,6 +47,7 @@ class TelegramAttachmentDriver extends TelegramDriver
 
     /**
      * Retrieve a image from an incoming message.
+     *
      * @return array A download for the image file.
      */
     private function getAttachments()
