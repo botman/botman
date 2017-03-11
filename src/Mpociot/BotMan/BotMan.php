@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Illuminate\Support\Facades\Log;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Traits\ProvidesStorage;

@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\TelegramVideoDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\FacebookAudioDriver;
+use Mpociot\BotMan\Drivers\TelegramVideoDriver;
 use Mpociot\BotMan\Drivers\FacebookImageDriver;
 use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
