@@ -45,7 +45,6 @@ class TelegramPhotoDriver extends TelegramDriver
 
     /**
      * Retrieve a image from an incoming message.
-     * @param  Message $matchingMessage
      * @return array A download for the image file.
      */
     private function getImages()
