@@ -63,7 +63,7 @@ class ApiAi implements MiddlewareInterface
 
     /**
      * Perform the API.ai API call and cache it for the message.
-     * @param  Message $message 
+     * @param  Message $message
      * @return stdClass
      */
     protected function getResponse(Message $message)
