@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiAiTest extends PHPUnit_Framework_TestCase
 {
-
     public function tearDown()
     {
         m::close();
@@ -145,12 +144,16 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
 
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
-        
-        $botman->hears('one', function ($bot) {})->middleware($middleware);
-        $botman->hears('two', function ($bot) {})->middleware($middleware);
+
+        $botman->hears('one', function ($bot) {
+        })->middleware($middleware);
+        $botman->hears('two', function ($bot) {
+        })->middleware($middleware);
         $botman->group(['middleware' => $middleware], function ($botman) use (&$called) {
-            $botman->hears('one', function ($bot) {});
-            $botman->hears('two', function ($bot) {});
+            $botman->hears('one', function ($bot) {
+            });
+            $botman->hears('two', function ($bot) {
+            });
         });
 
         $botman->listen();
