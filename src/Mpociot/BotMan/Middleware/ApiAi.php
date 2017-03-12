@@ -16,6 +16,12 @@ class ApiAi implements MiddlewareInterface
     /** @var HttpInterface */
     protected $http;
 
+    /** @var stdClass */
+    protected $response;
+
+    /** @var string */
+    protected $lastResponseHash;
+
     /** @var string */
     protected $apiUrl = 'https://api.api.ai/v1/query';
 
@@ -56,6 +62,31 @@ class ApiAi implements MiddlewareInterface
     }
 
     /**
+     * Perform the API.ai API call and cache it for the message.
+     * @param  Message $message 
+     * @return stdClass
+     */
+    protected function getResponse(Message $message)
+    {
+        $lastResponseHash = md5($message->getMessage());
+        if ($this->lastResponseHash !== $lastResponseHash) {
+            $response = $this->http->post($this->apiUrl, [], [
+                'query' => [$message->getMessage()],
+                'sessionId' => md5($message->getChannel()),
+                'lang' => 'en',
+            ], [
+                'Authorization: Bearer '.$this->token,
+                'Content-Type: application/json; charset=utf-8',
+            ], true);
+
+            $this->response = json_decode($response->getContent());
+            $this->lastResponseHash = $lastResponseHash;
+        }
+
+        return $this->response;
+    }
+
+    /**
      * Handle / modify the message.
      *
      * @param Message $message
@@ -63,16 +94,8 @@ class ApiAi implements MiddlewareInterface
      */
     public function handle(Message &$message, DriverInterface $driver)
     {
-        $response = $this->http->post($this->apiUrl, [], [
-            'query' => [$message->getMessage()],
-            'sessionId' => md5($message->getChannel()),
-            'lang' => 'en',
-        ], [
-            'Authorization: Bearer '.$this->token,
-            'Content-Type: application/json; charset=utf-8',
-        ], true);
+        $response = $this->getResponse($message);
 
-        $response = json_decode($response->getContent());
         $reply = isset($response->result->speech) ? $response->result->speech : '';
         $action = isset($response->result->action) ? $response->result->action : '';
         $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
