@@ -227,12 +227,13 @@ class TelegramDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $parameters = array_merge([
             'chat_id' => $matchingMessage->getChannel(),
         ], $parameters);
-        \Log::info(print_r($parameters,true));
+        \Log::info(print_r($parameters, true));
+
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
     }
 }

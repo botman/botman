@@ -283,10 +283,10 @@ class SlackDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $parameters = array_merge([
-            'token' => $this->config->get('slack_token')
+            'token' => $this->config->get('slack_token'),
         ], $parameters);
 
         return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);

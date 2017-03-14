@@ -212,7 +212,7 @@ class BotFrameworkDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $headers = [
             'Content-Type:application/json',

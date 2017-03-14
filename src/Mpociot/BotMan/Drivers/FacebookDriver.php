@@ -260,10 +260,10 @@ class FacebookDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $parameters = array_merge([
-            'access_token' => $this->config->get('facebook_token')
+            'access_token' => $this->config->get('facebook_token'),
         ], $parameters);
 
         return $this->http->post('https://graph.facebook.com/v2.6/'.$endpoint, [], $parameters);

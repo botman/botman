@@ -142,7 +142,7 @@ class HipChatDriver extends Driver
      * @param Message $matchingMessage
      * @return void
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         //
     }
