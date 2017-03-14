@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Added `sendRequest` method to perform low-level driver API requests.
 - Allow regular expressions in API.ai middleware
 - Added fake driver for testing
 
