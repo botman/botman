@@ -12,6 +12,7 @@ use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
@@ -249,5 +250,22 @@ class FacebookDriver extends Driver
         $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
 
         return new User($matchingMessage->getChannel(), $firstName, $lastName);
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'access_token' => $this->config->get('facebook_token')
+        ], $parameters);
+
+        return $this->http->post('https://graph.facebook.com/v2.6/'.$endpoint, [], $parameters);
     }
 }

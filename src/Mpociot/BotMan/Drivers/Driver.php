@@ -43,4 +43,14 @@ abstract class Driver implements DriverInterface
      * @return void
      */
     abstract public function buildPayload(Request $request);
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    abstract public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage);
 }

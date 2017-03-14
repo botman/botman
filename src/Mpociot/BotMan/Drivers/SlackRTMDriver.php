@@ -210,4 +210,17 @@ class SlackRTMDriver implements DriverInterface
     {
         return $this->client;
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return \React\Promise\PromiseInterface
+     */
+    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    {
+        return $this->client->apiCall($endpoint, $parameters, false, false);
+    }
 }

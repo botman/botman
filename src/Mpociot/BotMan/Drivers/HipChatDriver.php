@@ -133,4 +133,17 @@ class HipChatDriver extends Driver
 
         return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null, $payload->get('message')['from']['mention_name']);
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    {
+        //
+    }
 }

@@ -12,6 +12,7 @@ use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
@@ -1488,5 +1489,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Conversation::class, $GLOBALS['conversation']);
         $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
         $this->assertSame('Great!', $GLOBALS['answer']->getText());
+    }
+
+    /** @test */
+    public function it_does_not_allow_sendRequest_method()
+    {
+        $botman = $this->getBot([]);
+        $botman->setDriver(new FakeDriver());
+        $this->expectException(\BadMethodCallException::class);
+        $botman->sendRequest('foo', []);
     }
 }

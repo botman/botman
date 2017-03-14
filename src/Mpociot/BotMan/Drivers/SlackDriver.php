@@ -274,4 +274,21 @@ class SlackDriver extends Driver
     {
         return new User($matchingMessage->getUser());
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'token' => $this->config->get('slack_token')
+        ], $parameters);
+
+        return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);
+    }
 }

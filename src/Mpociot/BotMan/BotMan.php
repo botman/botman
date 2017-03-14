@@ -376,6 +376,23 @@ class BotMan
     }
 
     /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function sendRequest($endpoint, $additionalParameters = [])
+    {
+        $driver = $this->getDriver();
+        if (method_exists($driver, 'sendRequest')) {
+            return $driver->sendRequest($endpoint, $additionalParameters, $this->message);
+        } else {
+            throw new \BadMethodCallException('The driver '.$this->getDriver()->getName().' does not support low level requests.');
+        }
+    }
+
+    /**
      * @param string|Question $message
      * @param array $additionalParameters
      * @return $this

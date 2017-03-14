@@ -218,4 +218,21 @@ class TelegramDriver extends Driver
     {
         return ! is_null($this->config->get('telegram_token'));
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'chat_id' => $matchingMessage->getChannel(),
+        ], $parameters);
+        \Log::info(print_r($parameters,true));
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
+    }
 }
