@@ -163,7 +163,7 @@ class WeChatDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         return $this->http->post('https://api.wechat.com/cgi-bin/'.$endpoint.'?access_token='.$this->getAccessToken(), [], $parameters, [], true);
     }

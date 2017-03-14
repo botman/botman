@@ -132,7 +132,7 @@ class NexmoDriver extends Driver
      * @param Message $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $parameters = array_merge([
             'api_key' => $this->config->get('nexmo_key'),

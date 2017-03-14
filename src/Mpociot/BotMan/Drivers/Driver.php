@@ -52,5 +52,5 @@ abstract class Driver implements DriverInterface
      * @param Message $matchingMessage
      * @return void
      */
-    abstract public function sendRequest($endpoint, array $parameters = [], Message $matchingMessage);
+    abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
 }
