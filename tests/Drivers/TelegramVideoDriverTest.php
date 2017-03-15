@@ -76,7 +76,7 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
                 'chat' => [
                     'id' => 'chat_id',
                 ],
-                'document' => [
+                'video' => [
                     'mime_type' => 'video/quicktime',
                     'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
                 ],
@@ -104,7 +104,7 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
                 'chat' => [
                     'id' => 'chat_id',
                 ],
-                'document' => [
+                'video' => [
                     'mime_type' => 'video/quicktime',
                     'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
                 ],
@@ -132,7 +132,7 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
                 'chat' => [
                     'id' => 'chat_id',
                 ],
-                'document' => [
+                'video' => [
                     'mime_type' => 'video/quicktime',
                     'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
                 ],

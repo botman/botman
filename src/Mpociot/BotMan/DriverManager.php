@@ -24,7 +24,6 @@ use Mpociot\BotMan\Drivers\TelegramVideoDriver;
 use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
 use Mpociot\BotMan\Drivers\TelegramLocationDriver;
-use Mpociot\BotMan\Drivers\FacebookAttachmentDriver;
 
 class DriverManager
 {
@@ -35,7 +34,6 @@ class DriverManager
         SlackDriver::class,
         FacebookDriver::class,
         FacebookImageDriver::class,
-        FacebookAttachmentDriver::class,
         FacebookVideoDriver::class,
         FacebookAudioDriver::class,
         FacebookPostbackDriver::class,
