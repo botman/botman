@@ -45,11 +45,6 @@ class BotMan
     const AUDIO_PATTERN = '%%%_AUDIO_%%%';
 
     /**
-     * Pattern that messages use to identify attachments uploads.
-     */
-    const ATTACHMENT_PATTERN = '%%%_ATTACHMENT_%%%';
-
-    /**
      * Pattern that messages use to identify location attachment.
      */
     const LOCATION_PATTERN = '%%%_LOCATION_%%%';
@@ -271,17 +266,6 @@ class BotMan
     public function receivesAudio($callback)
     {
         return $this->hears(self::AUDIO_PATTERN, $callback);
-    }
-
-    /**
-     * Listening for file attachments.
-     *
-     * @param $callback
-     * @return Command
-     */
-    public function receivesAttachments($callback)
-    {
-        return $this->hears(self::ATTACHMENT_PATTERN, $callback);
     }
 
     /**

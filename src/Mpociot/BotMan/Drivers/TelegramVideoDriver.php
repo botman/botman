@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
-use Symfony\Component\HttpFoundation\Request;
 
 class TelegramVideoDriver extends TelegramDriver
 {
@@ -27,7 +26,7 @@ class TelegramVideoDriver extends TelegramDriver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('document')) && substr($this->event->get('document')['mime_type'], 0, 5) === 'video';
+        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('video'));
     }
 
     /**
@@ -49,7 +48,7 @@ class TelegramVideoDriver extends TelegramDriver
      */
     private function getVideos()
     {
-        $video = $this->event->get('document');
+        $video = $this->event->get('video');
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
             'file_id' => $video['file_id'],
         ]);

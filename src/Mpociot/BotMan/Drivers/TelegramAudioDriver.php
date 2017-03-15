@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
-use Symfony\Component\HttpFoundation\Request;
 
 class TelegramAudioDriver extends TelegramDriver
 {
@@ -27,7 +26,7 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('document')) && substr($this->event->get('document')['mime_type'], 0, 5) === 'audio';
+        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('audio'));
     }
 
     /**
@@ -49,7 +48,7 @@ class TelegramAudioDriver extends TelegramDriver
      */
     private function getAudio()
     {
-        $audio = $this->event->get('document');
+        $audio = $this->event->get('audio');
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
             'file_id' => $audio['file_id'],
         ]);
