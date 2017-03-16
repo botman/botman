@@ -30,6 +30,16 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return static::DRIVER_NAME;
+    }
+
+    /**
      * @param Message $matchingMessage
      * @return void
      */

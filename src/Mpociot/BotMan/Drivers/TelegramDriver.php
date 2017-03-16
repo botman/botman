@@ -32,16 +32,6 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * @param Message $matchingMessage
      * @return User
      */
