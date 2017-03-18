@@ -285,7 +285,7 @@ class BotMan
             call_user_func($this->fallbackMessage, $this);
         }
 
-        $this->driver->afterAllMessages();
+        $this->driver->afterMessagesHandled();
     }
 
     /**
