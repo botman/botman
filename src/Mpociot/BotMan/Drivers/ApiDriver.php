@@ -246,4 +246,17 @@ class ApiDriver extends Driver
             $this->sendResponse();
         }
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        // TODO: Implement sendRequest() method.
+    }
 }

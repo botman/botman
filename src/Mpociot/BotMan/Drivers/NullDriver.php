@@ -92,4 +92,23 @@ class NullDriver extends Driver
     {
         return new User();
     }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+    }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

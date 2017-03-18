@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Added `sendRequest` method to perform low-level driver API requests.
+- Allow regular expressions in API.ai middleware
+- Added fake driver for testing
+
+### Changed
+- Cache API.ai calls
+
 ## [1.4.1]
 ### Added
 - Added on-the-fly mini-conversations using `$botman->ask($question, Closure $next, $additionalParameters = [])`.

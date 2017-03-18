@@ -32,16 +32,6 @@ class BotFrameworkDriver extends Driver
     }
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * Determine if the request is for this driver.
      *
      * @return bool
@@ -185,7 +175,7 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
+        $apiURL = Collection::make($matchingMessage->getPayload()->all())->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
 
         if (strstr($apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
@@ -202,5 +192,32 @@ class BotFrameworkDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('microsoft_app_id')) && ! is_null($this->config->get('microsoft_app_key'));
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $headers = [
+            'Content-Type:application/json',
+            'Authorization:Bearer '.$this->getAccessToken(),
+        ];
+
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($parameters)->get('serviceUrl'));
+
+        return $this->http->post($apiURL.'/v3/'.$endpoint, [], $parameters, $headers, true);
+    }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
     }
 }

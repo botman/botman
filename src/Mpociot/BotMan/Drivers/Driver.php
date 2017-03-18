@@ -30,6 +30,16 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return static::DRIVER_NAME;
+    }
+
+    /**
      * @param Message $matchingMessage
      * @return void
      */
@@ -47,8 +57,15 @@ abstract class Driver implements DriverInterface
     /**
      * Define if something should be done after handling all messages
      */
-    public function afterMessagesHandled()
-    {
+     abstract public function afterMessagesHandled();
 
-    }
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
 }

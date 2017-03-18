@@ -32,16 +32,6 @@ class HipChatDriver extends Driver
     }
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * Determine if the request is for this driver.
      *
      * @return bool
@@ -132,5 +122,25 @@ class HipChatDriver extends Driver
         $payload = $matchingMessage->getPayload();
 
         return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null, $payload->get('message')['from']['mention_name']);
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        //
+    }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
     }
 }

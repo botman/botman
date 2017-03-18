@@ -49,16 +49,6 @@ class SlackDriver extends Driver
     }
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * Determine if the request is for this driver.
      *
      * @return bool
@@ -273,5 +263,29 @@ class SlackDriver extends Driver
     public function getUser(Message $matchingMessage)
     {
         return new User($matchingMessage->getUser());
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'token' => $this->config->get('slack_token'),
+        ], $parameters);
+
+        return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);
+    }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
     }
 }

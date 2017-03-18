@@ -32,16 +32,6 @@ class TelegramDriver extends Driver
     }
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * @param Message $matchingMessage
      * @return User
      */
@@ -217,5 +207,29 @@ class TelegramDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('telegram_token'));
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'chat_id' => $matchingMessage->getChannel(),
+        ], $parameters);
+
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
+    }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
     }
 }
