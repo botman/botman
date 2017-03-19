@@ -2,8 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Illuminate\Support\Facades\Log;
-use Mpociot\BotMan\Facebook\Element;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;

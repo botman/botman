@@ -4,22 +4,22 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Facebook\ButtonTemplate;
-use Mpociot\BotMan\Facebook\Element;
-use Mpociot\BotMan\Facebook\ElementButton;
-use Mpociot\BotMan\Facebook\GenericTemplate;
-use Mpociot\BotMan\Facebook\ListTemplate;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptAdjustment;
-use Mpociot\BotMan\Facebook\ReceiptElement;
-use Mpociot\BotMan\Facebook\ReceiptSummary;
-use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Facebook\Element;
 use Mpociot\BotMan\Drivers\ApiDriver;
+use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Facebook\ElementButton;
+use Mpociot\BotMan\Facebook\ButtonTemplate;
+use Mpociot\BotMan\Facebook\ReceiptElement;
+use Mpociot\BotMan\Facebook\ReceiptAddress;
+use Mpociot\BotMan\Facebook\ReceiptSummary;
+use Mpociot\BotMan\Facebook\GenericTemplate;
+use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Facebook\ReceiptAdjustment;
 
 class ApiDriverTest extends PHPUnit_Framework_TestCase
 {
