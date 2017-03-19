@@ -18,7 +18,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class FacebookDriver extends Driver
 {
-
     /** @var string */
     protected $signature;
 
