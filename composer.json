@@ -34,7 +34,8 @@
         "sllh/php-cs-fixer-styleci-bridge": "^2.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",
-        "mpociot/slack-client": "^0.2.6"
+        "mpociot/slack-client": "^0.2.6",
+        "ext-curl": "*"
     },
     "suggest": {
         "mpociot/slack-client": "Use the Slack RTM API with BotMan",
