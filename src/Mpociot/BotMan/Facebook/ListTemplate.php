@@ -82,9 +82,7 @@ class ListTemplate implements JsonSerializable
                     'template_type' => 'list',
                     'top_element_style' => $this->top_element_style,
                     'elements' => $this->elements,
-                    'buttons' => [
-                        $this->globalButton,
-                    ],
+                    'buttons' => $this->globalButton ? [$this->globalButton] : []
                 ],
             ],
         ];

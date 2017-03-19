@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Illuminate\Support\Facades\Log;
+use Mpociot\BotMan\Facebook\Element;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -29,6 +30,12 @@ class ApiDriver extends Driver
 
     /** @var array */
     protected $replies = [];
+
+    /** @var int */
+    protected $replyStatusCode = 200;
+
+    /** @var string */
+    protected $errorMessage = '';
 
     /** @var array */
     protected $templates = [
@@ -116,13 +123,16 @@ class ApiDriver extends Driver
     protected function sendResponse()
     {
         $messages = $this->buildReply($this->replies);
-
         $this->replies = [];
 
         $replyData = [
-            'status' => 200,
+            'status' => $this->replyStatusCode,
             'messages' => $messages,
         ];
+
+        If ($this->errorMessage) {
+            $replyData['error'] = $this->errorMessage;
+        }
 
         Response::create(json_encode($replyData), 200, [
             'Content-Type' => 'application/json',
@@ -174,7 +184,7 @@ class ApiDriver extends Driver
             return $reply;
         })->toArray();
 
-        return $replyData;
+        return $this->errorMessage ? [] : $replyData;
     }
 
     /**
@@ -191,50 +201,178 @@ class ApiDriver extends Driver
             'text' => $questionsData['text'],
         ];
 
-        if (! empty($message->getButtons())) {
+        if ($message->getButtons()) {
             $reply['type'] = 'buttons';
-
-            $reply['buttons'] = Collection::make($message->getButtons())->map(function ($button) {
-                return [
-                    'text' => $button['text'],
-                    'keyword' => $button['value'],
-                    'imageUrl' => $button['image_url'],
-                ];
-            })->toArray();
+            $reply['buttons'] = $this->generateButtonsPayload($message->getButtons());
         }
 
         return $reply;
     }
 
+    /**
+     * Build reply payload for template objects
+     *
+     * @param $message
+     * @return array|bool|mixed
+     */
     private function buildTemplatePayload($message)
     {
-        $reply = [];
-
-        if ($message instanceof ButtonTemplate) {
-            $reply['type'] = 'buttonlist';
-            $reply['text'] = Arr::get($message->toArray(), 'attachment.payload.text');
-            $reply['buttons'] = Collection::make(Arr::get($message->toArray(),
-                'attachment.payload.buttons'))->map(function ($button) {
-                $returnArray = [
-                    'type' => $button['type'] === 'web_url' ? 'url' : 'postback',
-                    'text' => $button['title'],
-                    'keyword' => $button['payload'] ?: null,
-                ];
-
-                if (isset($button['url'])) {
-                    $returnArray['url'] = $button['url'];
-                }
-
-                return $returnArray;
-            });
-        } else {
-            $reply = [
-                'status' => 500,
-                'message' => 'unknown template',
-            ];
+        switch (true) {
+            case $message instanceof ButtonTemplate:
+                $reply = $this->buildFacebookButtonTemplatePayload($message);
+                break;
+            case $message instanceof ListTemplate:
+                $reply = $this->buildFacebookListTemplatePayload($message);
+                break;
+            case $message instanceof GenericTemplate:
+                $reply = $this->buildFacebookGenericTemplatePayload($message);
+                break;
+            case $message instanceof ReceiptTemplate:
+                $reply = $this->buildFacebookReceiptTemplatePayload($message);
+                break;
+            default:
+                $this->replyStatusCode = 500;
+                $this->errorMessage = 'Unknown template.';
+                $reply = false;
         }
 
         return $reply;
+    }
+
+    /**
+     * Generate payload for Facebook button template
+     *
+     * @param ButtonTemplate $message
+     * @return mixed
+     */
+    private function buildFacebookButtonTemplatePayload(ButtonTemplate $message)
+    {
+        return [
+            'type' => 'buttons',
+            'text' => Arr::get($message->toArray(), 'attachment.payload.text'),
+            'buttons' => $this->generateButtonsPayload(Arr::get($message->toArray(), 'attachment.payload.buttons')),
+        ];
+    }
+
+    /**
+     * Generate payload for Facebook list template
+     *
+     * @param $message
+     * @return array
+     */
+    private function buildFacebookListTemplatePayload($message)
+    {
+        return [
+            'type' => 'list',
+            'elements' => $this->generateElementsPayload($message),
+            'globalButtons' => $this->generateButtonsPayload(Arr::get($message->toArray(),
+                'attachment.payload.buttons')),
+        ];
+    }
+
+    /**
+     * Generate payload for Facebook generic list template
+     *
+     * @param $message
+     * @return array
+     */
+    private function buildFacebookGenericTemplatePayload($message)
+    {
+        return [
+            'type' => 'list',
+            'elements' => $this->generateElementsPayload($message),
+        ];
+    }
+
+    /**
+     * Generate payload for Facebook receipt template
+     *
+     * @param $message
+     * @return array
+     */
+    private function buildFacebookReceiptTemplatePayload($message)
+    {
+        $payload = Arr::get($message->toArray(), 'attachment.payload');
+
+        return [
+            'type' => 'receipt',
+            'recipient_name' => $payload['recipient_name'],
+            'merchant_name' => $payload['merchant_name'],
+            'order_number' => $payload['order_number'],
+            'currency' => $payload['currency'],
+            'payment_method' => $payload['payment_method'],
+            'order_url' => $payload['order_url'],
+            'timestamp' => $payload['timestamp'],
+            'elements' => $this->generateElementsPayload($message),
+            'address' => $payload['address'],
+            'summary' => $payload['summary'],
+            'adjustments' => $payload['adjustments'],
+        ];
+    }
+
+    /**
+     * @param $message
+     * @return array
+     */
+    private function generateElementsPayload($message)
+    {
+        $elements = Arr::get($message->toArray(), 'attachment.payload.elements');
+
+        return collect($elements)->map(function ($element) use ($message) {
+            $elementArray = [
+                'title' => $element['title'],
+                'subtitle' => $element['subtitle'],
+                'imageUrl' => $element['image_url'],
+            ];
+
+            if (isset($element['item_url'])) {
+                $elementArray['itemUrl'] = $element['item_url'];
+            }
+
+            if (isset($element['buttons']) && count($element['buttons']) > 0) {
+                $elementArray['buttons'] = $this->generateButtonsPayload($element['buttons']);
+            }
+
+            if ($message instanceof ReceiptTemplate) {
+                $elementArray['quantity'] = $element['quantity'];
+                $elementArray['price'] = $element['price'];
+                $elementArray['currency'] = $element['currency'];
+            }
+
+            return $elementArray;
+        })->toArray();
+    }
+
+    /**
+     * @param array $buttons
+     * @return array
+     */
+    private function generateButtonsPayload(array $buttons)
+    {
+        return collect($buttons)->map(function ($button) {
+
+            switch ($button['type']) {
+                case 'button';
+                    $button['type'] = 'postback';
+                    break;
+                case 'url';
+                    $button['type'] = 'web_url';
+                    break;
+            }
+
+            $buttonArray = [
+                'type' => $button['type'],
+                'text' => isset($button['text']) ? $button['text'] : $button['title'],
+            ];
+
+            if ($button['type'] === 'postback') {
+                $buttonArray['value'] = isset($button['payload']) ? $button['payload'] : $button['value'];
+            } elseif ($button['type'] == 'web_url') {
+                $buttonArray['webUrl'] = isset($button['url']) ? $button['url'] : $button['web_url'];
+            }
+
+            return $buttonArray;
+        })->toArray();
     }
 
     /**
@@ -257,6 +395,5 @@ class ApiDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        // TODO: Implement sendRequest() method.
     }
 }
