@@ -268,7 +268,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Generate payload for Facebook generic list template
+     * Generate payload for Facebook generic list template.
      *
      * @param $message
      * @return array
@@ -282,7 +282,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Generate payload for Facebook receipt template
+     * Generate payload for Facebook receipt template.
      *
      * @param $message
      * @return array
@@ -347,7 +347,6 @@ class ApiDriver extends Driver
     private function generateButtonsPayload(array $buttons)
     {
         return collect($buttons)->map(function ($button) {
-
             switch ($button['type']) {
                 case 'button':
                     $button['type'] = 'postback';

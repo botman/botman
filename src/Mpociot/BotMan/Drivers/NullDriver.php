@@ -106,7 +106,7 @@ class NullDriver extends Driver
     }
 
     /**
-     * Define if something should be done after handling all messages
+     * Define if something should be done after handling all messages.
      */
     public function afterMessagesHandled()
     {

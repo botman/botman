@@ -21,7 +21,7 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
  *      $this->fakeDriver = new FakeDriver();
  *      ProxyDriver::setInstance($this->fakeDriver);
  *  }
- * </code>
+ * </code>.
  */
 class FakeDriver implements DriverInterface
 {
