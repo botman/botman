@@ -14,7 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class HipChatDriver extends Driver
 {
-
     const DRIVER_NAME = 'HipChat';
 
     /**
