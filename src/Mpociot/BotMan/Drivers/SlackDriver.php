@@ -14,11 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
 
     const DRIVER_NAME = 'Slack';
 
