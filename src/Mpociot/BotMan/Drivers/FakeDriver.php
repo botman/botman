@@ -135,4 +135,11 @@ class FakeDriver implements DriverInterface
         $this->botIsTyping = false;
         $this->botMessages = [];
     }
+
+    /**
+     * Define if something should be done after handling all messages
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }
