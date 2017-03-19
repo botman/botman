@@ -13,8 +13,8 @@ use Mpociot\BotMan\Drivers\ApiDriver;
 use Mpociot\BotMan\Facebook\ListTemplate;
 use Mpociot\BotMan\Facebook\ElementButton;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
-use Mpociot\BotMan\Facebook\ReceiptElement;
 use Mpociot\BotMan\Facebook\ReceiptAddress;
+use Mpociot\BotMan\Facebook\ReceiptElement;
 use Mpociot\BotMan\Facebook\ReceiptSummary;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
@@ -220,8 +220,8 @@ class ApiDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * @test
-    **/
+     * @test
+     **/
     public function it_replies_to_facebook_receipt_template()
     {
         $driver = $this->getDriver([

@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
 use Illuminate\Support\Arr;
+use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Facebook\ListTemplate;
@@ -128,7 +128,7 @@ class ApiDriver extends Driver
             'messages' => $messages,
         ];
 
-        If ($this->errorMessage) {
+        if ($this->errorMessage) {
             $replyData['error'] = $this->errorMessage;
         }
 
@@ -159,7 +159,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Build API reply
+     * Build API reply.
      *
      * @param $messages
      * @return array
@@ -167,7 +167,6 @@ class ApiDriver extends Driver
     private function buildReply($messages)
     {
         $replyData = collect($messages)->transform(function ($message) {
-
             if ($message instanceof Question) {
                 $reply = $this->buildQuestionPayload($message);
             } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
@@ -186,7 +185,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Build reply payload for a Question object
+     * Build reply payload for a Question object.
      *
      * @param Question $message
      * @return array
@@ -208,7 +207,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Build reply payload for template objects
+     * Build reply payload for template objects.
      *
      * @param $message
      * @return array|bool|mixed
@@ -238,7 +237,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Generate payload for Facebook button template
+     * Generate payload for Facebook button template.
      *
      * @param ButtonTemplate $message
      * @return mixed
@@ -253,7 +252,7 @@ class ApiDriver extends Driver
     }
 
     /**
-     * Generate payload for Facebook list template
+     * Generate payload for Facebook list template.
      *
      * @param $message
      * @return array
@@ -350,10 +349,10 @@ class ApiDriver extends Driver
         return collect($buttons)->map(function ($button) {
 
             switch ($button['type']) {
-                case 'button';
+                case 'button':
                     $button['type'] = 'postback';
                     break;
-                case 'url';
+                case 'url':
                     $button['type'] = 'web_url';
                     break;
             }
