@@ -10,6 +10,12 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 
 abstract class Driver implements DriverInterface
 {
+    /** @var Collection|ParameterBag */
+    protected $payload;
+
+    /** @var Collection */
+    protected $event;
+
     /** @var HttpInterface */
     protected $http;
 
