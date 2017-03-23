@@ -42,7 +42,7 @@ trait HandlesConversations
             'additionalParameters' => serialize($additionalParameters),
             'next' => $this->prepareCallbacks($next),
             'time' => microtime(),
-        ], 30);
+        ], isset($this->config['conversation_cache_time']) ? $this->config['conversation_cache_time'] : 30);
     }
 
     /**
