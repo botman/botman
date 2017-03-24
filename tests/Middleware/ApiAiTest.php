@@ -59,6 +59,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $this->assertSame([
             'apiReply' => 'api reply text',
             'apiAction' => 'api action name',
+            'apiActionIncomplete' => false,
             'apiIntent' => 'name of the matched intent',
             'apiParameters' => ['param1' => 'value'],
         ], $message->getExtras());
