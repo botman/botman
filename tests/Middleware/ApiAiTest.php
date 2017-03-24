@@ -28,7 +28,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
 
         $apiResponse = [
             'result' => [
-                'speech' => 'api reply text',
+                'fulfillment' => [
+                    'speech' => 'api reply text',
+                ],
                 'action' => 'api action name',
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
@@ -73,7 +75,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
 
         $apiResponse = [
             'result' => [
-                'speech' => 'api reply text',
+                'fulfillment' => [
+                    'speech' => 'api reply text',
+                ],
                 'action' => 'my_api_ai_action_name',
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
@@ -102,7 +106,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
 
         $apiResponse = [
             'result' => [
-                'speech' => 'api reply text',
+                'fulfillment' => [
+                    'speech' => 'api reply text',
+                ],
                 'action' => 'my_api_ai_action_name',
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
