@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
+use Mpociot\BotMan\Drivers\FacebookOptinDriver;
 
 class DriverManager
 {
@@ -26,6 +27,7 @@ class DriverManager
         SlackDriver::class,
         FacebookDriver::class,
         FacebookPostbackDriver::class,
+        FacebookOptinDriver::class,
         TelegramDriver::class,
         BotFrameworkDriver::class,
         NexmoDriver::class,
