@@ -23,7 +23,7 @@ class ApiAi implements MiddlewareInterface
     protected $lastResponseHash;
 
     /** @var string */
-    protected $apiUrl = 'https://api.api.ai/v1/query';
+    protected $apiUrl = 'https://api.api.ai/v1/query?v=20150910';
 
     /** @var bool */
     protected $listenForAction = false;
