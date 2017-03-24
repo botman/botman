@@ -30,7 +30,6 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             'result' => [
                 'speech' => 'api reply text',
                 'action' => 'api action name',
-                'apiActionIncomplete' => false,
                 'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
@@ -44,7 +43,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $http = m::mock(Curl::class);
         $http->shouldReceive('post')
             ->once()
-            ->with('https://api.api.ai/v1/query?v20150910', [], [
+            ->with('https://api.api.ai/v1/query?v=20150910', [], [
                 'query' => [$messageText],
                 'sessionId' => md5($messageChannel),
                 'lang' => 'en',
