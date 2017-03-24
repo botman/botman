@@ -73,7 +73,7 @@ class FacebookOptinDriverTest extends PHPUnit_Framework_TestCase
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"optin": {"ref":"optin","user_ref":"1234"}}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('1234', $driver->getMessages()[0]->getUser());
+        $this->assertSame('111899832631525', $driver->getMessages()[0]->getUser());
     }
 
     /** @test */
