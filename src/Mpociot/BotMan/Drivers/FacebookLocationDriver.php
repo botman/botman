@@ -12,16 +12,6 @@ class FacebookLocationDriver extends FacebookDriver
     const DRIVER_NAME = 'FacebookLocation';
 
     /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
-
-    /**
      * Determine if the request is for this driver.
      *
      * @return bool

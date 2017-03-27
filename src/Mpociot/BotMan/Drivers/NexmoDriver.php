@@ -9,17 +9,10 @@ use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class NexmoDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     const DRIVER_NAME = 'Nexmo';
 
     /**
@@ -38,16 +31,6 @@ class NexmoDriver extends Driver
     public function getUser(Message $matchingMessage)
     {
         return new User($matchingMessage->getChannel());
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -122,5 +105,23 @@ class NexmoDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('nexmo_key')) && ! is_null($this->config->get('nexmo_secret'));
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'api_key' => $this->config->get('nexmo_key'),
+            'api_secret' => $this->config->get('nexmo_secret'),
+        ], $parameters);
+
+        return $this->http->post('https://rest.nexmo.com/'.$endpoint.'?'.http_build_query($parameters));
     }
 }

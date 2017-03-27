@@ -14,12 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class TelegramDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     const DRIVER_NAME = 'Telegram';
 
     /**
@@ -29,16 +23,6 @@ class TelegramDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('message'));
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -217,5 +201,22 @@ class TelegramDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('telegram_token'));
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'chat_id' => $matchingMessage->getChannel(),
+        ], $parameters);
+
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
     }
 }

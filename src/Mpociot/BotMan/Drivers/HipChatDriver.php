@@ -14,12 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class HipChatDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     const DRIVER_NAME = 'HipChat';
 
     /**
@@ -29,16 +23,6 @@ class HipChatDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('item'));
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -132,5 +116,18 @@ class HipChatDriver extends Driver
         $payload = $matchingMessage->getPayload();
 
         return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null, $payload->get('message')['from']['mention_name']);
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        //
     }
 }

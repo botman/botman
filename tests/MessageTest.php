@@ -47,7 +47,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function it_can_return_the_originated_conversation_identifier()
     {
         $message = new Message('', 'user', 'channel');
-        $identifier = 'conversation--'.sha1('channel');
+        $identifier = 'conversation-da39a3ee5e6b4b0d3255bfef95601890afd80709-'.sha1('channel');
         $this->assertSame($identifier, $message->getOriginatedConversationIdentifier());
     }
 

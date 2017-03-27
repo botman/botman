@@ -12,17 +12,12 @@ use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class FacebookDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     /** @var string */
     protected $signature;
 
@@ -37,6 +32,8 @@ class FacebookDriver extends Driver
         ReceiptTemplate::class,
     ];
 
+    protected $facebookProfileEndpoint = 'https://graph.facebook.com/v2.6/';
+
     const DRIVER_NAME = 'Facebook';
 
     /**
@@ -48,16 +45,6 @@ class FacebookDriver extends Driver
         $this->event = Collection::make((array) $this->payload->get('entry')[0]);
         $this->signature = $request->headers->get('X_HUB_SIGNATURE', '');
         $this->content = $request->getContent();
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -80,7 +67,8 @@ class FacebookDriver extends Driver
      */
     protected function validateSignature()
     {
-        return hash_equals($this->signature, 'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
+        return hash_equals($this->signature,
+            'sha1='.hash_hmac('sha1', $this->content, $this->config->get('facebook_app_secret')));
     }
 
     /**
@@ -102,17 +90,13 @@ class FacebookDriver extends Driver
 
     /**
      * @param  Message $message
-     *
      * @return Answer
      */
     public function getConversationAnswer(Message $message)
     {
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
-            return Answer::create($message->getMessage())
-                ->setMessage($message)
-                ->setInteractiveReply(true)
-                ->setValue($payload['message']['quick_reply']['payload']);
+            return Answer::create($message->getMessage())->setMessage($message)->setInteractiveReply(true)->setValue($payload['message']['quick_reply']['payload']);
         }
 
         return Answer::create($message->getMessage())->setMessage($message);
@@ -180,7 +164,7 @@ class FacebookDriver extends Driver
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
@@ -237,11 +221,35 @@ class FacebookDriver extends Driver
 
     /**
      * Retrieve User information.
+     *
      * @param Message $matchingMessage
      * @return User
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getChannel());
+        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
+
+        $profileData = json_decode($profileData->getContent());
+        $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
+        $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
+
+        return new User($matchingMessage->getChannel(), $firstName, $lastName);
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'access_token' => $this->config->get('facebook_token'),
+        ], $parameters);
+
+        return $this->http->post('https://graph.facebook.com/v2.6/'.$endpoint, [], $parameters);
     }
 }
