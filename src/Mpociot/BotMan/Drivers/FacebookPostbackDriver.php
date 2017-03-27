@@ -4,21 +4,10 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
 
 class FacebookPostbackDriver extends FacebookDriver
 {
     const DRIVER_NAME = 'FacebookPostback';
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
-    }
 
     /**
      * Determine if the request is for this driver.

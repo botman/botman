@@ -10,6 +10,12 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 
 abstract class Driver implements DriverInterface
 {
+    /** @var Collection|ParameterBag */
+    protected $payload;
+
+    /** @var Collection */
+    protected $event;
+
     /** @var HttpInterface */
     protected $http;
 
@@ -30,6 +36,16 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Return the driver name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return static::DRIVER_NAME;
+    }
+
+    /**
      * @param Message $matchingMessage
      * @return void
      */
@@ -43,4 +59,14 @@ abstract class Driver implements DriverInterface
      * @return void
      */
     abstract public function buildPayload(Request $request);
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return void
+     */
+    abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
 }

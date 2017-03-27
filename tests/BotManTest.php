@@ -8,9 +8,11 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
@@ -771,12 +773,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman = $this->getBot([
             'event' => [
                 'user' => 'U0X12345',
-                'text' => 'bar',
+                'text' => 'successful',
             ],
         ]);
 
         $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$called) {
-            $botman->hears('bar', function ($bot) use (&$called) {
+            $botman->hears('successful', function ($bot) use (&$called) {
                 $called = true;
                 $this->assertSame([
                     'driver_name' => 'Slack',
@@ -791,6 +793,29 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
 
         $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_can_match_grouped_middleware_commands()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'bar',
+            ],
+        ]);
+
+        $botman->group(['middleware' => new TestNoMatchMiddleware()], function ($botman) use (&$called) {
+            $botman->hears('bar', function ($bot) use (&$called) {
+                $called = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($called);
     }
 
     /** @test */
@@ -1128,6 +1153,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->reply('foo', []);
+
+        DriverManager::unloadDriver(TestDriver::class);
     }
 
     /** @test */
@@ -1144,6 +1171,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->dummyMethod('bar', 'baz');
+
+        DriverManager::unloadDriver(TestDriver::class);
     }
 
     /** @test */
@@ -1247,5 +1276,227 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->listen();
+    }
+
+    /** @test */
+    public function it_checks_that_all_middleware_match()
+    {
+        $called_one = false;
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'open the pod bay doors',
+            ],
+        ]);
+        $botman->middleware([new TestMatchMiddleware(), new TestNoMatchMiddleware()]);
+
+        $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
+            $called_one = true;
+        });
+
+        $botman->listen();
+        $this->assertFalse($called_one);
+    }
+
+    /** @test */
+    public function it_can_skip_a_running_conversation()
+    {
+        $called = false;
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a test question', m::type(Message::class), []);
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply.
+         * This should get skipped!
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'skip_keyword',
+            ],
+        ]);
+
+        $botman->hears('skip_keyword', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called);
+
+        $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
+        $this->assertTrue($this->cache->has($cacheKey));
+
+        /*
+         * This should now get picked up the usual way.
+         */
+        $called = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'repeat',
+            ],
+        ]);
+
+        $botman->hears('repeat', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($called);
+    }
+
+    /** @test */
+    public function it_can_stop_a_running_conversation()
+    {
+        $called = false;
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('reply')
+            ->once()
+            ->with('This is a test question', m::type(Message::class), []);
+
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply.
+         * This should get skipped!
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'stop_keyword',
+            ],
+        ]);
+
+        $botman->hears('stop_keyword', function ($bot) use (&$called) {
+            $called = true;
+        });
+        $botman->listen();
+
+        $this->assertTrue($called);
+
+        // Conversation should be removed from cache
+        $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
+        $this->assertFalse($this->cache->has($cacheKey));
+
+        /*
+         * This should now get picked up the usual way.
+         */
+        $called = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'repeat',
+            ],
+        ]);
+
+        $botman->hears('repeat', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_can_create_conversations_on_the_fly()
+    {
+        $GLOBALS['answer'] = null;
+        $GLOBALS['conversation'] = null;
+        $GLOBALS['called'] = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->ask('How are you doing?', function ($answer, $conversation) {
+                $GLOBALS['called'] = true;
+                $GLOBALS['answer'] = $answer;
+                $GLOBALS['conversation'] = $conversation;
+            });
+        });
+        $botman->listen();
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Great!',
+            ],
+        ]);
+        $botman->listen();
+
+        $this->assertTrue($GLOBALS['called']);
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertInstanceOf(Conversation::class, $GLOBALS['conversation']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('Great!', $GLOBALS['answer']->getText());
+    }
+
+    /** @test */
+    public function it_does_not_allow_sendRequest_method()
+    {
+        $botman = $this->getBot([]);
+        $botman->setDriver(new FakeDriver());
+        $this->expectException(\BadMethodCallException::class);
+        $botman->sendRequest('foo', []);
     }
 }

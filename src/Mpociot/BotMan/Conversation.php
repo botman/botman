@@ -4,6 +4,7 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 /**
  * Class Conversation.
@@ -82,7 +83,40 @@ abstract class Conversation
     }
 
     /**
+     * Should the conversation be skipped (temporarily).
+     * @param  Message $message
+     * @return bool
+     */
+    public function skipConversation(Message $message)
+    {
+        //
+    }
+
+    /**
+     * Should the conversation be removed and stopped (permanently).
+     * @param  Message $message
+     * @return bool
+     */
+    public function stopConversation(Message $message)
+    {
+        //
+    }
+
+    /**
      * @return mixed
      */
     abstract public function run();
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        $properties = get_object_vars($this);
+        if (! $this instanceof ShouldQueue) {
+            unset($properties['bot']);
+        }
+
+        return array_keys($properties);
+    }
 }

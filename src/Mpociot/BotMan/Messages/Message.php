@@ -16,6 +16,9 @@ class Message
     /** @var string */
     private $audio;
 
+    /** @var string */
+    protected $filePath;
+
     /**
      * Message constructor.
      * @param string $message
@@ -71,6 +74,17 @@ class Message
     }
 
     /**
+     * @param string $filePath
+     * @return $this
+     */
+    public function filePath($filePath)
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getMessage()
@@ -94,13 +108,27 @@ class Message
         return $this->video;
     }
 
+    /**
+     * @return string
+     */
     public function setAudio($audio)
     {
         $this->audio = $audio;
     }
 
+    /**
+     * @return string
+     */
     public function getAudio()
     {
         return $this->audio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
     }
 }

@@ -13,6 +13,7 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Conversations\InlineConversation;
 
 /**
  * Class BotMan.
@@ -208,6 +209,7 @@ class BotMan
     /**
      * Get the parameter names for the route.
      *
+     * @param $value
      * @return array
      */
     protected function compileParameterNames($value)
@@ -314,14 +316,14 @@ class BotMan
                 }
 
                 list($class, $method) = explode('@', $callback);
-                $callback = [new $class, $method];
+                $callback = [new $class($this), $method];
             }
             foreach ($this->getMessages() as $message) {
                 $message = $this->applyMiddleware($message, $this->middleware);
                 $message = $this->applyMiddleware($message, $messageData['middleware']);
 
                 if (! $this->isBot() &&
-                    $this->isMessageMatching($message, $pattern, $matches) &&
+                    $this->isMessageMatching($message, $pattern, $matches, $messageData['middleware']) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
@@ -351,9 +353,10 @@ class BotMan
      * @param Message $message
      * @param string $pattern
      * @param array $matches
+     * @param array $messageMiddleware
      * @return int
      */
-    protected function isMessageMatching(Message $message, $pattern, &$matches)
+    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = [])
     {
         $matches = [];
 
@@ -365,8 +368,11 @@ class BotMan
         $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first
-        foreach ($this->middleware as $middleware) {
-            return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+        $mergedMiddleware = array_merge($this->middleware, $messageMiddleware);
+        if (count($mergedMiddleware)) {
+            return Collection::make($mergedMiddleware)->reject(function ($middleware) use ($message, $pattern, $regexMatched) {
+                return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+            })->isEmpty() === true;
         }
 
         return $regexMatched;
@@ -397,6 +403,20 @@ class BotMan
     }
 
     /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function ask($question, $next, $additionalParameters = [])
+    {
+        $this->reply($question, $additionalParameters);
+        $this->storeConversation(new InlineConversation, $next, $question, $additionalParameters);
+
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function types()
@@ -416,6 +436,23 @@ class BotMan
         sleep($seconds);
 
         return $this;
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function sendRequest($endpoint, $additionalParameters = [])
+    {
+        $driver = $this->getDriver();
+        if (method_exists($driver, 'sendRequest')) {
+            return $driver->sendRequest($endpoint, $additionalParameters, $this->message);
+        } else {
+            throw new \BadMethodCallException('The driver '.$this->getDriver()->getName().' does not support low level requests.');
+        }
     }
 
     /**

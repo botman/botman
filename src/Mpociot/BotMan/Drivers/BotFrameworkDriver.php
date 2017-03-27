@@ -14,12 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class BotFrameworkDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     const DRIVER_NAME = 'BotFramework';
 
     /**
@@ -29,16 +23,6 @@ class BotFrameworkDriver extends Driver
     {
         $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->all());
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -202,5 +186,25 @@ class BotFrameworkDriver extends Driver
     public function isConfigured()
     {
         return ! is_null($this->config->get('microsoft_app_id')) && ! is_null($this->config->get('microsoft_app_key'));
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $headers = [
+            'Content-Type:application/json',
+            'Authorization:Bearer '.$this->getAccessToken(),
+        ];
+
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($parameters)->get('serviceUrl'));
+
+        return $this->http->post($apiURL.'/v3/'.$endpoint, [], $parameters, $headers, true);
     }
 }

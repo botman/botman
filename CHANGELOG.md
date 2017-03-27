@@ -1,6 +1,29 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Added `sendRequest` method to perform low-level driver API requests.
+- Allow regular expressions in API.ai middleware
+- Added fake driver for testing
+
+### Changed
+- Cache API.ai calls
+
+## [1.4.1]
+### Added
+- Added on-the-fly mini-conversations using `$botman->ask($question, Closure $next, $additionalParameters = [])`.
+- Added ability to either temporarily skip conversations or completely stop them using the `skipConversation` and `stopConversation` methods on the conversation object.
+- Added a `ShouldQueue` interface that your Conversation classes should use if you want to store / serialize them in queues.
+- Added `filePath()` method to the Message class. (SlackRTM support only)
+
+### Changed
+- FacebookDriver now returns user first + lastname
+- Fixed a bug with Windows + cash file names (#200)
+- Fixed a bug with fluent middleware syntax (#203)
+- Fixed a bug with multiple middlewares (#209)
+
 ## [1.4.0]
 ### Added
 - Added methods to set typing indicators `$botman->types()` and `$botman->typesAndWaits(2);`.

@@ -14,12 +14,6 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackDriver extends Driver
 {
-    /** @var Collection|ParameterBag */
-    protected $payload;
-
-    /** @var Collection */
-    protected $event;
-
     const DRIVER_NAME = 'Slack';
 
     /**
@@ -46,16 +40,6 @@ class SlackDriver extends Driver
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->event = Collection::make($this->payload->get('event'));
         }
-    }
-
-    /**
-     * Return the driver name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return self::DRIVER_NAME;
     }
 
     /**
@@ -133,7 +117,7 @@ class SlackDriver extends Driver
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return $this|void
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
@@ -213,7 +197,7 @@ class SlackDriver extends Driver
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return Response
      */
     protected function replyWithToken($message, $matchingMessage, $additionalParameters = [])
     {
@@ -273,5 +257,22 @@ class SlackDriver extends Driver
     public function getUser(Message $matchingMessage)
     {
         return new User($matchingMessage->getUser());
+    }
+
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param Message $matchingMessage
+     * @return Response
+     */
+    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    {
+        $parameters = array_merge([
+            'token' => $this->config->get('slack_token'),
+        ], $parameters);
+
+        return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);
     }
 }
