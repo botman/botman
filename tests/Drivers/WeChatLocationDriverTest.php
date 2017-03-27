@@ -6,11 +6,34 @@ use Mockery as m;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\WeChatPhotoDriver;
+use Mpociot\BotMan\Drivers\WeChatLocationDriver;
 
-class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
+class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Valid WeChat video XML
+     * @var string
+     */
+    protected $validXml;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->validXml = '<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
+            <FromUserName><![CDATA[from_user_name]]></FromUserName>
+            <CreateTime>1483534197</CreateTime>
+            <MsgType><![CDATA[location]]></MsgType>
+            <PicUrl><![CDATA[http://test.com/picurl]]></PicUrl>
+            <Content><![CDATA[Hi Julia]]></Content>
+            <Location_X><![CDATA[40.7]]></Location_X>
+            <Location_Y><![CDATA[-74.1]]></Location_Y>
+            <MsgId>1234567890</MsgId>
+            </xml>';
+    }
+
     private function getDriver($xmlData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -19,14 +42,14 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
             $htmlInterface = m::mock(Curl::class);
         }
 
-        return new WeChatPhotoDriver($request, [], $htmlInterface);
+        return new WeChatLocationDriver($request, [], $htmlInterface);
     }
 
     /** @test */
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver([]);
-        $this->assertSame('WeChatPhoto', $driver->getName());
+        $this->assertSame('WeChatLocation', $driver->getName());
     }
 
     /** @test */
@@ -35,56 +58,33 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver('foo');
         $this->assertFalse($driver->matchesRequest());
 
-        $driver = $this->getDriver('<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
-<FromUserName><![CDATA[from_user_name]]></FromUserName>
-<CreateTime>1483534197</CreateTime>
-<MsgType><![CDATA[image]]></MsgType>
-<Content><![CDATA[foo]]></Content>
-<MsgId>1234567890</MsgId>
-</xml>');
+        $driver = $this->getDriver($this->validXml);
         $this->assertTrue($driver->matchesRequest());
     }
 
     /** @test */
     public function it_returns_the_message_object()
     {
-        $driver = $this->getDriver('<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
-<FromUserName><![CDATA[from_user_name]]></FromUserName>
-<CreateTime>1483534197</CreateTime>
-<MsgType><![CDATA[image]]></MsgType>
-<Content><![CDATA[foo]]></Content>
-<MsgId>1234567890</MsgId>
-</xml>');
+        $driver = $this->getDriver($this->validXml);
         $this->assertTrue(is_array($driver->getMessages()));
     }
 
     /** @test */
     public function it_returns_the_image_pattern()
     {
-        $driver = $this->getDriver('<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
-<FromUserName><![CDATA[from_user_name]]></FromUserName>
-<CreateTime>1483534197</CreateTime>
-<MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[Hi Julia]]></Content>
-<MsgId>1234567890</MsgId>
-</xml>');
-        $this->assertSame('%%%_IMAGE_%%%', $driver->getMessages()[0]->getMessage());
+        $driver = $this->getDriver($this->validXml);
+        $this->assertSame('%%%_LOCATION_%%%', $driver->getMessages()[0]->getMessage());
     }
 
     /** @test */
-    public function it_returns_the_image()
+    public function it_returns_the_location()
     {
-        $driver = $this->getDriver('<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
-<FromUserName><![CDATA[from_user_name]]></FromUserName>
-<CreateTime>1483534197</CreateTime>
-<MsgType><![CDATA[image]]></MsgType>
-<PicUrl><![CDATA[http://test.com/picurl]]></PicUrl>
-<Content><![CDATA[Hi Julia]]></Content>
-<MsgId>1234567890</MsgId>
-</xml>');
+        $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::IMAGE_PATTERN, $message->getMessage());
-        $this->assertSame(['http://test.com/picurl'], $message->getImages());
+        $this->assertSame(BotMan::LOCATION_PATTERN, $message->getMessage());
+        $this->assertInstanceOf(Location::class, $message->getLocation());
+        $this->assertEquals('40.7', $message->getLocation()->getLatitude());
+        $this->assertEquals('-74.1', $message->getLocation()->getLongitude());
     }
 
 }
