@@ -4,23 +4,22 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
 use Illuminate\Http\Response;
+use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChatVideoDriver;
+use Symfony\Component\HttpFoundation\Request;
 
 class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
 {
-
     /**
-     * Valid WeChat video XML
+     * Valid WeChat video XML.
      * @var string
      */
     protected $validXml;
 
     /**
-     * Invalid WeChat video XML
+     * Invalid WeChat video XML.
      * @var string
      */
     protected $invalidXml;

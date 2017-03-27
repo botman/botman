@@ -7,7 +7,6 @@ use Mpociot\BotMan\Message;
 
 class WeChatVideoDriver extends WeChatDriver
 {
-
     const DRIVER_NAME = 'WeChatVideo';
 
     /**
@@ -42,8 +41,8 @@ class WeChatVideoDriver extends WeChatDriver
     }
 
     /**
-     * Retrieve a image from an incoming message.
-     * @return array A download for the image file.
+     * Create the video url from an incoming message.
+     * @return array
      */
     private function getVideo()
     {

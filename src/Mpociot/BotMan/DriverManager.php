@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\WeChatVideoDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -13,8 +12,9 @@ use Mpociot\BotMan\Drivers\HipChatDriver;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChatPhotoDriver;
+use Mpociot\BotMan\Drivers\WeChatVideoDriver;
+use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\FacebookAudioDriver;

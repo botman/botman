@@ -44,7 +44,7 @@ class WeChatLocationDriver extends WeChatDriver
     }
 
     /**
-     * Retrieve a image from an incoming message.
+     * Create a location object from an incoming message.
      * @return Location
      */
     private function getLocation()

@@ -13,7 +13,7 @@ use Mpociot\BotMan\Drivers\WeChatLocationDriver;
 class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Valid WeChat video XML
+     * Valid WeChat location XML.
      * @var string
      */
     protected $validXml;
@@ -70,7 +70,7 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_returns_the_image_pattern()
+    public function it_returns_the_location_pattern()
     {
         $driver = $this->getDriver($this->validXml);
         $this->assertSame('%%%_LOCATION_%%%', $driver->getMessages()[0]->getMessage());
@@ -86,5 +86,4 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('40.7', $message->getLocation()->getLatitude());
         $this->assertEquals('-74.1', $message->getLocation()->getLongitude());
     }
-
 }

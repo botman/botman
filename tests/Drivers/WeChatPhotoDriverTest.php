@@ -6,13 +6,13 @@ use Mockery as m;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChatPhotoDriver;
+use Symfony\Component\HttpFoundation\Request;
 
 class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Valid WeChat video XML
+     * Valid WeChat image XML.
      * @var string
      */
     protected $validXml;
@@ -27,6 +27,7 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
             <MsgType><![CDATA[image]]></MsgType>
             <Content><![CDATA[foo]]></Content>
             <MsgId>1234567890</MsgId>
+            <PicUrl>http://test.com/picurl</PicUrl>
             </xml>';
     }
 

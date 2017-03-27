@@ -43,8 +43,8 @@ class WeChatPhotoDriver extends WeChatDriver
     }
 
     /**
-     * Retrieve a image from an incoming message.
-     * @return array A download for the image file.
+     * Retrieve image url from an incoming message.
+     * @return array
      */
     private function getImages()
     {
