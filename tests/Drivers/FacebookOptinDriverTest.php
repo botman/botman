@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\FacebookOptinDriver;
