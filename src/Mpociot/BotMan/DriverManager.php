@@ -24,6 +24,8 @@ use Mpociot\BotMan\Drivers\TelegramVideoDriver;
 use Mpociot\BotMan\Drivers\FacebookLocationDriver;
 use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
 use Mpociot\BotMan\Drivers\TelegramLocationDriver;
+use Mpociot\BotMan\Drivers\BotFrameworkImageDriver;
+use Mpociot\BotMan\Drivers\BotFrameworkAttachmentDriver;
 
 class DriverManager
 {
@@ -43,6 +45,8 @@ class DriverManager
         TelegramLocationDriver::class,
         TelegramAudioDriver::class,
         TelegramDriver::class,
+        BotFrameworkImageDriver::class,
+        BotFrameworkAttachmentDriver::class,
         BotFrameworkDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
