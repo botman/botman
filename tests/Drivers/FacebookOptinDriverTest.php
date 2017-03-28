@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,5 +108,52 @@ class FacebookOptinDriverTest extends PHPUnit_Framework_TestCase
         $driver = new FacebookOptinDriver($request, [], $htmlInterface);
 
         $this->assertFalse($driver->isConfigured());
+    }
+
+    /** @test */
+    public function it_can_reply_string_messages()
+    {
+        $responseData = [
+            'object' => 'page',
+            'event' => [
+                [
+                    'messaging' => [
+                        [
+                            'recipient' => [
+                                'id' => '0987654321',
+                            ],
+                            'timestamp' => 1234567890,
+                            'optin' => [
+                                'ref' => 'PASS_THROUGH_PARAM',
+                                'user_ref' => '1234',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'user_ref' => '1234',
+                ],
+                'message' => [
+                    'text' => 'Test',
+                ],
+                'access_token' => 'Foo',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new FacebookOptinDriver($request, [
+            'facebook_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '', '1234');
+        $driver->reply('Test', $message);
     }
 }
