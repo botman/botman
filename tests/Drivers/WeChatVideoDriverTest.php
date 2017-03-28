@@ -46,6 +46,11 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
             </xml>';
     }
 
+    public function tearDown()
+    {
+        m::close();
+    }
+
     private function getDriver($xmlData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -83,15 +88,6 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
                 'access_token' => 'SECRET_TOKEN',
             ])));
 
-        $html->shouldReceive('post')->once()->with('https://api.wechat.com/cgi-bin/message/custom/send?access_token=SECRET_TOKEN',
-                [], [
-                    'touser' => 'from_user_name',
-                    'msgtype' => 'text',
-                    'text' => [
-                        'content' => 'Test',
-                    ],
-                ], [], true);
-
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn($this->validXml);
 
@@ -100,8 +96,9 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
             'wechat_app_key' => 'WECHAT-APP-KEY',
         ], $html);
 
-        $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertEquals('%%%_VIDEO_%%%', $driver->getMessages()[0]->getMessage());
+        $messages = $driver->getMessages();
+        $this->assertTrue(is_array($messages));
+        $this->assertEquals('%%%_VIDEO_%%%', $messages[0]->getMessage());
     }
 
     /** @test */
@@ -112,15 +109,6 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
                 [], [])->andReturn(new Response(json_encode([
                 'access_token' => 'SECRET_TOKEN',
             ])));
-
-        $html->shouldReceive('post')->once()->with('https://api.wechat.com/cgi-bin/message/custom/send?access_token=SECRET_TOKEN',
-                [], [
-                    'touser' => 'from_user_name',
-                    'msgtype' => 'text',
-                    'text' => [
-                        'content' => 'Test',
-                    ],
-                ], [], true);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn($this->validXml);
