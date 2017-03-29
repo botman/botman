@@ -64,4 +64,12 @@ class FacebookImageDriver extends FacebookDriver
     {
         return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

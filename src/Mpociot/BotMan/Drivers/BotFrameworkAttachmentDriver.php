@@ -44,4 +44,12 @@ class BotFrameworkAttachmentDriver extends BotFrameworkDriver
     {
         return Collection::make($this->event->get('attachments'))->pluck('contentUrl')->toArray();
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

@@ -52,4 +52,12 @@ class WeChatPhotoDriver extends WeChatDriver
 
         return [$photoUrl];
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

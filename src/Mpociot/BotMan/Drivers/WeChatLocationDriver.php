@@ -51,4 +51,12 @@ class WeChatLocationDriver extends WeChatDriver
     {
         return new Location($this->event->get('Location_X'), $this->event->get('Location_Y'));
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

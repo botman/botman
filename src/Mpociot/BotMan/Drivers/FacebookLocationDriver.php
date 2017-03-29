@@ -67,4 +67,12 @@ class FacebookLocationDriver extends FacebookDriver
 
         return new Location($data['coordinates']['lat'], $data['coordinates']['long']);
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

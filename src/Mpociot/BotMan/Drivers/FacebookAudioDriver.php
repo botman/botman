@@ -64,4 +64,12 @@ class FacebookAudioDriver extends FacebookDriver
     {
         return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

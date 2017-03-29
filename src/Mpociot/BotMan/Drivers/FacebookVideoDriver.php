@@ -64,4 +64,12 @@ class FacebookVideoDriver extends FacebookDriver
     {
         return Collection::make($message['message']['attachments'])->where('type', 'video')->pluck('payload.url')->toArray();
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

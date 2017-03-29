@@ -50,4 +50,12 @@ class WeChatVideoDriver extends WeChatDriver
 
         return [$videoUrl];
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

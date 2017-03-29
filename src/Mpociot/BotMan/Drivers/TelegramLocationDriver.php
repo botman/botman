@@ -33,4 +33,12 @@ class TelegramLocationDriver extends TelegramDriver
 
         return [$message];
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }
