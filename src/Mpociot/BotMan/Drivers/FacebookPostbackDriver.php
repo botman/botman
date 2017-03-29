@@ -42,4 +42,12 @@ class FacebookPostbackDriver extends FacebookDriver
 
         return $messages;
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

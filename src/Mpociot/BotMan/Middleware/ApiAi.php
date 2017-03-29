@@ -23,7 +23,7 @@ class ApiAi implements MiddlewareInterface
     protected $lastResponseHash;
 
     /** @var string */
-    protected $apiUrl = 'https://api.api.ai/v1/query';
+    protected $apiUrl = 'https://api.api.ai/v1/query?v=20150910';
 
     /** @var bool */
     protected $listenForAction = false;
@@ -96,13 +96,15 @@ class ApiAi implements MiddlewareInterface
     {
         $response = $this->getResponse($message);
 
-        $reply = isset($response->result->speech) ? $response->result->speech : '';
+        $reply = isset($response->result->fulfillment->speech) ? $response->result->fulfillment->speech : '';
         $action = isset($response->result->action) ? $response->result->action : '';
+        $actionIncomplete = isset($response->result->actionIncomplete) ? (bool) $response->result->actionIncomplete : false;
         $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
         $parameters = isset($response->result->parameters) ? (array) $response->result->parameters : [];
 
         $message->addExtras('apiReply', $reply);
         $message->addExtras('apiAction', $action);
+        $message->addExtras('apiActionIncomplete', $actionIncomplete);
         $message->addExtras('apiIntent', $intent);
         $message->addExtras('apiParameters', $parameters);
     }
