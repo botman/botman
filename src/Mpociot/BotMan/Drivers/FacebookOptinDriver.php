@@ -64,4 +64,12 @@ class FacebookOptinDriver extends FacebookDriver
 
         return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }

@@ -97,7 +97,7 @@ class FacebookOptinDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'token',
         ], $htmlInterface);
 
-        $this->assertTrue($driver->isConfigured());
+        $this->assertFalse($driver->isConfigured());
 
         $driver = new FacebookOptinDriver($request, [
             'facebook_token' => null,
