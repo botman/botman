@@ -6,12 +6,19 @@ use Mockery as m;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Middleware\Wit;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 class WitTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+    }
+
     /** @test */
     public function it_adds_entities_to_the_message()
     {
@@ -121,5 +128,34 @@ class WitTest extends PHPUnit_Framework_TestCase
     {
         $middleware = Wit::create('token');
         $this->assertInstanceOf(Wit::class, $middleware);
+    }
+
+    /** @test */
+    public function it_only_calls_service_once_per_listen()
+    {
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode([]));
+
+        $botman = BotManFactory::create([], new ArrayCache, $request);
+
+        $http = m::mock(Curl::class);
+        $http->shouldReceive('post')
+            ->once()
+            ->andReturn(new Response('[]'));
+
+        $middleware = new Wit('token', 0.5, $http);
+
+        $botman->hears('one', function ($bot) {
+        })->middleware($middleware);
+        $botman->hears('two', function ($bot) {
+        })->middleware($middleware);
+        $botman->group(['middleware' => $middleware], function ($botman) use (&$called) {
+            $botman->hears('one', function ($bot) {
+            });
+            $botman->hears('two', function ($bot) {
+            });
+        });
+
+        $botman->listen();
     }
 }
