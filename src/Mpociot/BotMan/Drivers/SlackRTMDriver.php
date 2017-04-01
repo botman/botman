@@ -187,7 +187,7 @@ class SlackRTMDriver implements DriverInterface
             $user = $_user;
         });
         if (! is_null($user)) {
-            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername());
+            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername(), $user);
         }
 
         return new User($matchingMessage->getUser());
