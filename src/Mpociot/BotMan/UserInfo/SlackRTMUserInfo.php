@@ -30,7 +30,7 @@ class SlackRTMUserInfo implements UserInfoInterface
 
         Collection::make([
             'get'.ucfirst($key),
-            'is'.ucFirst($key),
+            'is'.ucfirst($key),
             $key,
         ])
         ->each(function ($method) use (&$info) {
