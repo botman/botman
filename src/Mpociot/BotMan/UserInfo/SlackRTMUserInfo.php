@@ -28,7 +28,11 @@ class SlackRTMUserInfo implements UserInfoInterface
     {
         $info = null;
 
-        Collection::make(['get' . ucfirst($key), 'is' . ucFirst($key)])
+        Collection::make([
+                'get' . ucfirst($key),
+                'is' . ucFirst($key),
+                $key,
+            ])
             ->each(function ($method) use (&$info) {
                 if (method_exists($this->user, $method)) {
                     $info = $this->user->$method();
