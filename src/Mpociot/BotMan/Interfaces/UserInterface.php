@@ -23,4 +23,13 @@ interface UserInterface
      * @return string
      */
     public function getLastName();
+
+    /**
+     * Get information from the driver's user info
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function getInfo($key);
 }
