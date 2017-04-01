@@ -9,6 +9,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\UserInfo\SlackRTMUserInfo;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
@@ -187,7 +188,8 @@ class SlackRTMDriver implements DriverInterface
             $user = $_user;
         });
         if (! is_null($user)) {
-            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername(), $user);
+            $userInfo = new SlackRTMUserInfo($user);
+            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername(), $userInfo);
         }
 
         return new User($matchingMessage->getUser());
