@@ -25,7 +25,7 @@ interface UserInterface
     public function getLastName();
 
     /**
-     * Get information from the driver's user info
+     * Get information from the driver's user info.
      *
      * @param string $key
      *

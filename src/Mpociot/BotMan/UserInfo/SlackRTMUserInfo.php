@@ -12,7 +12,7 @@ class SlackRTMUserInfo implements UserInfoInterface
     protected $user;
 
     /**
-     * SlackRTMUserInfo Constructor
+     * SlackRTMUserInfo Constructor.
      *
      * @param User $user
      */
@@ -29,16 +29,15 @@ class SlackRTMUserInfo implements UserInfoInterface
         $info = null;
 
         Collection::make([
-                'get' . ucfirst($key),
-                'is' . ucFirst($key),
-                $key,
-            ])
-            ->each(function ($method) use (&$info) {
-                if (method_exists($this->user, $method)) {
-                    $info = $this->user->$method();
-                }
-            })
-        ;
+            'get'.ucfirst($key),
+            'is'.ucFirst($key),
+            $key,
+        ])
+        ->each(function ($method) use (&$info) {
+            if (method_exists($this->user, $method)) {
+                $info = $this->user->$method();
+            }
+        });
 
         return $info;
     }
