@@ -181,7 +181,7 @@ class SlackRTMDriver implements DriverInterface
 
         if (is_null($channel)) {
             $this->client->getDMById($matchingMessage->getChannel())->then(function ($_channel) use (&$channel) {
-               $channel = $_channel;
+                $channel = $_channel;
             });
         }
 
