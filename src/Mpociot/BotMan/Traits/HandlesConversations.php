@@ -76,6 +76,7 @@ trait HandlesConversations
          */
         if ($this->getStoredConversation($message)['time'] == $this->currentConversationData['time']) {
             $this->cache->pull($this->message->getConversationIdentifier());
+            $this->cache->pull($this->message->getOriginatedConversationIdentifier());
         }
     }
 
