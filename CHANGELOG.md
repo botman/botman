@@ -7,9 +7,11 @@ All notable changes to this project will be documented in this file.
 - Added `sendRequest` method to perform low-level driver API requests.
 - Allow regular expressions in API.ai middleware
 - Added fake driver for testing
+- Allow typing indicators for Slack RTM driver
 
 ### Changed
 - Cache API.ai calls
+- Cache Wit.AI calls
 
 ## [1.4.1]
 ### Added
