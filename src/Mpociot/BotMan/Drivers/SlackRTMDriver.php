@@ -169,10 +169,17 @@ class SlackRTMDriver implements DriverInterface
     /**
      * Send a typing indicator.
      * @param Message $matchingMessage
-     * @return mixed
      */
     public function types(Message $matchingMessage)
     {
+        $channel = null;
+        $this->getChannelGroupOrDM($matchingMessage)->then(function ($_channel) use (&$channel) {
+            $channel = $_channel;
+        });
+
+        if (! is_null($channel)) {
+            $this->client->setAsTyping($channel, false);
+        }
     }
 
     /**
@@ -201,6 +208,16 @@ class SlackRTMDriver implements DriverInterface
     public function getChannel(Message $matchingMessage)
     {
         return $this->client->getChannelById($matchingMessage->getChannel());
+    }
+
+    /**
+     * Retrieve Channel, Group, or DM channel information.
+     * @param Message $matchingMessage
+     * @return \Slack\Channel|\Slack\Group|\Slack\DirectMessageChannel
+     */
+    public function getChannelGroupOrDM(Message $matchingMessage)
+    {
+        return $this->client->getChannelGroupOrDMByID($matchingMessage->getChannel());
     }
 
     /**
