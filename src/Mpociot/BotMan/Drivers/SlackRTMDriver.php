@@ -173,6 +173,21 @@ class SlackRTMDriver implements DriverInterface
      */
     public function types(Message $matchingMessage)
     {
+        $channel = null;
+
+        $this->getChannel($matchingMessage)->then(function ($_channel) use (&$channel) {
+            $channel = $_channel;
+        });
+
+        if (is_null($channel)) {
+            $this->client->getDMById($matchingMessage->getChannel())->then(function ($_channel) use (&$channel) {
+               $channel = $_channel;
+            });
+        }
+
+        if (! is_null($channel)) {
+            $this->client->setAsTyping($channel, false);
+        }
     }
 
     /**
