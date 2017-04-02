@@ -20,6 +20,12 @@ class Wit implements MiddlewareInterface
     /** @var HttpInterface */
     protected $http;
 
+    /** @var string */
+    protected $lastResponseHash;
+
+    /** @var stdClass */
+    protected $response;
+
     /**
      * Wit constructor.
      * @param string $token wit.ai access token
@@ -51,9 +57,8 @@ class Wit implements MiddlewareInterface
      */
     public function handle(Message &$message, DriverInterface $driver)
     {
-        $response = $this->http->post('https://api.wit.ai/message?q='.urlencode($message->getMessage()), [], [], [
-            'Authorization: Bearer '.$this->token,
-        ]);
+        $response = $this->getResponse($message);
+
         $responseData = Collection::make(json_decode($response->getContent(), true));
         $message->addExtras('entities', $responseData->get('entities'));
     }
@@ -81,5 +86,22 @@ class Wit implements MiddlewareInterface
         }
 
         return false;
+    }
+
+    protected function getResponse(Message $message)
+    {
+        $lastResponseHash = md5($message->getMessage());
+
+        if ($this->lastResponseHash !== $lastResponseHash) {
+            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
+
+            $this->response = $this->http->post($endpoint, [], [], [
+                'Authorization: Bearer '.$this->token,
+            ]);
+
+            $this->lastResponseHash = $lastResponseHash;
+        }
+
+        return $this->response;
     }
 }
