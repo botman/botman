@@ -1508,7 +1508,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $message = new Message(BotMan::IMAGE_PATTERN, '', '');
         $message->setImages([
-            'http://foo.com/bar.png'
+            'http://foo.com/bar.png',
         ]);
 
         $botman = $this->getBot([]);
@@ -1516,7 +1516,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(FakeDriver::class)->makePartial();
         $driver->shouldReceive('getMessages')
             ->andReturn([
-                $message
+                $message,
             ]);
 
         $botman->setDriver($driver);
@@ -1537,7 +1537,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $message = new Message(BotMan::VIDEO_PATTERN, '', '');
         $message->setVideos([
-            'http://foo.com/bar.png'
+            'http://foo.com/bar.png',
         ]);
 
         $botman = $this->getBot([]);
@@ -1545,7 +1545,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(FakeDriver::class)->makePartial();
         $driver->shouldReceive('getMessages')
             ->andReturn([
-                $message
+                $message,
             ]);
 
         $botman->setDriver($driver);
@@ -1566,7 +1566,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $message = new Message(BotMan::AUDIO_PATTERN, '', '');
         $message->setAudio([
-            'http://foo.com/bar.png'
+            'http://foo.com/bar.png',
         ]);
 
         $botman = $this->getBot([]);
@@ -1574,7 +1574,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(FakeDriver::class)->makePartial();
         $driver->shouldReceive('getMessages')
             ->andReturn([
-                $message
+                $message,
             ]);
 
         $botman->setDriver($driver);
@@ -1605,7 +1605,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(FakeDriver::class)->makePartial();
         $driver->shouldReceive('getMessages')
             ->andReturn([
-                $message
+                $message,
             ]);
 
         $botman->setDriver($driver);
