@@ -282,9 +282,9 @@ class BotMan
     }
 
     /**
-     * Add additional data (image,video,audio,location) data to 
+     * Add additional data (image,video,audio,location) data to
      * callable parameters.
-     * 
+     *
      * @param Message $message
      * @param array   $parameters
      */
@@ -363,7 +363,7 @@ class BotMan
                     }
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
-                    
+
                     $parameters = $this->addDataParameters($message, $parameters);
 
                     call_user_func_array($callback, $parameters);
