@@ -41,4 +41,12 @@ class SlackRTMUserInfo implements UserInfoInterface
 
         return $info;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }
