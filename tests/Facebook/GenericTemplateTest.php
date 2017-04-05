@@ -41,4 +41,17 @@ class GenericTemplateTest extends PHPUnit_Framework_TestCase
         $this->assertSame('BotMan Laravel Starter',
             Arr::get($template->toArray(), 'attachment.payload.elements.1.title'));
     }
+
+    /**
+     * @test
+     **/
+    public function it_can_set_square_ratio()
+    {
+        $template = new GenericTemplate;
+        $template->addElement(Element::create('BotMan Documentation'));
+        $template->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
+
+        $this->assertSame(GenericTemplate::RATIO_SQUARE,
+            Arr::get($template->toArray(), 'attachment.payload.image_aspect_ratio'));
+    }
 }

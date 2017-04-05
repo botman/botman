@@ -6,8 +6,20 @@ use JsonSerializable;
 
 class GenericTemplate implements JsonSerializable
 {
+    const RATIO_HORIZONTAL = 'horizontal';
+    const RATIO_SQUARE = 'square';
+
+    /** @var array */
+    private static $allowedRatios = [
+        self::RATIO_HORIZONTAL,
+        self::RATIO_SQUARE,
+    ];
+
     /** @var array */
     protected $elements = [];
+
+    /** @var string */
+    protected $imageAspectRatio = self::RATIO_HORIZONTAL;
 
     /**
      * @return static
@@ -44,6 +56,19 @@ class GenericTemplate implements JsonSerializable
     }
 
     /**
+     * @param string $ratio
+     * @return $this
+     */
+    public function addImageAspectRatio($ratio)
+    {
+        if (in_array($ratio, self::$allowedRatios)) {
+            $this->imageAspectRatio = $ratio;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -53,6 +78,7 @@ class GenericTemplate implements JsonSerializable
                 'type' => 'template',
                 'payload' => [
                     'template_type' => 'generic',
+                    'image_aspect_ratio' => $this->imageAspectRatio,
                     'elements' => $this->elements,
                 ],
             ],
