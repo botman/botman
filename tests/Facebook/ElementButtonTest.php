@@ -49,6 +49,19 @@ class ElementButtonTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      **/
+    public function it_ignores_title_for_account_link_type()
+    {
+        $button = new ElementButton('click me');
+        $button->type('account_link');
+
+        $this->assertSame('account_link', Arr::get($button->toArray(), 'type'));
+        $this->assertSame(null, Arr::get($button->toArray(), 'title'));
+        $this->assertFalse(array_key_exists('title', $button->toArray()));
+    }
+
+    /**
+     * @test
+     **/
     public function it_can_set_url()
     {
         $button = new ElementButton('click me');

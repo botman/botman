@@ -16,6 +16,8 @@ class ElementButton
     /** @var string */
     protected $payload;
 
+    const TYPE_ACCOUNT_LINK = 'account_link';
+
     /**
      * @param string $title
      * @return static
@@ -75,8 +77,11 @@ class ElementButton
     {
         $buttonArray = [
             'type' => $this->type,
-            'title' => $this->title,
         ];
+
+        if ($this->type !== self::TYPE_ACCOUNT_LINK) {
+            $buttonArray['title'] = $this->title;
+        }
 
         if ($this->type === 'postback') {
             $buttonArray['payload'] = $this->payload;
