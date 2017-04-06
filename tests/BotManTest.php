@@ -15,6 +15,7 @@ use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Mpociot\BotMan\Drivers\TelegramDriver;
 use Mpociot\BotMan\Interfaces\UserInterface;
@@ -1498,5 +1499,123 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver(new FakeDriver());
         $this->expectException(\BadMethodCallException::class);
         $botman->sendRequest('foo', []);
+    }
+
+    /** @test */
+    public function it_returns_images_as_second_argument()
+    {
+        $called = false;
+
+        $message = new Message(BotMan::IMAGE_PATTERN, '', '');
+        $message->setImages([
+            'http://foo.com/bar.png',
+        ]);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesImages(function ($bot, $data) use (&$called) {
+            $called = true;
+            $this->assertCount(1, $data);
+            $this->assertSame(['http://foo.com/bar.png'], $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_videos_as_second_argument()
+    {
+        $called = false;
+
+        $message = new Message(BotMan::VIDEO_PATTERN, '', '');
+        $message->setVideos([
+            'http://foo.com/bar.png',
+        ]);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesVideos(function ($bot, $data) use (&$called) {
+            $called = true;
+            $this->assertCount(1, $data);
+            $this->assertSame(['http://foo.com/bar.png'], $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_audio_as_second_argument()
+    {
+        $called = false;
+
+        $message = new Message(BotMan::AUDIO_PATTERN, '', '');
+        $message->setAudio([
+            'http://foo.com/bar.png',
+        ]);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesAudio(function ($bot, $data) use (&$called) {
+            $called = true;
+            $this->assertCount(1, $data);
+            $this->assertSame(['http://foo.com/bar.png'], $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_location_as_second_argument()
+    {
+        $called = false;
+        $lat = 41.123;
+        $lng = -12.123;
+
+        $location = new Location($lat, $lng);
+
+        $message = new Message(BotMan::LOCATION_PATTERN, '', '');
+        $message->setLocation($location);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesLocation(function ($bot, $data) use (&$called, $location) {
+            $called = true;
+            $this->assertInstanceOf(Location::class, $data);
+            $this->assertSame($location, $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
     }
 }

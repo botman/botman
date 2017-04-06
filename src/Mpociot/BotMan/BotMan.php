@@ -30,6 +30,26 @@ class BotMan
      */
     const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
 
+    /**
+     * Pattern that messages use to identify image uploads.
+     */
+    const IMAGE_PATTERN = '%%%_IMAGE_%%%';
+
+    /**
+     * Pattern that messages use to identify video uploads.
+     */
+    const VIDEO_PATTERN = '%%%_VIDEO_%%%';
+
+    /**
+     * Pattern that messages use to identify audio uploads.
+     */
+    const AUDIO_PATTERN = '%%%_AUDIO_%%%';
+
+    /**
+     * Pattern that messages use to identify location attachment.
+     */
+    const LOCATION_PATTERN = '%%%_LOCATION_%%%';
+
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -218,6 +238,74 @@ class BotMan
     }
 
     /**
+     * Listening for image files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesImages($callback)
+    {
+        return $this->hears(self::IMAGE_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for image files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesVideos($callback)
+    {
+        return $this->hears(self::VIDEO_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for audio files.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesAudio($callback)
+    {
+        return $this->hears(self::AUDIO_PATTERN, $callback);
+    }
+
+    /**
+     * Listening for location attachment.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesLocation($callback)
+    {
+        return $this->hears(self::LOCATION_PATTERN, $callback);
+    }
+
+    /**
+     * Add additional data (image,video,audio,location) data to
+     * callable parameters.
+     *
+     * @param Message $message
+     * @param array   $parameters
+     */
+    private function addDataParameters(Message $message, array $parameters)
+    {
+        $messageText = $message->getMessage();
+
+        if ($messageText === self::IMAGE_PATTERN) {
+            $parameters[] = $message->getImages();
+        } elseif ($messageText === self::VIDEO_PATTERN) {
+            $parameters[] = $message->getVideos();
+        } elseif ($messageText === self::AUDIO_PATTERN) {
+            $parameters[] = $message->getAudio();
+        } elseif ($messageText === self::LOCATION_PATTERN) {
+            $parameters[] = $message->getLocation();
+        }
+
+        return $parameters;
+    }
+
+    /**
      * Create a command group with shared attributes.
      *
      * @param  array  $attributes
@@ -254,7 +342,6 @@ class BotMan
                 list($class, $method) = explode('@', $callback);
                 $callback = [new $class($this), $method];
             }
-
             foreach ($this->getMessages() as $message) {
                 $message = $this->applyMiddleware($message, $this->middleware);
                 $message = $this->applyMiddleware($message, $messageData['middleware']);
@@ -276,6 +363,9 @@ class BotMan
                     }
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
+
+                    $parameters = $this->addDataParameters($message, $parameters);
+
                     call_user_func_array($callback, $parameters);
                 }
             }

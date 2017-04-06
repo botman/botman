@@ -38,7 +38,7 @@ class WeChatDriver extends Driver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('MsgType')) && ! is_null($this->event->get('MsgId'));
+        return ! is_null($this->event->get('MsgType')) && ! is_null($this->event->get('MsgId')) && $this->event->get('MsgType') === 'text';
     }
 
     /**

@@ -14,6 +14,9 @@ class Message
     protected $video;
 
     /** @var string */
+    private $audio;
+
+    /** @var string */
     protected $filePath;
 
     /**
@@ -103,6 +106,22 @@ class Message
     public function getVideo()
     {
         return $this->video;
+    }
+
+    /**
+     * @return string
+     */
+    public function setAudio($audio)
+    {
+        $this->audio = $audio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAudio()
+    {
+        return $this->audio;
     }
 
     /**

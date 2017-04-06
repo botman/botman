@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Location;
 
 class Message
 {
@@ -15,11 +16,26 @@ class Message
     /** @var string */
     protected $channel;
 
+    /** @var array */
+    protected $images = [];
+
+    /** @var array */
+    protected $videos = [];
+
     /** @var mixed */
     protected $payload;
 
     /** @var array */
     protected $extras = [];
+
+    /** @var array */
+    private $audio = [];
+
+    /** @var array */
+    private $attachments = [];
+
+    /** @var Location */
+    private $location;
 
     public function __construct($message, $user, $channel, $payload = null)
     {
@@ -102,5 +118,87 @@ class Message
         }
 
         return $this->extras;
+    }
+
+    /**
+     * @param array $images
+     */
+    public function setImages(array $images)
+    {
+        $this->images = $images;
+    }
+
+    /**
+     * Returns the message image URL.
+     * @return array
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param array $videos
+     */
+    public function setVideos(array $videos)
+    {
+        $this->videos = $videos;
+    }
+
+    /**
+     * Returns the message video URLs.
+     * @return array
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    /**
+     * @param array $audio
+     */
+    public function setAudio(array $audio)
+    {
+        $this->audio = $audio;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAudio()
+    {
+        return $this->audio;
+    }
+
+    /**
+     * @param array $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->attachments = $attachments;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation(Location $location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

@@ -62,6 +62,16 @@ class MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_set_and_return_an_image()
+    {
+        $message = new Message('', '', '');
+        $this->assertSame([], $message->getImages());
+
+        $message->setImages(['foo']);
+        $this->assertSame(['foo'], $message->getImages());
+    }
+
+    /** @test */
     public function it_can_set_and_return_extras()
     {
         $message = new Message('', '', '');
