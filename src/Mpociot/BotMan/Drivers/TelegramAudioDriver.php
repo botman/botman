@@ -47,4 +47,12 @@ class TelegramAudioDriver extends TelegramDriver
 
         return ['https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path];
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        return false;
+    }
 }
