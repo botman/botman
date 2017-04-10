@@ -188,6 +188,9 @@ trait HandlesConversations
     {
         /** @var Conversation $conversation */
         $conversation = $convo['conversation'];
+        if (! $conversation instanceof ShouldQueue) {
+            $conversation->setBot($this);
+        }
         /*
          * Validate askForImages, askForAudio, etc. calls
          */
@@ -225,9 +228,6 @@ trait HandlesConversations
     protected function prepareConversationClosure($next, Conversation $conversation, array $parameters)
     {
         if ($next instanceof SerializableClosure) {
-            if (! $conversation instanceof ShouldQueue) {
-                $conversation->setBot($this);
-            }
             $next = $next->getClosure()->bindTo($conversation, $conversation);
         }
 
