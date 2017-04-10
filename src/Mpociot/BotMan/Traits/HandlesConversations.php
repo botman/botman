@@ -144,11 +144,12 @@ trait HandlesConversations
             if ($convo['conversation']->skipConversation($message) === true) {
                 return;
             }
-            
+
             // Or stop it entirely?
             if ($convo['conversation']->stopConversation($message) === true) {
                 $this->cache->pull($message->getConversationIdentifier());
                 $this->cache->pull($message->getOriginatedConversationIdentifier());
+
                 return;
             }
 
