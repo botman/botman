@@ -12,6 +12,13 @@ use Mpociot\BotMan\Cache\RedisCache;
  */
 class RedisCacheTest extends PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        if (! extension_loaded('redis')) {
+            $this->markTestSkipped('Redis extension required');
+        }
+    }
+
     public function tearDown()
     {
         $redis = new Redis();
