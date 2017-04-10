@@ -44,6 +44,70 @@ abstract class Conversation
     }
 
     /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array|Closure $repeat
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function askForImages($question, $next, $repeat = null, $additionalParameters = [])
+    {
+        $additionalParameters['__getter'] = 'getImages';
+        $additionalParameters['__pattern'] = BotMan::IMAGE_PATTERN;
+        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+
+        return $this->ask($question, $next, $additionalParameters);
+    }
+
+    /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array|Closure $repeat
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function askForVideos($question, $next, $repeat = null, $additionalParameters = [])
+    {
+        $additionalParameters['__getter'] = 'getVideos';
+        $additionalParameters['__pattern'] = BotMan::VIDEO_PATTERN;
+        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+
+        return $this->ask($question, $next, $additionalParameters);
+    }
+
+    /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array|Closure $repeat
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function askForAudio($question, $next, $repeat = null, $additionalParameters = [])
+    {
+        $additionalParameters['__getter'] = 'getAudio';
+        $additionalParameters['__pattern'] = BotMan::AUDIO_PATTERN;
+        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+
+        return $this->ask($question, $next, $additionalParameters);
+    }
+
+    /**
+     * @param string|Question $question
+     * @param array|Closure $next
+     * @param array|Closure $repeat
+     * @param array $additionalParameters
+     * @return $this
+     */
+    public function askForLocation($question, $next, $repeat = null, $additionalParameters = [])
+    {
+        $additionalParameters['__getter'] = 'getLocation';
+        $additionalParameters['__pattern'] = BotMan::LOCATION_PATTERN;
+        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+
+        return $this->ask($question, $next, $additionalParameters);
+    }
+
+    /**
      * Repeat the previously asked question.
      * @param string|Question $question
      */

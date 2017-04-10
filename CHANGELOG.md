@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Added `askForImages`, `askForVideos`, `askForAudio`, `askForLocation`.
+- Added support for receiving images, videos, audio files and locations.
 - Added `sendRequest` method to perform low-level driver API requests.
 - Allow regular expressions in API.ai middleware
 - Added fake driver for testing

@@ -173,20 +173,65 @@ trait HandlesConversations
             $this->currentConversationData = $convo;
 
             if (is_callable($next)) {
-                if ($next instanceof SerializableClosure) {
-                    $conversation = $convo['conversation'];
-                    if (! $conversation instanceof ShouldQueue) {
-                        $conversation->setBot($this);
-                    }
-                    $next = $next->getClosure()->bindTo($conversation, $conversation);
-                }
-                array_unshift($parameters, $this->getConversationAnswer());
-                array_push($parameters, $convo['conversation']);
-                call_user_func_array($next, $parameters);
-                // Mark conversation as loaded to avoid triggering the fallback method
-                $this->loadedConversation = true;
-                $this->removeStoredConversation();
+                $this->callConversation($next, $convo, $message, $parameters);
             }
         });
+    }
+
+    /**
+     * @param callable $next
+     * @param array $convo
+     * @param Message $message
+     * @param array $parameters
+     */
+    protected function callConversation($next, $convo, Message $message, array $parameters)
+    {
+        /** @var Conversation $conversation */
+        $conversation = $convo['conversation'];
+        /*
+         * Validate askForImages, askForAudio, etc. calls
+         */
+        $additionalParameters = Collection::make(unserialize($convo['additionalParameters']));
+        if ($additionalParameters->has('__pattern')) {
+            $matches = [];
+            if ($this->isMessageMatching($message, $additionalParameters->get('__pattern'), $matches)) {
+                $getter = $additionalParameters->get('__getter');
+                array_unshift($parameters, $this->getConversationAnswer()->getMessage()->$getter());
+                $this->prepareConversationClosure($next, $conversation, $parameters);
+            } else {
+                if (is_null($additionalParameters->get('__repeat'))) {
+                    $conversation->repeat();
+                } else {
+                    $next = unserialize($additionalParameters->get('__repeat'));
+                    array_unshift($parameters, $this->getConversationAnswer());
+                    $this->prepareConversationClosure($next, $conversation, $parameters);
+                }
+            }
+        } else {
+            array_unshift($parameters, $this->getConversationAnswer());
+            $this->prepareConversationClosure($next, $conversation, $parameters);
+        }
+
+        // Mark conversation as loaded to avoid triggering the fallback method
+        $this->loadedConversation = true;
+        $this->removeStoredConversation();
+    }
+
+    /**
+     * @param Closure $next
+     * @param Conversation $conversation
+     * @param array $parameters
+     */
+    protected function prepareConversationClosure($next, Conversation $conversation, array $parameters)
+    {
+        if ($next instanceof SerializableClosure) {
+            if (! $conversation instanceof ShouldQueue) {
+                $conversation->setBot($this);
+            }
+            $next = $next->getClosure()->bindTo($conversation, $conversation);
+        }
+
+        array_push($parameters, $conversation);
+        call_user_func_array($next, $parameters);
     }
 }
