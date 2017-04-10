@@ -99,7 +99,7 @@ class RedisStorage implements StorageInterface
     {
         $this->redis = new Redis();
         $this->redis->connect($this->host, $this->port);
-        if (function_exists('igbinary_serialize')) {
+        if (function_exists('igbinary_serialize') && defined('Redis::SERIALIZER_IGBINARY')) {
             $this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
         } else {
             $this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
