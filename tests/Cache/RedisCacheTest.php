@@ -14,7 +14,7 @@ class RedisCacheTest extends PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        if (!extension_loaded('redis')) {
+        if (! extension_loaded('redis')) {
             $this->markTestSkipped('Redis extension required');
         }
     }
