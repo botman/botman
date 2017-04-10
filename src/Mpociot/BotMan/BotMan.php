@@ -326,7 +326,9 @@ class BotMan
      */
     public function listen()
     {
-        $this->loadActiveConversation();
+        if (! $this->isBot()) {
+            $this->loadActiveConversation();
+        }
 
         $heardMessage = false;
         foreach ($this->listenTo as $command) {

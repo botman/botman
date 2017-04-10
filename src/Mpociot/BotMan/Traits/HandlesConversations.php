@@ -7,6 +7,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\DriverManager;
+use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
@@ -84,7 +85,7 @@ trait HandlesConversations
      * @param Closure $closure
      * @return string
      */
-    protected function serializeClosure(Closure $closure)
+    public function serializeClosure(Closure $closure)
     {
         if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
             return serialize(new SerializableClosure($closure, true));
@@ -133,57 +134,58 @@ trait HandlesConversations
     public function loadActiveConversation()
     {
         $this->loadedConversation = false;
-        if ($this->isBot() === false) {
-            foreach ($this->getMessages() as $message) {
-                if ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier())) {
-                    $convo = $this->getStoredConversation($message);
 
-                    if ($convo['conversation']->stopConversation($message) === true) {
-                        $this->message = $message;
-                        $this->currentConversationData = $convo;
-                        $this->removeStoredConversation();
+        $conversationMessages = Collection::make($this->getMessages())->filter(function($message) {
+            return ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier()));
+        })->each(function($message) {
+            $convo = $this->getStoredConversation($message);
+
+            // Should we skip the conversation?
+            if ($convo['conversation']->skipConversation($message) === true) {
+                return;
+            }
+            
+            // Or stop it entirely?
+            if ($convo['conversation']->stopConversation($message) === true) {
+                $this->cache->pull($message->getConversationIdentifier());
+                $this->cache->pull($message->getOriginatedConversationIdentifier());
+                return;
+            }
+
+            // Ongoing conversation - let's find the callback.
+            $next = false;
+            $parameters = [];
+            if (is_array($convo['next'])) {
+                foreach ($convo['next'] as $callback) {
+                    if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
+                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
+                        $this->matches = $parameters;
+                        $next = $this->unserializeClosure($callback['callback']);
                         break;
-                    }
-                    if ($convo['conversation']->skipConversation($message) === true) {
-                        break;
-                    }
-
-                    $next = false;
-                    $parameters = [];
-                    if (is_array($convo['next'])) {
-                        foreach ($convo['next'] as $callback) {
-                            if ($this->isMessageMatching($message, $callback['pattern'], $matches)) {
-                                $this->message = $message;
-                                $this->currentConversationData = $convo;
-                                $parameters = array_combine($this->compileParameterNames($callback['pattern']), array_slice($matches, 1));
-                                $this->matches = $parameters;
-                                $next = $this->unserializeClosure($callback['callback']);
-                                break;
-                            }
-                        }
-                    } else {
-                        $this->message = $message;
-                        $this->currentConversationData = $convo;
-                        $next = $this->unserializeClosure($convo['next']);
-                    }
-
-                    if (is_callable($next)) {
-                        if ($next instanceof SerializableClosure) {
-                            $conversation = $convo['conversation'];
-                            if (! $conversation instanceof ShouldQueue) {
-                                $conversation->setBot($this);
-                            }
-                            $next = $next->getClosure()->bindTo($conversation, $conversation);
-                        }
-                        array_unshift($parameters, $this->getConversationAnswer());
-                        array_push($parameters, $convo['conversation']);
-                        call_user_func_array($next, $parameters);
-                        // Mark conversation as loaded to avoid triggering the fallback method
-                        $this->loadedConversation = true;
-                        $this->removeStoredConversation();
                     }
                 }
+            } else {
+                $next = $this->unserializeClosure($convo['next']);
             }
-        }
+
+            $this->message = $message;
+            $this->currentConversationData = $convo;
+
+            if (is_callable($next)) {
+                if ($next instanceof SerializableClosure) {
+                    $conversation = $convo['conversation'];
+                    if (! $conversation instanceof ShouldQueue) {
+                        $conversation->setBot($this);
+                    }
+                    $next = $next->getClosure()->bindTo($conversation, $conversation);
+                }
+                array_unshift($parameters, $this->getConversationAnswer());
+                array_push($parameters, $convo['conversation']);
+                call_user_func_array($next, $parameters);
+                // Mark conversation as loaded to avoid triggering the fallback method
+                $this->loadedConversation = true;
+                $this->removeStoredConversation();
+            }
+        });
     }
 }

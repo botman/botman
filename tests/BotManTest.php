@@ -603,6 +603,48 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_does_not_pick_up_conversations_with_bots()
+    {
+        $GLOBALS['answer'] = '';
+        $GLOBALS['called'] = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function () {
+        });
+        $botman->listen();
+
+        $conversation = new TestConversation();
+
+        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
+            $GLOBALS['answer'] = $answer;
+            $GLOBALS['called'] = true;
+        });
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'bot_id' => '1234',
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hello again',
+            ],
+        ]);
+        $botman->listen();
+
+        $this->assertFalse($GLOBALS['called']);
+    }
+
+    /** @test */
     public function it_picks_up_conversations_using_this()
     {
         $this->expectException(\Exception::class);
