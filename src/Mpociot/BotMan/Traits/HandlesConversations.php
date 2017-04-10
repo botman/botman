@@ -135,7 +135,7 @@ trait HandlesConversations
     {
         $this->loadedConversation = false;
 
-        $conversationMessages = Collection::make($this->getMessages())->filter(function($message) {
+        Collection::make($this->getMessages())->filter(function($message) {
             return ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier()));
         })->each(function($message) {
             $convo = $this->getStoredConversation($message);
