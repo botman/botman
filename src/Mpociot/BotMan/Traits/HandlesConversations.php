@@ -135,9 +135,9 @@ trait HandlesConversations
     {
         $this->loadedConversation = false;
 
-        Collection::make($this->getMessages())->filter(function($message) {
-            return ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier()));
-        })->each(function($message) {
+        Collection::make($this->getMessages())->filter(function ($message) {
+            return $this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier());
+        })->each(function ($message) {
             $convo = $this->getStoredConversation($message);
 
             // Should we skip the conversation?

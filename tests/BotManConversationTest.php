@@ -2,8 +2,6 @@
 
 namespace Mpociot\BotMan\Tests\Drivers;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
@@ -11,6 +9,7 @@ use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
 
 class BotManConversationTest extends PHPUnit_Framework_TestCase
@@ -104,8 +103,6 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'http://foo.com/bar.png';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
     }
-
-
 
     /** @test */
     public function it_repeats_invalid_videos_answers()

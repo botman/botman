@@ -54,7 +54,7 @@ abstract class Conversation
     {
         $additionalParameters['__getter'] = 'getImages';
         $additionalParameters['__pattern'] = BotMan::IMAGE_PATTERN;
-        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+        $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
     }
@@ -70,7 +70,7 @@ abstract class Conversation
     {
         $additionalParameters['__getter'] = 'getVideos';
         $additionalParameters['__pattern'] = BotMan::VIDEO_PATTERN;
-        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+        $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
     }
@@ -86,7 +86,7 @@ abstract class Conversation
     {
         $additionalParameters['__getter'] = 'getAudio';
         $additionalParameters['__pattern'] = BotMan::AUDIO_PATTERN;
-        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+        $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
     }
@@ -102,7 +102,7 @@ abstract class Conversation
     {
         $additionalParameters['__getter'] = 'getLocation';
         $additionalParameters['__pattern'] = BotMan::LOCATION_PATTERN;
-        $additionalParameters['__repeat'] = !is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+        $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
     }
