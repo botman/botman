@@ -135,20 +135,21 @@ trait HandlesConversations
     {
         $this->loadedConversation = false;
 
-        $conversationMessages = Collection::make($this->getMessages())->filter(function($message) {
-            return ($this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier()));
-        })->each(function($message) {
+        $conversationMessages = Collection::make($this->getMessages())->filter(function ($message) {
+            return $this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier());
+        })->each(function ($message) {
             $convo = $this->getStoredConversation($message);
 
             // Should we skip the conversation?
             if ($convo['conversation']->skipConversation($message) === true) {
                 return;
             }
-            
+
             // Or stop it entirely?
             if ($convo['conversation']->stopConversation($message) === true) {
                 $this->cache->pull($message->getConversationIdentifier());
                 $this->cache->pull($message->getOriginatedConversationIdentifier());
+
                 return;
             }
 
