@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.5.1]
+### Changed
+- Additional parameters for `say`, `reply` and `ask` methods now recursively merge the parameters.
+
 ## [1.5.0]
 
 ### Added
