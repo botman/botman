@@ -213,9 +213,11 @@ class TelegramDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge_recursive([
-            'chat_id' => $matchingMessage->getChannel(),
-        ], $parameters);
+        if(! array_key_exists('chat_id', $parameters)) {
+          $parameters = array_merge_recursive([
+              'chat_id' => $matchingMessage->getChannel(),
+          ], $parameters);
+        }
 
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
     }
