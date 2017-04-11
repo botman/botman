@@ -51,7 +51,7 @@ class FacebookOptinDriver extends FacebookDriver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'recipient' => [
                 'user_ref' => $matchingMessage->getChannel(),
             ],

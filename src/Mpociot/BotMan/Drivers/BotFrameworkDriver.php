@@ -125,7 +125,7 @@ class BotFrameworkDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'type' => 'message',
         ], $additionalParameters);
         /*

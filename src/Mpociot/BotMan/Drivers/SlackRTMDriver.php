@@ -131,7 +131,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'channel' => $matchingMessage->getChannel(),
             'as_user' => true,
         ], $additionalParameters);

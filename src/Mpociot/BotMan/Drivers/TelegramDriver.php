@@ -159,7 +159,7 @@ class TelegramDriver extends Driver
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
         $endpoint = 'sendMessage';
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'chat_id' => $matchingMessage->getChannel(),
         ], $additionalParameters);
         /*
@@ -213,7 +213,7 @@ class TelegramDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'chat_id' => $matchingMessage->getChannel(),
         ], $parameters);
 

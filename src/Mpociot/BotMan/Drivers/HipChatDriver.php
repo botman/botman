@@ -70,7 +70,7 @@ class HipChatDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'message_format' => 'text',
         ], $additionalParameters);
         /*

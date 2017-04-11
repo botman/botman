@@ -201,7 +201,7 @@ class SlackDriver extends Driver
      */
     protected function replyWithToken($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'token' => $this->payload->get('token'),
             'channel' => $matchingMessage->getChannel(),
         ], $additionalParameters);
@@ -269,7 +269,7 @@ class SlackDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'token' => $this->config->get('slack_token'),
         ], $parameters);
 

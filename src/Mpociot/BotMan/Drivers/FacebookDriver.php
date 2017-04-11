@@ -168,7 +168,7 @@ class FacebookDriver extends Driver
      */
     public function reply($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'recipient' => [
                 'id' => $matchingMessage->getChannel(),
             ],
@@ -246,7 +246,7 @@ class FacebookDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge([
+        $parameters = array_merge_recursive([
             'access_token' => $this->config->get('facebook_token'),
         ], $parameters);
 
