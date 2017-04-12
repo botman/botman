@@ -438,7 +438,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
         $this->assertTrue($called);
     }
-    
+
     /** @test */
     public function it_allows_unicode_regular_expressions()
     {
