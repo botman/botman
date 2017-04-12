@@ -438,6 +438,26 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
         $this->assertTrue($called);
     }
+    
+    /** @test */
+    public function it_allows_unicode_regular_expressions()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'Какая погода в Минске',
+            ],
+        ]);
+
+        $botman->hears('какая\s+погода\s+в\s+([а-яa-z0-9]+)\s*', function ($bot, $city) use (&$called) {
+            $called = true;
+            $this->assertSame('Минске', $city);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
 
     /** @test */
     public function it_allows_regular_expressions_with_range_quantifier()
