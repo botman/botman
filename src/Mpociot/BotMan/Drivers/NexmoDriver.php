@@ -117,7 +117,7 @@ class NexmoDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge_recursive([
+        $parameters = array_replace_recursive([
             'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
         ], $parameters);
