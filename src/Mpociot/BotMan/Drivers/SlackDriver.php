@@ -66,6 +66,7 @@ class SlackDriver extends Driver
             } else {
                 $value = $action->get('value');
             }
+
             return Answer::create($name)
                 ->setInteractiveReply(true)
                 ->setValue($value)
