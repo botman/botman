@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.5.2]
 ### Changed
 - Added unicode support
 - Added support for Telegram voice messages
