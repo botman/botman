@@ -396,7 +396,7 @@ class BotMan
         }
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/i';
+        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/iu';
         $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
 
         // Try middleware first

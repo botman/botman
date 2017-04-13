@@ -213,7 +213,7 @@ class TelegramDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        $parameters = array_merge_recursive([
+        $parameters = array_replace_recursive([
             'chat_id' => $matchingMessage->getChannel(),
         ], $parameters);
 
