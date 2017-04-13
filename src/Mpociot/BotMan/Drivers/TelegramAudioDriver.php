@@ -16,7 +16,7 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function matchesRequest()
     {
-        return ! is_null($this->event->get('from')) && ! is_null($this->event->get('audio'));
+        return ! is_null($this->event->get('from')) && (! is_null($this->event->get('audio')) || ! is_null($this->event->get('voice')));
     }
 
     /**
@@ -39,6 +39,9 @@ class TelegramAudioDriver extends TelegramDriver
     private function getAudio()
     {
         $audio = $this->event->get('audio');
+        if ($this->event->has('voice')) {
+            $audio = $this->event->get('voice');
+        }
         $response = $this->http->get('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getFile', [
             'file_id' => $audio['file_id'],
         ]);

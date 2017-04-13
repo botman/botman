@@ -3,8 +3,9 @@
 namespace Mpociot\BotMan;
 
 use JsonSerializable;
+use Mpociot\BotMan\Interfaces\QuestionActionInterface;
 
-class Button implements JsonSerializable
+class Button implements JsonSerializable, QuestionActionInterface
 {
     /** @var string */
     protected $text;

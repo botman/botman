@@ -3,11 +3,12 @@
 namespace Mpociot\BotMan;
 
 use JsonSerializable;
+use Mpociot\BotMan\Interfaces\QuestionActionInterface;
 
 class Question implements JsonSerializable
 {
     /** @var array */
-    protected $buttons;
+    protected $actions;
 
     /** @var string */
     protected $text;
@@ -62,13 +63,20 @@ class Question implements JsonSerializable
         return $this;
     }
 
+    public function addAction(QuestionActionInterface $action)
+    {
+        $this->actions[] = $action->toArray();
+
+        return $this;
+    }
+
     /**
      * @param Button $button
      * @return $this
      */
     public function addButton(Button $button)
     {
-        $this->buttons[] = $button->toArray();
+        $this->actions[] = $button->toArray();
 
         return $this;
     }
@@ -80,7 +88,7 @@ class Question implements JsonSerializable
     public function addButtons(array $buttons)
     {
         foreach ($buttons as $button) {
-            $this->buttons[] = $button->toArray();
+            $this->actions[] = $button->toArray();
         }
 
         return $this;
@@ -95,7 +103,7 @@ class Question implements JsonSerializable
             'text' => $this->text,
             'fallback' => $this->fallback,
             'callback_id' => $this->callback_id,
-            'actions' => $this->buttons,
+            'actions' => $this->actions,
         ];
     }
 
@@ -112,7 +120,15 @@ class Question implements JsonSerializable
      */
     public function getButtons()
     {
-        return $this->buttons;
+        return $this->actions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 
     /**

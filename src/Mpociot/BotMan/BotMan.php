@@ -391,6 +391,9 @@ class BotMan
 
         $messageText = $message->getMessage();
         $answerText = $this->getConversationAnswer()->getValue();
+        if (is_array($answerText)) {
+            $answerText = '';
+        }
 
         $pattern = str_replace('/', '\/', $pattern);
         $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/iu';

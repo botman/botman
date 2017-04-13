@@ -59,9 +59,17 @@ class SlackDriver extends Driver
     public function getConversationAnswer(Message $message)
     {
         if ($this->payload instanceof Collection) {
-            return Answer::create($this->payload['actions'][0]['name'])
+            $action = Collection::make($this->payload['actions'][0]);
+            $name = $action->get('name');
+            if ($action->get('type') === 'select') {
+                $value = $action->get('selected_options');
+            } else {
+                $value = $action->get('value');
+            }
+
+            return Answer::create($name)
                 ->setInteractiveReply(true)
-                ->setValue($this->payload['actions'][0]['value'])
+                ->setValue($value)
                 ->setMessage($message)
                 ->setCallbackId($this->payload['callback_id']);
         }

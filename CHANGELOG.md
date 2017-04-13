@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+- Added unicode support
+- Added support for Telegram voice messages
+
 ## [1.5.1]
 ### Changed
 - Additional parameters for `say`, `reply` and `ask` methods now recursively merge the parameters.
