@@ -131,8 +131,6 @@ class SlackDriver extends Driver
     {
         if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
             $this->replyWithToken($message, $matchingMessage, $additionalParameters);
-        } elseif ($this->isSlashCommand()) {
-            $this->respondText($message, $matchingMessage, $additionalParameters);
         } else {
             $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
@@ -175,30 +173,7 @@ class SlackDriver extends Driver
             $parameters['text'] = $this->format($message);
         }
 
-        Response::create(json_encode($parameters))->send();
-    }
-
-    /**
-     * @param string|Question $message
-     * @param Message $matchingMessage
-     * @param array $parameters
-     * @return $this
-     */
-    protected function respondText($message, $matchingMessage, $parameters = [])
-    {
-        /*
-         * If we send a Question with buttons, ignore
-         * the text and append the question.
-         */
-        if ($message instanceof Question) {
-            $text = $this->format($message->getText());
-        } elseif ($message instanceof IncomingMessage) {
-            $text = $message->getMessage();
-        } else {
-            $text = $this->format($message);
-        }
-
-        Response::create($text)->send();
+        Response::create(json_encode($parameters), 200, ['Content-Type', 'application/json'])->send();
     }
 
     /**

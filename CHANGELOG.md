@@ -1,7 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.6.0]
+### Added
+- Added support for Slack interactive menu messages
+
+### Changed
+- Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting
+
+## [1.5.2]
 ### Changed
 - Added unicode support
 - Added support for Telegram voice messages
