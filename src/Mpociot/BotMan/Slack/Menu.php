@@ -82,7 +82,7 @@ class Menu implements QuestionActionInterface
      */
     public function selectedOptions(array $options)
     {
-        $this->selectedOptions= $options;
+        $this->selectedOptions = $options;
 
         return $this;
     }
@@ -155,7 +155,7 @@ class Menu implements QuestionActionInterface
         } else {
             $data['data_source'] = $this->dataSource;
         }
+
         return $data;
     }
-
 }
