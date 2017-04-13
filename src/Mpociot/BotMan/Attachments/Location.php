@@ -16,7 +16,7 @@ class Location extends Attachment
 	 * @param string $longitude
 	 * @param mixed $payload
 	 */
-    public function __construct($latitude, $longitude, $payload)
+    public function __construct($latitude, $longitude, $payload = null)
     {
 	    parent::__construct($payload);
         $this->latitude = $latitude;

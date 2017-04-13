@@ -13,7 +13,7 @@ class Audio extends Attachment {
 	 * @param string $url
 	 * @param mixed $payload
 	 */
-	public function __construct($url, $payload) {
+	public function __construct($url, $payload = null) {
 		parent::__construct($payload);
 		$this->url = $url;
 	}
