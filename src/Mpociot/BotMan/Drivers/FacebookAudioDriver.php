@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
@@ -62,7 +63,9 @@ class FacebookAudioDriver extends FacebookDriver
      */
     public function getAudioUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload')->map(function($item) {
+        	return new Audio($item['url'], $item);
+        })->toArray();
     }
 
     /**

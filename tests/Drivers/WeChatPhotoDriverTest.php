@@ -79,6 +79,7 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
         $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
         $this->assertSame(BotMan::IMAGE_PATTERN, $message->getMessage());
-        $this->assertSame(['http://test.com/picurl'], $message->getImages());
+        $this->assertSame('http://test.com/picurl', $message->getImages()[0]->getUrl());
+	    $this->assertSame($message->getPayload(), $message->getImages()[0]->getPayload());
     }
 }

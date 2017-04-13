@@ -50,7 +50,12 @@ class BotMan
      */
     const LOCATION_PATTERN = '%%%_LOCATION_%%%';
 
-    /** @var \Symfony\Component\HttpFoundation\ParameterBag */
+	/**
+	 * Pattern that messages use to identify file attachment.
+	 */
+	const FILE_PATTERN = '%%%_FILE_%%%';
+
+	/** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
     /** @var \Illuminate\Support\Collection */

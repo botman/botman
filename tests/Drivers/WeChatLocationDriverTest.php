@@ -85,5 +85,6 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Location::class, $message->getLocation());
         $this->assertEquals('40.7', $message->getLocation()->getLatitude());
         $this->assertEquals('-74.1', $message->getLocation()->getLongitude());
+        $this->assertSame($message->getPayload(), $message->getLocation()->getPayload());
     }
 }

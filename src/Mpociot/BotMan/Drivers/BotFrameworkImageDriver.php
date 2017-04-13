@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
@@ -42,7 +43,9 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getImagesUrls()
     {
-        return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->pluck('contentUrl')->toArray();
+        return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->map(function ($item) {
+	        return new Image($item['contentUrl'], $item);
+        })->toArray();
     }
 
     /**

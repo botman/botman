@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 
@@ -45,7 +46,7 @@ class TelegramVideoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return ['https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path];
+        return [new Video('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path, $video)];
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 
@@ -48,7 +49,7 @@ class WeChatVideoDriver extends WeChatDriver
     {
         $videoUrl = 'http://file.api.wechat.com/cgi-bin/media/get?access_token='.$this->getAccessToken().'&media_id='.$this->event->get('MediaId');
 
-        return [$videoUrl];
+        return [new Video($videoUrl, $this->event)];
     }
 
     /**
