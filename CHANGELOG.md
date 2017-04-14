@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.5.3]
+### Fixed
+Fixed an issue with the SlackRTM driver in combination with regular file uploads (#323)
+
 ## [1.5.2]
 ### Changed
 - Added unicode support
