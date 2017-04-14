@@ -19,6 +19,7 @@ use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Drivers\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\FacebookImageDriver;
+use Mpociot\BotMan\Drivers\FacebookReferralDriver;
 use Mpociot\BotMan\Drivers\FacebookOptinDriver;
 use Mpociot\BotMan\Drivers\FacebookVideoDriver;
 use Mpociot\BotMan\Drivers\TelegramAudioDriver;
@@ -43,6 +44,7 @@ class DriverManager
         FacebookVideoDriver::class,
         FacebookAudioDriver::class,
         FacebookPostbackDriver::class,
+        FacebookReferralDriver::class,
         FacebookOptinDriver::class,
         FacebookLocationDriver::class,
         TelegramPhotoDriver::class,
