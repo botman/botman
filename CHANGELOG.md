@@ -1,12 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+<<<<<<< HEAD
 ## [1.6.0]
 ### Added
 - Added support for Slack interactive menu messages
 
 ### Changed
 - Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting
+
+## [1.5.3]
+### Fixed
+Fixed an issue with the SlackRTM driver in combination with regular file uploads (#323)
 
 ## [1.5.2]
 ### Changed
