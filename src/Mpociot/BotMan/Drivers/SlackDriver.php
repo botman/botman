@@ -144,7 +144,7 @@ class SlackDriver extends Driver
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage)
     {
-        $additionalParameters['thread_ts'] = !empty($matchingMessage->getPayload()->get('thread_ts'))
+        $additionalParameters['thread_ts'] = ! empty($matchingMessage->getPayload()->get('thread_ts'))
             ? $matchingMessage->getPayload()->get('thread_ts')
             : $matchingMessage->getPayload()->get('ts');
 
