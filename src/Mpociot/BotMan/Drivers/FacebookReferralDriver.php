@@ -16,14 +16,14 @@ class FacebookReferralDriver extends FacebookDriver
      */
     public function matchesRequest()
     {
-        $validSignature = !$this->config->has('facebook_app_secret') || $this->validateSignature();
+        $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
         $messages = Collection::make($this->event->get('messaging'))->filter(
             function ($msg) {
                 return isset($msg['referral']) && isset($msg['referral']['ref']);
             }
         );
 
-        return !$messages->isEmpty() && $validSignature;
+        return ! $messages->isEmpty() && $validSignature;
     }
 
     /**
