@@ -1,7 +1,6 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-<<<<<<< HEAD
 ## [1.6.0]
 ### Added
 - Added support for Slack interactive menu messages
