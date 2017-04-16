@@ -286,13 +286,14 @@ class BotMan
         return $this->hears(self::LOCATION_PATTERN, $callback);
     }
 
-    /**
-     * Add additional data (image,video,audio,location) data to
-     * callable parameters.
-     *
-     * @param Message $message
-     * @param array   $parameters
-     */
+	/**
+	 * Add additional data (image,video,audio,location) data to
+	 * callable parameters.
+	 *
+	 * @param Message $message
+	 * @param array $parameters
+	 * @return array
+	 */
     private function addDataParameters(Message $message, array $parameters)
     {
         $messageText = $message->getText();

@@ -192,10 +192,11 @@ class SlackRTMDriver implements DriverInterface
         return ! is_null($this->config->get('slack_token'));
     }
 
-    /**
-     * Send a typing indicator.
-     * @param Message $matchingMessage
-     */
+	/**
+	 * Send a typing indicator.
+	 * @param Message $matchingMessage
+	 * @return mixed
+	 */
     public function types(Message $matchingMessage)
     {
         $channel = null;

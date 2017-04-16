@@ -34,11 +34,11 @@ class TelegramPhotoDriver extends TelegramDriver
         return [$message];
     }
 
-    /**
-     * Retrieve a image from an incoming message.
-     * @param  Message $matchingMessage
-     * @return array A download for the image file.
-     */
+	/**
+	 * Retrieve a image from an incoming message.
+	 * @return array A download for the image file.
+	 * @internal param Message $matchingMessage
+	 */
     private function getImages()
     {
         $photos = $this->event->get('photo');
