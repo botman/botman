@@ -86,7 +86,7 @@ class BotFrameworkImageDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->getResponseData());
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::IMAGE_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::IMAGE_PATTERN, $message->getText());
 
         $image = $message->getImages()[0];
         $this->assertSame('http://foo.bar/baz.png', $image->getUrl());

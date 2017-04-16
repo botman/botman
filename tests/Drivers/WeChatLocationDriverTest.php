@@ -73,7 +73,7 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_location_pattern()
     {
         $driver = $this->getDriver($this->validXml);
-        $this->assertSame('%%%_LOCATION_%%%', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('%%%_LOCATION_%%%', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -81,7 +81,7 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::LOCATION_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::LOCATION_PATTERN, $message->getText());
         $this->assertInstanceOf(Location::class, $message->getLocation());
         $this->assertEquals('40.7', $message->getLocation()->getLatitude());
         $this->assertEquals('-74.1', $message->getLocation()->getLongitude());

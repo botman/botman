@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -151,12 +152,12 @@ class SlackDriver extends Driver
         return $this->reply($message, $matchingMessage, $additionalParameters);
     }
 
-    /**
-     * @param string|Question $message
-     * @param Message $matchingMessage
-     * @param array $parameters
-     * @return $this
-     */
+	/**
+	 * @param string|Question $message
+	 * @param Message $matchingMessage
+	 * @param array $parameters
+	 * @return Response
+	 */
     protected function respondJSON($message, $matchingMessage, $parameters = [])
     {
         /*
@@ -167,22 +168,25 @@ class SlackDriver extends Driver
             $parameters['text'] = $this->format($message->getText());
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
-            }
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+	        if (! is_null($attachment)) {
+		        if($attachment instanceof Image) {
+			        $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+		        }
+	        }
         } else {
             $parameters['text'] = $this->format($message);
         }
 
-        Response::create(json_encode($parameters))->send();
+        return Response::create(json_encode($parameters))->send();
     }
 
     /**
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $parameters
-     * @return $this
+     * @return Response
      */
     protected function respondText($message, $matchingMessage, $parameters = [])
     {
@@ -193,12 +197,12 @@ class SlackDriver extends Driver
         if ($message instanceof Question) {
             $text = $this->format($message->getText());
         } elseif ($message instanceof IncomingMessage) {
-            $text = $message->getMessage();
+            $text = $message->getText();
         } else {
             $text = $this->format($message);
         }
 
-        Response::create($text)->send();
+        return Response::create($text)->send();
     }
 
     /**
@@ -221,10 +225,13 @@ class SlackDriver extends Driver
             $parameters['text'] = '';
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
-            }
+            $parameters['text'] = $message->getText();
+	        $attachment = $message->getAttachment();
+	        if (! is_null($attachment)) {
+		        if($attachment instanceof Image) {
+			        $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+		        }
+	        }
         } else {
             $parameters['text'] = $this->format($message);
         }

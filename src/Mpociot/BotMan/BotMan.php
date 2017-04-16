@@ -295,7 +295,7 @@ class BotMan
      */
     private function addDataParameters(Message $message, array $parameters)
     {
-        $messageText = $message->getMessage();
+        $messageText = $message->getText();
 
         if ($messageText === self::IMAGE_PATTERN) {
             $parameters[] = $message->getImages();
@@ -394,7 +394,7 @@ class BotMan
     {
         $matches = [];
 
-        $messageText = $message->getMessage();
+        $messageText = $message->getText();
         $answerText = $this->getConversationAnswer()->getValue();
         if (is_array($answerText)) {
             $answerText = '';

@@ -23,6 +23,15 @@ class Location extends Attachment
         $this->longitude = $longitude;
     }
 
+	/**
+	 * @param string $latitude
+	 * @param string $longitude
+	 * @return Location
+	 */
+	public static function url($latitude, $longitude){
+		return new self($latitude, $longitude);
+	}
+
     /**
      * @return string
      */

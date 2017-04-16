@@ -49,7 +49,7 @@ class NexmoDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -91,7 +91,7 @@ class NexmoDriver extends Driver
         if ($message instanceof Question) {
             $parameters['text'] = $message->getText();
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
+            $parameters['text'] = $message->getText();
         } else {
             $parameters['text'] = $message;
         }

@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
@@ -105,7 +106,7 @@ class SlackRTMDriver implements DriverInterface
                 $message = new Message(BotMan::VIDEO_PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
             } else {
-                $message = new Message(BotMan::ATTACHMENT_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(BotMan::FILE_PATTERN, $user_id, $channel_id, $this->event);
                 $message->setAttachments([$file->get('permalink')]);
             }
 
@@ -139,16 +140,19 @@ class SlackRTMDriver implements DriverInterface
         $fileToUpload = null;
 
         if ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
-            }
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+            	if ($attachment instanceof Image) {
+		            $parameters['attachments'] = json_encode([['title' => $message->getText(), 'image_url' => $attachment->getUrl()]]);
 
-            if (! empty($message->getFilePath()) && file_exists($message->getFilePath())) {
-                $fileToUpload = (new File())
-                    ->setTitle(basename($message->getFilePath()))
-                    ->setPath($message->getFilePath())
-                    ->setInitialComment($message->getMessage());
+		        // else check if is a path
+	            } elseif ($attachment instanceof File && file_exists($attachment->getUrl())) {
+		            $fileToUpload = (new File())
+			            ->setTitle(basename($attachment))
+			            ->setPath($attachment)
+			            ->setInitialComment($message->getText());
+	            }
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';

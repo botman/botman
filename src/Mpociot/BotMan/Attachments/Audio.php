@@ -18,6 +18,15 @@ class Audio extends Attachment {
 		$this->url = $url;
 	}
 
+
+	/**
+	 * @param $url
+	 * @return Audio
+	 */
+	public static function url($url){
+		return new self($url);
+	}
+
 	/**
 	 * @return string
 	 */

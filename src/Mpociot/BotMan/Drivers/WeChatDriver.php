@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -47,7 +48,7 @@ class WeChatDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -108,13 +109,22 @@ class WeChatDriver extends Driver
             $parameters['text'] = [
                 'content' => $message->getText(),
             ];
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof IncomingMessage && $message->getAttachment() instanceof Image) {
             $parameters['msgtype'] = 'news';
 
-            $article = [
-                'title' => $message->getMessage(),
-                'picurl' => $message->getImage(),
-            ];
+            $attachment = $message->getAttachment();
+			if(! is_null($attachment)){
+				$article = [
+					'title' => $message->getText(),
+					'picurl' => $attachment->getUrl(),
+				];
+			} else {
+				$article = [
+					'title' => $message->getText(),
+					'picurl' => null,
+				];
+			}
+
 
             $parameters['news'] = [
                 'articles' => [$article],

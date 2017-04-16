@@ -2,6 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -41,16 +43,16 @@ class BotFrameworkDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        if (strstr($message->getMessage(), '<botman value="') !== false) {
-            preg_match('/<botman value="(.*)"\/>/', $message->getMessage(), $matches);
+        if (strstr($message->getText(), '<botman value="') !== false) {
+            preg_match('/<botman value="(.*)"\/>/', $message->getText(), $matches);
 
-            return Answer::create($message->getMessage())
+            return Answer::create($message->getText())
                 ->setInteractiveReply(true)
                 ->setMessage($message)
                 ->setValue($matches[1]);
         }
 
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -143,23 +145,26 @@ class BotFrameworkDriver extends Driver
                 ],
             ];
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
+	        $parameters['text'] = $message->getText();
+	        $attachment = $message->getAttachment();
+	        if (! is_null($attachment)) {
 
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = [
-                    [
-                        'contentType' => 'image/png',
-                        'contentUrl' => $message->getImage(),
-                    ],
-                ];
-            } elseif (! is_null($message->getVideo())) {
-                $parameters['attachments'] = [
-                    [
-                        'contentType' => 'video/mp4',
-                        'contentUrl' => $message->getVideo(),
-                    ],
-                ];
-            }
+		        if ($attachment instanceof Image) {
+			        $parameters['attachments'] = [
+				        [
+					        'contentType' => 'image/png',
+					        'contentUrl' => $attachment->getUrl(),
+				        ],
+			        ];
+		        } elseif ($attachment instanceof Video) {
+			        $parameters['attachments'] = [
+				        [
+					        'contentType' => 'video/mp4',
+					        'contentUrl' => $attachment->getUrl(),
+				        ],
+			        ];
+		        }
+	        }
         } else {
             $parameters['text'] = $message;
         }

@@ -139,7 +139,7 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getVideos()[0]->getUrl());
         $this->assertSame([
 	        'mime_type' => 'video/quicktime',

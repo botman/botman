@@ -98,7 +98,7 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
 
         $messages = $driver->getMessages();
         $this->assertTrue(is_array($messages));
-        $this->assertEquals('%%%_VIDEO_%%%', $messages[0]->getMessage());
+        $this->assertEquals('%%%_VIDEO_%%%', $messages[0]->getText());
     }
 
     /** @test */
@@ -119,7 +119,7 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getText());
         $this->assertSame('http://file.api.wechat.com/cgi-bin/media/get?access_token=SECRET_TOKEN&media_id=12345',
             $message->getVideos()[0]->getUrl());
 	    $this->assertSame($message->getPayload(), $message->getVideos()[0]->getPayload());

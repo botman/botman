@@ -70,7 +70,7 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_image_pattern()
     {
         $driver = $this->getDriver($this->validXml);
-        $this->assertSame('%%%_IMAGE_%%%', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('%%%_IMAGE_%%%', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::IMAGE_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::IMAGE_PATTERN, $message->getText());
         $this->assertSame('http://test.com/picurl', $message->getImages()[0]->getUrl());
 	    $this->assertSame($message->getPayload(), $message->getImages()[0]->getPayload());
     }

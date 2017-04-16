@@ -19,6 +19,14 @@ class Image extends Attachment {
 	}
 
 	/**
+	 * @param $url
+	 * @return Image
+	 */
+	public static function url($url){
+		return new self($url);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getUrl() {

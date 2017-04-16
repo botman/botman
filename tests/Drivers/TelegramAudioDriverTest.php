@@ -157,7 +157,7 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::AUDIO_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::AUDIO_PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
         $this->assertSame([
 	        'mime_type' => 'audio/x-m4a"',
@@ -191,7 +191,7 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::AUDIO_PATTERN, $message->getMessage());
+        $this->assertSame(BotMan::AUDIO_PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
         $this->assertSame([
 	        'mime_type' => 'audio/x-m4a"',

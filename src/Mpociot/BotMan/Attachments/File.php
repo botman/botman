@@ -19,6 +19,14 @@ class File extends Attachment {
 	}
 
 	/**
+	 * @param $url
+	 * @return File
+	 */
+	public static function url($url){
+		return new self($url);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getUrl() {
