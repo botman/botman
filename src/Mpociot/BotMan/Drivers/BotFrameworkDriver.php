@@ -169,7 +169,8 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload()->all())->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
+        $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
+        $apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
 
         if (strstr($apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
