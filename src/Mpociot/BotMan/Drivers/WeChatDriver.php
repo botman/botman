@@ -109,7 +109,7 @@ class WeChatDriver extends Driver
             $parameters['text'] = [
                 'content' => $message->getText(),
             ];
-        } elseif ($message instanceof IncomingMessage && $message->getAttachment() instanceof Image) {
+        } elseif ($message instanceof IncomingMessage) {
             $parameters['msgtype'] = 'news';
 
             $attachment = $message->getAttachment();

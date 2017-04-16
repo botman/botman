@@ -4,6 +4,7 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Attachments\Image;
 use Slack\File;
+use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
@@ -147,10 +148,10 @@ class SlackRTMDriver implements DriverInterface
 		            $parameters['attachments'] = json_encode([['title' => $message->getText(), 'image_url' => $attachment->getUrl()]]);
 
 		        // else check if is a path
-	            } elseif ($attachment instanceof File && file_exists($attachment->getUrl())) {
+	            } elseif ($attachment instanceof BotManFile && file_exists($attachment->getUrl())) {
 		            $fileToUpload = (new File())
-			            ->setTitle(basename($attachment))
-			            ->setPath($attachment)
+			            ->setTitle(basename($attachment->getUrl()))
+			            ->setPath($attachment->getUrl())
 			            ->setInitialComment($message->getText());
 	            }
             }
