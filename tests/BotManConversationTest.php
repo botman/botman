@@ -4,10 +4,10 @@ namespace Mpociot\BotMan\Tests;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
 use Mpociot\BotMan\Attachments\Location;

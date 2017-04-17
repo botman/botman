@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Location;
 
 class FacebookLocationDriver extends FacebookDriver
 {
