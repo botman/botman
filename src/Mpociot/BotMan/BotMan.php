@@ -56,6 +56,9 @@ class BotMan
     /** @var \Illuminate\Support\Collection */
     protected $event;
 
+    /** @var Command */
+    protected $command;
+
     /** @var Message */
     protected $message;
 
@@ -67,7 +70,7 @@ class BotMan
 
     /**
      * Messages to listen to.
-     * @var array
+     * @var Command[]
      */
     protected $listenTo = [];
 
@@ -337,16 +340,11 @@ class BotMan
             $callback = $messageData['callback'];
 
             if (! $callback instanceof Closure) {
-                if (strpos($callback, '@') === false) {
-                    $callback = $this->makeInvokableAction($callback);
-                }
-
-                list($class, $method) = explode('@', $callback);
-                $callback = [new $class($this), $method];
+                $callback = $this->getCallable($callback);
             }
+
             foreach ($this->getMessages() as $message) {
-                $message = $this->applyMiddleware($message, $this->middleware);
-                $message = $this->applyMiddleware($message, $messageData['middleware']);
+                $message = $this->applyMiddleware($message, $this->middleware+$messageData['middleware']);
 
                 if (! $this->isBot() &&
                     $this->isMessageMatching($message, $pattern, $matches, $messageData['middleware']) &&
@@ -354,15 +352,18 @@ class BotMan
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
-                    $this->message = $message;
                     $heardMessage = true;
+                    $this->command = $command;
+                    $this->message = $message;
                     $parameterNames = $this->compileParameterNames($pattern);
+
                     $matches = array_slice($matches, 1);
                     if (count($parameterNames) === count($matches)) {
                         $parameters = array_combine($parameterNames, $matches);
                     } else {
                         $parameters = $matches;
                     }
+
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
 
@@ -564,6 +565,19 @@ class BotMan
         }
 
         return $action.'@__invoke';
+    }
+
+    /**
+     * @param string $callback
+     * @return array
+     */
+    protected function getCallable($callback) {
+        if (strpos($callback, '@') === false) {
+            $callback = $this->makeInvokableAction($callback);
+        }
+
+        list($class, $method) = explode('@', $callback);
+        return [new $class($this), $method];
     }
 
     /**
