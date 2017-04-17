@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
 use Illuminate\Http\Response;
 use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Messages\Matcher;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Drivers\WeChatVideoDriver;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,7 +119,7 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getMessage());
+        $this->assertSame(Matcher::VIDEO_PATTERN, $message->getMessage());
         $this->assertSame(['http://file.api.wechat.com/cgi-bin/media/get?access_token=SECRET_TOKEN&media_id=12345'],
             $message->getVideos());
     }

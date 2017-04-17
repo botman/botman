@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
 
 class TelegramPhotoDriver extends TelegramDriver
@@ -27,7 +27,7 @@ class TelegramPhotoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setImages($this->getImages());
 
         return [$message];

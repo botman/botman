@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Matcher;
 
 class TelegramAudioDriver extends TelegramDriver
 {
@@ -26,7 +26,7 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::AUDIO_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Matcher::AUDIO_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setAudio($this->getAudio());
 
         return [$message];

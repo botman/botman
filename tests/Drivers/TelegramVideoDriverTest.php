@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\TelegramVideoDriver;
@@ -139,7 +139,7 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::VIDEO_PATTERN, $message->getMessage());
+        $this->assertSame(Matcher::VIDEO_PATTERN, $message->getMessage());
         $this->assertSame(['https://api.telegram.org/file/bot/foo'], $message->getVideos());
     }
 }

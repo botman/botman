@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Matcher;
 
 class WeChatPhotoDriver extends WeChatDriver
 {
@@ -36,7 +36,7 @@ class WeChatPhotoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
+        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
         $message->setImages($this->getImages());
 
         return [$message];

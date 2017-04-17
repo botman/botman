@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Messages\Matcher;
 
 class BotFrameworkImageDriver extends BotFrameworkDriver
 {
@@ -29,7 +29,7 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
+        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
         $message->setImages($this->getImagesUrls());
 
         return [$message];

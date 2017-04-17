@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Matcher;
 
 class WeChatVideoDriver extends WeChatDriver
 {
@@ -33,7 +33,7 @@ class WeChatVideoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::VIDEO_PATTERN, $this->event->get('ToUserName'),
+        $message = new Message(Matcher::VIDEO_PATTERN, $this->event->get('ToUserName'),
             $this->event->get('FromUserName'), $this->event);
         $message->setVideos($this->getVideo());
 
