@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Messages;
 
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 use Mpociot\Botman\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Matcher
 {
@@ -60,8 +60,8 @@ class Matcher
         // Try middleware first
         if (count($middleware)) {
             return Collection::make($middleware)->reject(function ($middleware) use ($message, $pattern, $regexMatched) {
-                    return $middleware->isMessageMatching($message, $pattern, $regexMatched);
-                })->isEmpty() === true;
+                return $middleware->isMessageMatching($message, $pattern, $regexMatched);
+            })->isEmpty() === true;
         }
 
         return $regexMatched;

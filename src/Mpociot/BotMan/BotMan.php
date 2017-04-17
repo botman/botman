@@ -25,7 +25,6 @@ class BotMan
         ProvidesStorage,
         HandlesConversations;
 
-
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
@@ -325,10 +324,10 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                $message = $this->applyMiddleware($message, $this->middleware+$messageData['middleware']);
+                $message = $this->applyMiddleware($message, $this->middleware + $messageData['middleware']);
 
                 if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware']+$this->middleware) &&
+                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
@@ -520,12 +519,14 @@ class BotMan
      * @param string $callback
      * @return array
      */
-    protected function getCallable($callback) {
+    protected function getCallable($callback)
+    {
         if (strpos($callback, '@') === false) {
             $callback = $this->makeInvokableAction($callback);
         }
 
         list($class, $method) = explode('@', $callback);
+
         return [new $class($this), $method];
     }
 
