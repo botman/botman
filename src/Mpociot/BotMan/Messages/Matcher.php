@@ -72,6 +72,6 @@ class Matcher
      */
     public function getMatches()
     {
-        return $this->matches;
+        return array_slice($this->matches, 1);
     }
 }

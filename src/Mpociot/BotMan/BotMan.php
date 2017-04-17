@@ -104,10 +104,10 @@ class BotMan
     /**
      * @param MiddlewareInterface|array $middleware
      */
-    public function middleware($middleware)
+    public function middleware(...$middleware)
     {
-        if (! is_array($middleware)) {
-            $middleware = [$middleware];
+        if (is_array($middleware[0])) {
+            $middleware = $middleware[0];
         }
 
         $this->middleware = Collection::make($middleware)->filter(function ($item) {
@@ -338,7 +338,7 @@ class BotMan
                     $this->message = $message;
                     $parameterNames = $this->compileParameterNames($pattern);
 
-                    $matches = array_slice($this->matcher->getMatches(), 1);
+                    $matches = $this->matcher->getMatches();
                     if (count($parameterNames) === count($matches)) {
                         $parameters = array_combine($parameterNames, $matches);
                     } else {
@@ -585,6 +585,7 @@ class BotMan
             'message',
             'cache',
             'matches',
+            'matcher',
             'config',
         ];
     }
