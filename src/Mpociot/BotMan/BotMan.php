@@ -5,6 +5,7 @@ namespace Mpociot\BotMan;
 use Closure;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;
@@ -24,42 +25,14 @@ class BotMan
         ProvidesStorage,
         HandlesConversations;
 
-    /**
-     * regular expression to capture named parameters but not quantifiers
-     * captures {name}, but not {1}, {1,}, or {1,2}.
-     */
-    const PARAM_NAME_REGEX = '/\{((?:(?!\d+,?\d+?)\w)+?)\}/';
-
-    /**
-     * Pattern that messages use to identify image uploads.
-     */
-    const IMAGE_PATTERN = '%%%_IMAGE_%%%';
-
-    /**
-     * Pattern that messages use to identify video uploads.
-     */
-    const VIDEO_PATTERN = '%%%_VIDEO_%%%';
-
-    /**
-     * Pattern that messages use to identify audio uploads.
-     */
-    const AUDIO_PATTERN = '%%%_AUDIO_%%%';
-
-    /**
-     * Pattern that messages use to identify location attachment.
-     */
-    const LOCATION_PATTERN = '%%%_LOCATION_%%%';
-
-	/**
-	 * Pattern that messages use to identify file attachment.
-	 */
-	const FILE_PATTERN = '%%%_FILE_%%%';
-
-	/** @var \Symfony\Component\HttpFoundation\ParameterBag */
+    /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     public $payload;
 
     /** @var \Illuminate\Support\Collection */
     protected $event;
+
+    /** @var Command */
+    protected $command;
 
     /** @var Message */
     protected $message;
@@ -72,7 +45,7 @@ class BotMan
 
     /**
      * Messages to listen to.
-     * @var array
+     * @var Command[]
      */
     protected $listenTo = [];
 
@@ -104,6 +77,9 @@ class BotMan
     /** @var StorageInterface */
     protected $storage;
 
+    /** @var Matcher */
+    protected $matcher;
+
     /** @var bool */
     protected $loadedConversation = false;
 
@@ -121,15 +97,16 @@ class BotMan
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
+        $this->matcher = new Matcher();
     }
 
     /**
      * @param MiddlewareInterface|array $middleware
      */
-    public function middleware($middleware)
+    public function middleware(...$middleware)
     {
-        if (! is_array($middleware)) {
-            $middleware = [$middleware];
+        if (is_array($middleware[0])) {
+            $middleware = $middleware[0];
         }
 
         $this->middleware = Collection::make($middleware)->filter(function ($item) {
@@ -219,7 +196,7 @@ class BotMan
      */
     protected function compileParameterNames($value)
     {
-        preg_match_all(self::PARAM_NAME_REGEX, $value, $matches);
+        preg_match_all(Matcher::PARAM_NAME_REGEX, $value, $matches);
 
         return array_map(function ($m) {
             return trim($m, '?');
@@ -250,7 +227,7 @@ class BotMan
      */
     public function receivesImages($callback)
     {
-        return $this->hears(self::IMAGE_PATTERN, $callback);
+        return $this->hears(Matcher::IMAGE_PATTERN, $callback);
     }
 
     /**
@@ -261,7 +238,7 @@ class BotMan
      */
     public function receivesVideos($callback)
     {
-        return $this->hears(self::VIDEO_PATTERN, $callback);
+        return $this->hears(Matcher::VIDEO_PATTERN, $callback);
     }
 
     /**
@@ -272,7 +249,7 @@ class BotMan
      */
     public function receivesAudio($callback)
     {
-        return $this->hears(self::AUDIO_PATTERN, $callback);
+        return $this->hears(Matcher::AUDIO_PATTERN, $callback);
     }
 
     /**
@@ -283,28 +260,28 @@ class BotMan
      */
     public function receivesLocation($callback)
     {
-        return $this->hears(self::LOCATION_PATTERN, $callback);
+        return $this->hears(Matcher::LOCATION_PATTERN, $callback);
     }
 
-	/**
-	 * Add additional data (image,video,audio,location) data to
-	 * callable parameters.
-	 *
-	 * @param Message $message
-	 * @param array $parameters
-	 * @return array
-	 */
+    /**
+     * Add additional data (image,video,audio,location) data to
+     * callable parameters.
+     *
+     * @param Message $message
+     * @param array $parameters
+     * @return array
+     */
     private function addDataParameters(Message $message, array $parameters)
     {
         $messageText = $message->getText();
 
-        if ($messageText === self::IMAGE_PATTERN) {
+        if ($messageText === Matcher::IMAGE_PATTERN) {
             $parameters[] = $message->getImages();
-        } elseif ($messageText === self::VIDEO_PATTERN) {
+        } elseif ($messageText === Matcher::VIDEO_PATTERN) {
             $parameters[] = $message->getVideos();
-        } elseif ($messageText === self::AUDIO_PATTERN) {
+        } elseif ($messageText === Matcher::AUDIO_PATTERN) {
             $parameters[] = $message->getAudio();
-        } elseif ($messageText === self::LOCATION_PATTERN) {
+        } elseif ($messageText === Matcher::LOCATION_PATTERN) {
             $parameters[] = $message->getLocation();
         }
 
@@ -343,32 +320,30 @@ class BotMan
             $callback = $messageData['callback'];
 
             if (! $callback instanceof Closure) {
-                if (strpos($callback, '@') === false) {
-                    $callback = $this->makeInvokableAction($callback);
-                }
-
-                list($class, $method) = explode('@', $callback);
-                $callback = [new $class($this), $method];
+                $callback = $this->getCallable($callback);
             }
+
             foreach ($this->getMessages() as $message) {
-                $message = $this->applyMiddleware($message, $this->middleware);
-                $message = $this->applyMiddleware($message, $messageData['middleware']);
+                $message = $this->applyMiddleware($message, $this->middleware + $messageData['middleware']);
 
                 if (! $this->isBot() &&
-                    $this->isMessageMatching($message, $pattern, $matches, $messageData['middleware']) &&
+                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
-                    $this->message = $message;
                     $heardMessage = true;
+                    $this->command = $command;
+                    $this->message = $message;
                     $parameterNames = $this->compileParameterNames($pattern);
-                    $matches = array_slice($matches, 1);
+
+                    $matches = $this->matcher->getMatches();
                     if (count($parameterNames) === count($matches)) {
                         $parameters = array_combine($parameterNames, $matches);
                     } else {
                         $parameters = $matches;
                     }
+
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
 
@@ -382,38 +357,6 @@ class BotMan
             $this->message = $this->getMessages()[0];
             call_user_func($this->fallbackMessage, $this);
         }
-    }
-
-    /**
-     * @param Message $message
-     * @param string $pattern
-     * @param array $matches
-     * @param array $messageMiddleware
-     * @return int
-     */
-    protected function isMessageMatching(Message $message, $pattern, &$matches, $messageMiddleware = [])
-    {
-        $matches = [];
-
-        $messageText = $message->getText();
-        $answerText = $this->getConversationAnswer()->getValue();
-        if (is_array($answerText)) {
-            $answerText = '';
-        }
-
-        $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/iu';
-        $regexMatched = (bool) preg_match($text, $messageText, $matches) || (bool) preg_match($text, $answerText, $matches);
-
-        // Try middleware first
-        $mergedMiddleware = array_merge($this->middleware, $messageMiddleware);
-        if (count($mergedMiddleware)) {
-            return Collection::make($mergedMiddleware)->reject(function ($middleware) use ($message, $pattern, $regexMatched) {
-                return $middleware->isMessageMatching($message, $pattern, $regexMatched);
-            })->isEmpty() === true;
-        }
-
-        return $regexMatched;
     }
 
     /**
@@ -573,6 +516,21 @@ class BotMan
     }
 
     /**
+     * @param string $callback
+     * @return array
+     */
+    protected function getCallable($callback)
+    {
+        if (strpos($callback, '@') === false) {
+            $callback = $this->makeInvokableAction($callback);
+        }
+
+        list($class, $method) = explode('@', $callback);
+
+        return [new $class($this), $method];
+    }
+
+    /**
      * @return array
      */
     public function getMatches()
@@ -628,6 +586,7 @@ class BotMan
             'message',
             'cache',
             'matches',
+            'matcher',
             'config',
         ];
     }

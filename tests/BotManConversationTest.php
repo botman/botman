@@ -1,12 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\Tests;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
 use Mpociot\BotMan\Attachments\Location;
@@ -96,7 +97,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply an image';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(BotMan::IMAGE_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Matcher::IMAGE_PATTERN, 'helloman', '#helloworld');
         $message->setImages(['http://foo.com/bar.png']);
         $this->replyWithFakeMessage($message);
 
@@ -159,7 +160,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply a video';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(BotMan::VIDEO_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Matcher::VIDEO_PATTERN, 'helloman', '#helloworld');
         $message->setVideos(['http://foo.com/bar.mp4']);
         $this->replyWithFakeMessage($message);
 
@@ -222,7 +223,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply an audio';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(BotMan::AUDIO_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Matcher::AUDIO_PATTERN, 'helloman', '#helloworld');
         $message->setAudio(['http://foo.com/bar.mp3']);
         $this->replyWithFakeMessage($message);
 
@@ -285,7 +286,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply a location';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(BotMan::LOCATION_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Matcher::LOCATION_PATTERN, 'helloman', '#helloworld');
         $location = new Location(41.123, -12.123);
         $message->setLocation($location);
         $this->replyWithFakeMessage($message);

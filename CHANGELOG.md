@@ -3,10 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [1.6.0]
 ### Added
-- Added support for Slack interactive menu messages
+- Added support for Slack interactive menu messages.
+- Added Facebook Referral driver.
+- Allow replying to an existing thread for Slack drivers (#327).
 
 ### Changed
-- Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting
+- Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting.
+- Moved message matching into a separate `Matcher` class.
 
 ## [1.5.3]
 ### Fixed

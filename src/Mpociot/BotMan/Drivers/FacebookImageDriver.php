@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Messages\Matcher;
 
 class FacebookImageDriver extends FacebookDriver
 {
@@ -42,7 +42,7 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(BotMan::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(Matcher::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
             $message->setImages($this->getImagesUrls($msg));
 
             return $message;

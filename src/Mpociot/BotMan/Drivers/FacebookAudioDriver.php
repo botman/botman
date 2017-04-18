@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Messages\Matcher;
 
 class FacebookAudioDriver extends FacebookDriver
 {
@@ -42,7 +42,7 @@ class FacebookAudioDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(BotMan::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(Matcher::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
             $message->setAudio($this->getAudioUrls($msg));
 
             return $message;

@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChatLocationDriver;
@@ -81,7 +81,8 @@ class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
-        $this->assertSame(BotMan::LOCATION_PATTERN, $message->getText());
+
+        $this->assertSame(Matcher::LOCATION_PATTERN, $message->getText());
         $this->assertInstanceOf(Location::class, $message->getLocation());
         $this->assertEquals('40.7', $message->getLocation()->getLatitude());
         $this->assertEquals('-74.1', $message->getLocation()->getLongitude());

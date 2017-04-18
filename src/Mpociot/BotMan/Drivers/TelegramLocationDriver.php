@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,7 +28,7 @@ class TelegramLocationDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::LOCATION_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Matcher::LOCATION_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setLocation(new Location($this->event->get('location')['latitude'], $this->event->get('location')['longitude'], $this->event->get('location')));
 
         return [$message];

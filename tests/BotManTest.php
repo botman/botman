@@ -12,6 +12,7 @@ use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\SlackDriver;
@@ -1568,7 +1569,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(BotMan::IMAGE_PATTERN, '', '');
+        $message = new Message(Matcher::IMAGE_PATTERN, '', '');
         $message->setImages([
             'http://foo.com/bar.png',
         ]);
@@ -1597,7 +1598,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(BotMan::VIDEO_PATTERN, '', '');
+        $message = new Message(Matcher::VIDEO_PATTERN, '', '');
         $message->setVideos([
             'http://foo.com/bar.png',
         ]);
@@ -1626,7 +1627,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(BotMan::AUDIO_PATTERN, '', '');
+        $message = new Message(Matcher::AUDIO_PATTERN, '', '');
         $message->setAudio([
             'http://foo.com/bar.png',
         ]);
@@ -1659,7 +1660,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $location = new Location($lat, $lng);
 
-        $message = new Message(BotMan::LOCATION_PATTERN, '', '');
+        $message = new Message(Matcher::LOCATION_PATTERN, '', '');
         $message->setLocation($location);
 
         $botman = $this->getBot([]);
