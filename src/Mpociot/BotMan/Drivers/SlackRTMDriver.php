@@ -2,7 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Slack\File;
 use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\User;
@@ -98,16 +100,16 @@ class SlackRTMDriver implements DriverInterface
             $file = Collection::make($this->event->get('file'));
 
             if (strstr($file->get('mimetype'), 'image')) {
-                $message = new Message(BotMan::IMAGE_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Image::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setImages([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'audio')) {
-                $message = new Message(BotMan::AUDIO_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Audio::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setAudio([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'video')) {
-                $message = new Message(BotMan::VIDEO_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Video::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
             } else {
-                $message = new Message(BotMan::FILE_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(\Mpociot\BotMan\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setAttachments([$file->get('permalink')]);
             }
 

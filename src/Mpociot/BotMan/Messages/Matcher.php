@@ -8,25 +8,6 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Matcher
 {
-    /**
-     * Pattern that messages use to identify audio uploads.
-     */
-    const AUDIO_PATTERN = '%%%_AUDIO_%%%';
-
-    /**
-     * Pattern that messages use to identify video uploads.
-     */
-    const VIDEO_PATTERN = '%%%_VIDEO_%%%';
-
-    /**
-     * Pattern that messages use to identify location attachment.
-     */
-    const LOCATION_PATTERN = '%%%_LOCATION_%%%';
-
-    /**
-     * Pattern that messages use to identify image uploads.
-     */
-    const IMAGE_PATTERN = '%%%_IMAGE_%%%';
 
     /**
      * regular expression to capture named parameters but not quantifiers
@@ -48,7 +29,7 @@ class Matcher
     {
         $this->matches = [];
 
-        $messageText = $message->getMessage();
+        $messageText = $message->getText();
         if (is_array($answerText)) {
             $answerText = '';
         }

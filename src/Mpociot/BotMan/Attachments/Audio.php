@@ -5,6 +5,11 @@ namespace Mpociot\BotMan\Attachments;
 
 class Audio extends Attachment {
 
+	/**
+	 * Pattern that messages use to identify audio uploads.
+	 */
+	const PATTERN = '%%%_AUDIO_%%%';
+
 	/** @var string */
 	protected $url;
 
@@ -23,7 +28,7 @@ class Audio extends Attachment {
 	 * @param $url
 	 * @return Audio
 	 */
-	public static function url($url){
+	public static function url($url) {
 		return new self($url);
 	}
 

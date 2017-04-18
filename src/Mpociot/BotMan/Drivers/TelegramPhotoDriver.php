@@ -28,7 +28,7 @@ class TelegramPhotoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
         $message->setImages($this->getImages());
 
         return [$message];

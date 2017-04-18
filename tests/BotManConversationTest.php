@@ -2,6 +2,9 @@
 
 namespace Mpociot\BotMan\Tests;
 
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
@@ -97,7 +100,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply an image';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(Matcher::IMAGE_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Image::PATTERN, 'helloman', '#helloworld');
         $message->setImages(['http://foo.com/bar.png']);
         $this->replyWithFakeMessage($message);
 
@@ -160,7 +163,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply a video';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(Matcher::VIDEO_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Video::PATTERN, 'helloman', '#helloworld');
         $message->setVideos(['http://foo.com/bar.mp4']);
         $this->replyWithFakeMessage($message);
 
@@ -223,7 +226,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply an audio';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(Matcher::AUDIO_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Audio::PATTERN, 'helloman', '#helloworld');
         $message->setAudio(['http://foo.com/bar.mp3']);
         $this->replyWithFakeMessage($message);
 
@@ -286,7 +289,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $answers[] = 'Please supply a location';
         static::assertEquals($answers, $this->fakeDriver->getBotMessages());
 
-        $message = new Message(Matcher::LOCATION_PATTERN, 'helloman', '#helloworld');
+        $message = new Message(Location::PATTERN, 'helloman', '#helloworld');
         $location = new Location(41.123, -12.123);
         $message->setLocation($location);
         $this->replyWithFakeMessage($message);

@@ -34,7 +34,7 @@ class WeChatVideoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::VIDEO_PATTERN, $this->event->get('ToUserName'),
+        $message = new Message(Video::PATTERN, $this->event->get('ToUserName'),
             $this->event->get('FromUserName'), $this->event);
         $message->setVideos($this->getVideo());
 

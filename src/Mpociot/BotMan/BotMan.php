@@ -3,6 +3,10 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Attachments\Video;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
@@ -227,7 +231,7 @@ class BotMan
      */
     public function receivesImages($callback)
     {
-        return $this->hears(Matcher::IMAGE_PATTERN, $callback);
+        return $this->hears(Image::PATTERN, $callback);
     }
 
     /**
@@ -238,7 +242,7 @@ class BotMan
      */
     public function receivesVideos($callback)
     {
-        return $this->hears(Matcher::VIDEO_PATTERN, $callback);
+        return $this->hears(Video::PATTERN, $callback);
     }
 
     /**
@@ -249,7 +253,7 @@ class BotMan
      */
     public function receivesAudio($callback)
     {
-        return $this->hears(Matcher::AUDIO_PATTERN, $callback);
+        return $this->hears(Audio::PATTERN, $callback);
     }
 
     /**
@@ -260,7 +264,7 @@ class BotMan
      */
     public function receivesLocation($callback)
     {
-        return $this->hears(Matcher::LOCATION_PATTERN, $callback);
+        return $this->hears(Location::PATTERN, $callback);
     }
 
     /**
@@ -275,13 +279,13 @@ class BotMan
     {
         $messageText = $message->getText();
 
-        if ($messageText === Matcher::IMAGE_PATTERN) {
+        if ($messageText === Image::PATTERN) {
             $parameters[] = $message->getImages();
-        } elseif ($messageText === Matcher::VIDEO_PATTERN) {
+        } elseif ($messageText === Video::PATTERN) {
             $parameters[] = $message->getVideos();
-        } elseif ($messageText === Matcher::AUDIO_PATTERN) {
+        } elseif ($messageText === Audio::PATTERN) {
             $parameters[] = $message->getAudio();
-        } elseif ($messageText === Matcher::LOCATION_PATTERN) {
+        } elseif ($messageText === Location::PATTERN) {
             $parameters[] = $message->getLocation();
         }
 

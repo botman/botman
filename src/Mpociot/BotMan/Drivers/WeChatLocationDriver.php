@@ -37,7 +37,7 @@ class WeChatLocationDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::LOCATION_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
+        $message = new Message(Location::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
         $message->setLocation($this->getLocation());
 
         return [$message];

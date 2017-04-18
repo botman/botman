@@ -37,7 +37,7 @@ class WeChatPhotoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
+        $message = new Message(Image::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
         $message->setImages($this->getImages());
 
         return [$message];

@@ -4,6 +4,10 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
@@ -54,7 +58,7 @@ abstract class Conversation
     public function askForImages($question, $next, $repeat = null, $additionalParameters = [])
     {
         $additionalParameters['__getter'] = 'getImages';
-        $additionalParameters['__pattern'] = Matcher::IMAGE_PATTERN;
+        $additionalParameters['__pattern'] = Image::PATTERN;
         $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
@@ -70,7 +74,7 @@ abstract class Conversation
     public function askForVideos($question, $next, $repeat = null, $additionalParameters = [])
     {
         $additionalParameters['__getter'] = 'getVideos';
-        $additionalParameters['__pattern'] = Matcher::VIDEO_PATTERN;
+        $additionalParameters['__pattern'] = Video::PATTERN;
         $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
@@ -86,7 +90,7 @@ abstract class Conversation
     public function askForAudio($question, $next, $repeat = null, $additionalParameters = [])
     {
         $additionalParameters['__getter'] = 'getAudio';
-        $additionalParameters['__pattern'] = Matcher::AUDIO_PATTERN;
+        $additionalParameters['__pattern'] = Audio::PATTERN;
         $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
@@ -102,7 +106,7 @@ abstract class Conversation
     public function askForLocation($question, $next, $repeat = null, $additionalParameters = [])
     {
         $additionalParameters['__getter'] = 'getLocation';
-        $additionalParameters['__pattern'] = Matcher::LOCATION_PATTERN;
+        $additionalParameters['__pattern'] = Location::PATTERN;
         $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);

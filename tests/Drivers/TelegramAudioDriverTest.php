@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
@@ -157,7 +158,7 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::AUDIO_PATTERN, $message->getText());
+        $this->assertSame(Audio::PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
         $this->assertSame([
 	        'mime_type' => 'audio/x-m4a"',
@@ -191,7 +192,7 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::AUDIO_PATTERN, $message->getText());
+        $this->assertSame(Audio::PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
         $this->assertSame([
 	        'mime_type' => 'audio/x-m4a"',

@@ -42,7 +42,7 @@ class FacebookVideoDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Matcher::VIDEO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(Video::PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
             $message->setVideos($this->getVideoUrls($msg));
 
             return $message;

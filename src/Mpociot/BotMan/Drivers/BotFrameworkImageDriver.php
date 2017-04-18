@@ -30,7 +30,7 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
+        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
         $message->setImages($this->getImagesUrls());
 
         return [$message];
