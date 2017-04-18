@@ -2,7 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Slack\File;
+use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
@@ -104,6 +106,9 @@ class SlackRTMDriver implements DriverInterface
             } elseif (strstr($file->get('mimetype'), 'video')) {
                 $message = new Message(BotMan::VIDEO_PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
+            } else {
+                $message = new Message(BotMan::FILE_PATTERN, $user_id, $channel_id, $this->event);
+                $message->setAttachments([$file->get('permalink')]);
             }
 
             return [$message];
@@ -136,16 +141,19 @@ class SlackRTMDriver implements DriverInterface
         $fileToUpload = null;
 
         if ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
-            }
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+            	if ($attachment instanceof Image) {
+		            $parameters['attachments'] = json_encode([['title' => $message->getText(), 'image_url' => $attachment->getUrl()]]);
 
-            if (! empty($message->getFilePath()) && file_exists($message->getFilePath())) {
-                $fileToUpload = (new File())
-                    ->setTitle(basename($message->getFilePath()))
-                    ->setPath($message->getFilePath())
-                    ->setInitialComment($message->getMessage());
+		        // else check if is a path
+	            } elseif ($attachment instanceof BotManFile && file_exists($attachment->getUrl())) {
+		            $fileToUpload = (new File())
+			            ->setTitle(basename($attachment->getUrl()))
+			            ->setPath($attachment->getUrl())
+			            ->setInitialComment($message->getText());
+	            }
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';
@@ -186,10 +194,11 @@ class SlackRTMDriver implements DriverInterface
         return ! is_null($this->config->get('slack_token'));
     }
 
-    /**
-     * Send a typing indicator.
-     * @param Message $matchingMessage
-     */
+	/**
+	 * Send a typing indicator.
+	 * @param Message $matchingMessage
+	 * @return mixed
+	 */
     public function types(Message $matchingMessage)
     {
         $channel = null;

@@ -41,7 +41,7 @@ class HipChatDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -80,7 +80,7 @@ class HipChatDriver extends Driver
         if ($message instanceof Question) {
             $parameters['message'] = $message->getText();
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['message'] = $message->getMessage();
+            $parameters['message'] = $message->getText();
         } else {
             $parameters['message'] = $message;
         }

@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
@@ -62,7 +63,9 @@ class FacebookVideoDriver extends FacebookDriver
      */
     public function getVideoUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'video')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'video')->pluck('payload')->map(function ($item) {
+	        return new Video($item['url'], $item);
+        })->toArray();
     }
 
     /**

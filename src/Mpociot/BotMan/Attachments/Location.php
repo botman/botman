@@ -2,7 +2,7 @@
 
 namespace Mpociot\BotMan\Attachments;
 
-class Location
+class Location extends Attachment
 {
     /** @var string */
     protected $latitude;
@@ -10,16 +10,27 @@ class Location
     /** @var string */
     protected $longitude;
 
-    /**
-     * Message constructor.
-     * @param string $latitude
-     * @param string $longitude
-     */
-    public function __construct($latitude, $longitude)
+	/**
+	 * Message constructor.
+	 * @param string $latitude
+	 * @param string $longitude
+	 * @param mixed $payload
+	 */
+    public function __construct($latitude, $longitude, $payload = null)
     {
+	    parent::__construct($payload);
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }
+
+	/**
+	 * @param string $latitude
+	 * @param string $longitude
+	 * @return Location
+	 */
+	public static function url($latitude, $longitude){
+		return new self($latitude, $longitude);
+	}
 
     /**
      * @return string

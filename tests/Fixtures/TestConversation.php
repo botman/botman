@@ -25,12 +25,12 @@ class TestConversation extends Conversation
 
     public function skipConversation(Message $message)
     {
-        return $message->getMessage() === 'skip_keyword';
+        return $message->getText() === 'skip_keyword';
     }
 
     public function stopConversation(Message $message)
     {
-        return $message->getMessage() === 'stop_keyword';
+        return $message->getText() === 'stop_keyword';
     }
 
     protected function _throwException($message)
