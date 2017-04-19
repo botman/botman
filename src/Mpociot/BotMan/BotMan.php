@@ -125,6 +125,14 @@ class BotMan
     }
 
     /**
+     * @param string $name The Driver name or class
+     */
+    public function loadDriver($name)
+    {
+        $this->driver = DriverManager::loadFromName($name, $this->config);
+    }
+
+    /**
      * @param DriverInterface $driver
      */
     public function setDriver(DriverInterface $driver)
