@@ -1240,6 +1240,18 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_load_drivers_from_name()
+    {
+        $botman = $this->getBot('');
+
+        $this->assertInstanceOf(NullDriver::class, $botman->getDriver());
+
+        $botman->loadDriver('Slack');
+
+        $this->assertInstanceOf(SlackDriver::class, $botman->getDriver());
+    }
+
+    /** @test */
     public function it_retrieves_the_user()
     {
         $botman = $this->getBot('');
