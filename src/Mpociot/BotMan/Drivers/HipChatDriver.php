@@ -103,7 +103,8 @@ class HipChatDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! empty($this->config->get('hipchat_urls'));
+        $urls = array_filter($this->config->get('hipchat_urls'));
+        return ! empty($urls);
     }
 
     /**
