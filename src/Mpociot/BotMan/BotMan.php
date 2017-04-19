@@ -105,9 +105,7 @@ class BotMan
      */
     public function middleware(...$middleware)
     {
-        if (is_array($middleware[0])) {
-            $middleware = $middleware[0];
-        }
+        $middleware = is_array($middleware[0]) ? $middleware[0] : $middleware;
 
         $this->middleware = Collection::make($middleware)->filter(function ($item) {
             return $item instanceof MiddlewareInterface;
@@ -375,9 +373,9 @@ class BotMan
         }
 
         foreach ($drivers as $driver) {
-            $matchMessage = new Message('', '', $channel);
-            /* @var $driver DriverInterface */
-            $driver->reply($message, $matchMessage, $additionalParameters);
+            $this->message = new Message('', '', $channel);
+            $this->setDriver($driver);
+            $this->reply($message, $additionalParameters);
         }
 
         return $this;
