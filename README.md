@@ -22,6 +22,12 @@ $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
 
 You can find the BotMan documentation at [http://botman.io](http://botman.io).
 
+## Support the development
+**Do you like this project? Support it by donating**
+
+- PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=m%2epociot%40googlemail%2ecom&lc=CY&item_name=BotMan&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
+- Patreon: [Donate](https://www.patreon.com/botman)
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
@@ -33,3 +39,4 @@ If you discover a security vulnerability within BotMan, please send an e-mail to
 ## License
 
 BotMan is free software distributed under the terms of the MIT license.
+ 
