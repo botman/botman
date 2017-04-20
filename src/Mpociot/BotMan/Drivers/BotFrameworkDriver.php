@@ -186,7 +186,7 @@ class BotFrameworkDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('microsoft_app_id')) && ! is_null($this->config->get('microsoft_app_key'));
+        return ! empty($this->config->get('microsoft_app_id')) && ! empty($this->config->get('microsoft_app_key'));
     }
 
     /**

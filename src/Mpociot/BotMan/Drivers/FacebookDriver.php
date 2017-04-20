@@ -216,7 +216,7 @@ class FacebookDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('facebook_token'));
+        return ! empty($this->config->get('facebook_token'));
     }
 
     /**

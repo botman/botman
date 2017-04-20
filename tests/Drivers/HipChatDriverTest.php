@@ -216,5 +216,11 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
         $driver = new HipChatDriver($request, [], $htmlInterface);
 
         $this->assertFalse($driver->isConfigured());
+
+        $driver = new HipChatDriver($request, [
+            'hipchat_urls' => [''],
+        ], $htmlInterface);
+
+        $this->assertFalse($driver->isConfigured());
     }
 }

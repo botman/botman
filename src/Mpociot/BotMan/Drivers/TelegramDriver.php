@@ -200,7 +200,7 @@ class TelegramDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('telegram_token'));
+        return ! empty($this->config->get('telegram_token'));
     }
 
     /**

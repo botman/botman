@@ -104,7 +104,7 @@ class NexmoDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('nexmo_key')) && ! is_null($this->config->get('nexmo_secret'));
+        return ! empty($this->config->get('nexmo_key')) && ! empty($this->config->get('nexmo_secret'));
     }
 
     /**
