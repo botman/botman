@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Mpociot\BotMan\Interfaces\UserInterface;
+use Mpociot\BotMan\Interfaces\UserInfoInterface;
 
 class User implements UserInterface
 {
@@ -18,6 +19,9 @@ class User implements UserInterface
     /** @var string */
     protected $username;
 
+    /** @var UserInfoInterface */
+    protected $user_info;
+
     /**
      * User constructor.
      * @param $id
@@ -25,12 +29,13 @@ class User implements UserInterface
      * @param $last_name
      * @param $username
      */
-    public function __construct($id = null, $first_name = null, $last_name = null, $username = null)
+    public function __construct($id = null, $first_name = null, $last_name = null, $username = null, UserInfoInterface $user_info = null)
     {
         $this->id = $id;
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->username = $username;
+        $this->user_info = $user_info;
     }
 
     /**
@@ -63,5 +68,13 @@ class User implements UserInterface
     public function getLastName()
     {
         return $this->last_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInfo($key)
+    {
+        return $this->user_info ? $this->user_info->get($key) : null;
     }
 }
