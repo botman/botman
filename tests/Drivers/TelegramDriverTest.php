@@ -3,6 +3,8 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -95,7 +97,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -522,7 +524,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message);
     }
 
     /** @test */
@@ -560,7 +562,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.gif'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.gif')), $message);
     }
 
     /** @test */
@@ -598,6 +600,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Video::url('http://image.url/foo.mp4')), $message);
     }
 }

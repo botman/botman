@@ -128,7 +128,7 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             ],
             'webhook_id' => '11223344',
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */

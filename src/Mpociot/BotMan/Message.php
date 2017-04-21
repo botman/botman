@@ -72,7 +72,7 @@ class Message
     /**
      * @return string
      */
-    public function getMessage()
+    public function getText()
     {
         return $this->message;
     }

@@ -90,10 +90,10 @@ class Wit implements MiddlewareInterface
 
     protected function getResponse(Message $message)
     {
-        $lastResponseHash = md5($message->getMessage());
+        $lastResponseHash = md5($message->getText());
 
         if ($this->lastResponseHash !== $lastResponseHash) {
-            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
+            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
 
             $this->response = $this->http->post($endpoint, [], [], [
                 'Authorization: Bearer '.$this->token,

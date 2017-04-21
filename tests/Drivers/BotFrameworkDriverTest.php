@@ -3,6 +3,8 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
@@ -98,7 +100,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
             'text' => 'Hi Julia',
             'entities' => [],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -109,7 +111,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $driver = $this->getDriver($responseData);
 
-        $this->assertSame('Hi Maks', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Maks', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -433,7 +435,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->image('http://foo.com/bar.png'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
     }
 
     /** @test */
@@ -479,6 +481,6 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://foo.com/bar.mp4'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
     }
 }

@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -119,7 +120,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -140,7 +141,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('/botman Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('/botman Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -152,7 +153,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -414,7 +415,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message);
     }
 
     /** @test */

@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Matcher;
 
@@ -50,7 +51,7 @@ class WeChatPhotoDriver extends WeChatDriver
     {
         $photoUrl = $this->event->get('PicUrl');
 
-        return [$photoUrl];
+        return [new Image($photoUrl, $this->event)];
     }
 
     /**

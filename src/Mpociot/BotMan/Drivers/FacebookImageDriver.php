@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
@@ -62,7 +63,9 @@ class FacebookImageDriver extends FacebookDriver
      */
     public function getImagesUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload')->map(function($item) {
+	        return new Image($item['url'], $item);
+        })->toArray();
     }
 
     /**

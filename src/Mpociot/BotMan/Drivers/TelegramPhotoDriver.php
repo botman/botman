@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,11 +34,11 @@ class TelegramPhotoDriver extends TelegramDriver
         return [$message];
     }
 
-    /**
-     * Retrieve a image from an incoming message.
-     * @param  Message $matchingMessage
-     * @return array A download for the image file.
-     */
+	/**
+	 * Retrieve a image from an incoming message.
+	 * @return array A download for the image file.
+	 * @internal param Message $matchingMessage
+	 */
     private function getImages()
     {
         $photos = $this->event->get('photo');
@@ -48,7 +49,7 @@ class TelegramPhotoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return ['https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path];
+        return [new Image('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path, $largetstPhoto)];
     }
 
     /**

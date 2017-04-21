@@ -59,13 +59,13 @@ class FacebookLocationDriver extends FacebookDriver
      * Retrieve location from an incoming message.
      *
      * @param array $messages
-     * @return array A download for the attachment location.
+     * @return Location
      */
     public function getLocation(array $messages)
     {
         $data = Collection::make($messages['message']['attachments'])->where('type', 'location')->pluck('payload')->first();
 
-        return new Location($data['coordinates']['lat'], $data['coordinates']['long']);
+        return new Location($data['coordinates']['lat'], $data['coordinates']['long'], $data);
     }
 
     /**

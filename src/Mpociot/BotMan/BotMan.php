@@ -279,7 +279,7 @@ class BotMan
      */
     private function addDataParameters(Message $message, array $parameters)
     {
-        $messageText = $message->getMessage();
+        $messageText = $message->getText();
 
         if ($messageText === Matcher::IMAGE_PATTERN) {
             $parameters[] = $message->getImages();

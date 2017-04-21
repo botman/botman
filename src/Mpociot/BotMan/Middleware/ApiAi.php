@@ -68,10 +68,10 @@ class ApiAi implements MiddlewareInterface
      */
     protected function getResponse(Message $message)
     {
-        $lastResponseHash = md5($message->getMessage());
+        $lastResponseHash = md5($message->getText());
         if ($this->lastResponseHash !== $lastResponseHash) {
             $response = $this->http->post($this->apiUrl, [], [
-                'query' => [$message->getMessage()],
+                'query' => [$message->getText()],
                 'sessionId' => md5($message->getChannel()),
                 'lang' => 'en',
             ], [

@@ -2,6 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -71,7 +73,7 @@ class TelegramDriver extends Driver
                 ->setValue($callback->get('data'));
         }
 
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -172,22 +174,24 @@ class TelegramDriver extends Driver
                 'inline_keyboard' => $this->convertQuestion($message),
             ], true);
         } elseif ($message instanceof IncomingMessage) {
-            if (! is_null($message->getImage())) {
-                if (strtolower(pathinfo($message->getImage(), PATHINFO_EXTENSION)) === 'gif') {
-                    $endpoint = 'sendDocument';
-                    $parameters['document'] = $message->getImage();
-                } else {
-                    $endpoint = 'sendPhoto';
-                    $parameters['photo'] = $message->getImage();
-                }
-                $parameters['caption'] = $message->getMessage();
-            } elseif (! is_null($message->getVideo())) {
-                $endpoint = 'sendVideo';
-                $parameters['video'] = $message->getVideo();
-                $parameters['caption'] = $message->getMessage();
-            } else {
-                $parameters['text'] = $message->getMessage();
-            }
+        	if(! is_null($message->getAttachment())) {
+		        $attachment = $message->getAttachment();
+		        if ($attachment instanceof Image) {
+			        if (strtolower(pathinfo($attachment->getUrl(), PATHINFO_EXTENSION)) === 'gif') {
+				        $endpoint = 'sendDocument';
+				        $parameters['document'] = $attachment->getUrl();
+			        } else {
+				        $endpoint = 'sendPhoto';
+				        $parameters['photo'] = $attachment->getUrl();
+			        }
+		        } elseif ($attachment instanceof Video) {
+			        $endpoint = 'sendVideo';
+			        $parameters['video'] = $attachment->getUrl();
+		        }
+		        $parameters['caption'] = $message->getText();
+	        } else {
+		        $parameters['text'] = $message->getText();
+	        }
         } else {
             $parameters['text'] = $message;
         }

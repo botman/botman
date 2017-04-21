@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -64,12 +65,12 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
 
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -93,7 +94,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = '';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -443,6 +444,6 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url//foo.png'), $message);
+        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url//foo.png')), $message);
     }
 }

@@ -49,7 +49,7 @@ class WeChatLocationDriver extends WeChatDriver
      */
     private function getLocation()
     {
-        return new Location($this->event->get('Location_X'), $this->event->get('Location_Y'));
+        return new Location($this->event->get('Location_X'), $this->event->get('Location_Y'), $this->event);
     }
 
     /**
