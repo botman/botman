@@ -2,11 +2,11 @@
 
 namespace Mpociot\BotMan\Middleware;
 
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Wit implements MiddlewareInterface
@@ -49,45 +49,6 @@ class Wit implements MiddlewareInterface
         return new static($token, $minimumConfidence, new Curl());
     }
 
-    /**
-     * Handle / modify the message.
-     *
-     * @param Message $message
-     * @param DriverInterface $driver
-     */
-    public function handle(Message &$message, DriverInterface $driver)
-    {
-        $response = $this->getResponse($message);
-
-        $responseData = Collection::make(json_decode($response->getContent(), true));
-        $message->addExtras('entities', $responseData->get('entities'));
-    }
-
-    /**
-     * @param Message $message
-     * @param string $test
-     * @param bool $regexMatched
-     * @return bool
-     */
-    public function isMessageMatching(Message $message, $test, $regexMatched)
-    {
-        $entities = Collection::make($message->getExtras())->get('entities', []);
-
-        if (! empty($entities)) {
-            foreach ($entities as $name => $entity) {
-                if ($name === 'intent') {
-                    foreach ($entity as $item) {
-                        if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
     protected function getResponse(Message $message)
     {
         $lastResponseHash = md5($message->getMessage());
@@ -103,5 +64,92 @@ class Wit implements MiddlewareInterface
         }
 
         return $this->response;
+    }
+
+    /**
+     * Handle a captured message.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function captured(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
+    }
+
+    /**
+     * Handle an incoming message.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function received(Message $message, $next, BotMan $bot)
+    {
+        $response = $this->getResponse($message);
+
+        $responseData = Collection::make(json_decode($response->getContent(), true));
+        $message->addExtras('entities', $responseData->get('entities'));
+
+        return $next($message);
+    }
+
+    /**
+     * @param Message $message
+     * @param string $pattern
+     * @param bool $regexMatched Indicator if the regular expression was matched too
+     * @return bool
+     */
+    public function matching(Message $message, $pattern, $regexMatched)
+    {
+        $entities = Collection::make($message->getExtras())->get('entities', []);
+
+        if (! empty($entities)) {
+            foreach ($entities as $name => $entity) {
+                if ($name === 'intent') {
+                    foreach ($entity as $item) {
+                        if ($item['value'] === $pattern && $item['confidence'] >= $this->minimumConfidence) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Handle a message that was successfully heard, but not processed yet.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function heard(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
+    }
+
+    /**
+     * Handle an outgoing message payload before/after it
+     * hits the message service.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function sending(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
     }
 }

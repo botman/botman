@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
+use React\Promise\PromiseInterface;
 use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
@@ -25,6 +26,8 @@ class SlackRTMDriver implements DriverInterface
     protected $bot_id;
 
     const DRIVER_NAME = 'SlackRTM';
+
+    protected $file;
 
     /**
      * Driver constructor.
@@ -124,16 +127,16 @@ class SlackRTMDriver implements DriverInterface
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return mixed
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'channel' => $matchingMessage->getChannel(),
             'as_user' => true,
         ], $additionalParameters);
 
-        $fileToUpload = null;
+        $this->file = null;
 
         if ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getMessage();
@@ -142,7 +145,7 @@ class SlackRTMDriver implements DriverInterface
             }
 
             if (! empty($message->getFilePath()) && file_exists($message->getFilePath())) {
-                $fileToUpload = (new File())
+                $this->file = (new File())
                     ->setTitle(basename($message->getFilePath()))
                     ->setPath($message->getFilePath())
                     ->setInitialComment($message->getMessage());
@@ -154,13 +157,19 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message;
         }
 
-        if (empty($fileToUpload)) {
-            $this->client->apiCall('chat.postMessage', $parameters, false, false);
-        } else {
-            $this->client->fileUpload($fileToUpload, [$matchingMessage->getChannel()]);
-        }
+        return (is_null($this->file)) ? $parameters : [$matchingMessage->getChannel()];
+    }
 
-        return $this;
+    /**
+     * @param mixed $payload
+     * @return PromiseInterface
+     */
+    public function sendPayload($payload)
+    {
+        if (is_null($this->file)) {
+            return $this->client->apiCall('chat.postMessage', $payload, false, false);
+        }
+        return $this->client->fileUpload($this->file, $payload);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\Pipeline\Pipeline;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
@@ -24,9 +25,6 @@ class BotMan
     use VerifiesServices,
         ProvidesStorage,
         HandlesConversations;
-
-    /** @var \Symfony\Component\HttpFoundation\ParameterBag */
-    public $payload;
 
     /** @var \Illuminate\Support\Collection */
     protected $event;
@@ -157,17 +155,22 @@ class BotMan
     }
 
     /**
-     * @param Message $message
-     * @param array $middleware
-     * @return Message
+     * @param string $method
+     * @param mixed $payload
+     * @param MiddlewareInterface[] $middleware
+     * @param Closure|null $destination
+     * @return mixed
      */
-    protected function applyMiddleware(Message &$message, array $middleware)
+    protected function applyMiddleware($method, $payload, array $middleware, Closure $destination = null)
     {
-        foreach ($middleware as $middle) {
-            $middle->handle($message, $this->getDriver());
-        }
+        $destination = is_null($destination) ? function($message) { return $message; } : $destination;
 
-        return $message;
+        return (new Pipeline())
+            ->via($method)
+            ->send($payload)
+            ->with($this)
+            ->through($middleware)
+            ->then($destination);
     }
 
     /**
@@ -330,7 +333,7 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                $message = $this->applyMiddleware($message, $this->middleware + $messageData['middleware']);
+                $message = $this->applyMiddleware('received', $message, $this->middleware + $messageData['middleware']);
 
                 if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
@@ -340,7 +343,7 @@ class BotMan
                 ) {
                     $heardMessage = true;
                     $this->command = $command;
-                    $this->message = $message;
+                    $this->message = $this->applyMiddleware('heard', $message, $this->middleware + $messageData['middleware']);
                     $parameterNames = $this->compileParameterNames($pattern);
 
                     $matches = $this->matcher->getMatches();
@@ -445,13 +448,20 @@ class BotMan
     /**
      * @param string|Question $message
      * @param array $additionalParameters
-     * @return $this
+     * @return mixed
      */
     public function reply($message, $additionalParameters = [])
     {
-        $this->getDriver()->reply($message, $this->message, $additionalParameters);
+        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
+    }
 
-        return $this;
+    public function sendPayload($payload)
+    {
+        $middleware = is_null($this->command) ? $this->middleware : $this->middleware + $this->command->toArray()['middleware'];
+
+        return $this->applyMiddleware('sending', $payload, $middleware, function($payload) {
+            return $this->getDriver()->sendPayload($payload);
+        });
     }
 
     /**
@@ -462,20 +472,6 @@ class BotMan
     public function randomReply(array $messages)
     {
         return $this->reply($messages[array_rand($messages)]);
-    }
-
-    /**
-     * @param string|Question $message
-     * @param array $additionalParameters
-     * @return $this
-     */
-    public function replyPrivate($message, $additionalParameters = [])
-    {
-        $privateChannel = [
-            'channel' => $this->message->getUser(),
-        ];
-
-        return $this->reply($message, array_merge($additionalParameters, $privateChannel));
     }
 
     /**
@@ -562,6 +558,7 @@ class BotMan
         if (method_exists($this->getDriver(), $name)) {
             // Add the current message to the passed arguments
             array_push($arguments, $this->getMessage());
+            array_push($arguments, $this);
 
             return call_user_func_array([$this->getDriver(), $name], $arguments);
         }
@@ -585,7 +582,6 @@ class BotMan
         $this->driverName = $this->driver->getName();
 
         return [
-            'payload',
             'event',
             'driverName',
             'storage',

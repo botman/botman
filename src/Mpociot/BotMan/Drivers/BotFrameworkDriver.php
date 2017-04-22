@@ -16,6 +16,8 @@ class BotFrameworkDriver extends Driver
 {
     const DRIVER_NAME = 'BotFramework';
 
+    protected $apiURL;
+
     /**
      * @param Request $request
      */
@@ -123,7 +125,7 @@ class BotFrameworkDriver extends Driver
      * @param array $additionalParameters
      * @return Response
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'type' => 'message',
@@ -164,21 +166,28 @@ class BotFrameworkDriver extends Driver
             $parameters['text'] = $message;
         }
 
-        $headers = [
-            'Content-Type:application/json',
-            'Authorization:Bearer '.$this->getAccessToken(),
-        ];
-
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
-        $apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
+        $this->apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
 
-        if (strstr($apiURL, 'webchat.botframework')) {
+        if (strstr($this->apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
                 'id' => $this->config->get('microsoft_bot_handle'),
             ];
         }
+        return $parameters;
+    }
 
-        return $this->http->post($apiURL.'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        $headers = [
+            'Content-Type:application/json',
+            'Authorization:Bearer '.$this->getAccessToken(),
+        ];
+        return $this->http->post($this->apiURL, [], $payload, $headers, true);
     }
 
     /**

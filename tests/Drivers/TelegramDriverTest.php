@@ -326,7 +326,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message);
+        $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
     /** @test */
@@ -383,7 +383,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply($question, $message);
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
     /** @test */
@@ -421,9 +421,9 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message, [
+        $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'foo' => 'bar',
-        ]);
+        ]));
     }
 
     /** @test */
@@ -484,7 +484,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
     /** @test */
@@ -522,7 +522,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message));
     }
 
     /** @test */
@@ -560,7 +560,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.gif'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.gif'), $message));
     }
 
     /** @test */
@@ -598,6 +598,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message));
     }
 }

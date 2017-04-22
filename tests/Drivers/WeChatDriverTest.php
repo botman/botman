@@ -150,7 +150,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message);
+        $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
     /** @test */
@@ -195,7 +195,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply($question, $message);
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
     /** @test */
@@ -237,9 +237,9 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message, [
+        $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'foo' => 'bar',
-        ]);
+        ]));
     }
 
     /** @test */
@@ -311,7 +311,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
     /** @test */
@@ -357,6 +357,6 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message));
     }
 }

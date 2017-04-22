@@ -1,8 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.6.0]
+## [Unreleased]
 ### Added
+- Changed the way middleware works in BotMan.
 - Added support for Slack interactive menu messages.
 - Added Facebook Referral driver.
 - Allow replying to an existing thread for Slack drivers (#327).

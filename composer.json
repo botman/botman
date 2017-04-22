@@ -23,7 +23,8 @@
         "php": ">=5.6.0",
         "symfony/http-foundation": "2.8.*|3.0.*|3.1.*|3.2.*",
         "tightenco/collect": "~5.0",
-        "opis/closure": "^2.3"
+        "opis/closure": "^2.3",
+        "mpociot/pipeline": "^1.0"
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",

@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Middleware;
 
 use Mockery as m;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
@@ -55,8 +56,12 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ], true)
             ->andReturn($response);
 
+        $callback = function($m) use (&$message) {
+            $message = $m;
+        };
+
         $middleware = new ApiAi('token', $http);
-        $middleware->handle($message, m::mock(NullDriver::class));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
 
         $this->assertSame([
             'apiReply' => 'api reply text',
@@ -91,11 +96,15 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($response);
 
+        $callback = function($m) use (&$message) {
+            $message = $m;
+        };
+
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
-        $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertTrue($middleware->isMessageMatching($message, $messageText, false));
-        $this->assertFalse($middleware->isMessageMatching($message, 'some_other_action', false));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
+        $this->assertTrue($middleware->matching($message, $messageText, false));
+        $this->assertFalse($middleware->matching($message, 'some_other_action', false));
     }
 
     /** @test */
@@ -122,11 +131,15 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($response);
 
+        $callback = function($m) use (&$message) {
+            $message = $m;
+        };
+
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
-        $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertTrue($middleware->isMessageMatching($message, $messageText, false));
-        $this->assertFalse($middleware->isMessageMatching($message, 'some_other_action', false));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
+        $this->assertTrue($middleware->matching($message, $messageText, false));
+        $this->assertFalse($middleware->matching($message, 'some_other_action', false));
     }
 
     /** @test */

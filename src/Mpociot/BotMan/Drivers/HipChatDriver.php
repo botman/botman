@@ -16,6 +16,8 @@ class HipChatDriver extends Driver
 {
     const DRIVER_NAME = 'HipChat';
 
+    protected $apiURL;
+
     /**
      * @param Request $request
      */
@@ -68,7 +70,7 @@ class HipChatDriver extends Driver
      * @param array $additionalParameters
      * @return Response|null
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'message_format' => 'text',
@@ -85,16 +87,25 @@ class HipChatDriver extends Driver
             $parameters['message'] = $message;
         }
 
+        $this->apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use ($matchingMessage) {
+            return strstr($url, 'room/'.$matchingMessage->getChannel().'/notification');
+        })->first();
+
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
         $headers = [
             'Content-Type:application/json',
         ];
 
-        $apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use ($matchingMessage) {
-            return strstr($url, 'room/'.$matchingMessage->getChannel().'/notification');
-        })->first();
-
-        if (! is_null($apiURL)) {
-            return $this->http->post($apiURL, [], $parameters, $headers, true);
+        if (! is_null($this->apiURL)) {
+            return $this->http->post($this->apiURL, [], $payload, $headers, true);
         }
     }
 

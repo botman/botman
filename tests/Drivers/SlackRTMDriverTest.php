@@ -126,6 +126,6 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
 
         $matchingMessage = new Message('A command', 'U0X12345', $channelId);
 
-        $driver->reply($message, $matchingMessage);
+        $driver->sendPayload($driver->buildServicePayload($message, $matchingMessage));
     }
 }

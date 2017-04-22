@@ -60,9 +60,18 @@ class TestDriver implements DriverInterface
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return mixed
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
+    {
+        return [];
+    }
+
+    /**
+     * @param mixed $payload
+     * @return mixed
+     */
+    public function sendPayload($payload)
     {
         return $this;
     }

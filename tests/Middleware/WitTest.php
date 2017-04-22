@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests\Middleware;
 
 use Mockery as m;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
@@ -35,8 +36,12 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
+        $callback = function($m) use (&$message) {
+            $message = $m;
+        };
+
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message, m::mock(NullDriver::class));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
 
         $this->assertSame([
             'entities' => ['foo' => 'bar'],
@@ -78,9 +83,14 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
+
+        $callback = function($m) use (&$message) {
+            $message = $m;
+        };
+
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertTrue($middleware->isMessageMatching($message, 'emotion', false));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
+        $this->assertTrue($middleware->matching($message, 'emotion', false));
     }
 
     /** @test */
@@ -118,9 +128,13 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
+        $callback = function($m) use ($message) {
+            $message = $m;
+        };
+
         $middleware = new Wit('token', 0.5, $http);
-        $middleware->handle($message, m::mock(NullDriver::class));
-        $this->assertFalse($middleware->isMessageMatching($message, 'emotion', false));
+        $middleware->received($message, $callback, m::mock(BotMan::class));
+        $this->assertFalse($middleware->matching($message, 'emotion', false));
     }
 
     /** @test */

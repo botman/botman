@@ -166,7 +166,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply('Test', $message);
+        $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
     /** @test */
@@ -215,9 +215,9 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply('Test', $message, [
+        $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'custom' => 'payload',
-        ]);
+        ]));
     }
 
     /** @test */
@@ -318,7 +318,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply($question, $message);
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
     /** @test */
@@ -390,7 +390,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
     /** @test */
@@ -443,6 +443,6 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url//foo.png'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url//foo.png'), $message));
     }
 }

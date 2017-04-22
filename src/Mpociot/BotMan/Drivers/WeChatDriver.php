@@ -97,7 +97,7 @@ class WeChatDriver extends Driver
      * @param array $additionalParameters
      * @return Response
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'touser' => $matchingMessage->getChannel(),
@@ -125,9 +125,18 @@ class WeChatDriver extends Driver
             ];
         }
 
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
         Response::create('')->send();
 
-        return $this->http->post('https://api.wechat.com/cgi-bin/message/custom/send?access_token='.$this->getAccessToken(), [], $parameters, [], true);
+        return $this->http->post('https://api.wechat.com/cgi-bin/message/custom/send?access_token='.$this->getAccessToken(), [], $payload, [], true);
     }
 
     /**
