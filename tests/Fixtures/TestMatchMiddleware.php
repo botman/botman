@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class TestMatchMiddleware implements MiddlewareInterface

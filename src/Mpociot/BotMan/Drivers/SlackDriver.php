@@ -2,10 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
@@ -144,6 +143,7 @@ class SlackDriver extends Driver
             $this->resultType = self::RESULT_JSON;
             $payload = $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
+
         return $payload;
     }
 
@@ -156,8 +156,8 @@ class SlackDriver extends Driver
         if ($this->resultType == self::RESULT_TOKEN) {
             return $this->http->post('https://slack.com/api/chat.postMessage', [], $payload);
         }
-        return Response::create(json_encode($payload), 200, ['Content-Type', 'application/json'])->send();
 
+        return Response::create(json_encode($payload), 200, ['Content-Type', 'application/json'])->send();
     }
 
     /**

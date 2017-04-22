@@ -174,6 +174,7 @@ class BotFrameworkDriver extends Driver
                 'id' => $this->config->get('microsoft_bot_handle'),
             ];
         }
+
         return $parameters;
     }
 
@@ -187,6 +188,7 @@ class BotFrameworkDriver extends Driver
             'Content-Type:application/json',
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
+
         return $this->http->post($this->apiURL, [], $payload, $headers, true);
     }
 

@@ -73,7 +73,6 @@ class NullDriver extends Driver
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        return null;
     }
 
     /**
@@ -82,7 +81,6 @@ class NullDriver extends Driver
      */
     public function sendPayload($payload)
     {
-        return null;
     }
 
     /**

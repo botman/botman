@@ -10,7 +10,6 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Middleware\Wit;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 class WitTest extends PHPUnit_Framework_TestCase
@@ -36,7 +35,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
-        $callback = function($m) use (&$message) {
+        $callback = function ($m) use (&$message) {
             $message = $m;
         };
 
@@ -83,8 +82,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
-
-        $callback = function($m) use (&$message) {
+        $callback = function ($m) use (&$message) {
             $message = $m;
         };
 
@@ -128,7 +126,7 @@ class WitTest extends PHPUnit_Framework_TestCase
             ])
             ->andReturn($response);
 
-        $callback = function($m) use ($message) {
+        $callback = function ($m) use ($message) {
             $message = $m;
         };
 
