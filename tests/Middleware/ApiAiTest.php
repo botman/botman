@@ -10,7 +10,6 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Middleware\ApiAi;
-use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiAiTest extends PHPUnit_Framework_TestCase
@@ -56,7 +55,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ], true)
             ->andReturn($response);
 
-        $callback = function($m) use (&$message) {
+        $callback = function ($m) use (&$message) {
             $message = $m;
         };
 
@@ -96,7 +95,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($response);
 
-        $callback = function($m) use (&$message) {
+        $callback = function ($m) use (&$message) {
             $message = $m;
         };
 
@@ -131,7 +130,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($response);
 
-        $callback = function($m) use (&$message) {
+        $callback = function ($m) use (&$message) {
             $message = $m;
         };
 

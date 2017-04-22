@@ -54,7 +54,6 @@ interface DriverInterface
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = []);
 
-
     /**
      * @param mixed $payload
      * @return Response

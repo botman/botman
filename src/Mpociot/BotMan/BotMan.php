@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\Pipeline\Pipeline;
 use UnexpectedValueException;
+use Mpociot\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Traits\ProvidesStorage;
@@ -163,7 +163,10 @@ class BotMan
      */
     protected function applyMiddleware($method, $payload, array $middleware, Closure $destination = null)
     {
-        $destination = is_null($destination) ? function($message) { return $message; } : $destination;
+        $destination = is_null($destination) ? function ($message) {
+            return $message;
+        }
+        : $destination;
 
         return (new Pipeline())
             ->via($method)
@@ -459,7 +462,7 @@ class BotMan
     {
         $middleware = is_null($this->command) ? $this->middleware : $this->middleware + $this->command->toArray()['middleware'];
 
-        return $this->applyMiddleware('sending', $payload, $middleware, function($payload) {
+        return $this->applyMiddleware('sending', $payload, $middleware, function ($payload) {
             return $this->getDriver()->sendPayload($payload);
         });
     }

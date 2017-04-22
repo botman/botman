@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use React\Promise\PromiseInterface;
 use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
@@ -11,6 +10,7 @@ use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use React\Promise\PromiseInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
@@ -169,6 +169,7 @@ class SlackRTMDriver implements DriverInterface
         if (is_null($this->file)) {
             return $this->client->apiCall('chat.postMessage', $payload, false, false);
         }
+
         return $this->client->fileUpload($this->file, $payload);
     }
 

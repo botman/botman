@@ -1470,7 +1470,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with('This is a test question', m::type(Message::class), []);
 
-
         $driver->shouldReceive('sendPayload')
             ->once();
 

@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
