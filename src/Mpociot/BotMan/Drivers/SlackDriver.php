@@ -5,6 +5,7 @@ namespace Mpociot\BotMan\Drivers;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
@@ -16,6 +17,12 @@ use Mpociot\BotMan\Messages\Message as IncomingMessage;
 class SlackDriver extends Driver
 {
     const DRIVER_NAME = 'Slack';
+
+    const RESULT_TOKEN = 'token';
+
+    const RESULT_JSON = 'json';
+
+    protected $resultType = self::RESULT_JSON;
 
     /**
      * @param Request $request
@@ -126,30 +133,49 @@ class SlackDriver extends Driver
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this|void
+     * @return array
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
-            $this->replyWithToken($message, $matchingMessage, $additionalParameters);
+            $this->resultType = self::RESULT_TOKEN;
+            $payload = $this->replyWithToken($message, $matchingMessage, $additionalParameters);
         } else {
-            $this->respondJSON($message, $matchingMessage, $additionalParameters);
+            $this->resultType = self::RESULT_JSON;
+            $payload = $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
+
+        return $payload;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        if ($this->resultType == self::RESULT_TOKEN) {
+            return $this->http->post('https://slack.com/api/chat.postMessage', [], $payload);
+        }
+
+        return Response::create(json_encode($payload), 200, ['Content-Type', 'application/json'])->send();
     }
 
     /**
      * @param $message
      * @param array $additionalParameters
      * @param Message $matchingMessage
-     * @return $this
+     * @return array
      */
-    public function replyInThread($message, $additionalParameters, $matchingMessage)
+    public function replyInThread($message, $additionalParameters, $matchingMessage, BotMan $bot)
     {
         $additionalParameters['thread_ts'] = ! empty($matchingMessage->getPayload()->get('thread_ts'))
             ? $matchingMessage->getPayload()->get('thread_ts')
             : $matchingMessage->getPayload()->get('ts');
 
-        return $this->reply($message, $matchingMessage, $additionalParameters);
+        $payload = $this->buildServicePayload($message, $matchingMessage, $additionalParameters);
+
+        return $bot->sendPayload($payload);
     }
 
 	/**
@@ -186,7 +212,7 @@ class SlackDriver extends Driver
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $parameters
-     * @return Response
+     * @return array
      */
     protected function respondText($message, $matchingMessage, $parameters = [])
     {
@@ -202,14 +228,14 @@ class SlackDriver extends Driver
             $text = $this->format($message);
         }
 
-        Response::create(json_encode($parameters), 200, ['Content-Type', 'application/json'])->send();
+        return $parameters;
     }
 
     /**
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return Response
+     * @return array
      */
     protected function replyWithToken($message, $matchingMessage, $additionalParameters = [])
     {
@@ -238,7 +264,7 @@ class SlackDriver extends Driver
 
         $parameters['token'] = $this->config->get('slack_token');
 
-        return $this->http->post('https://slack.com/api/chat.postMessage', [], $parameters);
+        return $parameters;
     }
 
     /**
@@ -261,7 +287,7 @@ class SlackDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('slack_token'));
+        return ! empty($this->config->get('slack_token'));
     }
 
     /**

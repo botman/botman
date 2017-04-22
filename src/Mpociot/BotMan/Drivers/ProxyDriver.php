@@ -69,9 +69,14 @@ final class ProxyDriver implements DriverInterface
         return self::instance()->getConversationAnswer($message);
     }
 
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        return self::instance()->reply($message, $matchingMessage, $additionalParameters);
+        return self::instance()->buildServicePayload($message, $matchingMessage, $additionalParameters);
+    }
+
+    public function sendPayload($payload)
+    {
+        return self::instance()->sendPayload($payload);
     }
 
     public function getName()

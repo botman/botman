@@ -3,7 +3,9 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+
 use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
@@ -15,6 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+    }
+
     private function getDriver($responseData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -352,7 +359,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply('Test', $message);
+        $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
     /** @test */
@@ -383,7 +390,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
     /** @test */
@@ -415,7 +422,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message);
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */
@@ -434,7 +441,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'text' => 'Hi Julia',
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
-        $driver->reply('test', $driver->getMessages()[0]);
+        $driver->sendPayload($driver->buildServicePayload('test', $driver->getMessages()[0]));
     }
 
     /** @test */
@@ -454,7 +461,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'text' => 'Hi Julia',
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
-        $driver->reply('test', $driver->getMessages()[0]);
+        $driver->sendPayload($driver->buildServicePayload('test', $driver->getMessages()[0]));
     }
 
     /** @test */
@@ -490,7 +497,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->reply($question, $message);
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
     /** @test */
@@ -526,13 +533,13 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('response', '', 'general');
-        $driver->reply('Test', $message, [
+        $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'username' => 'ReplyBot',
             'icon_emoji' => ':dash:',
             'attachments' => json_encode([[
                 'image_url' => 'imageurl',
             ]]),
-        ]);
+        ]));
     }
 
     /** @test */
@@ -572,13 +579,17 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         $message = new Message('response', '', 'general', Collection::make([
             'ts' => '1234.5678',
         ]));
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->setDriver($driver);
+
         $driver->replyInThread('Test', [
             'username' => 'ReplyBot',
             'icon_emoji' => ':dash:',
             'attachments' => json_encode([[
                 'image_url' => 'imageurl',
             ]]),
-        ], $message);
+        ], $message, $botman);
     }
 
     /** @test */

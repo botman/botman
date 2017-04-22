@@ -155,6 +155,6 @@ class FacebookReferralDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->reply('Test', $message);
+        $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 }

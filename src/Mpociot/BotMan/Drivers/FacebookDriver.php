@@ -168,7 +168,7 @@ class FacebookDriver extends Driver
      * @param array $additionalParameters
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'recipient' => [
@@ -216,7 +216,16 @@ class FacebookDriver extends Driver
 
         $parameters['access_token'] = $this->config->get('facebook_token');
 
-        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $parameters);
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        return $this->http->post('https://graph.facebook.com/v2.6/me/messages', [], $payload);
     }
 
     /**
@@ -224,7 +233,7 @@ class FacebookDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('facebook_token'));
+        return ! empty($this->config->get('facebook_token'));
     }
 
     /**

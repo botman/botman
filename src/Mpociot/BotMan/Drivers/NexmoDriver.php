@@ -76,7 +76,7 @@ class NexmoDriver extends Driver
      * @param array $additionalParameters
      * @return Response
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'api_key' => $this->config->get('nexmo_key'),
@@ -96,7 +96,16 @@ class NexmoDriver extends Driver
             $parameters['text'] = $message;
         }
 
-        return $this->http->post('https://rest.nexmo.com/sms/json?'.http_build_query($parameters));
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        return $this->http->post('https://rest.nexmo.com/sms/json?'.http_build_query($payload));
     }
 
     /**
@@ -104,7 +113,7 @@ class NexmoDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('nexmo_key')) && ! is_null($this->config->get('nexmo_secret'));
+        return ! empty($this->config->get('nexmo_key')) && ! empty($this->config->get('nexmo_secret'));
     }
 
     /**

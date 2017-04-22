@@ -5,6 +5,7 @@ namespace Mpociot\BotMan\Interfaces;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
+use Symfony\Component\HttpFoundation\Response;
 
 interface DriverInterface
 {
@@ -51,7 +52,13 @@ interface DriverInterface
      * @param array $additionalParameters
      * @return $this
      */
-    public function reply($message, $matchingMessage, $additionalParameters = []);
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = []);
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload);
 
     /**
      * Return the driver name.

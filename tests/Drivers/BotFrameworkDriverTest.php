@@ -265,7 +265,8 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message);
+        $payload = $driver->buildServicePayload('Test', $message);
+        $driver->sendPayload($payload);
     }
 
     /** @test */
@@ -306,7 +307,8 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $user = '29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1';
         $message = new Message('hey there', $user, $user);
-        $driver->reply('Test', $message);
+        $payload = $driver->buildServicePayload('Test', $message);
+        $driver->sendPayload($payload);
     }
 
     /** @test */
@@ -347,9 +349,11 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply('Test', $message, [
+
+        $payload = $driver->buildServicePayload('Test', $message, [
             'foo' => 'bar',
         ]);
+        $driver->sendPayload($payload);
     }
 
     /** @test */
@@ -389,7 +393,8 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $driver->sendPayload($payload);
     }
 
     /** @test */
@@ -481,6 +486,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
+        $driver->sendPayload($payload);
     }
 }

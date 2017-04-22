@@ -14,6 +14,7 @@ use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use React\Promise\PromiseInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
@@ -29,6 +30,8 @@ class SlackRTMDriver implements DriverInterface
     protected $bot_id;
 
     const DRIVER_NAME = 'SlackRTM';
+
+    protected $file;
 
     /**
      * Driver constructor.
@@ -131,16 +134,16 @@ class SlackRTMDriver implements DriverInterface
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
-     * @return $this
+     * @return mixed
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
             'channel' => $matchingMessage->getChannel(),
             'as_user' => true,
         ], $additionalParameters);
 
-        $fileToUpload = null;
+        $this->file = null;
 
         if ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getText();
@@ -164,13 +167,20 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message;
         }
 
-        if (empty($fileToUpload)) {
-            $this->client->apiCall('chat.postMessage', $parameters, false, false);
-        } else {
-            $this->client->fileUpload($fileToUpload, [$matchingMessage->getChannel()]);
+        return (is_null($this->file)) ? $parameters : [$matchingMessage->getChannel()];
+    }
+
+    /**
+     * @param mixed $payload
+     * @return PromiseInterface
+     */
+    public function sendPayload($payload)
+    {
+        if (is_null($this->file)) {
+            return $this->client->apiCall('chat.postMessage', $payload, false, false);
         }
 
-        return $this;
+        return $this->client->fileUpload($this->file, $payload);
     }
 
     /**

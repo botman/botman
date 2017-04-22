@@ -71,7 +71,15 @@ class NullDriver extends Driver
      * @param array $additionalParameters
      * @return $this
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
+    {
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
     {
     }
 

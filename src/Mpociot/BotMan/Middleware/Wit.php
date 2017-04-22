@@ -2,11 +2,11 @@
 
 namespace Mpociot\BotMan\Middleware;
 
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Wit implements MiddlewareInterface
@@ -49,27 +49,63 @@ class Wit implements MiddlewareInterface
         return new static($token, $minimumConfidence, new Curl());
     }
 
+    protected function getResponse(Message $message)
+    {
+        $lastResponseHash = md5($message->getMessage());
+
+        if ($this->lastResponseHash !== $lastResponseHash) {
+            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
+
+            $this->response = $this->http->post($endpoint, [], [], [
+                'Authorization: Bearer '.$this->token,
+            ]);
+
+            $this->lastResponseHash = $lastResponseHash;
+        }
+
+        return $this->response;
+    }
+
     /**
-     * Handle / modify the message.
+     * Handle a captured message.
      *
      * @param Message $message
-     * @param DriverInterface $driver
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
      */
-    public function handle(Message &$message, DriverInterface $driver)
+    public function captured(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
+    }
+
+    /**
+     * Handle an incoming message.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function received(Message $message, $next, BotMan $bot)
     {
         $response = $this->getResponse($message);
 
         $responseData = Collection::make(json_decode($response->getContent(), true));
         $message->addExtras('entities', $responseData->get('entities'));
+
+        return $next($message);
     }
 
     /**
      * @param Message $message
-     * @param string $test
-     * @param bool $regexMatched
+     * @param string $pattern
+     * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
      */
-    public function isMessageMatching(Message $message, $test, $regexMatched)
+    public function matching(Message $message, $pattern, $regexMatched)
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
@@ -77,7 +113,7 @@ class Wit implements MiddlewareInterface
             foreach ($entities as $name => $entity) {
                 if ($name === 'intent') {
                     foreach ($entity as $item) {
-                        if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
+                        if ($item['value'] === $pattern && $item['confidence'] >= $this->minimumConfidence) {
                             return true;
                         }
                     }
@@ -88,20 +124,32 @@ class Wit implements MiddlewareInterface
         return false;
     }
 
-    protected function getResponse(Message $message)
+    /**
+     * Handle a message that was successfully heard, but not processed yet.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function heard(Message $message, $next, BotMan $bot)
     {
-        $lastResponseHash = md5($message->getText());
+        return $next($message);
+    }
 
-        if ($this->lastResponseHash !== $lastResponseHash) {
-            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
-
-            $this->response = $this->http->post($endpoint, [], [], [
-                'Authorization: Bearer '.$this->token,
-            ]);
-
-            $this->lastResponseHash = $lastResponseHash;
-        }
-
-        return $this->response;
+    /**
+     * Handle an outgoing message payload before/after it
+     * hits the message service.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function sending(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
     }
 }

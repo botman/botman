@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Middleware;
 
+use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class ApiAi implements MiddlewareInterface
@@ -87,12 +87,29 @@ class ApiAi implements MiddlewareInterface
     }
 
     /**
-     * Handle / modify the message.
+     * Handle a captured message.
      *
      * @param Message $message
-     * @param DriverInterface $driver
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
      */
-    public function handle(Message &$message, DriverInterface $driver)
+    public function captured(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
+    }
+
+    /**
+     * Handle an incoming message.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function received(Message $message, $next, BotMan $bot)
     {
         $response = $this->getResponse($message);
 
@@ -107,23 +124,53 @@ class ApiAi implements MiddlewareInterface
         $message->addExtras('apiActionIncomplete', $actionIncomplete);
         $message->addExtras('apiIntent', $intent);
         $message->addExtras('apiParameters', $parameters);
+
+        return $next($message);
     }
 
     /**
      * @param Message $message
-     * @param string $test
-     * @param bool $regexMatched
+     * @param string $pattern
+     * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
-     * @internal param string $test
      */
-    public function isMessageMatching(Message $message, $test, $regexMatched)
+    public function matching(Message $message, $pattern, $regexMatched)
     {
         if ($this->listenForAction) {
-            $pattern = '/^'.$test.'$/i';
+            $pattern = '/^'.$pattern.'$/i';
 
             return (bool) preg_match($pattern, $message->getExtras()['apiAction']);
         }
 
         return true;
+    }
+
+    /**
+     * Handle a message that was successfully heard, but not processed yet.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function heard(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
+    }
+
+    /**
+     * Handle an outgoing message payload before/after it
+     * hits the message service.
+     *
+     * @param Message $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
+    public function sending(Message $message, $next, BotMan $bot)
+    {
+        return $next($message);
     }
 }

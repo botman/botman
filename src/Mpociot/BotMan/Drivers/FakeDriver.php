@@ -90,11 +90,16 @@ class FakeDriver implements DriverInterface
         return Answer::create($message->getText())->setMessage($message);
     }
 
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        $this->botMessages[] = $message;
+        return $message;
+    }
 
-        return $this;
+    public function sendPayload($payload)
+    {
+        $this->botMessages[] = $payload;
+
+        return true;
     }
 
     public function getName()

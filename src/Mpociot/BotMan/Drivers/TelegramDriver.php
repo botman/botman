@@ -18,6 +18,8 @@ class TelegramDriver extends Driver
 {
     const DRIVER_NAME = 'Telegram';
 
+    protected $endpoint = 'sendMessage';
+
     /**
      * @param Request $request
      */
@@ -158,9 +160,8 @@ class TelegramDriver extends Driver
      * @param array $additionalParameters
      * @return Response
      */
-    public function reply($message, $matchingMessage, $additionalParameters = [])
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        $endpoint = 'sendMessage';
         $parameters = array_merge_recursive([
             'chat_id' => $matchingMessage->getChannel(),
         ], $additionalParameters);
@@ -196,7 +197,16 @@ class TelegramDriver extends Driver
             $parameters['text'] = $message;
         }
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$this->endpoint, [], $payload);
     }
 
     /**
@@ -204,7 +214,7 @@ class TelegramDriver extends Driver
      */
     public function isConfigured()
     {
-        return ! is_null($this->config->get('telegram_token'));
+        return ! empty($this->config->get('telegram_token'));
     }
 
     /**
