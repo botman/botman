@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Messages;
 
-use Mpociot\Botman\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
@@ -25,7 +24,7 @@ class Matcher
      * @param MiddlewareInterface[] $middleware
      * @return int
      */
-    public function isMessageMatching(Message $message, $answerText, $pattern, $middleware = [])
+    public function isMessageMatching(\Mpociot\Botman\Message $message, $answerText, $pattern, $middleware = [])
     {
         $this->matches = [];
 

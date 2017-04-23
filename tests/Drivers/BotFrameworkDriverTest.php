@@ -440,7 +440,8 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->reply(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
+	    $driver->sendPayload($payload);
     }
 
     /** @test */

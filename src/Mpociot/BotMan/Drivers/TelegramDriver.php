@@ -179,14 +179,14 @@ class TelegramDriver extends Driver
 		        $attachment = $message->getAttachment();
 		        if ($attachment instanceof Image) {
 			        if (strtolower(pathinfo($attachment->getUrl(), PATHINFO_EXTENSION)) === 'gif') {
-				        $endpoint = 'sendDocument';
+				        $this->endpoint = 'sendDocument';
 				        $parameters['document'] = $attachment->getUrl();
 			        } else {
-				        $endpoint = 'sendPhoto';
+				        $this->endpoint = 'sendPhoto';
 				        $parameters['photo'] = $attachment->getUrl();
 			        }
 		        } elseif ($attachment instanceof Video) {
-			        $endpoint = 'sendVideo';
+			        $this->endpoint = 'sendVideo';
 			        $parameters['video'] = $attachment->getUrl();
 		        }
 		        $parameters['caption'] = $message->getText();
