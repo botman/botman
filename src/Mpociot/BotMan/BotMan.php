@@ -340,8 +340,8 @@ class BotMan
 
                 if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
-                    $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
+                    $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
+                    $this->matcher->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
                     $heardMessage = true;
@@ -458,6 +458,10 @@ class BotMan
         return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
     }
 
+    /**
+     * @param $payload
+     * @return mixed
+     */
     public function sendPayload($payload)
     {
         $middleware = is_null($this->command) ? $this->middleware : $this->middleware + $this->command->toArray()['middleware'];
@@ -475,30 +479,6 @@ class BotMan
     public function randomReply(array $messages)
     {
         return $this->reply($messages[array_rand($messages)]);
-    }
-
-    /**
-     * @param string $driverName
-     * @param string|array $allowedDrivers
-     * @return bool
-     */
-    protected function isDriverValid($driverName, $allowedDrivers)
-    {
-        if (! is_null($allowedDrivers)) {
-            return Collection::make($allowedDrivers)->contains($driverName);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $givenChannel
-     * @param $allowedChannel
-     * @return bool
-     */
-    protected function isChannelValid($givenChannel, $allowedChannel)
-    {
-        return $givenChannel == $allowedChannel || $allowedChannel === null;
     }
 
     /**

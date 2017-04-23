@@ -68,6 +68,30 @@ class Matcher
     }
 
     /**
+     * @param string $driverName
+     * @param string|array $allowedDrivers
+     * @return bool
+     */
+    public function isDriverValid($driverName, $allowedDrivers)
+    {
+        if (! is_null($allowedDrivers)) {
+            return Collection::make($allowedDrivers)->contains($driverName);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $givenChannel
+     * @param $allowedChannel
+     * @return bool
+     */
+    public function isChannelValid($givenChannel, $allowedChannel)
+    {
+        return $givenChannel == $allowedChannel || $allowedChannel === null;
+    }
+
+    /**
      * @return array
      */
     public function getMatches()
