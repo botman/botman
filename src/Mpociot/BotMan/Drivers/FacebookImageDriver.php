@@ -63,9 +63,10 @@ class FacebookImageDriver extends FacebookDriver
      */
     public function getImagesUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload')->map(function($item) {
-	        return new Image($item['url'], $item);
-        })->toArray();
+        return Collection::make($message['message']['attachments'])->where('type',
+            'image')->pluck('payload')->map(function ($item) {
+                return new Image($item['url'], $item);
+            })->toArray();
     }
 
     /**

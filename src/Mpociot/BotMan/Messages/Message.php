@@ -7,7 +7,7 @@ class Message
     /** @var string */
     protected $message;
 
-    /** @var mixed*/
+    /** @var mixed */
     protected $attachment;
 
     /**
@@ -53,17 +53,19 @@ class Message
         return $this;
     }
 
-	/**
-	 * @return mixed
-	 */
-	public function getAttachment() {
-		return $this->attachment;
-	}
+    /**
+     * @return mixed
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getText() {
-		return $this->message;
-	}
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->message;
+    }
 }

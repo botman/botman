@@ -28,8 +28,10 @@ class TelegramLocationDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Location::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
-        $message->setLocation(new Location($this->event->get('location')['latitude'], $this->event->get('location')['longitude'], $this->event->get('location')));
+        $message = new Message(Location::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
+        $message->setLocation(new Location($this->event->get('location')['latitude'],
+            $this->event->get('location')['longitude'], $this->event->get('location')));
 
         return [$message];
     }

@@ -149,16 +149,21 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
             if (! is_null($attachment)) {
-            	if ($attachment instanceof Image) {
-		            $parameters['attachments'] = json_encode([['title' => $message->getText(), 'image_url' => $attachment->getUrl()]]);
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode([
+                        [
+                            'title' => $message->getText(),
+                            'image_url' => $attachment->getUrl()
+                        ]
+                    ]);
 
-		        // else check if is a path
-	            } elseif ($attachment instanceof BotManFile && file_exists($attachment->getUrl())) {
-		            $this->file = (new File())
-			            ->setTitle(basename($attachment->getUrl()))
-			            ->setPath($attachment->getUrl())
-			            ->setInitialComment($message->getText());
-	            }
+                    // else check if is a path
+                } elseif ($attachment instanceof BotManFile && file_exists($attachment->getUrl())) {
+                    $this->file = (new File())
+                        ->setTitle(basename($attachment->getUrl()))
+                        ->setPath($attachment->getUrl())
+                        ->setInitialComment($message->getText());
+                }
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';
@@ -206,11 +211,11 @@ class SlackRTMDriver implements DriverInterface
         return ! is_null($this->config->get('slack_token'));
     }
 
-	/**
-	 * Send a typing indicator.
-	 * @param Message $matchingMessage
-	 * @return mixed
-	 */
+    /**
+     * Send a typing indicator.
+     * @param Message $matchingMessage
+     * @return mixed
+     */
     public function types(Message $matchingMessage)
     {
         $channel = null;
@@ -235,7 +240,8 @@ class SlackRTMDriver implements DriverInterface
             $user = $_user;
         });
         if (! is_null($user)) {
-            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername());
+            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(),
+                $user->getUsername());
         }
 
         return new User($matchingMessage->getUser());

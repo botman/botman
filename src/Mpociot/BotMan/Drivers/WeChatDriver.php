@@ -57,7 +57,8 @@ class WeChatDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        $response = $this->http->post('https://api.wechat.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$matchingMessage->getChannel().'&lang=en_US', [], [], [], true);
+        $response = $this->http->post('https://api.wechat.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$matchingMessage->getChannel().'&lang=en_US',
+            [], [], [], true);
         $responseData = json_decode($response->getContent());
 
         return new User($matchingMessage->getChannel(), null, null, $responseData->nickname);
@@ -70,7 +71,10 @@ class WeChatDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('Content'), $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event)];
+        return [
+            new Message($this->event->get('Content'), $this->event->get('ToUserName'),
+                $this->event->get('FromUserName'), $this->event)
+        ];
     }
 
     /**
@@ -86,7 +90,8 @@ class WeChatDriver extends Driver
      */
     protected function getAccessToken()
     {
-        $response = $this->http->post('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid='.$this->config->get('wechat_app_id').'&secret='.$this->config->get('wechat_app_key'), [], []);
+        $response = $this->http->post('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid='.$this->config->get('wechat_app_id').'&secret='.$this->config->get('wechat_app_key'),
+            [], []);
         $responseData = json_decode($response->getContent());
 
         return $responseData->access_token;
@@ -113,17 +118,17 @@ class WeChatDriver extends Driver
             $parameters['msgtype'] = 'news';
 
             $attachment = $message->getAttachment();
-			if(! is_null($attachment)){
-				$article = [
-					'title' => $message->getText(),
-					'picurl' => $attachment->getUrl(),
-				];
-			} else {
-				$article = [
-					'title' => $message->getText(),
-					'picurl' => null,
-				];
-			}
+            if (! is_null($attachment)) {
+                $article = [
+                    'title' => $message->getText(),
+                    'picurl' => $attachment->getUrl(),
+                ];
+            } else {
+                $article = [
+                    'title' => $message->getText(),
+                    'picurl' => null,
+                ];
+            }
 
 
             $parameters['news'] = [
@@ -146,7 +151,8 @@ class WeChatDriver extends Driver
     {
         Response::create('')->send();
 
-        return $this->http->post('https://api.wechat.com/cgi-bin/message/custom/send?access_token='.$this->getAccessToken(), [], $payload, [], true);
+        return $this->http->post('https://api.wechat.com/cgi-bin/message/custom/send?access_token='.$this->getAccessToken(),
+            [], $payload, [], true);
     }
 
     /**
@@ -167,6 +173,7 @@ class WeChatDriver extends Driver
      */
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
-        return $this->http->post('https://api.wechat.com/cgi-bin/'.$endpoint.'?access_token='.$this->getAccessToken(), [], $parameters, [], true);
+        return $this->http->post('https://api.wechat.com/cgi-bin/'.$endpoint.'?access_token='.$this->getAccessToken(),
+            [], $parameters, [], true);
     }
 }

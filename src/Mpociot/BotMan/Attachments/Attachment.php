@@ -2,24 +2,26 @@
 
 namespace Mpociot\BotMan\Attachments;
 
+abstract class Attachment
+{
 
-abstract class Attachment {
+    /** @var mixed */
+    protected $payload;
 
-	/** @var mixed */
-	protected $payload;
+    /**
+     * Attachment constructor.
+     * @param mixed $payload
+     */
+    public function __construct($payload)
+    {
+        $this->payload = $payload;
+    }
 
-	/**
-	 * Attachment constructor.
-	 * @param mixed $payload
-	 */
-	public function __construct($payload) {
-		$this->payload = $payload;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getPayload() {
-		return $this->payload;
-	}
+    /**
+     * @return mixed
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
 }

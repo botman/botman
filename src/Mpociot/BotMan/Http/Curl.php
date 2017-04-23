@@ -10,8 +10,13 @@ class Curl implements HttpInterface
     /**
      * {@inheritdoc}
      */
-    public function post($url, array $urlParameters = [], array $postParameters = [], array $headers = [], $asJSON = false)
-    {
+    public function post(
+        $url,
+        array $urlParameters = [],
+        array $postParameters = [],
+        array $headers = [],
+        $asJSON = false
+    ) {
         $request = $this->prepareRequest($url, $urlParameters, $headers);
 
         curl_setopt($request, CURLOPT_POST, count($postParameters));
@@ -43,9 +48,9 @@ class Curl implements HttpInterface
     /**
      * Prepares a request using curl.
      *
-     * @param  string $url        [description]
-     * @param  array  $parameters [description]
-     * @param  array  $headers    [description]
+     * @param  string $url [description]
+     * @param  array $parameters [description]
+     * @param  array $headers [description]
      * @return resource
      */
     protected static function prepareRequest($url, $parameters = [], $headers = [])
@@ -80,6 +85,6 @@ class Curl implements HttpInterface
 
         $statusCode = $info['http_code'] === 0 ? 500 : $info['http_code'];
 
-        return new Response((string) $body, $statusCode, []);
+        return new Response((string)$body, $statusCode, []);
     }
 }

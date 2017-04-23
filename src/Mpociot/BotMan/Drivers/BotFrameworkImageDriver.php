@@ -30,7 +30,8 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
+        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+            $this->payload);
         $message->setImages($this->getImagesUrls());
 
         return [$message];
@@ -44,7 +45,7 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
     public function getImagesUrls()
     {
         return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->map(function ($item) {
-	        return new Image($item['contentUrl'], $item);
+            return new Image($item['contentUrl'], $item);
         })->toArray();
     }
 

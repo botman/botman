@@ -63,9 +63,10 @@ class FacebookVideoDriver extends FacebookDriver
      */
     public function getVideoUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'video')->pluck('payload')->map(function ($item) {
-	        return new Video($item['url'], $item);
-        })->toArray();
+        return Collection::make($message['message']['attachments'])->where('type',
+            'video')->pluck('payload')->map(function ($item) {
+                return new Video($item['url'], $item);
+            })->toArray();
     }
 
     /**

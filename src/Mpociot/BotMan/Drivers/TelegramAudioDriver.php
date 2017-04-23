@@ -27,7 +27,8 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Audio::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Audio::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
         $message->setAudio($this->getAudio());
 
         return [$message];
@@ -49,7 +50,10 @@ class TelegramAudioDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return [new Audio('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path, $audio)];
+        return [
+            new Audio('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
+                $audio)
+        ];
     }
 
     /**

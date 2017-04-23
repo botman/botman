@@ -28,17 +28,18 @@ class TelegramPhotoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
         $message->setImages($this->getImages());
 
         return [$message];
     }
 
-	/**
-	 * Retrieve a image from an incoming message.
-	 * @return array A download for the image file.
-	 * @internal param Message $matchingMessage
-	 */
+    /**
+     * Retrieve a image from an incoming message.
+     * @return array A download for the image file.
+     * @internal param Message $matchingMessage
+     */
     private function getImages()
     {
         $photos = $this->event->get('photo');
@@ -49,7 +50,10 @@ class TelegramPhotoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return [new Image('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path, $largetstPhoto)];
+        return [
+            new Image('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
+                $largetstPhoto)
+        ];
     }
 
     /**

@@ -25,7 +25,7 @@ class BotFrameworkDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
+        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->all());
     }
 
@@ -68,7 +68,10 @@ class BotFrameworkDriver extends Driver
         $pattern = '/<at id=(.*?)at>[^(\x20-\x7F)\x0A]*\s*/';
         $message = preg_replace($pattern, '', $this->event->get('text'));
 
-        return [new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
+        return [
+            new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+                $this->payload)
+        ];
     }
 
     /**
@@ -85,7 +88,8 @@ class BotFrameworkDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getChannel(), null, null, Collection::make($matchingMessage->getPayload())->get('from')['name']);
+        return new User($matchingMessage->getChannel(), null, null,
+            Collection::make($matchingMessage->getPayload())->get('from')['name']);
     }
 
     /**
@@ -147,32 +151,32 @@ class BotFrameworkDriver extends Driver
                 ],
             ];
         } elseif ($message instanceof IncomingMessage) {
-	        $parameters['text'] = $message->getText();
-	        $attachment = $message->getAttachment();
-	        if (! is_null($attachment)) {
-
-		        if ($attachment instanceof Image) {
-			        $parameters['attachments'] = [
-				        [
-					        'contentType' => 'image/png',
-					        'contentUrl' => $attachment->getUrl(),
-				        ],
-			        ];
-		        } elseif ($attachment instanceof Video) {
-			        $parameters['attachments'] = [
-				        [
-					        'contentType' => 'video/mp4',
-					        'contentUrl' => $attachment->getUrl(),
-				        ],
-			        ];
-		        }
-	        }
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = [
+                        [
+                            'contentType' => 'image/png',
+                            'contentUrl' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Video) {
+                    $parameters['attachments'] = [
+                        [
+                            'contentType' => 'video/mp4',
+                            'contentUrl' => $attachment->getUrl(),
+                        ],
+                    ];
+                }
+            }
         } else {
             $parameters['text'] = $message;
         }
 
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
-        $this->apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
+        $this->apiURL = Collection::make($payload)->get('serviceUrl',
+                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
 
         if (strstr($this->apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
@@ -220,7 +224,8 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($parameters)->get('serviceUrl'));
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl',
+            Collection::make($parameters)->get('serviceUrl'));
 
         return $this->http->post($apiURL.'/v3/'.$endpoint, [], $parameters, $headers, true);
     }

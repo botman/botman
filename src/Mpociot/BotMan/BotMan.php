@@ -307,8 +307,8 @@ class BotMan
     /**
      * Create a command group with shared attributes.
      *
-     * @param  array  $attributes
-     * @param  \Closure  $callback
+     * @param  array $attributes
+     * @param  \Closure $callback
      */
     public function group(array $attributes, Closure $callback)
     {
@@ -343,14 +343,16 @@ class BotMan
                 $message = $this->applyMiddleware('received', $message, $this->middleware + $messageData['middleware']);
 
                 if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
+                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern,
+                        $messageData['middleware'] + $this->middleware) &&
                     $this->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
                     $heardMessage = true;
                     $this->command = $command;
-                    $this->message = $this->applyMiddleware('heard', $message, $this->middleware + $messageData['middleware']);
+                    $this->message = $this->applyMiddleware('heard', $message,
+                        $this->middleware + $messageData['middleware']);
                     $parameterNames = $this->compileParameterNames($pattern);
 
                     $matches = $this->matcher->getMatches();
@@ -459,7 +461,8 @@ class BotMan
      */
     public function reply($message, $additionalParameters = [])
     {
-        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
+        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message,
+            $additionalParameters));
     }
 
     public function sendPayload($payload)

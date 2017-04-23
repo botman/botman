@@ -43,8 +43,8 @@ class FacebookDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = Collection::make((array) $this->payload->get('entry')[0]);
+        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
+        $this->event = Collection::make((array)$this->payload->get('entry')[0]);
         $this->signature = $request->headers->get('X_HUB_SIGNATURE', '');
         $this->content = $request->getContent();
     }
@@ -187,29 +187,28 @@ class FacebookDriver extends Driver
         } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
-        	$attachment = $message->getAttachment();
-        	if (! is_null($attachment)) {
-
-        		if ($attachment instanceof Image) {
-			        unset($parameters['message']['text']);
-			        $parameters['message']['attachment'] = [
-				        'type' => 'image',
-				        'payload' => [
-					        'url' => $attachment->getUrl(),
-				        ],
-			        ];
-		        } elseif ($attachment instanceof Video) {
-			        unset($parameters['message']['text']);
-			        $parameters['message']['attachment'] = [
-				        'type' => 'video',
-				        'payload' => [
-					        'url' => $attachment->getUrl(),
-				        ],
-			        ];
-		        } else {
-			        $parameters['message']['text'] = $message->getText();
-		        }
-	        } else {
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'image',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Video) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'video',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } else {
+                    $parameters['message']['text'] = $message->getText();
+                }
+            } else {
                 $parameters['message']['text'] = $message->getText();
             }
         }

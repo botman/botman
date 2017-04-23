@@ -45,7 +45,7 @@ class SlackDriver extends Driver
             $this->payload = $request->request;
             $this->event = Collection::make($request->request->all());
         } else {
-            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
+            $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
             $this->event = Collection::make($this->payload->get('event'));
         }
     }
@@ -178,12 +178,12 @@ class SlackDriver extends Driver
         return $bot->sendPayload($payload);
     }
 
-	/**
-	 * @param string|Question $message
-	 * @param Message $matchingMessage
-	 * @param array $parameters
-	 * @return Response
-	 */
+    /**
+     * @param string|Question $message
+     * @param Message $matchingMessage
+     * @param array $parameters
+     * @return Response
+     */
     protected function respondJSON($message, $matchingMessage, $parameters = [])
     {
         /*
@@ -196,11 +196,11 @@ class SlackDriver extends Driver
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
-	        if (! is_null($attachment)) {
-		        if($attachment instanceof Image) {
-			        $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
-		        }
-	        }
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+                }
+            }
         } else {
             $parameters['text'] = $this->format($message);
         }
@@ -252,12 +252,12 @@ class SlackDriver extends Driver
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getText();
-	        $attachment = $message->getAttachment();
-	        if (! is_null($attachment)) {
-		        if($attachment instanceof Image) {
-			        $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
-		        }
-	        }
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+                }
+            }
         } else {
             $parameters['text'] = $this->format($message);
         }

@@ -27,7 +27,8 @@ class TelegramVideoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Video::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Video::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
         $message->setVideos($this->getVideos());
 
         return [$message];
@@ -46,7 +47,10 @@ class TelegramVideoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return [new Video('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path, $video)];
+        return [
+            new Video('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
+                $video)
+        ];
     }
 
     /**

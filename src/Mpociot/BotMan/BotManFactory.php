@@ -24,8 +24,12 @@ class BotManFactory
      * @param StorageInterface $storageDriver
      * @return \Mpociot\BotMan\BotMan
      */
-    public static function create(array $config, CacheInterface $cache = null, Request $request = null, StorageInterface $storageDriver = null)
-    {
+    public static function create(
+        array $config,
+        CacheInterface $cache = null,
+        Request $request = null,
+        StorageInterface $storageDriver = null
+    ) {
         if (empty($cache)) {
             $cache = new ArrayCache();
         }
@@ -51,8 +55,12 @@ class BotManFactory
      * @param StorageInterface $storageDriver
      * @return \Mpociot\BotMan\BotMan
      */
-    public static function createForRTM(array $config, LoopInterface $loop, CacheInterface $cache = null, StorageInterface $storageDriver = null)
-    {
+    public static function createForRTM(
+        array $config,
+        LoopInterface $loop,
+        CacheInterface $cache = null,
+        StorageInterface $storageDriver = null
+    ) {
         $client = new RealTimeClient($loop);
 
         return self::createUsingRTM($config, $client, $cache, $storageDriver);
@@ -68,8 +76,12 @@ class BotManFactory
      * @return BotMan
      * @internal param LoopInterface $loop
      */
-    public static function createUsingRTM(array $config, RealTimeClient $client, CacheInterface $cache = null, StorageInterface $storageDriver = null)
-    {
+    public static function createUsingRTM(
+        array $config,
+        RealTimeClient $client,
+        CacheInterface $cache = null,
+        StorageInterface $storageDriver = null
+    ) {
         if (empty($cache)) {
             $cache = new ArrayCache();
         }

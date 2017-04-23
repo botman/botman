@@ -27,8 +27,8 @@ class FileStorage implements StorageInterface
     /**
      * Save an item in the storage with a specific key and data.
      *
-     * @param  array  $data
-     * @param  string  $key
+     * @param  array $data
+     * @param  string $key
      */
     public function save(array $data, $key)
     {
@@ -45,7 +45,7 @@ class FileStorage implements StorageInterface
     /**
      * Retrieve an item from the storage by key.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return Collection
      */
     public function get($key)
@@ -62,7 +62,7 @@ class FileStorage implements StorageInterface
     /**
      * Delete a stored item by its key.
      *
-     * @param  string  $key
+     * @param  string $key
      */
     public function delete($key)
     {
