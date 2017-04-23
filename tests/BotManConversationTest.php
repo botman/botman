@@ -2,15 +2,14 @@
 
 namespace Mpociot\BotMan\Tests;
 
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
 use Mpociot\BotMan\Attachments\Location;

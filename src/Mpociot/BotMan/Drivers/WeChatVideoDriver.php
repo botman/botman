@@ -2,9 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Video;
 
 class WeChatVideoDriver extends WeChatDriver
 {

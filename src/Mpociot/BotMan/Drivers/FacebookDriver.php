@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
@@ -43,8 +43,8 @@ class FacebookDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
-        $this->event = Collection::make((array)$this->payload->get('entry')[0]);
+        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
+        $this->event = Collection::make((array) $this->payload->get('entry')[0]);
         $this->signature = $request->headers->get('X_HUB_SIGNATURE', '');
         $this->content = $request->getContent();
     }

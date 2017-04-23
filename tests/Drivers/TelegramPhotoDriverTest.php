@@ -3,10 +3,9 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
@@ -132,7 +131,7 @@ class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
         $this->assertSame(Image::PATTERN, $message->getText());
         $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getImages()[0]->getUrl());
         $this->assertSame([
-	        'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+            'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
         ], $message->getImages()[0]->getPayload());
     }
 }

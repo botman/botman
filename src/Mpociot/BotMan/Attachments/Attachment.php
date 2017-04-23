@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Attachments;
 
 abstract class Attachment
 {
-
     /** @var mixed */
     protected $payload;
 

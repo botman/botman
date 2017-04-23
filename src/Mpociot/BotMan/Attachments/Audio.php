@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Attachments;
 
 class Audio extends Attachment
 {
-
     /**
      * Pattern that messages use to identify audio uploads.
      */
@@ -23,7 +22,6 @@ class Audio extends Attachment
         parent::__construct($payload);
         $this->url = $url;
     }
-
 
     /**
      * @param $url

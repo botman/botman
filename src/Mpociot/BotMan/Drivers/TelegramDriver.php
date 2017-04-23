@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -25,7 +25,7 @@ class TelegramDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
+        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('message'));
     }
 
@@ -93,12 +93,12 @@ class TelegramDriver extends Driver
 
             return [
                 new Message($callback->get('data'), $callback->get('from')['id'],
-                    $callback->get('message')['chat']['id'], $callback->get('message'))
+                    $callback->get('message')['chat']['id'], $callback->get('message')),
             ];
         } else {
             return [
                 new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'],
-                    $this->event)
+                    $this->event),
             ];
         }
     }
@@ -137,8 +137,8 @@ class TelegramDriver extends Driver
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
                 [
-                    'text' => (string)$button['text'],
-                    'callback_data' => (string)$button['value'],
+                    'text' => (string) $button['text'],
+                    'callback_data' => (string) $button['value'],
                 ],
             ];
         });

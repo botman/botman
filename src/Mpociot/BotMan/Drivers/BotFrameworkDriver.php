@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -25,7 +25,7 @@ class BotFrameworkDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
+        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->all());
     }
 
@@ -70,7 +70,7 @@ class BotFrameworkDriver extends Driver
 
         return [
             new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
-                $this->payload)
+                $this->payload),
         ];
     }
 

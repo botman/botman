@@ -2,20 +2,19 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Slack\File;
-use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use React\Promise\PromiseInterface;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriver implements DriverInterface
@@ -153,8 +152,8 @@ class SlackRTMDriver implements DriverInterface
                     $parameters['attachments'] = json_encode([
                         [
                             'title' => $message->getText(),
-                            'image_url' => $attachment->getUrl()
-                        ]
+                            'image_url' => $attachment->getUrl(),
+                        ],
                     ]);
 
                     // else check if is a path

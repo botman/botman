@@ -3,14 +3,14 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Location;
-use Mpociot\BotMan\Attachments\Video;
 use UnexpectedValueException;
 use Mpociot\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;

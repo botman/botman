@@ -93,8 +93,8 @@ class TelegramLocationDriverTest extends PHPUnit_Framework_TestCase
         $this->assertSame(41.123987123, $location->getLatitude());
         $this->assertSame(-122.123854248, $location->getLongitude());
         $this->assertSame([
-	        'latitude' => 41.123987123,
-	        'longitude' => -122.123854248,
+            'latitude' => 41.123987123,
+            'longitude' => -122.123854248,
         ], $location->getPayload());
     }
 }

@@ -23,7 +23,7 @@ class HipChatDriver extends Driver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
+        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
         $this->event = Collection::make($this->payload->get('item'));
     }
 
@@ -55,7 +55,7 @@ class HipChatDriver extends Driver
     {
         return [
             new Message($this->event->get('message')['message'], $this->event->get('message')['from']['id'],
-                $this->event->get('room')['id'], $this->event)
+                $this->event->get('room')['id'], $this->event),
         ];
     }
 

@@ -6,9 +6,8 @@ use Closure;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 /**

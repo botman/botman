@@ -2,10 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\File;
 
 class BotFrameworkAttachmentDriver extends BotFrameworkDriver
 {

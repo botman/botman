@@ -138,7 +138,7 @@ class FacebookVideoDriverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($videos));
         $this->assertEquals('http://facebook.com/video.mp4', $videos[0]->getUrl());
         $this->assertEquals([
-	        'url' => 'http://facebook.com/video.mp4',
+            'url' => 'http://facebook.com/video.mp4',
         ], $videos[0]->getPayload());
     }
 }

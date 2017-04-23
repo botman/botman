@@ -3,11 +3,11 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFrameworkDriver;
 use Symfony\Component\HttpFoundation\Response;
@@ -441,7 +441,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
-	    $driver->sendPayload($payload);
+        $driver->sendPayload($payload);
     }
 
     /** @test */

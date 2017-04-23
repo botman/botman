@@ -3,8 +3,6 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-
-use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
@@ -12,6 +10,7 @@ use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Drivers\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 

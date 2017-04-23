@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Tests\Messages;
 
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Message;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_set_a_videoimage()
     {
-	    $message = Message::create()->withAttachment(Video::url('foo'));
-	    $this->assertSame('foo', $message->getAttachment()->getUrl());
+        $message = Message::create()->withAttachment(Video::url('foo'));
+        $this->assertSame('foo', $message->getAttachment()->getUrl());
     }
 }

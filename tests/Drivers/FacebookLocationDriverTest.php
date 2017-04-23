@@ -143,10 +143,10 @@ class FacebookLocationDriverTest extends PHPUnit_Framework_TestCase
         $this->assertSame(37.483872693672, $location->getLatitude());
         $this->assertSame(-122.14900441942, $location->getLongitude());
         $this->assertEquals([
-	        'coordinates' => [
-		        'lat' => 37.483872693672,
-		        'long' => -122.14900441942,
-	        ],
+            'coordinates' => [
+                'lat' => 37.483872693672,
+                'long' => -122.14900441942,
+            ],
         ], $location->getPayload());
     }
 }

@@ -7,7 +7,6 @@ use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class Matcher
 {
-
     /**
      * regular expression to capture named parameters but not quantifiers
      * captures {name}, but not {1}, {1,}, or {1,2}.
@@ -35,7 +34,7 @@ class Matcher
 
         $pattern = str_replace('/', '\/', $pattern);
         $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/iu';
-        $regexMatched = (bool)preg_match($text, $messageText, $this->matches) || (bool)preg_match($text, $answerText,
+        $regexMatched = (bool) preg_match($text, $messageText, $this->matches) || (bool) preg_match($text, $answerText,
                 $this->matches);
 
         // Try middleware first

@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -45,7 +45,7 @@ class SlackDriver extends Driver
             $this->payload = $request->request;
             $this->event = Collection::make($request->request->all());
         } else {
-            $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
+            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->event = Collection::make($this->payload->get('event'));
         }
     }

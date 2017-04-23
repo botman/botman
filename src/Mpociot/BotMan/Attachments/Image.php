@@ -4,7 +4,6 @@ namespace Mpociot\BotMan\Attachments;
 
 class Image extends Attachment
 {
-
     /**
      * Pattern that messages use to identify image uploads.
      */

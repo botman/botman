@@ -2,9 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Video;
 
 class TelegramVideoDriver extends TelegramDriver
 {
@@ -49,7 +48,7 @@ class TelegramVideoDriver extends TelegramDriver
 
         return [
             new Video('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
-                $video)
+                $video),
         ];
     }
 

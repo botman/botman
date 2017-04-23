@@ -2,7 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -73,7 +72,7 @@ class WeChatDriver extends Driver
     {
         return [
             new Message($this->event->get('Content'), $this->event->get('ToUserName'),
-                $this->event->get('FromUserName'), $this->event)
+                $this->event->get('FromUserName'), $this->event),
         ];
     }
 
@@ -129,7 +128,6 @@ class WeChatDriver extends Driver
                     'picurl' => null,
                 ];
             }
-
 
             $parameters['news'] = [
                 'articles' => [$article],

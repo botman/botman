@@ -60,7 +60,7 @@ class NexmoDriver extends Driver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('text'), $this->event->get('to'), $this->event->get('msisdn'), $this->payload)
+            new Message($this->event->get('text'), $this->event->get('to'), $this->event->get('msisdn'), $this->payload),
         ];
     }
 

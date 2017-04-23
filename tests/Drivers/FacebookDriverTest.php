@@ -3,12 +3,12 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Drivers\FacebookDriver;
 use Symfony\Component\HttpFoundation\Request;
 
