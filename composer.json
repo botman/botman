@@ -44,8 +44,8 @@
         "symfony/cache": "Use any Symfony cache driver for cache"
     },
     "autoload": {
-        "psr-0": {
-            "Mpociot\\BotMan": "src/"
+        "psr-4": {
+            "Mpociot\\BotMan\\": "src/"
         }
     },
     "autoload-dev": {
