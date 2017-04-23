@@ -7,12 +7,10 @@ use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Drivers\FakeDriver;
 use Mpociot\BotMan\Drivers\ProxyDriver;
-use Mpociot\BotMan\Tests\Fixtures\TestCustomMiddleware;
-use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Tests\Fixtures\TestCustomMiddleware;
 
 class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
 {
@@ -55,7 +53,7 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
 
         $answers = ['Hello youself! - middleware'];
         $this->replyWithFakeMessage('Hello');
-        $this->assertEquals($answers, $this->fakeDriver->getBotMessages());;
+        $this->assertEquals($answers, $this->fakeDriver->getBotMessages());
     }
 
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')
