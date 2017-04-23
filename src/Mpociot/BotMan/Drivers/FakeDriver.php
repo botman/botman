@@ -7,6 +7,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
@@ -99,7 +100,7 @@ class FakeDriver implements DriverInterface
     {
         $this->botMessages[] = $payload;
 
-        return true;
+        return Response::create(json_encode($payload));
     }
 
     public function getName()

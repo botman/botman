@@ -6,14 +6,14 @@ use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
-class TestNoMatchMiddleware implements MiddlewareInterface
+class TestCustomMiddleware implements MiddlewareInterface
 {
     /**
      * Handle a captured message.
      *
      * @param Message $message
+     * @param callable $next
      * @param BotMan $bot
-     * @param $next
      *
      * @return mixed
      */
@@ -26,8 +26,8 @@ class TestNoMatchMiddleware implements MiddlewareInterface
      * Handle an incoming message.
      *
      * @param Message $message
+     * @param callable $next
      * @param BotMan $bot
-     * @param $next
      *
      * @return mixed
      */
@@ -44,15 +44,15 @@ class TestNoMatchMiddleware implements MiddlewareInterface
      */
     public function matching(Message $message, $pattern, $regexMatched)
     {
-        return false;
+        return $regexMatched;
     }
 
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
      * @param Message $message
+     * @param callable $next
      * @param BotMan $bot
-     * @param $next
      *
      * @return mixed
      */
@@ -66,13 +66,17 @@ class TestNoMatchMiddleware implements MiddlewareInterface
      * hits the message service.
      *
      * @param mixed $payload
+     * @param callable $next
      * @param BotMan $bot
-     * @param $next
      *
      * @return mixed
      */
     public function sending($payload, $next, BotMan $bot)
     {
-        return $next($payload);
+        $payload .= ' - middleware';
+        $response = $next($payload);
+        $content = $response->getContent();
+        $response->setContent($content . ' - sending');
+        return $response;
     }
 }

@@ -163,14 +163,14 @@ class ApiAi implements MiddlewareInterface
      * Handle an outgoing message payload before/after it
      * hits the message service.
      *
-     * @param Message $message
+     * @param mixed $payload
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function sending(Message $message, $next, BotMan $bot)
+    public function sending($payload, $next, BotMan $bot)
     {
-        return $next($message);
+        return $next($payload);
     }
 }

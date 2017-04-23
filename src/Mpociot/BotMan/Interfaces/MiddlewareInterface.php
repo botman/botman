@@ -52,11 +52,11 @@ interface MiddlewareInterface
      * Handle an outgoing message payload before/after it
      * hits the message service.
      *
-     * @param Message $message
+     * @param mixed $payload
      * @param callable $next
      * @param BotMan $bot
      *
      * @return mixed
      */
-    public function sending(Message $message, $next, BotMan $bot);
+    public function sending($payload, $next, BotMan $bot);
 }
