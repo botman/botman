@@ -76,7 +76,8 @@ class TestCustomMiddleware implements MiddlewareInterface
         $payload .= ' - middleware';
         $response = $next($payload);
         $content = $response->getContent();
-        $response->setContent($content . ' - sending');
+        $response->setContent($content.' - sending');
+
         return $response;
     }
 }
