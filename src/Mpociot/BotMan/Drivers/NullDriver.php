@@ -112,4 +112,11 @@ class NullDriver extends Driver
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

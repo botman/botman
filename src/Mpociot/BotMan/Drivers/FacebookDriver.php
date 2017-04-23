@@ -261,4 +261,11 @@ class FacebookDriver extends Driver
 
         return $this->http->post('https://graph.facebook.com/v2.6/'.$endpoint, [], $parameters);
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

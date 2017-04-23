@@ -219,4 +219,11 @@ class BotFrameworkDriver extends Driver
 
         return $this->http->post($apiURL.'/v3/'.$endpoint, [], $parameters, $headers, true);
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

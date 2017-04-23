@@ -229,4 +229,11 @@ class TelegramDriver extends Driver
 
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

@@ -159,4 +159,11 @@ class WeChatDriver extends Driver
     {
         return $this->http->post('https://api.wechat.com/cgi-bin/'.$endpoint.'?access_token='.$this->getAccessToken(), [], $parameters, [], true);
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

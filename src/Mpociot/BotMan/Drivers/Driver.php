@@ -24,6 +24,7 @@ abstract class Driver implements DriverInterface
 
     /**
      * Driver constructor.
+     *
      * @param Request $request
      * @param array $config
      * @param HttpInterface $http
@@ -59,6 +60,11 @@ abstract class Driver implements DriverInterface
      * @return void
      */
     abstract public function buildPayload(Request $request);
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    abstract public function afterMessagesHandled();
 
     /**
      * Low-level method to perform driver specific API requests.

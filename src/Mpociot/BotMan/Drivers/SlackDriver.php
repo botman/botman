@@ -286,4 +286,11 @@ class SlackDriver extends Driver
 
         return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

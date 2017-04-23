@@ -133,4 +133,11 @@ class NexmoDriver extends Driver
 
         return $this->http->post('https://rest.nexmo.com/'.$endpoint.'?'.http_build_query($parameters));
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

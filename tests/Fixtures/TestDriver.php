@@ -107,4 +107,11 @@ class TestDriver implements DriverInterface
     {
         return new User();
     }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
+    }
 }

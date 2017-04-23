@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
- *
  * Example to set it up in a unit test:
- *
  * <code>
  *  public static function setUpBeforeClass()
  *  {
@@ -24,21 +22,25 @@ use Symfony\Component\HttpFoundation\Response;
  *      $this->fakeDriver = new FakeDriver();
  *      ProxyDriver::setInstance($this->fakeDriver);
  *  }
- * </code>
+ * </code>.
  */
 class FakeDriver implements DriverInterface
 {
     /** @var bool */
     public $matchesRequest = true;
+
     /** @var Message[] */
     public $messages = [];
+
     /** @var bool */
     public $isBot = false;
+
     /** @var bool */
     public $isConfigured = true;
 
     /** @var array */
     private $botMessages = [];
+
     /** @var bool */
     private $botIsTyping = false;
 
@@ -140,5 +142,12 @@ class FakeDriver implements DriverInterface
     {
         $this->botIsTyping = false;
         $this->botMessages = [];
+    }
+
+    /**
+     * Define if something should be done after handling all messages.
+     */
+    public function afterMessagesHandled()
+    {
     }
 }
