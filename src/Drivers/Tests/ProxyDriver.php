@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Tests;
 
-use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
+use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 

@@ -10,8 +10,8 @@ use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\StorageInterface;
-use Mpociot\BotMan\Storages\Drivers\FileStorage;
 use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
+use Mpociot\BotMan\Storages\Drivers\FileStorage;
 
 class BotManFactory
 {

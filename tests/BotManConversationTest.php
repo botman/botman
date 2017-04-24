@@ -8,9 +8,9 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
 
 class BotManConversationTest extends PHPUnit_Framework_TestCase
