@@ -1,15 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Attachments\Location;
 
-class FacebookLocationDriver extends FacebookDriver
+class FacebookAudioDriver extends FacebookDriver
 {
-    const DRIVER_NAME = 'FacebookLocation';
+    const DRIVER_NAME = 'FacebookAudio';
 
     /**
      * Determine if the request is for this driver.
@@ -22,7 +21,7 @@ class FacebookLocationDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments'])) {
                 return Collection::make($msg['message']['attachments'])->filter(function ($attachment) {
-                    return $attachment['type'] === 'location';
+                    return $attachment['type'] === 'audio';
                 })->isEmpty() === false;
             }
 
@@ -42,8 +41,8 @@ class FacebookLocationDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Matcher::LOCATION_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            $message->setLocation($this->getLocation($msg));
+            $message = new Message(Matcher::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setAudio($this->getAudioUrls($msg));
 
             return $message;
         })->toArray();
@@ -56,16 +55,14 @@ class FacebookLocationDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve location from an incoming message.
+     * Retrieve audio file urls from an incoming message.
      *
-     * @param array $messages
-     * @return array A download for the attachment location.
+     * @param array $message
+     * @return array A download for the audio file.
      */
-    public function getLocation(array $messages)
+    public function getAudioUrls(array $message)
     {
-        $data = Collection::make($messages['message']['attachments'])->where('type', 'location')->pluck('payload')->first();
-
-        return new Location($data['coordinates']['lat'], $data['coordinates']['long']);
+        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
     }
 
     /**

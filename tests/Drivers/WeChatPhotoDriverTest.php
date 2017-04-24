@@ -6,8 +6,8 @@ use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Drivers\WeChatPhotoDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 
 class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
 {

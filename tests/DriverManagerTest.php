@@ -6,8 +6,8 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\NullDriver;
-use Mpociot\BotMan\Drivers\SlackDriver;
-use Mpociot\BotMan\Drivers\FacebookDriver;
+use Mpociot\BotMan\Drivers\Slack\SlackDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase

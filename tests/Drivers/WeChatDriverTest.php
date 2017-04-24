@@ -7,9 +7,9 @@ use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\WeChatDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
 
 class WeChatDriverTest extends PHPUnit_Framework_TestCase
 {

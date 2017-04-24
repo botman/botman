@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Drivers\TelegramPhotoDriver;
+use Mpociot\BotMan\Drivers\Telegram\TelegramPhotoDriver;
 
 class TelegramPhotoDriverTest extends PHPUnit_Framework_TestCase
 {

@@ -8,12 +8,12 @@ use Mpociot\BotMan\Message;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Drivers\FakeDriver;
-use Mpociot\BotMan\Drivers\ProxyDriver;
+use Mpociot\BotMan\Drivers\Tests\FakeDriver;
+use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 
 /**
  * @covers \Mpociot\BotMan\Drivers\FakeDriver
- * @covers \Mpociot\BotMan\Drivers\ProxyDriver
+ * @covers \Mpociot\BotMan\Drivers\Tests\ProxyDriver
  */
 class FakeDriverTest extends PHPUnit_Framework_TestCase
 {

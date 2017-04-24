@@ -9,7 +9,7 @@ use Mpociot\BotMan\Message;
 use React\EventLoop\Factory;
 use PHPUnit_Framework_TestCase;
 use React\Promise\FulfilledPromise;
-use Mpociot\BotMan\Drivers\SlackRTMDriver;
+use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriverTest extends PHPUnit_Framework_TestCase

@@ -7,7 +7,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookVideoDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookVideoDriver;
 
 class FacebookVideoDriverTest extends PHPUnit_Framework_TestCase
 {

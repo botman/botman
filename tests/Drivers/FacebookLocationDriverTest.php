@@ -8,7 +8,7 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookLocationDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookLocationDriver;
 
 class FacebookLocationDriverTest extends PHPUnit_Framework_TestCase
 {

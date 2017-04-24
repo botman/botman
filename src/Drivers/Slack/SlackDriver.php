@@ -1,12 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Slack;
 
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Drivers\Driver;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

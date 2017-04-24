@@ -1,10 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Telegram;
 
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Matcher;
-use Symfony\Component\HttpFoundation\Request;
 
 class TelegramPhotoDriver extends TelegramDriver
 {

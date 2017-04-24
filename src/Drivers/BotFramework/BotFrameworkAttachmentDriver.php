@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\BotFramework;
 
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;

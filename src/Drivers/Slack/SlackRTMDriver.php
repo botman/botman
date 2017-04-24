@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Slack;
 
 use Slack\File;
 use Mpociot\BotMan\User;

@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Drivers\TelegramAudioDriver;
+use Mpociot\BotMan\Drivers\Telegram\TelegramAudioDriver;
 
 class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
 {

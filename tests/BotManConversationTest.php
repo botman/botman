@@ -8,8 +8,8 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Drivers\FakeDriver;
-use Mpociot\BotMan\Drivers\ProxyDriver;
+use Mpociot\BotMan\Drivers\Tests\FakeDriver;
+use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
 

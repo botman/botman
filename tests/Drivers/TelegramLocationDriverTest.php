@@ -8,7 +8,7 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\TelegramLocationDriver;
+use Mpociot\BotMan\Drivers\Telegram\TelegramLocationDriver;
 
 class TelegramLocationDriverTest extends PHPUnit_Framework_TestCase
 {

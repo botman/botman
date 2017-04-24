@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;

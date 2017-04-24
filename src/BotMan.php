@@ -359,7 +359,7 @@ class BotMan
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
 
-                    $parameters = $this->addDataParameters($message, $parameters);
+                    $parameters = $this->addDataParameters($this->message, $parameters);
 
                     call_user_func_array($callback, $parameters);
                 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\WeChat;
 
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Matcher;

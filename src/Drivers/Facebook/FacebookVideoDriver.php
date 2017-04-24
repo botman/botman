@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
 
-class FacebookImageDriver extends FacebookDriver
+class FacebookVideoDriver extends FacebookDriver
 {
-    const DRIVER_NAME = 'FacebookImage';
+    const DRIVER_NAME = 'FacebookVideo';
 
     /**
      * Determine if the request is for this driver.
@@ -21,7 +21,7 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments'])) {
                 return Collection::make($msg['message']['attachments'])->filter(function ($attachment) {
-                    return $attachment['type'] === 'image';
+                    return $attachment['type'] === 'video';
                 })->isEmpty() === false;
             }
 
@@ -41,8 +41,8 @@ class FacebookImageDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Matcher::IMAGE_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            $message->setImages($this->getImagesUrls($msg));
+            $message = new Message(Matcher::VIDEO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message->setVideos($this->getVideoUrls($msg));
 
             return $message;
         })->toArray();
@@ -55,14 +55,14 @@ class FacebookImageDriver extends FacebookDriver
     }
 
     /**
-     * Retrieve image urls from an incoming message.
+     * Retrieve video urls from an incoming message.
      *
      * @param array $message
      * @return array A download for the image file.
      */
-    public function getImagesUrls(array $message)
+    public function getVideoUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'image')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type', 'video')->pluck('payload.url')->toArray();
     }
 
     /**

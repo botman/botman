@@ -1,7 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\BotFramework;
 
+use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;

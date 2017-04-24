@@ -9,7 +9,7 @@ use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookPostbackDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookPostbackDriver;
 
 class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
 {

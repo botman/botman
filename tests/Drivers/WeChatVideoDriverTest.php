@@ -7,8 +7,8 @@ use Illuminate\Http\Response;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Drivers\WeChatVideoDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
 
 class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
 
-class FacebookReferralDriver extends FacebookDriver
+class FacebookPostbackDriver extends FacebookDriver
 {
-    const DRIVER_NAME = 'FacebookReferral';
+    const DRIVER_NAME = 'FacebookPostback';
 
     /**
      * Determine if the request is for this driver.
@@ -17,28 +17,24 @@ class FacebookReferralDriver extends FacebookDriver
     public function matchesRequest()
     {
         $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
-        $messages = Collection::make($this->event->get('messaging'))->filter(
-            function ($msg) {
-                return isset($msg['referral']) && isset($msg['referral']['ref']);
-            }
-        );
+        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+            return isset($msg['postback']) && isset($msg['postback']['payload']);
+        });
 
         return ! $messages->isEmpty() && $validSignature;
     }
 
     /**
-     * Retrieve the referral message.
+     * Retrieve the chat message.
      *
      * @return array
      */
     public function getMessages()
     {
         $messages = Collection::make($this->event->get('messaging'));
-        $messages = $messages->transform(
-            function ($msg) {
-                return new Message($msg['referral']['ref'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
-            }
-        )->toArray();
+        $messages = $messages->transform(function ($msg) {
+            return new Message($msg['postback']['payload'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+        })->toArray();
 
         if (count($messages) === 0) {
             return [new Message('', '', '')];

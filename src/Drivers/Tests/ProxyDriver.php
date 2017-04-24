@@ -1,7 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Tests;
 
+use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use Symfony\Component\HttpFoundation\Request;

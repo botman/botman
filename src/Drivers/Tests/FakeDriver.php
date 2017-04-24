@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Tests;
 
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;

@@ -7,7 +7,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\FacebookAudioDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookAudioDriver;
 
 class FacebookAudioDriverTest extends PHPUnit_Framework_TestCase
 {

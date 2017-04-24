@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\WeChatLocationDriver;
+use Mpociot\BotMan\Drivers\WeChat\WeChatLocationDriver;
 
 class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase
 {

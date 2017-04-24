@@ -1,11 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace Mpociot\BotMan\Drivers\Telegram;
 
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
-use Symfony\Component\HttpFoundation\Request;
 
 class TelegramLocationDriver extends TelegramDriver
 {
