@@ -7,8 +7,8 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\DriverManager;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {

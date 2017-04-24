@@ -7,8 +7,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
 
 class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 {

@@ -9,8 +9,8 @@ use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\DriverManager;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
-use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
+use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
 
 trait HandlesConversations
 {

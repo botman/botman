@@ -8,8 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
