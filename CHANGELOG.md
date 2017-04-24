@@ -1,9 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.5.4]
+## [1.5.5]
 ### Fixed
 Fix botframework not using shorthand closing tags (#345)
+
+## [1.5.4]
+### Fixed
+Fix error when originating MS Bot Framework messages - fixes (#324)
 
 ## [1.5.3]
 ### Fixed
