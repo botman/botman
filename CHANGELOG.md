@@ -13,6 +13,18 @@ All notable changes to this project will be documented in this file.
 - Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting.
 - Moved message matching into a separate `Matcher` class.
 
+## [1.5.6]
+### Fixed
+Custom drivers now get loaded first.
+
+## [1.5.5]
+### Fixed
+Fix botframework not using shorthand closing tags (#345)
+
+## [1.5.4]
+### Fixed
+Fix error when originating MS Bot Framework messages - fixes (#324)
+
 ## [1.5.3]
 ### Fixed
 Fixed an issue with the SlackRTM driver in combination with regular file uploads (#323)

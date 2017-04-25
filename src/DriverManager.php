@@ -151,7 +151,7 @@ class DriverManager
      */
     public static function loadDriver($driver)
     {
-        self::$drivers[] = $driver;
+        array_unshift(self::$drivers, $driver);
     }
 
     /**

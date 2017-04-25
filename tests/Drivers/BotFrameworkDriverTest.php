@@ -488,4 +488,22 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://foo.com/bar.mp4'), $message);
         $driver->sendPayload($payload);
     }
+
+    /** @test */
+    public function it_interactive_responses_correctly()
+    {
+        $driver = $this->getDriver([
+            'event' => [
+                'user' => '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us',
+            ],
+        ]);
+
+        $text = 'I use botman with Skype<botman value="yes"></botman>';
+        $message = new Message($text, '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us', '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us');
+
+        $answer = $driver->getConversationAnswer($message);
+        $this->assertSame($text, $answer->getText());
+        $this->assertTrue($answer->isInteractiveMessageReply());
+        $this->assertSame('yes', $answer->getValue());
+    }
 }
