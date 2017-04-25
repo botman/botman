@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.5.6]
+### Fixed
+Custom drivers now get loaded first.
+
 ## [1.5.5]
 ### Fixed
 Fix botframework not using shorthand closing tags (#345)
