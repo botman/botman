@@ -15,6 +15,7 @@ use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Conversations\InlineConversation;
 
 /**
@@ -240,12 +241,12 @@ class BotMan
     /**
      * Listen for messaging service events.
      *
-     * @param $event
+     * @param string $name
      * @param Closure $closure
      */
-    public function on($event, Closure $closure)
+    public function on($name, Closure $closure)
     {
-        $this->events[] = compact('event', 'closure');
+        $this->events[] = compact('name', 'closure');
     }
 
     /**
@@ -338,8 +339,13 @@ class BotMan
      */
     public function listen()
     {
-        foreach ($this->events as $event) {
-            call_user_func_array($event['closure'], [$this->getDriver()->hasMatchingEvent(), $this]);
+        $driverEvent = $this->getDriver()->hasMatchingEvent();
+        if ($driverEvent instanceof DriverEventInterface) {
+            Collection::make($this->events)->filter(function($event) use ($driverEvent) {
+                return $driverEvent->getName() === $event['name'];
+            })->each(function($event) use ($driverEvent) {
+                call_user_func_array($event['closure'], [$driverEvent->getPayload(), $this]);
+            });
         }
 
         if (! $this->isBot()) {
