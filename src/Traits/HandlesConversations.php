@@ -138,6 +138,12 @@ trait HandlesConversations
         Collection::make($this->getMessages())->filter(function ($message) {
             return $this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier());
         })->each(function ($message) {
+            $commandMiddleware = [];
+            if ($this->command) {
+                $commandMiddleware = $this->command->toArray()['middleware'];
+            }
+            $message = $this->applyMiddleware('received', $message, $this->middleware + $commandMiddleware);
+
             $convo = $this->getStoredConversation($message);
 
             // Should we skip the conversation?
