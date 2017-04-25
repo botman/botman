@@ -44,7 +44,7 @@ class BotManDriverEventTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
         $this->fakeDriver->hasMatchingEvent = new TestEvent();
-        $this->botman->on('test_event', function ($data, BotMan $bot) use (&$called){
+        $this->botman->on('test_event', function ($data, BotMan $bot) use (&$called) {
             $called = true;
         });
         $this->botman->listen();
@@ -59,7 +59,7 @@ class BotManDriverEventTest extends PHPUnit_Framework_TestCase
         $this->botman->on('test_event', function ($data, BotMan $bot) {
             $this->assertSame([
                 'event' => 'test_event',
-                'data' => 'foo'
+                'data' => 'foo',
             ], $data);
         });
 
@@ -69,7 +69,6 @@ class BotManDriverEventTest extends PHPUnit_Framework_TestCase
 
 class TestEvent implements DriverEventInterface
 {
-
     /**
      * Return the event name to match.
      *
@@ -89,7 +88,7 @@ class TestEvent implements DriverEventInterface
     {
         return [
             'event' => 'test_event',
-            'data' => 'foo'
+            'data' => 'foo',
         ];
     }
 }
