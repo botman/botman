@@ -76,6 +76,14 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasMatchingEvent()
+    {
+        return false;
+    }
+
+    /**
      * @param  Message $message
      * @return Answer
      */

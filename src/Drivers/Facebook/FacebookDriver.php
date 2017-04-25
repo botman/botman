@@ -64,6 +64,18 @@ class FacebookDriver extends Driver
     }
 
     /**
+     * @return bool|mixed
+     */
+    public function hasMatchingEvent()
+    {
+        $event = Collection::make($this->event->get('messaging'))->transform(function ($msg) {
+            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp'])->toArray();
+        });
+
+        return $event->isEmpty() ? false : $event->first();
+    }
+
+    /**
      * @return bool
      */
     protected function validateSignature()

@@ -48,6 +48,12 @@ class BotMan
     protected $listenTo = [];
 
     /**
+     * Message service events.
+     * @var array
+     */
+    protected $events = [];
+
+    /**
      * The fallback message to use, if no match
      * could be heard.
      * @var callable|null
@@ -232,6 +238,17 @@ class BotMan
     }
 
     /**
+     * Listen for messaging service events.
+     *
+     * @param $event
+     * @param Closure $closure
+     */
+    public function on($event, Closure $closure)
+    {
+        $this->events[] = compact('event', 'closure');
+    }
+
+    /**
      * Listening for image files.
      *
      * @param $callback
@@ -321,6 +338,10 @@ class BotMan
      */
     public function listen()
     {
+        foreach ($this->events as $event) {
+            call_user_func_array($event['closure'], [$this->getDriver()->hasMatchingEvent(), $this]);
+        }
+
         if (! $this->isBot()) {
             $this->loadActiveConversation();
         }

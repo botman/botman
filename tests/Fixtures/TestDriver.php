@@ -85,6 +85,14 @@ class TestDriver implements DriverInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasMatchingEvent()
+    {
+        return false;
+    }
+
+    /**
      * Return the driver name.
      *
      * @return string

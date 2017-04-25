@@ -86,6 +86,14 @@ class NullDriver extends Driver
     /**
      * @return bool
      */
+    public function hasMatchingEvent()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function isConfigured()
     {
         return false;

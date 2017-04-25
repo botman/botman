@@ -30,6 +30,8 @@ class FakeDriver implements DriverInterface
 {
     /** @var bool */
     public $matchesRequest = true;
+    /** @var bool */
+    public $hasMatchingEvent = false;
     /** @var Message[] */
     public $messages = [];
     /** @var bool */
@@ -121,6 +123,14 @@ class FakeDriver implements DriverInterface
     public function isBotTyping()
     {
         return $this->botIsTyping;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMatchingEvent()
+    {
+        return $this->hasMatchingEvent;
     }
 
     /**

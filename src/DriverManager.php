@@ -175,7 +175,7 @@ class DriverManager
         foreach (self::getAvailableDrivers() as $driver) {
             /** @var Driver $driver */
             $driver = new $driver($request, $this->config, $this->http);
-            if ($driver->matchesRequest()) {
+            if ($driver->matchesRequest() || $driver->hasMatchingEvent()) {
                 return $driver;
             }
         }

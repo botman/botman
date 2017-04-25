@@ -68,6 +68,13 @@ interface DriverInterface
     public function getName();
 
     /**
+     * Does the driver match to an incoming messaging service event.
+     *
+     * @return bool|mixed
+     */
+    public function hasMatchingEvent();
+
+    /**
      * Send a typing indicator.
      * @param Message $matchingMessage
      * @return mixed

@@ -55,6 +55,14 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasMatchingEvent()
+    {
+        return false;
+    }
+
+    /**
      * @param Request $request
      * @return void
      */
