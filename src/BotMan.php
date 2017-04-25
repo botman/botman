@@ -341,9 +341,9 @@ class BotMan
     {
         $driverEvent = $this->getDriver()->hasMatchingEvent();
         if ($driverEvent instanceof DriverEventInterface) {
-            Collection::make($this->events)->filter(function($event) use ($driverEvent) {
+            Collection::make($this->events)->filter(function ($event) use ($driverEvent) {
                 return $driverEvent->getName() === $event['name'];
-            })->each(function($event) use ($driverEvent) {
+            })->each(function ($event) use ($driverEvent) {
                 call_user_func_array($event['closure'], [$driverEvent->getPayload(), $this]);
             });
         }
