@@ -300,10 +300,9 @@ class BotMan
     }
 
     /**
-     * Try to match messages with the ones we should
-     * listen to.
+     * Fire potential driver event callbacks.
      */
-    public function listen()
+    protected function fireDriverEvents()
     {
         $driverEvent = $this->getDriver()->hasMatchingEvent();
         if ($driverEvent instanceof DriverEventInterface) {
@@ -313,23 +312,34 @@ class BotMan
                 call_user_func_array($event['closure'], [$driverEvent->getPayload(), $this]);
             });
         }
+    }
+
+    /**
+     * Try to match messages with the ones we should
+     * listen to.
+     */
+    public function listen()
+    {
+        $this->fireDriverEvents();
 
         if (! $this->isBot()) {
             $this->loadActiveConversation();
         }
 
         $heardMessage = false;
-        foreach ($this->listenTo as $command) {
-            $messageData = $command->toArray();
-            $pattern = $messageData['pattern'];
-            $callback = $messageData['callback'];
+        foreach ($this->getMessages() as $message) {
+            // Call received middleware
+            $message = $this->middleware->applyMiddleware('received', $message);
 
-            if (! $callback instanceof Closure) {
-                $callback = $this->getCallable($callback);
-            }
+            foreach ($this->listenTo as $command) {
 
-            foreach ($this->getMessages() as $message) {
-                $message = $this->middleware->applyMiddleware('received', $message);
+                $messageData = $command->toArray();
+                $pattern = $messageData['pattern'];
+                $callback = $messageData['callback'];
+
+                if (! $callback instanceof Closure) {
+                    $callback = $this->getCallable($callback);
+                }
 
                 if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) &&

@@ -33,6 +33,8 @@ class TestCustomMiddleware implements MiddlewareInterface
      */
     public function received(Message $message, $next, BotMan $bot)
     {
+        $_SERVER['middleware_received_count'] = isset($_SERVER['middleware_received_count']) ? $_SERVER['middleware_received_count']+1 : 1;
+        $_SERVER['middleware_received'] = $message->getMessage();
         return $next($message);
     }
 

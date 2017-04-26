@@ -20,9 +20,6 @@ class Wit implements MiddlewareInterface
     /** @var HttpInterface */
     protected $http;
 
-    /** @var string */
-    protected $lastResponseHash;
-
     /** @var stdClass */
     protected $response;
 
@@ -51,17 +48,11 @@ class Wit implements MiddlewareInterface
 
     protected function getResponse(Message $message)
     {
-        $lastResponseHash = md5($message->getMessage());
+        $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
 
-        if ($this->lastResponseHash !== $lastResponseHash) {
-            $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
-
-            $this->response = $this->http->post($endpoint, [], [], [
-                'Authorization: Bearer '.$this->token,
-            ]);
-
-            $this->lastResponseHash = $lastResponseHash;
-        }
+        $this->response = $this->http->post($endpoint, [], [], [
+            'Authorization: Bearer '.$this->token,
+        ]);
 
         return $this->response;
     }

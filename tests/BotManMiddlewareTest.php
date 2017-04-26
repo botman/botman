@@ -34,7 +34,6 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
         $this->fakeDriver = new FakeDriver();
         ProxyDriver::setInstance($this->fakeDriver);
         $this->botman = BotManFactory::create([]);
-        $this->botman->middleware->sending(new TestCustomMiddleware());
     }
 
     protected function tearDown()
@@ -43,8 +42,34 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_passes_payload_to_sending_middleware()
+    public function it_calls_received_middleware()
     {
+        $this->botman->middleware->received(new TestCustomMiddleware());
+        $this->replyWithFakeMessage('Hello');
+        $this->assertEquals('Hello', $_SERVER['middleware_received']);
+    }
+
+    /** @test */
+    public function it_calls_received_middleware_once_per_incoming_message()
+    {
+        $this->botman->middleware->received(new TestCustomMiddleware());
+
+        $this->botman->hears('foo', function($bot){});
+        $this->botman->hears('bar', function($bot){});
+
+        $this->replyWithFakeMessage('Hello');
+        $this->assertEquals(1, $_SERVER['middleware_received_count']);
+
+        $_SERVER['middleware_received_count'] = 0;
+        $this->fakeDriver->messages = [new Message('Hello', 'foo', 'bar'), new Message('Hello 2', 'foo', 'bar')];
+        $this->botman->listen();
+        $this->assertEquals(2, $_SERVER['middleware_received_count']);
+    }
+
+    /** @test */
+    public function it_calls_sending_middleware()
+    {
+        $this->botman->middleware->sending(new TestCustomMiddleware());
         $this->botman->hears('Hello', function (BotMan $bot) {
             $response = $bot->reply('Hello youself!');
             $this->assertInstanceOf(Response::class, $response);
