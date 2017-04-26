@@ -77,7 +77,7 @@ class MiddlewareManager
         $destination = is_null($destination) ? function ($payload) {
             return $payload;
         }
-            : $destination;
+        : $destination;
 
         $middleware = $this->$method + $additionalMiddleware;
 

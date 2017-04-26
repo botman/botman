@@ -6,13 +6,13 @@ use Mockery as m;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Middleware\MiddlewareManager;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Middleware\MiddlewareManager;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
 {
