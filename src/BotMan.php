@@ -3,9 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\BotMan\Middleware\MiddlewareManager;
 use UnexpectedValueException;
-use Mpociot\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Traits\ProvidesStorage;
@@ -15,7 +13,7 @@ use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Traits\HandlesConversations;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Middleware\MiddlewareManager;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Conversations\InlineConversation;
 
