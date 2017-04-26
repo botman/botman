@@ -332,7 +332,6 @@ class BotMan
             $message = $this->middleware->applyMiddleware('received', $message);
 
             foreach ($this->listenTo as $command) {
-
                 $messageData = $command->toArray();
                 $pattern = $messageData['pattern'];
                 $callback = $messageData['callback'];
