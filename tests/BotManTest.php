@@ -7,6 +7,7 @@ use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Middleware\MiddlewareManager;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
@@ -810,7 +811,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_applies_middlewares()
+    public function it_applies_received_middlewares()
     {
         $botman = $this->getBot([
             'event' => [
@@ -818,7 +819,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'foo',
             ],
         ]);
-        $botman->middleware(new TestMiddleware());
+        $botman->middleware->received(new TestMiddleware());
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
@@ -840,7 +841,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'successful',
             ],
         ]);
-
+        $botman->middleware->received(new TestMiddleware());
         $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$called) {
             $botman->hears('successful', function ($bot) use (&$called) {
                 $called = true;
@@ -914,30 +915,6 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_applies_middleware_only_on_specific_commands()
-    {
-        $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
-        ]);
-
-        $botman->hears('foo', function ($bot) {
-            $this->assertSame([], $bot->getMessage()->getExtras());
-        });
-
-        $botman->hears('foo', function ($bot) {
-            $this->assertSame([
-                'driver_name' => 'Slack',
-                'test' => 'successful',
-            ], $bot->getMessage()->getExtras());
-        })->middleware(new TestMiddleware());
-
-        $botman->listen();
-    }
-
-    /** @test */
     public function it_only_listens_on_specific_channels()
     {
         $called_one = false;
@@ -1008,7 +985,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'foo',
             ],
         ]);
-        $botman->middleware([new TestMiddleware()]);
+        $botman->middleware->received(new TestMiddleware(), new TestMiddleware());
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
@@ -1030,7 +1007,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'open the pod bay doors',
             ],
         ]);
-        $botman->middleware(new TestMatchMiddleware());
+        $botman->middleware->heard(new TestMatchMiddleware());
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
             $called_one = true;
@@ -1082,7 +1059,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'open the pod bay doors',
             ],
         ]);
-        $botman->middleware(new TestNoMatchMiddleware());
+        $botman->middleware->heard(new TestNoMatchMiddleware());
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called) {
             $called = true;
@@ -1138,6 +1115,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn($driver);
 
         $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
     }
 
@@ -1168,6 +1146,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn($driver);
 
         $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
     }
 
@@ -1192,6 +1171,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn([$driver]);
 
         $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->say('foo', 'channel');
     }
 
@@ -1207,6 +1187,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         DriverManager::loadDriver(TestDriver::class);
 
         $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->setDriver($driver);
 
         $botman->reply('foo', []);
@@ -1369,7 +1350,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'text' => 'open the pod bay doors',
             ],
         ]);
-        $botman->middleware([new TestMatchMiddleware(), new TestNoMatchMiddleware()]);
+        $botman->middleware->heard(new TestMatchMiddleware());
+        $botman->middleware->heard(new TestNoMatchMiddleware());
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
             $called_one = true;

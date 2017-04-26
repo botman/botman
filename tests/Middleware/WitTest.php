@@ -157,6 +157,8 @@ class WitTest extends PHPUnit_Framework_TestCase
 
         $middleware = new Wit('token', 0.5, $http);
 
+        $botman->middleware->received($middleware);
+
         $botman->hears('one', function ($bot) {
         })->middleware($middleware);
         $botman->hears('two', function ($bot) {

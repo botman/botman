@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\BotMan\Middleware\MiddlewareManager;
 use UnexpectedValueException;
 use Mpociot\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
@@ -73,8 +74,8 @@ class BotMan
     /** @var array */
     protected $config = [];
 
-    /** @var array */
-    protected $middleware = [];
+    /** @var MiddlewareManager */
+    public $middleware;
 
     /** @var CacheInterface */
     private $cache;
@@ -103,18 +104,7 @@ class BotMan
         $this->config = $config;
         $this->storage = $storage;
         $this->matcher = new Matcher();
-    }
-
-    /**
-     * @param MiddlewareInterface|array $middleware
-     */
-    public function middleware(...$middleware)
-    {
-        $middleware = is_array($middleware[0]) ? $middleware[0] : $middleware;
-
-        $this->middleware = Collection::make($middleware)->filter(function ($item) {
-            return $item instanceof MiddlewareInterface;
-        })->merge($this->middleware)->toArray();
+        $this->middleware = new MiddlewareManager($this);
     }
 
     /**
@@ -159,28 +149,6 @@ class BotMan
     public function getMessages()
     {
         return $this->getDriver()->getMessages();
-    }
-
-    /**
-     * @param string $method
-     * @param mixed $payload
-     * @param MiddlewareInterface[] $middleware
-     * @param Closure|null $destination
-     * @return mixed
-     */
-    protected function applyMiddleware($method, $payload, array $middleware, Closure $destination = null)
-    {
-        $destination = is_null($destination) ? function ($message) {
-            return $message;
-        }
-        : $destination;
-
-        return (new Pipeline())
-            ->via($method)
-            ->send($payload)
-            ->with($this)
-            ->through($middleware)
-            ->then($destination);
     }
 
     /**
@@ -363,17 +331,17 @@ class BotMan
             }
 
             foreach ($this->getMessages() as $message) {
-                $message = $this->applyMiddleware('received', $message, $this->middleware + $messageData['middleware']);
+                $message = $this->middleware->applyMiddleware('received', $message);
 
                 if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware) &&
+                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) &&
                     $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->matcher->isChannelValid($message->getChannel(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
                     $heardMessage = true;
                     $this->command = $command;
-                    $this->message = $this->applyMiddleware('heard', $message, $this->middleware + $messageData['middleware']);
+                    $this->message = $this->middleware->applyMiddleware('heard', $message, $messageData['middleware']);
                     $parameterNames = $this->compileParameterNames($pattern);
 
                     $matches = $this->matcher->getMatches();
@@ -491,9 +459,7 @@ class BotMan
      */
     public function sendPayload($payload)
     {
-        $middleware = is_null($this->command) ? $this->middleware : $this->middleware + $this->command->toArray()['middleware'];
-
-        return $this->applyMiddleware('sending', $payload, $middleware, function ($payload) {
+        return $this->middleware->applyMiddleware('sending', $payload, [], function ($payload) {
             return $this->getDriver()->sendPayload($payload);
         });
     }
@@ -600,6 +566,7 @@ class BotMan
             'matches',
             'matcher',
             'config',
+            'middleware',
         ];
     }
 }

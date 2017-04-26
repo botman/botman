@@ -6,6 +6,7 @@ use Mockery as m;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Middleware\MiddlewareManager;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
@@ -579,6 +580,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]));
 
         $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->setDriver($driver);
 
         $driver->replyInThread('Test', [

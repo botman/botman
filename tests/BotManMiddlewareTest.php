@@ -34,7 +34,7 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
         $this->fakeDriver = new FakeDriver();
         ProxyDriver::setInstance($this->fakeDriver);
         $this->botman = BotManFactory::create([]);
-        $this->botman->middleware(new TestCustomMiddleware());
+        $this->botman->middleware->sending(new TestCustomMiddleware());
     }
 
     protected function tearDown()

@@ -164,6 +164,8 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
 
+        $botman->middleware->received($middleware);
+
         $botman->hears('one', function ($bot) {
         })->middleware($middleware);
         $botman->hears('two', function ($bot) {
