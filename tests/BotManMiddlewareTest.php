@@ -54,8 +54,10 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     {
         $this->botman->middleware->received(new TestCustomMiddleware());
 
-        $this->botman->hears('foo', function($bot){});
-        $this->botman->hears('bar', function($bot){});
+        $this->botman->hears('foo', function ($bot) {
+        });
+        $this->botman->hears('bar', function ($bot) {
+        });
 
         $this->replyWithFakeMessage('Hello');
         $this->assertEquals(1, $_SERVER['middleware_received_count']);
