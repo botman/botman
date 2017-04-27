@@ -9,7 +9,9 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
@@ -56,6 +58,28 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertTrue($driver->matchesRequest());
+    }
+
+    private function getRequest($responseData)
+    {
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        return $request;
+    }
+
+    /** @test */
+    public function it_matches_the_request_using_the_driver_manager()
+    {
+        $request = $this->getRequest([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'bar',
+            ],
+        ]);
+
+        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $this->assertInstanceOf(SlackDriver::class, $botman->getDriver());
     }
 
     /** @test */

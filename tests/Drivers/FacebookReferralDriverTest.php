@@ -6,6 +6,8 @@ use Mockery as m;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookReferralDriver;
 
@@ -42,6 +44,23 @@ class FacebookReferralDriverTest extends PHPUnit_Framework_TestCase
         $request = '{}';
         $driver = $this->getDriver($request, $config);
         $this->assertFalse($driver->matchesRequest());
+    }
+
+    private function getRequest($responseData)
+    {
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn($responseData);
+
+        return $request;
+    }
+
+    /** @test */
+    public function it_matches_the_request_using_the_driver_manager()
+    {
+        $request = $this->getRequest('{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"referral":{"ref":"MY_REF","source": "MY_SOURCE","type": "MY_TYPE"}}]}]}');
+
+        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $this->assertInstanceOf(FacebookReferralDriver::class, $botman->getDriver());
     }
 
     /** @test */

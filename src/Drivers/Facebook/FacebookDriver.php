@@ -69,7 +69,7 @@ class FacebookDriver extends Driver
     public function hasMatchingEvent()
     {
         $event = Collection::make($this->event->get('messaging'))->transform(function ($msg) {
-            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp'])->toArray();
+            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message', 'postback', 'referral', 'optin'])->toArray();
         });
 
         return $event->isEmpty() ? false : $event->first();

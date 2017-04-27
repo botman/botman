@@ -8,15 +8,24 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
-    private function getDriver($responseData, array $config = ['facebook_token' => 'Foo'], $signature = '')
+    private function getRequest($responseData)
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn($responseData);
+
+        return $request;
+    }
+
+    private function getDriver($responseData, array $config = ['facebook_token' => 'Foo'], $signature = '')
+    {
+        $request = $this->getRequest($responseData);
         $request->headers->set('X_HUB_SIGNATURE', $signature);
 
         return new FacebookDriver($request, $config, new Curl());
@@ -56,6 +65,15 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}';
         $driver = $this->getDriver($request, $config, $signature);
         $this->assertTrue($driver->matchesRequest());
+    }
+
+    /** @test */
+    public function it_matches_the_request_using_the_driver_manager()
+    {
+        $request = $this->getRequest('{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi"}}]}]}');
+
+        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $this->assertInstanceOf(FacebookDriver::class, $botman->getDriver());
     }
 
     /** @test */
