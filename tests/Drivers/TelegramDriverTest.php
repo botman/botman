@@ -8,6 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
@@ -56,6 +58,36 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertTrue($driver->matchesRequest());
+    }
+
+    private function getRequest($responseData)
+    {
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        return $request;
+    }
+
+    /** @test */
+    public function it_matches_the_request_using_the_driver_manager()
+    {
+        $request = $this->getRequest([
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => 'chat_id',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ]);
+
+        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $this->assertInstanceOf(TelegramDriver::class, $botman->getDriver());
     }
 
     /** @test */

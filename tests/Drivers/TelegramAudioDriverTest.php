@@ -5,6 +5,8 @@ namespace Mpociot\BotMan\Tests\Drivers;
 use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Messages\Matcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,6 +103,38 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertTrue($driver->matchesRequest());
+    }
+
+    private function getRequest($responseData)
+    {
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        return $request;
+    }
+
+    /** @test */
+    public function it_matches_the_request_using_the_driver_manager()
+    {
+        $request = $this->getRequest([
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => 'chat_id',
+                ],
+                'voice' => [
+                    'mime_type' => 'audio/ogg',
+                    'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+                ],
+            ],
+        ]);
+
+        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $this->assertInstanceOf(TelegramAudioDriver::class, $botman->getDriver());
     }
 
     /** @test */
