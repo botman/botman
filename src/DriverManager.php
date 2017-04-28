@@ -5,6 +5,7 @@ namespace Mpociot\BotMan;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
+use Mpociot\BotMan\Drivers\Kik\KikDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Mpociot\BotMan\Drivers\Nexmo\NexmoDriver;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
@@ -47,6 +48,7 @@ class DriverManager
         FacebookReferralDriver::class,
         FacebookOptinDriver::class,
         FacebookLocationDriver::class,
+        KikDriver::class,
         TelegramPhotoDriver::class,
         TelegramVideoDriver::class,
         TelegramLocationDriver::class,
