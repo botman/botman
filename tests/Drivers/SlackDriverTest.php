@@ -13,8 +13,8 @@ use Mpociot\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Attachments\Image;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
+use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase

@@ -2,13 +2,13 @@
 
 namespace Mpociot\BotMan\Drivers\Kik;
 
+use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\UserInterface;
-use Mpociot\BotMan\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,7 +59,7 @@ class KikDriver extends Driver
      */
     public function getMessages()
     {
-        return $this->event->map(function($message) {
+        return $this->event->map(function ($message) {
             return new Message($message['body'], $message['from'], $message['chatId']);
         })->toArray();
     }
@@ -92,6 +92,7 @@ class KikDriver extends Driver
             'Authorization:Basic '.base64_encode(''),
         ]);
         $profileData = json_decode($response->getContent());
+
         return new User($matchingMessage->getUser(), $profileData->firstName, $profileData->lastName, $matchingMessage->getUser());
     }
 
@@ -118,9 +119,9 @@ class KikDriver extends Driver
                     'body' => $message,
                     'to' => $matchingMessage->getUser(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel()
-                ]
-            ]
+                    'chatId' => $matchingMessage->getChannel(),
+                ],
+            ],
         ];
     }
 
@@ -147,9 +148,9 @@ class KikDriver extends Driver
                 [
                     'to' => $matchingMessage->getUser(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel()
-                ]
-            ]
+                    'chatId' => $matchingMessage->getChannel(),
+                ],
+            ],
         ]);
     }
 }
