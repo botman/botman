@@ -463,6 +463,7 @@ class BotMan
     public function reply($message, $additionalParameters = [])
     {
         $message = is_string($message) ? OutgoingMessage::create($message) : $message;
+
         return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
     }
 
