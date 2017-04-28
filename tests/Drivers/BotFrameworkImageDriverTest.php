@@ -8,7 +8,6 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
