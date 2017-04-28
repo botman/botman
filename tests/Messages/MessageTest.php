@@ -12,13 +12,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_be_created()
     {
-        $message = Message::create('foo', 'bar');
+        $attachment = new Image('foo');
+        $message = Message::create('foo', $attachment);
         $this->assertSame('foo', $message->getText());
-        $this->assertSame('bar', $message->getAttachment());
+        $this->assertSame($attachment, $message->getAttachment());
 
-        $message = new Message('foo', 'bar');
+        $message = new Message('foo', $attachment);
         $this->assertSame('foo', $message->getText());
-        $this->assertSame('bar', $message->getAttachment());
+        $this->assertSame($attachment, $message->getAttachment());
     }
 
     /** @test */

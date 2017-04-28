@@ -2,20 +2,22 @@
 
 namespace Mpociot\BotMan\Messages;
 
+use Mpociot\BotMan\Attachments\Attachment;
+
 class Message
 {
     /** @var string */
     protected $message;
 
-    /** @var mixed */
+    /** @var Attachment */
     protected $attachment;
 
     /**
      * Message constructor.
      * @param string $message
-     * @param mixed $attachment
+     * @param Attachment $attachment
      */
-    public function __construct($message = null, $attachment = null)
+    public function __construct($message = null, Attachment $attachment = null)
     {
         $this->message = $message;
         $this->attachment = $attachment;
@@ -23,10 +25,10 @@ class Message
 
     /**
      * @param string $message
-     * @param mixed $attachment
+     * @param Attachment $attachment
      * @return Message
      */
-    public static function create($message = null, $attachment = null)
+    public static function create($message = null, Attachment $attachment = null)
     {
         return new self($message, $attachment);
     }
@@ -43,10 +45,10 @@ class Message
     }
 
     /**
-     * @param mixed $attachment
+     * @param Attachment $attachment
      * @return $this
      */
-    public function withAttachment($attachment)
+    public function withAttachment(Attachment $attachment)
     {
         $this->attachment = $attachment;
 
@@ -54,7 +56,7 @@ class Message
     }
 
     /**
-     * @return mixed
+     * @return Attachment
      */
     public function getAttachment()
     {
