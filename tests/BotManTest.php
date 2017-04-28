@@ -1078,7 +1078,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
 
         $botman->reply('foo', []);
-        $this->assertSame(['foo'], $botman->getDriver()->getBotMessages());
+        $this->assertCount(1, $botman->getDriver()->getBotMessages());
+        $this->assertSame('foo', $botman->getDriver()->getBotMessages()[0]->getText());
     }
 
     /** @test */
@@ -1090,7 +1091,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->setDriver($driver);
         $botman->randomReply($randomMessages, []);
 
-        $message = $botman->getDriver()->getBotMessages()[0];
+        $message = $botman->getDriver()->getBotMessages()[0]->getText();
         $this->assertContains($message, $randomMessages);
     }
 
@@ -1105,7 +1106,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1136,7 +1137,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) use ($additionalParameters) {
-                return $message === 'foo' && $match->getChannel() === '1234567890' && $arguments === $additionalParameters;
+                return $message->getText() === 'foo' && $match->getChannel() === '1234567890' && $arguments === $additionalParameters;
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1163,7 +1164,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1244,7 +1245,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1278,7 +1281,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1298,7 +1303,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1332,7 +1339,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a modified test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a modified test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1374,7 +1383,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1452,7 +1463,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
-            ->with('This is a test question', m::type(Message::class), []);
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+            });
 
         $driver->shouldReceive('sendPayload')
             ->once();

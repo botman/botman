@@ -102,7 +102,7 @@ class FakeDriver implements DriverInterface
     {
         $this->botMessages[] = $payload;
 
-        return Response::create(json_encode($payload));
+        return Response::create(json_encode($payload->getText()));
     }
 
     public function getName()

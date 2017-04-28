@@ -51,17 +51,19 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertCount(1, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('images');
-        $answers[] = 'Please supply an image';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+
+        static::assertCount(2, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_an_image');
-        $answers[] = 'Please supply an image';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+
+        static::assertCount(3, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -71,17 +73,17 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertCount(1, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('custom_image_repeat');
-        $answers[] = 'Please supply an image';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertCount(2, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_an_image');
-        $answers[] = 'That is not an image...';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertCount(3, $this->fakeDriver->getBotMessages());
+        static::assertEquals('That is not an image...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -91,20 +93,17 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('images');
-        $answers[] = 'Please supply an image';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $message = new Message(Image::PATTERN, 'helloman', '#helloworld');
         $message->setImages(['http://foo.com/bar.png']);
         $this->replyWithFakeMessage($message);
 
-        $answers[] = 'http://foo.com/bar.png';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('http://foo.com/bar.png', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -114,17 +113,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('videos');
-        $answers[] = 'Please supply a video';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a video', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_a_video');
-        $answers[] = 'Please supply a video';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a video', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -134,17 +130,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('custom_video_repeat');
-        $answers[] = 'Please supply a video';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a video', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_a_video');
-        $answers[] = 'That is not a video...';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('That is not a video...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -154,20 +147,17 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('videos');
-        $answers[] = 'Please supply a video';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a video', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $message = new Message(Video::PATTERN, 'helloman', '#helloworld');
         $message->setVideos(['http://foo.com/bar.mp4']);
         $this->replyWithFakeMessage($message);
 
-        $answers[] = 'http://foo.com/bar.mp4';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('http://foo.com/bar.mp4', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -177,17 +167,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('audio');
-        $answers[] = 'Please supply an audio';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an audio', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_an_audio');
-        $answers[] = 'Please supply an audio';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an audio', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -197,17 +184,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('custom_audio_repeat');
-        $answers[] = 'Please supply an audio';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an audio', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_an_audio');
-        $answers[] = 'That is not an audio...';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('That is not an audio...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -217,20 +201,17 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('audio');
-        $answers[] = 'Please supply an audio';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply an audio', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $message = new Message(Audio::PATTERN, 'helloman', '#helloworld');
         $message->setAudio(['http://foo.com/bar.mp3']);
         $this->replyWithFakeMessage($message);
 
-        $answers[] = 'http://foo.com/bar.mp3';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('http://foo.com/bar.mp3', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -240,17 +221,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('location');
-        $answers[] = 'Please supply a location';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_a_location');
-        $answers[] = 'Please supply a location';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -260,17 +238,14 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('custom_location_repeat');
-        $answers[] = 'Please supply a location';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $this->replyWithFakeMessage('not_a_location');
-        $answers[] = 'That is not a location...';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('That is not a location...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     /** @test */
@@ -280,21 +255,18 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
             $bot->startConversation(new TestDataConversation());
         });
 
-        $answers = ['What do you want to test?'];
         $this->replyWithFakeMessage('Hello');
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('location');
-        $answers[] = 'Please supply a location';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
 
         $message = new Message(Location::PATTERN, 'helloman', '#helloworld');
         $location = new Location(41.123, -12.123);
         $message->setLocation($location);
         $this->replyWithFakeMessage($message);
 
-        $answers[] = '41.123:-12.123';
-        static::assertEquals($answers, $this->fakeDriver->getBotMessages());
+        static::assertEquals('41.123:-12.123', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')
