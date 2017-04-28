@@ -26,8 +26,8 @@ class LaravelCache implements CacheInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed $default
      * @return mixed
      */
     public function get($key, $default = null)

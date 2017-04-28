@@ -20,6 +20,9 @@ class ApiAi implements MiddlewareInterface
     protected $response;
 
     /** @var string */
+    protected $lastResponseHash;
+
+    /** @var string */
     protected $apiUrl = 'https://api.api.ai/v1/query?v=20150910';
 
     /** @var bool */
@@ -66,7 +69,7 @@ class ApiAi implements MiddlewareInterface
     protected function getResponse(Message $message)
     {
         $response = $this->http->post($this->apiUrl, [], [
-            'query' => [$message->getMessage()],
+            'query' => [$message->getText()],
             'sessionId' => md5($message->getChannel()),
             'lang' => 'en',
         ], [

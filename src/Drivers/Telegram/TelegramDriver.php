@@ -8,6 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -39,11 +41,13 @@ class TelegramDriver extends Driver
             'user_id' => $matchingMessage->getUser(),
         ];
 
-        $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getChatMember', [], $parameters);
+        $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getChatMember',
+            [], $parameters);
         $responseData = json_decode($response->getContent(), true);
         $userData = Collection::make($responseData['result']['user']);
 
-        return new User($userData->get('id'), $userData->get('first_name'), $userData->get('last_name'), $userData->get('username'));
+        return new User($userData->get('id'), $userData->get('first_name'), $userData->get('last_name'),
+            $userData->get('username'));
     }
 
     /**
@@ -66,7 +70,8 @@ class TelegramDriver extends Driver
             $callback = Collection::make($this->payload->get('callback_query'));
 
             // Update original message
-            $this->removeInlineKeyboard($callback->get('message')['chat']['id'], $callback->get('message')['message_id']);
+            $this->removeInlineKeyboard($callback->get('message')['chat']['id'],
+                $callback->get('message')['message_id']);
 
             return Answer::create($callback->get('data'))
                 ->setInteractiveReply(true)
@@ -74,7 +79,7 @@ class TelegramDriver extends Driver
                 ->setValue($callback->get('data'));
         }
 
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -87,9 +92,15 @@ class TelegramDriver extends Driver
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
 
-            return [new Message($callback->get('data'), $callback->get('from')['id'], $callback->get('message')['chat']['id'], $callback->get('message'))];
+            return [
+                new Message($callback->get('data'), $callback->get('from')['id'],
+                    $callback->get('message')['chat']['id'], $callback->get('message')),
+            ];
         } else {
-            return [new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event)];
+            return [
+                new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'],
+                    $this->event),
+            ];
         }
     }
 
@@ -111,7 +122,8 @@ class TelegramDriver extends Driver
             'chat_id' => $matchingMessage->getChannel(),
             'action' => 'typing',
         ];
-        $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendChatAction', [], $parameters);
+        $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendChatAction', [],
+            $parameters);
     }
 
     /**
@@ -150,7 +162,8 @@ class TelegramDriver extends Driver
             'inline_keyboard' => [],
         ];
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/editMessageReplyMarkup', [], $parameters);
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/editMessageReplyMarkup',
+            [], $parameters);
     }
 
     /**
@@ -174,21 +187,23 @@ class TelegramDriver extends Driver
                 'inline_keyboard' => $this->convertQuestion($message),
             ], true);
         } elseif ($message instanceof IncomingMessage) {
-            if (! is_null($message->getImage())) {
-                if (strtolower(pathinfo($message->getImage(), PATHINFO_EXTENSION)) === 'gif') {
-                    $this->endpoint = 'sendDocument';
-                    $parameters['document'] = $message->getImage();
-                } else {
-                    $this->endpoint = 'sendPhoto';
-                    $parameters['photo'] = $message->getImage();
+            if (! is_null($message->getAttachment())) {
+                $attachment = $message->getAttachment();
+                if ($attachment instanceof Image) {
+                    if (strtolower(pathinfo($attachment->getUrl(), PATHINFO_EXTENSION)) === 'gif') {
+                        $this->endpoint = 'sendDocument';
+                        $parameters['document'] = $attachment->getUrl();
+                    } else {
+                        $this->endpoint = 'sendPhoto';
+                        $parameters['photo'] = $attachment->getUrl();
+                    }
+                } elseif ($attachment instanceof Video) {
+                    $this->endpoint = 'sendVideo';
+                    $parameters['video'] = $attachment->getUrl();
                 }
-                $parameters['caption'] = $message->getMessage();
-            } elseif (! is_null($message->getVideo())) {
-                $this->endpoint = 'sendVideo';
-                $parameters['video'] = $message->getVideo();
-                $parameters['caption'] = $message->getMessage();
+                $parameters['caption'] = $message->getText();
             } else {
-                $parameters['text'] = $message->getMessage();
+                $parameters['text'] = $message->getText();
             }
         } else {
             $parameters['text'] = $message;
@@ -203,7 +218,8 @@ class TelegramDriver extends Driver
      */
     public function sendPayload($payload)
     {
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$this->endpoint, [], $payload);
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$this->endpoint,
+            [], $payload);
     }
 
     /**
@@ -228,6 +244,7 @@ class TelegramDriver extends Driver
             'chat_id' => $matchingMessage->getChannel(),
         ], $parameters);
 
-        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [], $parameters);
+        return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [],
+            $parameters);
     }
 }

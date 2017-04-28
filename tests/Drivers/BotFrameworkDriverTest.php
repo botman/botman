@@ -8,6 +8,8 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
@@ -117,7 +119,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
             'text' => 'Hi Julia',
             'entities' => [],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -128,7 +130,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $driver = $this->getDriver($responseData);
 
-        $this->assertSame('Hi Maks', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Maks', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -457,7 +459,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->image('http://foo.com/bar.png'), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
         $driver->sendPayload($payload);
     }
 
@@ -504,7 +506,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://foo.com/bar.mp4'), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
         $driver->sendPayload($payload);
     }
 

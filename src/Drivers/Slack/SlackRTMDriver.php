@@ -6,12 +6,15 @@ use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use React\Promise\PromiseInterface;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Attachments\File as BotManFile;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriver implements DriverInterface
@@ -107,14 +110,17 @@ class SlackRTMDriver implements DriverInterface
             $file = Collection::make($this->event->get('file'));
 
             if (strstr($file->get('mimetype'), 'image')) {
-                $message = new Message(BotMan::IMAGE_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Image::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setImages([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'audio')) {
-                $message = new Message(BotMan::AUDIO_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Audio::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setAudio([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'video')) {
-                $message = new Message(BotMan::VIDEO_PATTERN, $user_id, $channel_id, $this->event);
+                $message = new Message(Video::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
+            } else {
+                $message = new Message(\Mpociot\BotMan\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
+                $message->setAttachments([$file->get('permalink')]);
             }
 
             return [$message];
@@ -147,16 +153,24 @@ class SlackRTMDriver implements DriverInterface
         $this->file = null;
 
         if ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode([['title' => $message->getMessage(), 'image_url' => $message->getImage()]]);
-            }
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode([
+                        [
+                            'title' => $message->getText(),
+                            'image_url' => $attachment->getUrl(),
+                        ],
+                    ]);
 
-            if (! empty($message->getFilePath()) && file_exists($message->getFilePath())) {
-                $this->file = (new File())
-                    ->setTitle(basename($message->getFilePath()))
-                    ->setPath($message->getFilePath())
-                    ->setInitialComment($message->getMessage());
+                    // else check if is a path
+                } elseif ($attachment instanceof BotManFile && file_exists($attachment->getUrl())) {
+                    $this->file = (new File())
+                        ->setTitle(basename($attachment->getUrl()))
+                        ->setPath($attachment->getUrl())
+                        ->setInitialComment($message->getText());
+                }
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';
@@ -207,6 +221,7 @@ class SlackRTMDriver implements DriverInterface
     /**
      * Send a typing indicator.
      * @param Message $matchingMessage
+     * @return mixed
      */
     public function types(Message $matchingMessage)
     {
@@ -232,7 +247,8 @@ class SlackRTMDriver implements DriverInterface
             $user = $_user;
         });
         if (! is_null($user)) {
-            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(), $user->getUsername());
+            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(),
+                $user->getUsername());
         }
 
         return new User($matchingMessage->getUser());

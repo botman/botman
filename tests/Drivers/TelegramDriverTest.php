@@ -10,6 +10,8 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
@@ -127,7 +129,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -554,7 +556,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */
@@ -592,7 +594,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.gif'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.gif')), $message));
     }
 
     /** @test */
@@ -630,6 +632,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->video('http://image.url/foo.mp4'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Video::url('http://image.url/foo.mp4')), $message));
     }
 }

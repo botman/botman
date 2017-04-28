@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan\Drivers\WeChat;
 
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Video;
 
 class WeChatVideoDriver extends WeChatDriver
 {
@@ -33,7 +33,7 @@ class WeChatVideoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::VIDEO_PATTERN, $this->event->get('ToUserName'),
+        $message = new Message(Video::PATTERN, $this->event->get('ToUserName'),
             $this->event->get('FromUserName'), $this->event);
         $message->setVideos($this->getVideo());
 
@@ -48,7 +48,7 @@ class WeChatVideoDriver extends WeChatDriver
     {
         $videoUrl = 'http://file.api.wechat.com/cgi-bin/media/get?access_token='.$this->getAccessToken().'&media_id='.$this->event->get('MediaId');
 
-        return [$videoUrl];
+        return [new Video($videoUrl, $this->event)];
     }
 
     /**

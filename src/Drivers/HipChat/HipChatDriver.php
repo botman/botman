@@ -44,7 +44,7 @@ class HipChatDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -54,7 +54,10 @@ class HipChatDriver extends Driver
      */
     public function getMessages()
     {
-        return [new Message($this->event->get('message')['message'], $this->event->get('message')['from']['id'], $this->event->get('room')['id'], $this->event)];
+        return [
+            new Message($this->event->get('message')['message'], $this->event->get('message')['from']['id'],
+                $this->event->get('room')['id'], $this->event),
+        ];
     }
 
     /**
@@ -83,12 +86,14 @@ class HipChatDriver extends Driver
         if ($message instanceof Question) {
             $parameters['message'] = $message->getText();
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['message'] = $message->getMessage();
+            $parameters['message'] = $message->getText();
         } else {
             $parameters['message'] = $message;
         }
 
-        $this->apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use ($matchingMessage) {
+        $this->apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use (
+            $matchingMessage
+        ) {
             return strstr($url, 'room/'.$matchingMessage->getChannel().'/notification');
         })->first();
 
@@ -133,7 +138,8 @@ class HipChatDriver extends Driver
     {
         $payload = $matchingMessage->getPayload();
 
-        return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null, $payload->get('message')['from']['mention_name']);
+        return new User($payload->get('message')['from']['id'], $payload->get('message')['from']['name'], null,
+            $payload->get('message')['from']['mention_name']);
     }
 
     /**

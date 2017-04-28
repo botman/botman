@@ -3,11 +3,13 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
+use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
 
@@ -103,7 +105,14 @@ class BotFrameworkImageDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->getResponseData());
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::IMAGE_PATTERN, $message->getMessage());
-        $this->assertSame(['http://foo.bar/baz.png'], $message->getImages());
+        $this->assertSame(Image::PATTERN, $message->getText());
+
+        $image = $message->getImages()[0];
+        $this->assertSame('http://foo.bar/baz.png', $image->getUrl());
+        $this->assertSame([
+            'contentType' => 'image',
+            'contentUrl' => 'http://foo.bar/baz.png',
+            'name' => 'baz.png',
+        ], $image->getPayload());
     }
 }

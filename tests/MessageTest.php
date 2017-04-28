@@ -32,7 +32,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function it_can_return_the_message()
     {
         $message = new Message('my message', '', '');
-        $this->assertSame('my message', $message->getMessage());
+        $this->assertSame('my message', $message->getText());
     }
 
     /** @test */

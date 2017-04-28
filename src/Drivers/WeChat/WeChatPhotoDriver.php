@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan\Drivers\WeChat;
 
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Image;
 
 class WeChatPhotoDriver extends WeChatDriver
 {
@@ -36,7 +36,8 @@ class WeChatPhotoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
+        $message = new Message(Image::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
+            $this->event);
         $message->setImages($this->getImages());
 
         return [$message];
@@ -50,7 +51,7 @@ class WeChatPhotoDriver extends WeChatDriver
     {
         $photoUrl = $this->event->get('PicUrl');
 
-        return [$photoUrl];
+        return [new Image($photoUrl, $this->event)];
     }
 
     /**

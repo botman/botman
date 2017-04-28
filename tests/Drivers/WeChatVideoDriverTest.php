@@ -6,7 +6,7 @@ use Mockery as m;
 use Illuminate\Http\Response;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
 
@@ -98,7 +98,7 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
 
         $messages = $driver->getMessages();
         $this->assertTrue(is_array($messages));
-        $this->assertEquals('%%%_VIDEO_%%%', $messages[0]->getMessage());
+        $this->assertEquals('%%%_VIDEO_%%%', $messages[0]->getText());
     }
 
     /** @test */
@@ -119,8 +119,9 @@ class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::VIDEO_PATTERN, $message->getMessage());
-        $this->assertSame(['http://file.api.wechat.com/cgi-bin/media/get?access_token=SECRET_TOKEN&media_id=12345'],
-            $message->getVideos());
+        $this->assertSame(Video::PATTERN, $message->getText());
+        $this->assertSame('http://file.api.wechat.com/cgi-bin/media/get?access_token=SECRET_TOKEN&media_id=12345',
+            $message->getVideos()[0]->getUrl());
+        $this->assertSame($message->getPayload(), $message->getVideos()[0]->getPayload());
     }
 }

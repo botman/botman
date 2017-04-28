@@ -147,13 +147,16 @@ class FacebookAudioDriverTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      **/
-    public function it_returns_location_from_request()
+    public function it_returns_audio_from_request()
     {
         $driver = $this->getDriver($this->getCorrectRequestData());
-        $messages = $driver->getMessages();
-        $audiUrls = $messages[0]->getAudio();
+        $messages = $driver->getMessages()[0];
+        $audiUrls = $messages->getAudio();
 
         $this->assertTrue(is_array($audiUrls));
-        $this->assertEquals('http://facebookimage.com/audio.mp3', $audiUrls[0]);
+        $this->assertEquals('http://facebookimage.com/audio.mp3', $audiUrls[0]->getUrl());
+        $this->assertEquals([
+                    'url' => 'http://facebookimage.com/audio.mp3',
+            ], $audiUrls[0]->getPayload());
     }
 }

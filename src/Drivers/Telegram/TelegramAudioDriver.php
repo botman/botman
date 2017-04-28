@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan\Drivers\Telegram;
 
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Audio;
 
 class TelegramAudioDriver extends TelegramDriver
 {
@@ -26,7 +26,8 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::AUDIO_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
+        $message = new Message(Audio::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
         $message->setAudio($this->getAudio());
 
         return [$message];
@@ -34,7 +35,7 @@ class TelegramAudioDriver extends TelegramDriver
 
     /**
      * Retrieve a image from an incoming message.
-     * @return array A download for the image file.
+     * @return array A download for the audio file.
      */
     private function getAudio()
     {
@@ -48,7 +49,10 @@ class TelegramAudioDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return ['https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path];
+        return [
+            new Audio('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
+                $audio),
+        ];
     }
 
     /**

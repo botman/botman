@@ -4,6 +4,8 @@ namespace Mpociot\BotMan\Tests\Messages;
 
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Message;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {
@@ -11,32 +13,32 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function it_can_be_created()
     {
         $message = Message::create('foo', 'bar');
-        $this->assertSame('foo', $message->getMessage());
-        $this->assertSame('bar', $message->getImage());
+        $this->assertSame('foo', $message->getText());
+        $this->assertSame('bar', $message->getAttachment());
 
         $message = new Message('foo', 'bar');
-        $this->assertSame('foo', $message->getMessage());
-        $this->assertSame('bar', $message->getImage());
+        $this->assertSame('foo', $message->getText());
+        $this->assertSame('bar', $message->getAttachment());
     }
 
     /** @test */
     public function it_can_set_a_message()
     {
-        $message = Message::create()->message('foo');
-        $this->assertSame('foo', $message->getMessage());
+        $message = Message::create()->text('foo');
+        $this->assertSame('foo', $message->getText());
     }
 
     /** @test */
     public function it_can_set_an_image()
     {
-        $message = Message::create()->image('foo');
-        $this->assertSame('foo', $message->getImage());
+        $message = Message::create()->withAttachment(Image::url('foo'));
+        $this->assertSame('foo', $message->getAttachment()->getUrl());
     }
 
     /** @test */
     public function it_can_set_a_videoimage()
     {
-        $message = Message::create()->video('foo');
-        $this->assertSame('foo', $message->getVideo());
+        $message = Message::create()->withAttachment(Video::url('foo'));
+        $this->assertSame('foo', $message->getAttachment()->getUrl());
     }
 }

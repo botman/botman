@@ -9,6 +9,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -194,9 +195,12 @@ class SlackDriver extends Driver
             $parameters['text'] = $this->format($message->getText());
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+                }
             }
         } else {
             $parameters['text'] = $this->format($message);
@@ -225,9 +229,12 @@ class SlackDriver extends Driver
             $parameters['text'] = '';
             $parameters['attachments'] = json_encode([$message->toArray()]);
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = json_encode(['image_url' => $message->getImage()]);
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = json_encode(['image_url' => $attachment->getUrl()]);
+                }
             }
         } else {
             $parameters['text'] = $this->format($message);
