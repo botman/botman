@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added Kik driver.
+- Added custom Attachment classes.
+- Added support to listen for message service events.
 - Changed the way middleware works in BotMan.
 - Added support for Slack interactive menu messages.
 - Added Facebook Referral driver.
