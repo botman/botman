@@ -18,7 +18,8 @@ class BotManServiceProvider extends ServiceProvider
         $this->app->singleton('botman', function ($app) {
             $storage = new FileStorage(storage_path('botman'));
 
-            return BotManFactory::create(config('services.botman', []), new LaravelCache(), $app->make('request'), $storage);
+            return BotManFactory::create(config('services.botman', []), new LaravelCache(), $app->make('request'),
+                $storage);
         });
     }
 }

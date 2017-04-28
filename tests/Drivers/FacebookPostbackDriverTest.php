@@ -10,6 +10,7 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookPostbackDriver;
 
@@ -82,7 +83,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
     {
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
         $driver = $this->getDriver($request);
-        $this->assertSame('MY_PAYLOAD', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('MY_PAYLOAD', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -91,7 +92,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
         $request = '';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -440,6 +441,6 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', '1234567890');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url//foo.png'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url//foo.png')), $message));
     }
 }

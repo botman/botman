@@ -7,44 +7,35 @@ class Message
     /** @var string */
     protected $message;
 
-    /** @var string */
-    protected $image;
-
-    /** @var string */
-    protected $video;
-
-    /** @var string */
-    private $audio;
-
-    /** @var string */
-    protected $filePath;
+    /** @var mixed */
+    protected $attachment;
 
     /**
      * Message constructor.
      * @param string $message
-     * @param string $image
+     * @param mixed $attachment
      */
-    public function __construct($message = null, $image = null)
+    public function __construct($message = null, $attachment = null)
     {
         $this->message = $message;
-        $this->image = $image;
+        $this->attachment = $attachment;
     }
 
     /**
      * @param string $message
-     * @param string $image
+     * @param mixed $attachment
      * @return Message
      */
-    public static function create($message = null, $image = null)
+    public static function create($message = null, $attachment = null)
     {
-        return new self($message, $image);
+        return new self($message, $attachment);
     }
 
     /**
      * @param string $message
      * @return $this
      */
-    public function message($message)
+    public function text($message)
     {
         $this->message = $message;
 
@@ -52,83 +43,29 @@ class Message
     }
 
     /**
-     * @param string $image
+     * @param mixed $attachment
      * @return $this
      */
-    public function image($image)
+    public function withAttachment($attachment)
     {
-        $this->image = $image;
+        $this->attachment = $attachment;
 
         return $this;
     }
 
     /**
-     * @param string $video
-     * @return $this
+     * @return mixed
      */
-    public function video($video)
+    public function getAttachment()
     {
-        $this->video = $video;
-
-        return $this;
-    }
-
-    /**
-     * @param string $filePath
-     * @return $this
-     */
-    public function filePath($filePath)
-    {
-        $this->filePath = $filePath;
-
-        return $this;
+        return $this->attachment;
     }
 
     /**
      * @return string
      */
-    public function getMessage()
+    public function getText()
     {
         return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVideo()
-    {
-        return $this->video;
-    }
-
-    /**
-     * @return string
-     */
-    public function setAudio($audio)
-    {
-        $this->audio = $audio;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAudio()
-    {
-        return $this->audio;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilePath()
-    {
-        return $this->filePath;
     }
 }

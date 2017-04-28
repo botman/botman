@@ -5,6 +5,7 @@ namespace Mpociot\BotMan\Tests\Drivers;
 use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Messages\Matcher;
@@ -191,8 +192,12 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::AUDIO_PATTERN, $message->getMessage());
-        $this->assertSame(['https://api.telegram.org/file/bot/foo'], $message->getAudio());
+        $this->assertSame(Audio::PATTERN, $message->getText());
+        $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
+        $this->assertSame([
+            'mime_type' => 'audio/x-m4a"',
+            'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+        ], $message->getAudio()[0]->getPayload());
     }
 
     /** @test */
@@ -221,7 +226,11 @@ class TelegramAudioDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::AUDIO_PATTERN, $message->getMessage());
-        $this->assertSame(['https://api.telegram.org/file/bot/foo'], $message->getAudio());
+        $this->assertSame(Audio::PATTERN, $message->getText());
+        $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getAudio()[0]->getUrl());
+        $this->assertSame([
+            'mime_type' => 'audio/x-m4a"',
+            'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+        ], $message->getAudio()[0]->getPayload());
     }
 }

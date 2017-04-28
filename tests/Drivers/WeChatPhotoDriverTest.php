@@ -6,6 +6,7 @@ use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 
@@ -70,7 +71,7 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_image_pattern()
     {
         $driver = $this->getDriver($this->validXml);
-        $this->assertSame('%%%_IMAGE_%%%', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('%%%_IMAGE_%%%', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -78,7 +79,8 @@ class WeChatPhotoDriverTest extends PHPUnit_Framework_TestCase
     {
         $driver = $this->getDriver($this->validXml);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::IMAGE_PATTERN, $message->getMessage());
-        $this->assertSame(['http://test.com/picurl'], $message->getImages());
+        $this->assertSame(Image::PATTERN, $message->getText());
+        $this->assertSame('http://test.com/picurl', $message->getImages()[0]->getUrl());
+        $this->assertSame($message->getPayload(), $message->getImages()[0]->getPayload());
     }
 }

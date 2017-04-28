@@ -48,7 +48,7 @@ class Wit implements MiddlewareInterface
 
     protected function getResponse(Message $message)
     {
-        $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getMessage());
+        $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
 
         $this->response = $this->http->post($endpoint, [], [], [
             'Authorization: Bearer '.$this->token,

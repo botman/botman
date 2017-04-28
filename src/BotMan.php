@@ -6,6 +6,10 @@ use Closure;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;
@@ -223,7 +227,7 @@ class BotMan
      */
     public function receivesImages($callback)
     {
-        return $this->hears(Matcher::IMAGE_PATTERN, $callback);
+        return $this->hears(Image::PATTERN, $callback);
     }
 
     /**
@@ -234,7 +238,7 @@ class BotMan
      */
     public function receivesVideos($callback)
     {
-        return $this->hears(Matcher::VIDEO_PATTERN, $callback);
+        return $this->hears(Video::PATTERN, $callback);
     }
 
     /**
@@ -245,7 +249,7 @@ class BotMan
      */
     public function receivesAudio($callback)
     {
-        return $this->hears(Matcher::AUDIO_PATTERN, $callback);
+        return $this->hears(Audio::PATTERN, $callback);
     }
 
     /**
@@ -256,7 +260,7 @@ class BotMan
      */
     public function receivesLocation($callback)
     {
-        return $this->hears(Matcher::LOCATION_PATTERN, $callback);
+        return $this->hears(Location::PATTERN, $callback);
     }
 
     /**
@@ -269,15 +273,15 @@ class BotMan
      */
     private function addDataParameters(Message $message, array $parameters)
     {
-        $messageText = $message->getMessage();
+        $messageText = $message->getText();
 
-        if ($messageText === Matcher::IMAGE_PATTERN) {
+        if ($messageText === Image::PATTERN) {
             $parameters[] = $message->getImages();
-        } elseif ($messageText === Matcher::VIDEO_PATTERN) {
+        } elseif ($messageText === Video::PATTERN) {
             $parameters[] = $message->getVideos();
-        } elseif ($messageText === Matcher::AUDIO_PATTERN) {
+        } elseif ($messageText === Audio::PATTERN) {
             $parameters[] = $message->getAudio();
-        } elseif ($messageText === Matcher::LOCATION_PATTERN) {
+        } elseif ($messageText === Location::PATTERN) {
             $parameters[] = $message->getLocation();
         }
 
@@ -287,8 +291,8 @@ class BotMan
     /**
      * Create a command group with shared attributes.
      *
-     * @param  array  $attributes
-     * @param  \Closure  $callback
+     * @param  array $attributes
+     * @param  \Closure $callback
      */
     public function group(array $attributes, Closure $callback)
     {

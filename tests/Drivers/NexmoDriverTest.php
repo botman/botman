@@ -79,7 +79,7 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
             'keyword' => 'HEY',
             'message_timestamp' => '2016-11-30 19:27:46',
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */

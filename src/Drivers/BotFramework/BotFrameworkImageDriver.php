@@ -4,7 +4,7 @@ namespace Mpociot\BotMan\Drivers\BotFramework;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Image;
 
 class BotFrameworkImageDriver extends BotFrameworkDriver
 {
@@ -29,7 +29,8 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
+        $message = new Message(Image::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+            $this->payload);
         $message->setImages($this->getImagesUrls());
 
         return [$message];
@@ -42,7 +43,9 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getImagesUrls()
     {
-        return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->pluck('contentUrl')->toArray();
+        return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->map(function ($item) {
+            return new Image($item['contentUrl'], $item);
+        })->toArray();
     }
 
     /**

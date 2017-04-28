@@ -4,7 +4,7 @@ namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Audio;
 
 class FacebookAudioDriver extends FacebookDriver
 {
@@ -41,7 +41,7 @@ class FacebookAudioDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Matcher::AUDIO_PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(Audio::PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
             $message->setAudio($this->getAudioUrls($msg));
 
             return $message;
@@ -62,7 +62,10 @@ class FacebookAudioDriver extends FacebookDriver
      */
     public function getAudioUrls(array $message)
     {
-        return Collection::make($message['message']['attachments'])->where('type', 'audio')->pluck('payload.url')->toArray();
+        return Collection::make($message['message']['attachments'])->where('type',
+            'audio')->pluck('payload')->map(function ($item) {
+                return new Audio($item['url'], $item);
+            })->toArray();
     }
 
     /**

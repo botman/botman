@@ -60,7 +60,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
             'user' => 'U0X12345',
             'text' => 'Hi Julia',
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -122,7 +122,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
         $driver = new SlackRTMDriver([], $clientMock);
 
         $message = IncomingMessage::create('File')
-            ->filePath($filePath);
+            ->withAttachment(\Mpociot\BotMan\Attachments\File::url($filePath));
 
         $matchingMessage = new Message('A command', 'U0X12345', $channelId);
 

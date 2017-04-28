@@ -12,8 +12,9 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Drivers\Slack\SlackDriver;
+use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
@@ -150,7 +151,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -171,7 +172,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('/botman Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('/botman Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -183,7 +184,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getMessage());
+        $this->assertSame('Hi Julia', $driver->getMessages()[0]->getText());
     }
 
     /** @test */
@@ -445,7 +446,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new Message('', '', 'general');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', 'http://image.url/foo.png'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */

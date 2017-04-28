@@ -8,6 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -44,16 +46,16 @@ class BotFrameworkDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        if (false !== strpos($message->getMessage(), '<botman value="')) {
-            preg_match('/<botman value="(.*)"><\/botman>/', $message->getMessage(), $matches);
+        if (false !== strpos($message->getText(), '<botman value="')) {
+            preg_match('/<botman value="(.*)"><\/botman>/', $message->getText(), $matches);
 
-            return Answer::create($message->getMessage())
+            return Answer::create($message->getText())
                 ->setInteractiveReply(true)
                 ->setMessage($message)
                 ->setValue($matches[1]);
         }
 
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -67,7 +69,10 @@ class BotFrameworkDriver extends Driver
         $pattern = '/<at id=(.*?)at>[^(\x20-\x7F)\x0A]*\s*/';
         $message = preg_replace($pattern, '', $this->event->get('text'));
 
-        return [new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload)];
+        return [
+            new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+                $this->payload),
+        ];
     }
 
     /**
@@ -84,7 +89,8 @@ class BotFrameworkDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getChannel(), null, null, Collection::make($matchingMessage->getPayload())->get('from')['name']);
+        return new User($matchingMessage->getChannel(), null, null,
+            Collection::make($matchingMessage->getPayload())->get('from')['name']);
     }
 
     /**
@@ -146,29 +152,32 @@ class BotFrameworkDriver extends Driver
                 ],
             ];
         } elseif ($message instanceof IncomingMessage) {
-            $parameters['text'] = $message->getMessage();
-
-            if (! is_null($message->getImage())) {
-                $parameters['attachments'] = [
-                    [
-                        'contentType' => 'image/png',
-                        'contentUrl' => $message->getImage(),
-                    ],
-                ];
-            } elseif (! is_null($message->getVideo())) {
-                $parameters['attachments'] = [
-                    [
-                        'contentType' => 'video/mp4',
-                        'contentUrl' => $message->getVideo(),
-                    ],
-                ];
+            $parameters['text'] = $message->getText();
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    $parameters['attachments'] = [
+                        [
+                            'contentType' => 'image/png',
+                            'contentUrl' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Video) {
+                    $parameters['attachments'] = [
+                        [
+                            'contentType' => 'video/mp4',
+                            'contentUrl' => $attachment->getUrl(),
+                        ],
+                    ];
+                }
             }
         } else {
             $parameters['text'] = $message;
         }
 
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
-        $this->apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
+        $this->apiURL = Collection::make($payload)->get('serviceUrl',
+                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
 
         if (strstr($this->apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
@@ -216,7 +225,8 @@ class BotFrameworkDriver extends Driver
             'Authorization:Bearer '.$this->getAccessToken(),
         ];
 
-        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl', Collection::make($parameters)->get('serviceUrl'));
+        $apiURL = Collection::make($matchingMessage->getPayload())->get('serviceUrl',
+            Collection::make($parameters)->get('serviceUrl'));
 
         return $this->http->post($apiURL.'/v3/'.$endpoint, [], $parameters, $headers, true);
     }

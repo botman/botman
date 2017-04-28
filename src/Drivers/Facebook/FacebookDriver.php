@@ -8,6 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
@@ -109,10 +111,10 @@ class FacebookDriver extends Driver
     {
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
-            return Answer::create($message->getMessage())->setMessage($message)->setInteractiveReply(true)->setValue($payload['message']['quick_reply']['payload']);
+            return Answer::create($message->getText())->setMessage($message)->setInteractiveReply(true)->setValue($payload['message']['quick_reply']['payload']);
         }
 
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -198,24 +200,29 @@ class FacebookDriver extends Driver
         } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
-            if (! is_null($message->getImage())) {
-                unset($parameters['message']['text']);
-                $parameters['message']['attachment'] = [
-                    'type' => 'image',
-                    'payload' => [
-                        'url' => $message->getImage(),
-                    ],
-                ];
-            } elseif (! is_null($message->getVideo())) {
-                unset($parameters['message']['text']);
-                $parameters['message']['attachment'] = [
-                    'type' => 'video',
-                    'payload' => [
-                        'url' => $message->getVideo(),
-                    ],
-                ];
+            $attachment = $message->getAttachment();
+            if (! is_null($attachment)) {
+                if ($attachment instanceof Image) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'image',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Video) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'video',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } else {
+                    $parameters['message']['text'] = $message->getText();
+                }
             } else {
-                $parameters['message']['text'] = $message->getMessage();
+                $parameters['message']['text'] = $message->getText();
             }
         }
 

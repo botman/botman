@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan\Drivers\WeChat;
 
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
 
 class WeChatLocationDriver extends WeChatDriver
@@ -37,7 +36,8 @@ class WeChatLocationDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::LOCATION_PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'), $this->event);
+        $message = new Message(Location::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
+            $this->event);
         $message->setLocation($this->getLocation());
 
         return [$message];
@@ -49,7 +49,7 @@ class WeChatLocationDriver extends WeChatDriver
      */
     private function getLocation()
     {
-        return new Location($this->event->get('Location_X'), $this->event->get('Location_Y'));
+        return new Location($this->event->get('Location_X'), $this->event->get('Location_Y'), $this->event);
     }
 
     /**

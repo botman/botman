@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Messages\Matcher;
+use Mpociot\BotMan\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\Telegram\TelegramVideoDriver;
@@ -173,7 +174,11 @@ class TelegramVideoDriverTest extends PHPUnit_Framework_TestCase
             ],
         ], $htmlInterface);
         $message = $driver->getMessages()[0];
-        $this->assertSame(Matcher::VIDEO_PATTERN, $message->getMessage());
-        $this->assertSame(['https://api.telegram.org/file/bot/foo'], $message->getVideos());
+        $this->assertSame(Video::PATTERN, $message->getText());
+        $this->assertSame('https://api.telegram.org/file/bot/foo', $message->getVideos()[0]->getUrl());
+        $this->assertSame([
+            'mime_type' => 'video/quicktime',
+            'file_id' => 'AgADAgAD6KcxG4tSUUnK3tsu3YsxCu8VSw0ABO72aPxtHuGxcGMFAAEC',
+        ], $message->getVideos()[0]->getPayload());
     }
 }

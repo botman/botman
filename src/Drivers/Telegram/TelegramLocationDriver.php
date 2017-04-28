@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan\Drivers\Telegram;
 
 use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Location;
 
 class TelegramLocationDriver extends TelegramDriver
@@ -27,8 +26,10 @@ class TelegramLocationDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Matcher::LOCATION_PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'], $this->event);
-        $message->setLocation(new Location($this->event->get('location')['latitude'], $this->event->get('location')['longitude']));
+        $message = new Message(Location::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+            $this->event);
+        $message->setLocation(new Location($this->event->get('location')['latitude'],
+            $this->event->get('location')['longitude'], $this->event->get('location')));
 
         return [$message];
     }

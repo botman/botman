@@ -44,7 +44,7 @@ class Command
     /**
      * Apply possible group attributes.
      *
-     * @param  array  $attributes
+     * @param  array $attributes
      */
     public function applyGroupAttributes(array $attributes)
     {
