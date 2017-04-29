@@ -33,7 +33,7 @@ class Location extends Attachment
      * @param string $longitude
      * @return Location
      */
-    public static function url($latitude, $longitude)
+    public static function create($latitude, $longitude)
     {
         return new self($latitude, $longitude);
     }
