@@ -2,6 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -214,6 +216,22 @@ class FacebookDriver extends Driver
                     unset($parameters['message']['text']);
                     $parameters['message']['attachment'] = [
                         'type' => 'video',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Audio) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'audio',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof File) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'file',
                         'payload' => [
                             'url' => $attachment->getUrl(),
                         ],

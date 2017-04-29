@@ -2,6 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
+use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -189,6 +192,7 @@ class TelegramDriver extends Driver
         } elseif ($message instanceof IncomingMessage) {
             if (! is_null($message->getAttachment())) {
                 $attachment = $message->getAttachment();
+                $parameters['caption'] = $message->getText();
                 if ($attachment instanceof Image) {
                     if (strtolower(pathinfo($attachment->getUrl(), PATHINFO_EXTENSION)) === 'gif') {
                         $this->endpoint = 'sendDocument';
@@ -200,8 +204,17 @@ class TelegramDriver extends Driver
                 } elseif ($attachment instanceof Video) {
                     $this->endpoint = 'sendVideo';
                     $parameters['video'] = $attachment->getUrl();
+                } elseif ($attachment instanceof Audio) {
+                    $this->endpoint = 'sendAudio';
+                    $parameters['audio'] = $attachment->getUrl();
+                } elseif ($attachment instanceof File) {
+                    $this->endpoint = 'sendDocument';
+                    $parameters['document'] = $attachment->getUrl();
+                } elseif ($attachment instanceof Location) {
+                    $this->endpoint = 'sendLocation';
+                    $parameters['latitude'] = $attachment->getLatitude();
+                    $parameters['longitude'] = $attachment->getLongitude();
                 }
-                $parameters['caption'] = $message->getText();
             } else {
                 $parameters['text'] = $message->getText();
             }
