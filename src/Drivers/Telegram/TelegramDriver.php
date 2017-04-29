@@ -2,17 +2,17 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;

@@ -3,18 +3,18 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
@@ -751,6 +751,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', new Location('123','321')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', new Location('123', '321')), $message));
     }
 }

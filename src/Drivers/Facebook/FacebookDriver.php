@@ -2,14 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
