@@ -65,9 +65,10 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
 
         $this->listenToFakeMessage('Hello', 'helloman123', '#helloworld');
 
+        static::assertCount(1, $this->fakeDriver->getBotMessages());
         static::assertEquals(
-            ['World!'],
-            $this->fakeDriver->getBotMessages()
+            'World!',
+            $this->fakeDriver->getBotMessages()[0]->getText()
         );
 
         return $this->fakeDriver;
@@ -134,10 +135,13 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         });
 
         $this->listenToFakeMessage('Hello', 'helloman123', '#helloworld');
-        static::assertEquals(['Who are you?'], $this->fakeDriver->getBotMessages());
+        static::assertCount(1, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Who are you?', $this->fakeDriver->getBotMessages()[0]->getText());
 
         $this->replyWithFakeMessage('Helloman', 'helloman123', '#helloworld');
-        static::assertEquals(['Who are you?', 'Hello, Helloman'], $this->fakeDriver->getBotMessages());
+        static::assertCount(2, $this->fakeDriver->getBotMessages());
+        static::assertEquals('Who are you?', $this->fakeDriver->getBotMessages()[0]->getText());
+        static::assertEquals('Hello, Helloman', $this->fakeDriver->getBotMessages()[1]->getText());
     }
 
     private function listenToFakeMessage($message, $username, $channel)

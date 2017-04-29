@@ -11,6 +11,7 @@ use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Interfaces\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Messages\Message as OutgoingMessage;
 
 class KikDriver extends Driver
 {
@@ -102,11 +103,11 @@ class KikDriver extends Driver
      */
     public function getConversationAnswer(Message $message)
     {
-        return Answer::create($message->getMessage())->setMessage($message);
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
-     * @param string|Question $message
+     * @param OutgoingMessage|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
      * @return array
@@ -116,7 +117,7 @@ class KikDriver extends Driver
         return [
             'messages' => [
                 [
-                    'body' => $message,
+                    'body' => $message->getText(),
                     'to' => $matchingMessage->getUser(),
                     'type' => 'text',
                     'chatId' => $matchingMessage->getChannel(),

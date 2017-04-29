@@ -20,6 +20,7 @@ use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Conversations\InlineConversation;
+use Mpociot\BotMan\Messages\Message as OutgoingMessage;
 
 /**
  * Class BotMan.
@@ -461,6 +462,8 @@ class BotMan
      */
     public function reply($message, $additionalParameters = [])
     {
+        $message = is_string($message) ? OutgoingMessage::create($message) : $message;
+
         return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
     }
 
