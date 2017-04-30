@@ -13,14 +13,17 @@ use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
-use Mpociot\BotMan\Attachments\Attachment;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingOptins;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingPostbacks;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
 
 class FacebookDriver extends Driver
 {
@@ -76,15 +79,32 @@ class FacebookDriver extends Driver
     }
 
     /**
-     * @return bool|mixed
+     * @return bool|DriverEventInterface
      */
     public function hasMatchingEvent()
     {
-        $event = Collection::make($this->event->get('messaging'))->transform(function ($msg) {
-            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message', 'postback', 'referral', 'optin'])->toArray();
-        });
+        $event = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message'])->isNotEmpty();
+        })->transform(function ($msg) {
+            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message'])->toArray();
+        })->first();
 
-        return $event->isEmpty() ? false : $event->first();
+        if (! is_null($event)) {
+            return $this->getEventFromEventData($event);
+        }
+
+        return false;
+    }
+
+    protected function getEventFromEventData(array $eventData) {
+        $name = Collection::make($eventData)->keys()->first();
+        if ($name === 'postback') {
+            return new MessagingPostbacks($eventData);
+        } elseif ($name === 'referral') {
+            return new MessagingReferrals($eventData);
+        } elseif ($name === 'optin') {
+            return new MessagingOptins($eventData);
+        }
     }
 
     /**
@@ -183,13 +203,6 @@ class FacebookDriver extends Driver
             'text' => $questionData['text'],
             'quick_replies' => $replies->toArray(),
         ];
-    }
-
-    private function getAttachmentType(Attachment $attachment)
-    {
-        if ($attachment instanceof Image) {
-            return 'image';
-        }
     }
 
     /**
