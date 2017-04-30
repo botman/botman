@@ -69,7 +69,6 @@ class BotManDriverEventTest extends PHPUnit_Framework_TestCase
 
 class TestEvent implements DriverEventInterface
 {
-
     /**
      * @param $payload
      */
