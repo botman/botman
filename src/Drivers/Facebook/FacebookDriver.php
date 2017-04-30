@@ -13,6 +13,7 @@ use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
+use Mpociot\BotMan\Attachments\Attachment;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
@@ -35,6 +36,13 @@ class FacebookDriver extends Driver
         GenericTemplate::class,
         ListTemplate::class,
         ReceiptTemplate::class,
+    ];
+
+    private $supportedAttachments = [
+        Video::class,
+        Audio::class,
+        Image::class,
+        File::class,
     ];
 
     protected $facebookProfileEndpoint = 'https://graph.facebook.com/v2.6/';
@@ -177,6 +185,13 @@ class FacebookDriver extends Driver
         ];
     }
 
+    private function getAttachmentType(Attachment $attachment)
+    {
+        if ($attachment instanceof Image) {
+            return 'image';
+        }
+    }
+
     /**
      * @param string|Question|IncomingMessage $message
      * @param Message $matchingMessage
@@ -203,42 +218,15 @@ class FacebookDriver extends Driver
             $parameters['message'] = $message->toArray();
         } elseif ($message instanceof IncomingMessage) {
             $attachment = $message->getAttachment();
-            if (! is_null($attachment)) {
-                if ($attachment instanceof Image) {
-                    unset($parameters['message']['text']);
-                    $parameters['message']['attachment'] = [
-                        'type' => 'image',
-                        'payload' => [
-                            'url' => $attachment->getUrl(),
-                        ],
-                    ];
-                } elseif ($attachment instanceof Video) {
-                    unset($parameters['message']['text']);
-                    $parameters['message']['attachment'] = [
-                        'type' => 'video',
-                        'payload' => [
-                            'url' => $attachment->getUrl(),
-                        ],
-                    ];
-                } elseif ($attachment instanceof Audio) {
-                    unset($parameters['message']['text']);
-                    $parameters['message']['attachment'] = [
-                        'type' => 'audio',
-                        'payload' => [
-                            'url' => $attachment->getUrl(),
-                        ],
-                    ];
-                } elseif ($attachment instanceof File) {
-                    unset($parameters['message']['text']);
-                    $parameters['message']['attachment'] = [
-                        'type' => 'file',
-                        'payload' => [
-                            'url' => $attachment->getUrl(),
-                        ],
-                    ];
-                } else {
-                    $parameters['message']['text'] = $message->getText();
-                }
+            if (in_array(get_class($attachment), $this->supportedAttachments)) {
+                $attachmentType = strtolower(basename(str_replace('\\', '/', get_class($attachment))));
+                unset($parameters['message']['text']);
+                $parameters['message']['attachment'] = [
+                    'type' => $attachmentType,
+                    'payload' => [
+                        'url' => $attachment->getUrl(),
+                    ],
+                ];
             } else {
                 $parameters['message']['text'] = $message->getText();
             }
