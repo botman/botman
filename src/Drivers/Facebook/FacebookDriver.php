@@ -8,6 +8,8 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Facebook\ListTemplate;
@@ -214,6 +216,22 @@ class FacebookDriver extends Driver
                     unset($parameters['message']['text']);
                     $parameters['message']['attachment'] = [
                         'type' => 'video',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof Audio) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'audio',
+                        'payload' => [
+                            'url' => $attachment->getUrl(),
+                        ],
+                    ];
+                } elseif ($attachment instanceof File) {
+                    unset($parameters['message']['text']);
+                    $parameters['message']['attachment'] = [
+                        'type' => 'file',
                         'payload' => [
                             'url' => $attachment->getUrl(),
                         ],

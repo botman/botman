@@ -9,9 +9,12 @@ use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
@@ -633,5 +636,121 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
 
         $message = $driver->getMessages()[0];
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Video::url('http://image.url/foo.mp4')), $message));
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_audio()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendAudio', [], [
+                'chat_id' => '12345',
+                'audio' => 'http://image.url/foo.mp3',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test',
+            Audio::url('http://image.url/foo.mp3')), $message));
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_file()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendDocument', [], [
+                'chat_id' => '12345',
+                'document' => 'http://image.url/foo.pdf',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', File::url('http://image.url/foo.pdf')), $message));
+    }
+
+    /** @test */
+    public function it_can_reply_message_objects_with_location()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendLocation', [], [
+                'chat_id' => '12345',
+                'latitude' => '123',
+                'longitude' => '321',
+                'caption' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', new Location('123', '321')), $message));
     }
 }
