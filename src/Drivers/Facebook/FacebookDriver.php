@@ -96,7 +96,8 @@ class FacebookDriver extends Driver
         return false;
     }
 
-    protected function getEventFromEventData(array $eventData) {
+    protected function getEventFromEventData(array $eventData)
+    {
         $name = Collection::make($eventData)->keys()->first();
         if ($name === 'postback') {
             return new MessagingPostbacks($eventData);
