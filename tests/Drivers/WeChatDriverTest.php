@@ -97,11 +97,11 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
 <Content><![CDATA[foo]]></Content>
 <MsgId>1234567890</MsgId>
 </xml>');
-        $this->assertSame('to_user_name', $driver->getMessages()[0]->getSender());
+        $this->assertSame('from_user_name', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
-    public function it_returns_the_channel_id()
+    public function it_returns_the_recipient_id()
     {
         $driver = $this->getDriver('<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
 <FromUserName><![CDATA[from_user_name]]></FromUserName>
@@ -110,7 +110,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
 <Content><![CDATA[foo]]></Content>
 <MsgId>1234567890</MsgId>
 </xml>');
-        $this->assertSame('from_user_name', $driver->getMessages()[0]->getRecipient());
+        $this->assertSame('to_user_name', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

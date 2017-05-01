@@ -61,7 +61,7 @@ class WeChatDriver extends Driver
             [], [], [], true);
         $responseData = json_decode($response->getContent());
 
-        return new User($matchingMessage->getRecipient(), null, null, $responseData->nickname);
+        return new User($matchingMessage->getSender(), null, null, $responseData->nickname);
     }
 
     /**
@@ -72,8 +72,8 @@ class WeChatDriver extends Driver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('Content'), $this->event->get('ToUserName'),
-                $this->event->get('FromUserName'), $this->event),
+            new Message($this->event->get('Content'), $this->event->get('FromUserName'),
+                $this->event->get('ToUserName'), $this->event),
         ];
     }
 
@@ -106,7 +106,7 @@ class WeChatDriver extends Driver
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
-            'touser' => $matchingMessage->getRecipient(),
+            'touser' => $matchingMessage->getSender(),
             'msgtype' => 'text',
         ], $additionalParameters);
 
