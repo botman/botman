@@ -3,14 +3,14 @@
 namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
 
 class TelegramFileDriverTest extends PHPUnit_Framework_TestCase
 {

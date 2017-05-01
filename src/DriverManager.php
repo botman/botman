@@ -2,8 +2,6 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\Facebook\FacebookFileDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Drivers\NullDriver;
@@ -19,6 +17,8 @@ use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookFileDriver;
+use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatLocationDriver;
 use Mpociot\BotMan\Drivers\Facebook\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\Facebook\FacebookImageDriver;
