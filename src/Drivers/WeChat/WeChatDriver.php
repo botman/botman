@@ -60,8 +60,9 @@ class WeChatDriver extends Driver
         $response = $this->http->post('https://api.wechat.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$matchingMessage->getRecipient().'&lang=en_US',
             [], [], [], true);
         $responseData = json_decode($response->getContent());
+        $nickname = isset($responseData->nickname) ? $responseData->nickname : '';
 
-        return new User($matchingMessage->getSender(), null, null, $responseData->nickname);
+        return new User($matchingMessage->getSender(), null, null, $nickname);
     }
 
     /**
