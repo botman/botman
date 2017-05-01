@@ -3,9 +3,9 @@
 namespace Mpociot\BotMan;
 
 use Closure;
-use Mpociot\BotMan\Attachments\File;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Messages\Matcher;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;

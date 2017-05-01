@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Attachments\File;
 
 class TelegramFileDriver extends TelegramDriver
 {

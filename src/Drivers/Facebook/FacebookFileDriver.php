@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Message;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Attachments\File;
 
 class FacebookFileDriver extends FacebookDriver
 {
