@@ -158,7 +158,7 @@ class FacebookDriver extends Driver
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
-                return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+                return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
             }
 
             return new Message('', '', '');
@@ -276,13 +276,13 @@ class FacebookDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
+        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getUser().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
 
         $profileData = json_decode($profileData->getContent());
         $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
         $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
 
-        return new User($matchingMessage->getChannel(), $firstName, $lastName);
+        return new User($matchingMessage->getUser(), $firstName, $lastName);
     }
 
     /**
