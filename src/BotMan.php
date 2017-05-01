@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\BotMan\Attachments\File;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Matcher;
@@ -265,7 +266,18 @@ class BotMan
     }
 
     /**
-     * Add additional data (image,video,audio,location) data to
+     * Listening for files attachment.
+     *
+     * @param $callback
+     * @return Command
+     */
+    public function receivesFiles($callback)
+    {
+        return $this->hears(File::PATTERN, $callback);
+    }
+
+    /**
+     * Add additional data (image,video,audio,location,files) data to
      * callable parameters.
      *
      * @param Message $message
@@ -284,6 +296,8 @@ class BotMan
             $parameters[] = $message->getAudio();
         } elseif ($messageText === Location::PATTERN) {
             $parameters[] = $message->getLocation();
+        } elseif ($messageText === File::PATTERN) {
+            $parameters[] = $message->getFiles();
         }
 
         return $parameters;

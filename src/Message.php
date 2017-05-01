@@ -32,6 +32,9 @@ class Message
     private $audio = [];
 
     /** @var array */
+    private $files = [];
+
+    /** @var array */
     private $attachments = [];
 
     /** @var Location */
@@ -62,7 +65,7 @@ class Message
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getPayload()
     {
@@ -129,7 +132,7 @@ class Message
     }
 
     /**
-     * Returns the message image URL.
+     * Returns the message image Objects.
      * @return array
      */
     public function getImages()
@@ -146,7 +149,7 @@ class Message
     }
 
     /**
-     * Returns the message video URLs.
+     * Returns the message video Objects.
      * @return array
      */
     public function getVideos()
@@ -163,6 +166,7 @@ class Message
     }
 
     /**
+     * Returns the message audio Objects.
      * @return array
      */
     public function getAudio()
@@ -171,19 +175,19 @@ class Message
     }
 
     /**
-     * @param array $attachments
+     * @param array $files
      */
-    public function setAttachments(array $attachments)
+    public function setFiles(array $files)
     {
-        $this->attachments = $attachments;
+        $this->files = $files;
     }
 
     /**
      * @return array
      */
-    public function getAttachments()
+    public function getFiles()
     {
-        return $this->attachments;
+        return $this->files;
     }
 
     /**
