@@ -137,7 +137,7 @@ class FacebookDriver extends Driver
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
-                return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+                return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
             }
 
             return new Message('', '', '');
@@ -202,7 +202,7 @@ class FacebookDriver extends Driver
     {
         $parameters = array_merge_recursive([
             'recipient' => [
-                'id' => $matchingMessage->getRecipient(),
+                'id' => $matchingMessage->getSender(),
             ],
             'message' => [
                 'text' => $message,
@@ -268,7 +268,7 @@ class FacebookDriver extends Driver
         $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
         $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
 
-        return new User($matchingMessage->getRecipient(), $firstName, $lastName);
+        return new User($matchingMessage->getSender(), $firstName, $lastName);
     }
 
     /**

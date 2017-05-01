@@ -164,7 +164,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
@@ -213,7 +213,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'custom' => 'payload',
         ]));
@@ -315,7 +315,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
@@ -387,7 +387,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
@@ -440,7 +440,7 @@ class FacebookPostbackDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url//foo.png')), $message));
     }
 }

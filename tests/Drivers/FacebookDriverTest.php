@@ -130,16 +130,16 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('111899832631525', $driver->getMessages()[0]->getSender());
+        $this->assertSame('1433960459967306', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
-    public function it_returns_the_channel_id()
+    public function it_returns_the_recipient_id()
     {
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('1433960459967306', $driver->getMessages()[0]->getRecipient());
+        $this->assertSame('111899832631525', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */
@@ -186,7 +186,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
@@ -235,7 +235,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'custom' => 'payload',
         ]));
@@ -281,7 +281,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
-        $message = new Message('Red', '0987654321', '1234567890', [
+        $message = new Message('Red', '1234567890', '0987654321', [
             'sender' => [
                 'id' => '1234567890',
             ],
@@ -338,7 +338,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
@@ -410,7 +410,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
@@ -463,7 +463,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url//foo.png')), $message));
     }
 
@@ -516,7 +516,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Audio::url('http://image.url//foo.mp3')), $message));
     }
 
@@ -569,7 +569,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', File::url('http://image.url//foo.pdf')), $message));
     }
 }

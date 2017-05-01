@@ -173,7 +173,7 @@ class FacebookReferralDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', '1234567890');
+        $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 }
