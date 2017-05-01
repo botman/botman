@@ -41,7 +41,7 @@ class FacebookAudioDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Audio::PATTERN, $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            $message = new Message(Audio::PATTERN, $msg['sender']['id'], $msg['recipient']['id'], $msg);
             $message->setAudio($this->getAudioUrls($msg));
 
             return $message;
