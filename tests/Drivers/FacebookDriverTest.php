@@ -15,6 +15,9 @@ use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingOptins;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingPostbacks;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -571,5 +574,38 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('', '1234567890', '');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', File::url('http://image.url//foo.pdf')), $message));
+    }
+
+    /** @test */
+    public function it_calls_postback_event()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"postback":{"payload":"MY_PAYLOAD"}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingPostbacks::class, $event);
+        $this->assertSame('messaging_postbacks', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_referral_event()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"referral":{"ref":"MY_REF","source": "MY_SOURCE","type": "MY_TYPE"}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingReferrals::class, $event);
+        $this->assertSame('messaging_referrals', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_optin_event()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"optin": {"ref":"optin","user_ref":"1234"}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingOptins::class, $event);
+        $this->assertSame('messaging_optins', $event->getName());
     }
 }

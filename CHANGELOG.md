@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file.
 - Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting.
 - Moved message matching into a separate `Matcher` class.
 
+### Removed
+- Removed `FacebookPostbackDriver`, `FacebookOptinDriver` and `FacebookReferralDriver` in favor of the new event API.
+
 ## [1.5.6]
 ### Fixed
 Custom drivers now get loaded first.
