@@ -219,7 +219,7 @@ class SlackDriver extends Driver
     {
         $parameters = array_merge_recursive([
             'token' => $this->payload->get('token'),
-            'channel' => $matchingMessage->getChannel(),
+            'channel' => $matchingMessage->getRecipient(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
@@ -275,7 +275,7 @@ class SlackDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getUser());
+        return new User($matchingMessage->getSender());
     }
 
     /**

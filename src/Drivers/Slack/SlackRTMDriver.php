@@ -146,7 +146,7 @@ class SlackRTMDriver implements DriverInterface
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
-            'channel' => $matchingMessage->getChannel(),
+            'channel' => $matchingMessage->getRecipient(),
             'as_user' => true,
         ], $additionalParameters);
 
@@ -179,7 +179,7 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message;
         }
 
-        return (is_null($this->file)) ? $parameters : [$matchingMessage->getChannel()];
+        return (is_null($this->file)) ? $parameters : [$matchingMessage->getRecipient()];
     }
 
     /**
@@ -243,15 +243,15 @@ class SlackRTMDriver implements DriverInterface
     public function getUser(Message $matchingMessage)
     {
         $user = null;
-        $this->client->getUserById($matchingMessage->getUser())->then(function ($_user) use (&$user) {
+        $this->client->getUserById($matchingMessage->getSender())->then(function ($_user) use (&$user) {
             $user = $_user;
         });
         if (! is_null($user)) {
-            return new User($matchingMessage->getUser(), $user->getFirstName(), $user->getLastName(),
+            return new User($matchingMessage->getSender(), $user->getFirstName(), $user->getLastName(),
                 $user->getUsername());
         }
 
-        return new User($matchingMessage->getUser());
+        return new User($matchingMessage->getSender());
     }
 
     /**
@@ -261,7 +261,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getChannel(Message $matchingMessage)
     {
-        return $this->client->getChannelById($matchingMessage->getChannel());
+        return $this->client->getChannelById($matchingMessage->getRecipient());
     }
 
     /**
@@ -271,7 +271,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getChannelGroupOrDM(Message $matchingMessage)
     {
-        return $this->client->getChannelGroupOrDMByID($matchingMessage->getChannel());
+        return $this->client->getChannelGroupOrDMByID($matchingMessage->getRecipient());
     }
 
     /**

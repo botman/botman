@@ -381,7 +381,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-            $this->assertSame('U0X12345', $bot->getMessage()->getUser());
+            $this->assertSame('U0X12345', $bot->getMessage()->getSender());
         });
         $botman->listen();
         $this->assertTrue($called);
@@ -917,7 +917,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_only_listens_on_specific_channels()
+    public function it_only_listens_for_specific_recipients()
     {
         $called_one = false;
         $called_two = false;
@@ -933,11 +933,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called_one) {
             $called_one = true;
-        })->channel('C12345');
+        })->recipient('C12345');
 
         $botman->hears('foo', function ($bot) use (&$called_two) {
             $called_two = true;
-        })->channel('C123456');
+        })->recipient('C123456');
 
         $botman->listen();
 
@@ -946,7 +946,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_only_listens_on_specific_channels_in_group()
+    public function it_only_listens_on_specific_recipients_in_group()
     {
         $called_one = false;
         $called_two = false;
@@ -960,13 +960,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['channel' => 'C12345'], function ($botman) use (&$called_one) {
+        $botman->group(['recipient' => 'C12345'], function ($botman) use (&$called_one) {
             $botman->hears('foo', function ($bot) use (&$called_one) {
                 $called_one = true;
             });
         });
 
-        $botman->group(['channel' => 'C123456'], function ($botman) use (&$called_two) {
+        $botman->group(['recipient' => 'C123456'], function ($botman) use (&$called_two) {
             $botman->hears('foo', function ($bot) use (&$called_two) {
                 $called_two = true;
             });
@@ -1106,7 +1106,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getRecipient() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1137,7 +1137,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) use ($additionalParameters) {
-                return $message->getText() === 'foo' && $match->getChannel() === '1234567890' && $arguments === $additionalParameters;
+                return $message->getText() === 'foo' && $match->getRecipient() === '1234567890' && $arguments === $additionalParameters;
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1164,7 +1164,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'foo' && $match->getChannel() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getRecipient() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();

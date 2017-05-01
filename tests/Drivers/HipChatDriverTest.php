@@ -170,7 +170,7 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             ],
             'webhook_id' => '11223344',
         ]);
-        $this->assertSame('12345', $driver->getMessages()[0]->getUser());
+        $this->assertSame('12345', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -191,7 +191,7 @@ class HipChatDriverTest extends PHPUnit_Framework_TestCase
             ],
             'webhook_id' => '11223344',
         ]);
-        $this->assertSame('98765', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('98765', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

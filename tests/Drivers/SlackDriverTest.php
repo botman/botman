@@ -235,7 +235,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'user' => 'U0X12345',
             ],
         ]);
-        $this->assertSame('U0X12345', $driver->getMessages()[0]->getUser());
+        $this->assertSame('U0X12345', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -255,7 +255,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('U1234567890', $driver->getMessages()[0]->getUser());
+        $this->assertSame('U1234567890', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -267,7 +267,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'channel' => 'general',
             ],
         ]);
-        $this->assertSame('general', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('general', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */
@@ -287,7 +287,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], m::mock(Curl::class));
         $this->assertTrue(is_array($driver->getMessages()));
-        $this->assertSame('C1234567890', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('C1234567890', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */
@@ -315,7 +315,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
-        $this->assertSame('U045VRZFT', $driver->getMessages()[0]->getUser());
+        $this->assertSame('U045VRZFT', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -339,7 +339,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
-        $this->assertSame('C065W1189', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('C065W1189', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */
