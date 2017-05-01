@@ -109,7 +109,7 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
             'keyword' => 'HEY',
             'message_timestamp' => '2016-11-30 19:27:46',
         ]);
-        $this->assertSame('4176260130298', $driver->getMessages()[0]->getSender());
+        $this->assertSame('491762012309022505', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -124,7 +124,7 @@ class NexmoDriverTest extends PHPUnit_Framework_TestCase
             'keyword' => 'HEY',
             'message_timestamp' => '2016-11-30 19:27:46',
         ]);
-        $this->assertSame('491762012309022505', $driver->getMessages()[0]->getRecipient());
+        $this->assertSame('4176260130298', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

@@ -31,7 +31,7 @@ class NexmoDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getRecipient());
+        return new User($matchingMessage->getSender());
     }
 
     /**
@@ -61,7 +61,7 @@ class NexmoDriver extends Driver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('text'), $this->event->get('to'), $this->event->get('msisdn'), $this->payload),
+            new Message($this->event->get('text'), $this->event->get('msisdn'), $this->event->get('to'), $this->payload),
         ];
     }
 
@@ -84,8 +84,8 @@ class NexmoDriver extends Driver
         $parameters = array_merge_recursive([
             'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
-            'to' => $matchingMessage->getRecipient(),
-            'from' => $matchingMessage->getSender(),
+            'to' => $matchingMessage->getSender(),
+            'from' => $matchingMessage->getRecipient(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
