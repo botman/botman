@@ -917,7 +917,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_only_listens_on_specific_channels()
+    public function it_only_listens_for_specific_recipients()
     {
         $called_one = false;
         $called_two = false;
@@ -933,11 +933,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called_one) {
             $called_one = true;
-        })->channel('C12345');
+        })->recipient('C12345');
 
         $botman->hears('foo', function ($bot) use (&$called_two) {
             $called_two = true;
-        })->channel('C123456');
+        })->recipient('C123456');
 
         $botman->listen();
 
@@ -946,7 +946,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_only_listens_on_specific_channels_in_group()
+    public function it_only_listens_on_specific_recipients_in_group()
     {
         $called_one = false;
         $called_two = false;
@@ -960,13 +960,13 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['channel' => 'C12345'], function ($botman) use (&$called_one) {
+        $botman->group(['recipient' => 'C12345'], function ($botman) use (&$called_one) {
             $botman->hears('foo', function ($bot) use (&$called_one) {
                 $called_one = true;
             });
         });
 
-        $botman->group(['channel' => 'C123456'], function ($botman) use (&$called_two) {
+        $botman->group(['recipient' => 'C123456'], function ($botman) use (&$called_two) {
             $botman->hears('foo', function ($bot) use (&$called_two) {
                 $called_two = true;
             });

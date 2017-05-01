@@ -66,13 +66,13 @@ class Matcher
     }
 
     /**
-     * @param $givenChannel
-     * @param $allowedChannel
+     * @param $givenRecipient
+     * @param $allowedRecipient
      * @return bool
      */
-    public function isChannelValid($givenChannel, $allowedChannel)
+    public function isRecipientValid($givenRecipient, $allowedRecipient)
     {
-        return $givenChannel == $allowedChannel || $allowedChannel === null;
+        return $givenRecipient == $allowedRecipient || $allowedRecipient === null;
     }
 
     /**
