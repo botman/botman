@@ -40,8 +40,8 @@ class TelegramDriver extends Driver
     public function getUser(Message $matchingMessage)
     {
         $parameters = [
-            'chat_id' => $matchingMessage->getChannel(),
-            'user_id' => $matchingMessage->getUser(),
+            'chat_id' => $matchingMessage->getRecipient(),
+            'user_id' => $matchingMessage->getSender(),
         ];
 
         $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getChatMember',
@@ -122,7 +122,7 @@ class TelegramDriver extends Driver
     public function types(Message $matchingMessage)
     {
         $parameters = [
-            'chat_id' => $matchingMessage->getChannel(),
+            'chat_id' => $matchingMessage->getRecipient(),
             'action' => 'typing',
         ];
         $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/sendChatAction', [],
@@ -178,7 +178,7 @@ class TelegramDriver extends Driver
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
-            'chat_id' => $matchingMessage->getChannel(),
+            'chat_id' => $matchingMessage->getRecipient(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
@@ -254,7 +254,7 @@ class TelegramDriver extends Driver
     public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
     {
         $parameters = array_replace_recursive([
-            'chat_id' => $matchingMessage->getChannel(),
+            'chat_id' => $matchingMessage->getRecipient(),
         ], $parameters);
 
         return $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/'.$endpoint, [],

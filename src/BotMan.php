@@ -348,7 +348,7 @@ class BotMan
                 if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) &&
                     $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->matcher->isChannelValid($message->getChannel(), $messageData['channel']) &&
+                    $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) &&
                     $this->loadedConversation === false
                 ) {
                     $heardMessage = true;
@@ -380,12 +380,12 @@ class BotMan
 
     /**
      * @param string|Question $message
-     * @param string|array $channel
+     * @param string|array $recipient
      * @param DriverInterface|null $driver
      * @param array $additionalParameters
      * @return $this
      */
-    public function say($message, $channel, $driver = null, $additionalParameters = [])
+    public function say($message, $recipient, $driver = null, $additionalParameters = [])
     {
         if (is_null($driver)) {
             $drivers = DriverManager::getConfiguredDrivers($this->config);
@@ -394,7 +394,7 @@ class BotMan
         }
 
         foreach ($drivers as $driver) {
-            $this->message = new Message('', '', $channel);
+            $this->message = new Message('', '', $recipient);
             $this->setDriver($driver);
             $this->reply($message, $additionalParameters);
         }

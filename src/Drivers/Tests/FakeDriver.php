@@ -85,7 +85,7 @@ class FakeDriver implements DriverInterface
 
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getUser());
+        return new User($matchingMessage->getSender());
     }
 
     public function getConversationAnswer(Message $message)

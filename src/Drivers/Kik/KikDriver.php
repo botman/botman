@@ -88,13 +88,13 @@ class KikDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        $response = $this->http->get('https://api.kik.com/v1/user/'.$matchingMessage->getUser(), [], [
+        $response = $this->http->get('https://api.kik.com/v1/user/'.$matchingMessage->getSender(), [], [
             'Content-Type:application/json',
             'Authorization:Basic '.base64_encode(''),
         ]);
         $profileData = json_decode($response->getContent());
 
-        return new User($matchingMessage->getUser(), $profileData->firstName, $profileData->lastName, $matchingMessage->getUser());
+        return new User($matchingMessage->getSender(), $profileData->firstName, $profileData->lastName, $matchingMessage->getSender());
     }
 
     /**
@@ -118,9 +118,9 @@ class KikDriver extends Driver
             'messages' => [
                 [
                     'body' => $message->getText(),
-                    'to' => $matchingMessage->getUser(),
+                    'to' => $matchingMessage->getSender(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel(),
+                    'chatId' => $matchingMessage->getRecipient(),
                 ],
             ],
         ];
@@ -147,9 +147,9 @@ class KikDriver extends Driver
         return $this->sendPayload([
             'messages' => [
                 [
-                    'to' => $matchingMessage->getUser(),
+                    'to' => $matchingMessage->getSender(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel(),
+                    'chatId' => $matchingMessage->getRecipient(),
                 ],
             ],
         ]);

@@ -89,7 +89,7 @@ class BotFrameworkDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getChannel(), null, null,
+        return new User($matchingMessage->getRecipient(), null, null,
             Collection::make($matchingMessage->getPayload())->get('from')['name']);
     }
 
@@ -177,7 +177,7 @@ class BotFrameworkDriver extends Driver
 
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
         $this->apiURL = Collection::make($payload)->get('serviceUrl',
-                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities';
+                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getRecipient()).'/activities';
 
         if (strstr($this->apiURL, 'webchat.botframework')) {
             $parameters['from'] = [

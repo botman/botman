@@ -21,7 +21,7 @@ class Command
     protected $driver;
 
     /** @var string */
-    protected $channel;
+    protected $recipient;
 
     /** @var array */
     protected $middleware = [];
@@ -30,15 +30,15 @@ class Command
      * Command constructor.
      * @param string $pattern
      * @param Closure|string $callback
-     * @param string|null $channel
+     * @param string|null $recipient
      * @param string|null $driver
      */
-    public function __construct($pattern, $callback, $channel = null, $driver = null)
+    public function __construct($pattern, $callback, $recipient = null, $driver = null)
     {
         $this->pattern = $pattern;
         $this->callback = $callback;
         $this->driver = $driver;
-        $this->channel = $channel;
+        $this->recipient = $recipient;
     }
 
     /**
@@ -56,8 +56,8 @@ class Command
             $this->driver($attributes['driver']);
         }
 
-        if (isset($attributes['channel'])) {
-            $this->channel($attributes['channel']);
+        if (isset($attributes['recipient'])) {
+            $this->recipient($attributes['recipient']);
         }
     }
 
@@ -79,12 +79,12 @@ class Command
     }
 
     /**
-     * @param $channel
+     * @param $recipient
      * @return $this
      */
-    public function channel($channel)
+    public function recipient($recipient)
     {
-        $this->channel = $channel;
+        $this->recipient = $recipient;
 
         return $this;
     }
@@ -116,7 +116,7 @@ class Command
             'callback' => $this->callback,
             'driver' => $this->driver,
             'middleware' => $this->middleware,
-            'channel' => $this->channel,
+            'recipient' => $this->recipient,
         ];
     }
 }
