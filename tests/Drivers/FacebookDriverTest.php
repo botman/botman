@@ -4,6 +4,10 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
+use Mpociot\BotMan\DriverEvents\GenericEvent;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
@@ -607,5 +611,49 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         $event = $driver->hasMatchingEvent();
         $this->assertInstanceOf(MessagingOptins::class, $event);
         $this->assertSame('messaging_optins', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_delivery_event()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"USER_ID"},"recipient":{"id":"PAGE_ID"},"delivery":{"mids":["mid.1458668856218:ed81099e15d3f4f233"],"watermark":1458668856253,"seq":37}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingDeliveries::class, $event);
+        $this->assertSame('messaging_deliveries', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_read_event()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"USER_ID"},"recipient":{"id":"PAGE_ID"},"timestamp":1458668856463,"read":{"watermark":1458668856253,"seq":38}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingReads::class, $event);
+        $this->assertSame('messaging_reads', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_checkout_update_event()
+    {
+        $request = '{"object": "page","entry": [{"id": "PAGE_ID","time": 1473204787206,"messaging": [{"recipient": {"id": "PAGE_ID"},"timestamp": 1473204787206,"sender": {"id": "USER_ID"},"checkout_update": {"payload": "DEVELOPER_DEFINED_PAYLOAD","shipping_address": {"id": 10105655000959552,"country": "US","city": "MENLO PARK","street1": "1 Hacker Way","street2": "","state": "CA","postal_code": "94025"}}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(MessagingCheckoutUpdates::class, $event);
+        $this->assertSame('messaging_checkout_updates', $event->getName());
+    }
+
+    /** @test */
+    public function it_calls_generic_event_for_unkown_facebook_events()
+    {
+        $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"USER_ID"},"recipient":{"id":"PAGE_ID"},"timestamp":1458668856463,"foo":{"watermark":1458668856253,"seq":38}}]}]}';
+        $driver = $this->getDriver($request);
+
+        $event = $driver->hasMatchingEvent();
+        $this->assertInstanceOf(GenericEvent::class, $event);
+        $this->assertSame('foo', $event->getName());
     }
 }

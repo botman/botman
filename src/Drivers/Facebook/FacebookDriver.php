@@ -2,6 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -16,6 +19,7 @@ use Mpociot\BotMan\Facebook\ListTemplate;
 use Mpociot\BotMan\Facebook\ButtonTemplate;
 use Mpociot\BotMan\Facebook\GenericTemplate;
 use Mpociot\BotMan\Facebook\ReceiptTemplate;
+use Mpociot\BotMan\DriverEvents\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -96,15 +100,37 @@ class FacebookDriver extends Driver
         return false;
     }
 
+    /**
+     * @param array $eventData
+     * @return DriverEventInterface
+     */
     protected function getEventFromEventData(array $eventData)
     {
         $name = Collection::make($eventData)->keys()->first();
-        if ($name === 'postback') {
-            return new MessagingPostbacks($eventData);
-        } elseif ($name === 'referral') {
-            return new MessagingReferrals($eventData);
-        } elseif ($name === 'optin') {
-            return new MessagingOptins($eventData);
+        switch ($name) {
+            case 'postback':
+                return new MessagingPostbacks($eventData);
+            break;
+            case 'referral':
+                return new MessagingReferrals($eventData);
+            break;
+            case 'optin':
+                return new MessagingOptins($eventData);
+            break;
+            case 'delivery':
+                return new MessagingDeliveries($eventData);
+            break;
+            case 'read':
+                return new MessagingReads($eventData);
+            break;
+            case 'checkout_update':
+                return new MessagingCheckoutUpdates($eventData);
+            break;
+            default:
+                $event = new GenericEvent($eventData);
+                $event->setName($name);
+                return $event;
+            break;
         }
     }
 
