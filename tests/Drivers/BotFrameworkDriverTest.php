@@ -164,7 +164,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_channel_id()
     {
         $driver = $this->getDriver($this->getResponseData());
-        $this->assertSame('29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */
@@ -218,7 +218,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
             'entities' => [],
         ]);
 
-        $this->assertSame('29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

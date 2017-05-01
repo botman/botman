@@ -146,7 +146,7 @@ class SlackRTMDriver implements DriverInterface
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $parameters = array_merge_recursive([
-            'channel' => $matchingMessage->getChannel(),
+            'channel' => $matchingMessage->getRecipient(),
             'as_user' => true,
         ], $additionalParameters);
 
@@ -179,7 +179,7 @@ class SlackRTMDriver implements DriverInterface
             $parameters['text'] = $message;
         }
 
-        return (is_null($this->file)) ? $parameters : [$matchingMessage->getChannel()];
+        return (is_null($this->file)) ? $parameters : [$matchingMessage->getRecipient()];
     }
 
     /**
@@ -261,7 +261,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getChannel(Message $matchingMessage)
     {
-        return $this->client->getChannelById($matchingMessage->getChannel());
+        return $this->client->getChannelById($matchingMessage->getRecipient());
     }
 
     /**
@@ -271,7 +271,7 @@ class SlackRTMDriver implements DriverInterface
      */
     public function getChannelGroupOrDM(Message $matchingMessage)
     {
-        return $this->client->getChannelGroupOrDMByID($matchingMessage->getChannel());
+        return $this->client->getChannelGroupOrDMByID($matchingMessage->getRecipient());
     }
 
     /**

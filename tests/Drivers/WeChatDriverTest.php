@@ -110,7 +110,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
 <Content><![CDATA[foo]]></Content>
 <MsgId>1234567890</MsgId>
 </xml>');
-        $this->assertSame('from_user_name', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('from_user_name', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

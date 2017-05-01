@@ -348,7 +348,7 @@ class BotMan
                 if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) &&
                     $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->matcher->isChannelValid($message->getChannel(), $messageData['channel']) &&
+                    $this->matcher->isChannelValid($message->getRecipient(), $messageData['channel']) &&
                     $this->loadedConversation === false
                 ) {
                     $heardMessage = true;

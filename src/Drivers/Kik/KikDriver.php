@@ -120,7 +120,7 @@ class KikDriver extends Driver
                     'body' => $message->getText(),
                     'to' => $matchingMessage->getUser(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel(),
+                    'chatId' => $matchingMessage->getRecipient(),
                 ],
             ],
         ];
@@ -149,7 +149,7 @@ class KikDriver extends Driver
                 [
                     'to' => $matchingMessage->getUser(),
                     'type' => 'text',
-                    'chatId' => $matchingMessage->getChannel(),
+                    'chatId' => $matchingMessage->getRecipient(),
                 ],
             ],
         ]);

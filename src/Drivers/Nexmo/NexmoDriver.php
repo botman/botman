@@ -31,7 +31,7 @@ class NexmoDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getChannel());
+        return new User($matchingMessage->getRecipient());
     }
 
     /**
@@ -84,7 +84,7 @@ class NexmoDriver extends Driver
         $parameters = array_merge_recursive([
             'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
-            'to' => $matchingMessage->getChannel(),
+            'to' => $matchingMessage->getRecipient(),
             'from' => $matchingMessage->getUser(),
         ], $additionalParameters);
         /*

@@ -23,7 +23,7 @@ trait ProvidesStorage
     {
         return (new Storage($this->storage))
             ->setPrefix('channel_')
-            ->setDefaultKey($this->getMessage()->getChannel());
+            ->setDefaultKey($this->getMessage()->getRecipient());
     }
 
     /**

@@ -104,7 +104,7 @@ class FacebookDriver extends Driver
     {
         $parameters = [
             'recipient' => [
-                'id' => $matchingMessage->getChannel(),
+                'id' => $matchingMessage->getRecipient(),
             ],
             'access_token' => $this->config->get('facebook_token'),
             'sender_action' => 'typing_on',
@@ -202,7 +202,7 @@ class FacebookDriver extends Driver
     {
         $parameters = array_merge_recursive([
             'recipient' => [
-                'id' => $matchingMessage->getChannel(),
+                'id' => $matchingMessage->getRecipient(),
             ],
             'message' => [
                 'text' => $message,
@@ -262,13 +262,13 @@ class FacebookDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getChannel().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
+        $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getRecipient().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
 
         $profileData = json_decode($profileData->getContent());
         $firstName = isset($profileData->first_name) ? $profileData->first_name : null;
         $lastName = isset($profileData->last_name) ? $profileData->last_name : null;
 
-        return new User($matchingMessage->getChannel(), $firstName, $lastName);
+        return new User($matchingMessage->getRecipient(), $firstName, $lastName);
     }
 
     /**

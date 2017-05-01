@@ -14,7 +14,7 @@ class Message
     protected $user;
 
     /** @var string */
-    protected $channel;
+    protected $recipient;
 
     /** @var array */
     protected $images = [];
@@ -37,20 +37,20 @@ class Message
     /** @var Location */
     private $location;
 
-    public function __construct($message, $user, $channel, $payload = null)
+    public function __construct($message, $user, $recipient, $payload = null)
     {
         $this->message = $message;
         $this->user = $user;
-        $this->channel = $channel;
+        $this->recipient = $recipient;
         $this->payload = $payload;
     }
 
     /**
      * @return string
      */
-    public function getChannel()
+    public function getRecipient()
     {
-        return $this->channel;
+        return $this->recipient;
     }
 
     /**
@@ -82,7 +82,7 @@ class Message
      */
     public function getConversationIdentifier()
     {
-        return 'conversation-'.sha1($this->getUser()).'-'.sha1($this->getChannel());
+        return 'conversation-'.sha1($this->getUser()).'-'.sha1($this->getRecipient());
     }
 
     /**
@@ -92,7 +92,7 @@ class Message
      */
     public function getOriginatedConversationIdentifier()
     {
-        return 'conversation-'.sha1('').'-'.sha1($this->getChannel());
+        return 'conversation-'.sha1('').'-'.sha1($this->getRecipient());
     }
 
     /**

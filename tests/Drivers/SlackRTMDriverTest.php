@@ -96,7 +96,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
             'user' => 'U0X12345',
             'channel' => 'general',
         ]);
-        $this->assertSame('general', $driver->getMessages()[0]->getChannel());
+        $this->assertSame('general', $driver->getMessages()[0]->getRecipient());
     }
 
     /** @test */

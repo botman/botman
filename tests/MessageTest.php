@@ -18,7 +18,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function it_can_return_the_channel()
     {
         $message = new Message('', '', 'channel');
-        $this->assertSame('channel', $message->getChannel());
+        $this->assertSame('channel', $message->getRecipient());
     }
 
     /** @test */

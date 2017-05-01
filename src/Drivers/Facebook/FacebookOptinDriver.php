@@ -53,7 +53,7 @@ class FacebookOptinDriver extends FacebookDriver
     {
         $parameters = array_merge_recursive([
             'recipient' => [
-                'user_ref' => $matchingMessage->getChannel(),
+                'user_ref' => $matchingMessage->getRecipient(),
             ],
             'message' => [
                 'text' => $message,

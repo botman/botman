@@ -94,7 +94,7 @@ class HipChatDriver extends Driver
         $this->apiURL = Collection::make($this->config->get('hipchat_urls', []))->filter(function ($url) use (
             $matchingMessage
         ) {
-            return strstr($url, 'room/'.$matchingMessage->getChannel().'/notification');
+            return strstr($url, 'room/'.$matchingMessage->getRecipient().'/notification');
         })->first();
 
         return $parameters;
