@@ -2,9 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -25,9 +22,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingOptins;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingPostbacks;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
 
 class FacebookDriver extends Driver
 {
@@ -129,6 +129,7 @@ class FacebookDriver extends Driver
             default:
                 $event = new GenericEvent($eventData);
                 $event->setName($name);
+
                 return $event;
             break;
         }

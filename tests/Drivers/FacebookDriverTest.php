@@ -4,10 +4,6 @@ namespace Mpociot\BotMan\Tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Button;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
-use Mpociot\BotMan\DriverEvents\GenericEvent;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Http\Curl;
@@ -17,11 +13,15 @@ use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\DriverEvents\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingOptins;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingPostbacks;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
+use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
