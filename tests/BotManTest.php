@@ -381,7 +381,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-            $this->assertSame('U0X12345', $bot->getMessage()->getUser());
+            $this->assertSame('U0X12345', $bot->getMessage()->getSender());
         });
         $botman->listen();
         $this->assertTrue($called);

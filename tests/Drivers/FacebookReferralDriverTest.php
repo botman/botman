@@ -93,7 +93,7 @@ class FacebookReferralDriverTest extends PHPUnit_Framework_TestCase
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"referral":{"ref":"MY_REF","source": "MY_SOURCE","type": "MY_TYPE"}}]}]}';
         $driver = $this->getDriver($request);
 
-        $this->assertSame('111899832631525', $driver->getMessages()[0]->getUser());
+        $this->assertSame('111899832631525', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */

@@ -41,7 +41,7 @@ class TelegramDriver extends Driver
     {
         $parameters = [
             'chat_id' => $matchingMessage->getRecipient(),
-            'user_id' => $matchingMessage->getUser(),
+            'user_id' => $matchingMessage->getSender(),
         ];
 
         $response = $this->http->post('https://api.telegram.org/bot'.$this->config->get('telegram_token').'/getChatMember',

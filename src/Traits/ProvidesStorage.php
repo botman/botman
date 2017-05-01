@@ -13,7 +13,7 @@ trait ProvidesStorage
     {
         return (new Storage($this->storage))
             ->setPrefix('user_')
-            ->setDefaultKey($this->getMessage()->getUser());
+            ->setDefaultKey($this->getMessage()->getSender());
     }
 
     /**

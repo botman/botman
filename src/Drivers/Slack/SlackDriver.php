@@ -275,7 +275,7 @@ class SlackDriver extends Driver
      */
     public function getUser(Message $matchingMessage)
     {
-        return new User($matchingMessage->getUser());
+        return new User($matchingMessage->getSender());
     }
 
     /**

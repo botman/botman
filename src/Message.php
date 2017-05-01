@@ -11,7 +11,7 @@ class Message
     protected $message;
 
     /** @var string */
-    protected $user;
+    protected $sender;
 
     /** @var string */
     protected $recipient;
@@ -37,10 +37,10 @@ class Message
     /** @var Location */
     private $location;
 
-    public function __construct($message, $user, $recipient, $payload = null)
+    public function __construct($message, $sender, $recipient, $payload = null)
     {
         $this->message = $message;
-        $this->user = $user;
+        $this->sender = $sender;
         $this->recipient = $recipient;
         $this->payload = $payload;
     }
@@ -56,9 +56,9 @@ class Message
     /**
      * @return string
      */
-    public function getUser()
+    public function getSender()
     {
-        return $this->user;
+        return $this->sender;
     }
 
     /**
@@ -82,7 +82,7 @@ class Message
      */
     public function getConversationIdentifier()
     {
-        return 'conversation-'.sha1($this->getUser()).'-'.sha1($this->getRecipient());
+        return 'conversation-'.sha1($this->getSender()).'-'.sha1($this->getRecipient());
     }
 
     /**

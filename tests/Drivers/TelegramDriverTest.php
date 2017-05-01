@@ -173,7 +173,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             ],
             'entities' => [],
         ]);
-        $this->assertSame('from_id', $driver->getMessages()[0]->getUser());
+        $this->assertSame('from_id', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */
@@ -222,7 +222,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
             'data' => 'FooBar',
         ]);
 
-        $this->assertSame('from_id', $driver->getMessages()[0]->getUser());
+        $this->assertSame('from_id', $driver->getMessages()[0]->getSender());
     }
 
     /** @test */

@@ -25,7 +25,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     public function it_can_return_the_user()
     {
         $message = new Message('', 'user', '');
-        $this->assertSame('user', $message->getUser());
+        $this->assertSame('user', $message->getSender());
     }
 
     /** @test */

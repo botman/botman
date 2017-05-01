@@ -85,7 +85,7 @@ class NexmoDriver extends Driver
             'api_key' => $this->config->get('nexmo_key'),
             'api_secret' => $this->config->get('nexmo_secret'),
             'to' => $matchingMessage->getRecipient(),
-            'from' => $matchingMessage->getUser(),
+            'from' => $matchingMessage->getSender(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore
