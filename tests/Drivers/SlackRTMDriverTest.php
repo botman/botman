@@ -24,7 +24,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
         $loop = Factory::create();
         $client = new RealTimeClient($loop);
         $driver = new SlackRTMDriver([], $client);
-        $client->emit('message', [$responseData]);
+        $client->emit('_internal_message', ['message', $responseData]);
 
         return $driver;
     }
