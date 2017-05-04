@@ -78,7 +78,7 @@ class KikDriver extends Driver
      */
     public function isConfigured()
     {
-        // TODO: Implement isConfigured() method.
+        return ! empty($this->config->get('kik_username')) && ! empty($this->config->get('kik_key'));
     }
 
     /**
@@ -90,7 +90,7 @@ class KikDriver extends Driver
     {
         $response = $this->http->get('https://api.kik.com/v1/user/'.$matchingMessage->getSender(), [], [
             'Content-Type:application/json',
-            'Authorization:Basic '.base64_encode(''),
+            'Authorization:Basic '.$this->getRequestCredentials(),
         ]);
         $profileData = json_decode($response->getContent());
 
@@ -126,6 +126,11 @@ class KikDriver extends Driver
         ];
     }
 
+    protected function getRequestCredentials()
+    {
+        return base64_encode($this->config->get('kik_username').':'.$this->config->get('kik_key'));
+    }
+
     /**
      * @param mixed $payload
      * @return Response
@@ -134,7 +139,7 @@ class KikDriver extends Driver
     {
         return $this->http->post('https://api.kik.com/v1/message', [], $payload, [
             'Content-Type:application/json',
-            'Authorization:Basic '.base64_encode(''),
+            'Authorization:Basic '.$this->getRequestCredentials(),
         ], true);
     }
 
@@ -148,8 +153,9 @@ class KikDriver extends Driver
             'messages' => [
                 [
                     'to' => $matchingMessage->getSender(),
-                    'type' => 'text',
+                    'type' => 'is-typing',
                     'chatId' => $matchingMessage->getRecipient(),
+                    'isTyping' =>  true
                 ],
             ],
         ]);
