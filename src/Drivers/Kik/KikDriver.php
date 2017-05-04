@@ -2,6 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Kik;
 
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Button;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
@@ -107,6 +110,36 @@ class KikDriver extends Driver
     }
 
     /**
+     * Convert a Question object into a valid Kik
+     * keyboard object.
+     *
+     * @param Question $question
+     * @return array
+     */
+    private function convertQuestion(Question $question)
+    {
+        $buttons = $question->getButtons();
+        if ($buttons) {
+            return [
+                [
+                    'type' => 'suggested',
+                    'responses' => Collection::make($buttons)->transform(function($button) {
+                        return [
+                            'type' => 'text',
+                            'body' => $button['text'],
+                            'metadata' => [
+                                'value' => $button['value']
+                            ]
+                        ];
+                    })->toArray()
+                ]
+            ];
+        }
+
+        return null;
+    }
+
+    /**
      * @param OutgoingMessage|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
@@ -114,15 +147,31 @@ class KikDriver extends Driver
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
+        $payload = [
+            'to' => $matchingMessage->getSender(),
+            'chatId' => $matchingMessage->getRecipient(),
+        ];
+
+        if ($message instanceof OutgoingMessage) {
+            $attachment = $message->getAttachment();
+            if ($attachment instanceof Image) {
+                $payload['picUrl'] = $attachment->getUrl();
+                $payload['type'] = 'picture';
+            } elseif ($attachment instanceof Video) {
+                $payload['videoUrl'] = $attachment->getUrl();
+                $payload['type'] = 'video';
+            } else {
+                $payload['body'] = $message->getText();
+                $payload['type'] = 'text';
+            }
+        } elseif ($message instanceof Question) {
+            $payload['body'] = $message->getText();
+            $payload['keyboards'] = $this->convertQuestion($message);
+            $payload['type'] = 'text';
+        }
+\Log::info(print_r($payload,true));
         return [
-            'messages' => [
-                [
-                    'body' => $message->getText(),
-                    'to' => $matchingMessage->getSender(),
-                    'type' => 'text',
-                    'chatId' => $matchingMessage->getRecipient(),
-                ],
-            ],
+            'messages' => [$payload],
         ];
     }
 
