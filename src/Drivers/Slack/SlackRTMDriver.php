@@ -2,8 +2,6 @@
 
 namespace Mpociot\BotMan\Drivers\Slack;
 
-use Mpociot\BotMan\DriverEvents\GenericEvent;
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Slack\File;
 use Mpociot\BotMan\User;
 use Slack\RealTimeClient;
@@ -15,8 +13,10 @@ use React\Promise\PromiseInterface;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\DriverEvents\GenericEvent;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Attachments\File as BotManFile;
+use Mpociot\BotMan\Interfaces\DriverEventInterface;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
 class SlackRTMDriver implements DriverInterface
@@ -49,7 +49,7 @@ class SlackRTMDriver implements DriverInterface
         $this->client = $client;
 
         $this->client->on('_internal_message', function ($type, $data) {
-                $this->event = Collection::make($data);
+            $this->event = Collection::make($data);
             if ($type !== 'message') {
                 $this->slackEventData = [$type, $data];
             } else {
@@ -97,8 +97,10 @@ class SlackRTMDriver implements DriverInterface
             list($type, $payload) = $this->slackEventData;
             $event = new GenericEvent($payload);
             $event->setName($type);
+
             return $event;
         }
+
         return false;
     }
 
