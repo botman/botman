@@ -124,13 +124,19 @@ class KikDriver extends Driver
                 [
                     'type' => 'suggested',
                     'responses' => Collection::make($buttons)->transform(function($button) {
-                        return [
+                        $buttonData = [
                             'type' => 'text',
-                            'body' => $button['text'],
                             'metadata' => [
                                 'value' => $button['value']
                             ]
                         ];
+                        if ($button['image_url']) {
+                            $buttonData['type'] = 'picture';
+                            $buttonData['picUrl'] = $button['image_url'];
+                        } else {
+                            $buttonData['body'] = $button['text'];
+                        }
+                        return $buttonData;
                     })->toArray()
                 ]
             ];
