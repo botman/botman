@@ -95,7 +95,7 @@ class BotManFactory
         $driver = new SlackRTMDriver($config, $client);
         $botman = new BotMan($cache, $driver, $config, $storageDriver);
 
-        $client->on('message', function () use ($botman) {
+        $client->on('_internal_message', function () use ($botman) {
             $botman->listen();
         });
 
