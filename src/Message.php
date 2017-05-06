@@ -34,9 +34,6 @@ class Message
     /** @var array */
     private $files = [];
 
-    /** @var array */
-    private $attachments = [];
-
     /** @var Location */
     private $location;
 
