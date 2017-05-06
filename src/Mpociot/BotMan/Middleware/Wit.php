@@ -15,7 +15,7 @@ class Wit implements MiddlewareInterface
     protected $token;
 
     /** @var float */
-    protected $minimumConfidence = 0.5;
+    protected $minimumConfidence;
 
     /** @var HttpInterface */
     protected $http;
@@ -35,6 +35,7 @@ class Wit implements MiddlewareInterface
     public function __construct($token, $minimumConfidence, HttpInterface $http)
     {
         $this->token = $token;
+        $this->minimumConfidence = $minimumConfidence;
         $this->http = $http;
     }
 
@@ -75,9 +76,9 @@ class Wit implements MiddlewareInterface
 
         if (! empty($entities)) {
             foreach ($entities as $name => $entity) {
-                if ($name === 'intent') {
+                if ($name === $test) {
                     foreach ($entity as $item) {
-                        if ($item['value'] === $test && $item['confidence'] >= $this->minimumConfidence) {
+                        if ($item['confidence'] >= $this->minimumConfidence) {
                             return true;
                         }
                     }
