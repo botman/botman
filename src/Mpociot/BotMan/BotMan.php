@@ -456,13 +456,13 @@ class BotMan
     }
 
     /**
-     * @param int $seconds Number of seconds to wait
+     * @param int $microSeconds Number of micro seconds to wait
      * @return $this
      */
-    public function typesAndWaits($seconds)
+    public function typesAndWaits($microSeconds)
     {
         $this->getDriver()->types($this->message);
-        sleep($seconds);
+        usleep($microSeconds);
 
         return $this;
     }
