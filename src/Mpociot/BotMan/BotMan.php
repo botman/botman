@@ -503,7 +503,7 @@ class BotMan
      */
     public function randomReply(array $messages)
     {
-        return $this->reply($messages[array_rand($messages)]);
+        return $this->reply($messages[mt_rand(0, count($messages) - 1)]);
     }
 
     /**
