@@ -17,6 +17,8 @@ use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
+use Mpociot\BotMan\Drivers\Facebook\FacebookFileDriver;
+use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
 use Mpociot\BotMan\Drivers\WeChat\WeChatLocationDriver;
 use Mpociot\BotMan\Drivers\Facebook\FacebookAudioDriver;
 use Mpociot\BotMan\Drivers\Facebook\FacebookImageDriver;
@@ -42,11 +44,13 @@ class DriverManager
         FacebookVideoDriver::class,
         FacebookAudioDriver::class,
         FacebookLocationDriver::class,
+        FacebookFileDriver::class,
         KikDriver::class,
         TelegramPhotoDriver::class,
         TelegramVideoDriver::class,
         TelegramLocationDriver::class,
         TelegramAudioDriver::class,
+        TelegramFileDriver::class,
         TelegramDriver::class,
         BotFrameworkImageDriver::class,
         BotFrameworkAttachmentDriver::class,
