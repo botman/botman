@@ -328,4 +328,12 @@ class FacebookDriver extends Driver
 
         return $this->http->post('https://graph.facebook.com/v2.6/'.$endpoint, [], $parameters);
     }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 }
