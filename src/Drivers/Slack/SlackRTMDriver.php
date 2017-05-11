@@ -126,6 +126,7 @@ class SlackRTMDriver implements DriverInterface
 
         if ($this->event->get('subtype') === 'file_share') {
             $file = Collection::make($this->event->get('file'));
+            $message = new Message('', '', '');
 
             if (strstr($file->get('mimetype'), 'image')) {
                 $message = new Message(Image::PATTERN, $user_id, $channel_id, $this->event);
