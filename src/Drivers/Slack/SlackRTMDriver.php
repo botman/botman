@@ -139,7 +139,7 @@ class SlackRTMDriver implements DriverInterface
                 $message->setVideos([$file->get('permalink')]);
             } else {
                 $message = new Message(\Mpociot\BotMan\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
-                $message->setAttachments([$file->get('permalink')]);
+                $message->setFiles([$file->get('permalink')]);
             }
 
             return [$message];

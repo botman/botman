@@ -2,15 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers\Kik;
 
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Button;
 use Mpociot\BotMan\User;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Attachments\Video;
 use Mpociot\BotMan\Interfaces\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -123,12 +122,12 @@ class KikDriver extends Driver
             return [
                 [
                     'type' => 'suggested',
-                    'responses' => Collection::make($buttons)->transform(function($button) {
+                    'responses' => Collection::make($buttons)->transform(function ($button) {
                         $buttonData = [
                             'type' => 'text',
                             'metadata' => [
-                                'value' => $button['value']
-                            ]
+                                'value' => $button['value'],
+                            ],
                         ];
                         if ($button['image_url']) {
                             $buttonData['type'] = 'picture';
@@ -136,13 +135,12 @@ class KikDriver extends Driver
                         } else {
                             $buttonData['body'] = $button['text'];
                         }
+
                         return $buttonData;
-                    })->toArray()
-                ]
+                    })->toArray(),
+                ],
             ];
         }
-
-        return null;
     }
 
     /**
@@ -175,7 +173,8 @@ class KikDriver extends Driver
             $payload['keyboards'] = $this->convertQuestion($message);
             $payload['type'] = 'text';
         }
-\Log::info(print_r($payload,true));
+        \Log::info(print_r($payload, true));
+
         return [
             'messages' => [$payload],
         ];
@@ -210,7 +209,7 @@ class KikDriver extends Driver
                     'to' => $matchingMessage->getSender(),
                     'type' => 'is-typing',
                     'chatId' => $matchingMessage->getRecipient(),
-                    'isTyping' =>  true
+                    'isTyping' => true,
                 ],
             ],
         ]);
