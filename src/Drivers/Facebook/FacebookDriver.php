@@ -52,6 +52,9 @@ class FacebookDriver extends Driver
         File::class,
     ];
 
+    /** @var DriverEventInterface */
+    protected $driverEvent;
+
     protected $facebookProfileEndpoint = 'https://graph.facebook.com/v2.6/';
 
     const DRIVER_NAME = 'Facebook';
@@ -88,13 +91,14 @@ class FacebookDriver extends Driver
     public function hasMatchingEvent()
     {
         $event = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
-            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message'])->isNotEmpty();
+            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message'])->isEmpty() === false;
         })->transform(function ($msg) {
-            return Collection::make($msg)->except(['sender', 'recipient', 'timestamp', 'message'])->toArray();
+            return Collection::make($msg)->toArray();
         })->first();
 
         if (! is_null($event)) {
-            return $this->getEventFromEventData($event);
+            $this->driverEvent = $this->getEventFromEventData($event);
+            return $this->driverEvent;
         }
 
         return false;
@@ -106,7 +110,7 @@ class FacebookDriver extends Driver
      */
     protected function getEventFromEventData(array $eventData)
     {
-        $name = Collection::make($eventData)->keys()->first();
+        $name = Collection::make($eventData)->except(['sender', 'recipient', 'timestamp', 'message'])->keys()->first();
         switch ($name) {
             case 'postback':
                 return new MessagingPostbacks($eventData);
@@ -241,9 +245,14 @@ class FacebookDriver extends Driver
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
+        if ($this->driverEvent) {
+            $recipient = $this->driverEvent->getPayload()['sender']['id'];
+        } else {
+            $recipient = $matchingMessage->getSender();
+        }
         $parameters = array_merge_recursive([
             'recipient' => [
-                'id' => $matchingMessage->getSender(),
+                'id' => $recipient,
             ],
             'message' => [
                 'text' => $message,
