@@ -40,8 +40,8 @@ class Botanalytics implements MiddlewareInterface
     private function getHeaders(string $service): array
     {
         return [
-            'Authorization: Token ' . ($this->tokens[$service] ?? null),
-            'Content-Type: application/json'
+            'Authorization: Token '.($this->tokens[$service] ?? null),
+            'Content-Type: application/json',
         ];
     }
 
@@ -90,18 +90,18 @@ class Botanalytics implements MiddlewareInterface
             $payload = [
                 'recipient' => null,
                 'timestamp' => $message->getPayload()['timestamp'],
-                'message' => json_decode($driver->getContent())
+                'message' => json_decode($driver->getContent()),
             ];
         } elseif ($driver instanceof WeChatDriver) {
             $endpoint = 'wechat';
             $payload = [
                 'is_sender_bot' => false,
-                'message' => json_decode($message->getPayload())
+                'message' => json_decode($message->getPayload()),
             ];
         }
 
-        if (!is_null($endpoint)) {
-            $this->http->post(self::API_URL . $endpoint . '/', [], $payload, $this->getHeaders($endpoint), true);
+        if (! is_null($endpoint)) {
+            $this->http->post(self::API_URL.$endpoint.'/', [], $payload, $this->getHeaders($endpoint), true);
         }
 
         return $next($message);
@@ -153,7 +153,7 @@ class Botanalytics implements MiddlewareInterface
             $analyticsPayload = [
                 'recipient' => $payload['recipient']['id'],
                 'timestamp' => round(microtime(true) * 1000),
-                'message' => $payload['message']
+                'message' => $payload['message'],
             ];
         } elseif ($driver instanceof WeChatDriver) {
             $matchingMessage = $bot->getMessage();
@@ -164,16 +164,16 @@ class Botanalytics implements MiddlewareInterface
                     'ToUserName' => $matchingMessage->getSender(),
                     'FromUserName' => $matchingMessage->getRecipient(),
                     'CreateTime' => time(),
-                    'MsgType' => $payload['msgtype']
-                ]
+                    'MsgType' => $payload['msgtype'],
+                ],
             ];
             if ($payload['msgtype'] === 'text') {
                 $analyticsPayload['message']['Content'] = $payload['text']['content'];
             }
         }
 
-        if (!is_null($endpoint)) {
-            $this->http->post(self::API_URL . $endpoint . '/', [], $analyticsPayload, $this->getHeaders($endpoint),
+        if (! is_null($endpoint)) {
+            $this->http->post(self::API_URL.$endpoint.'/', [], $analyticsPayload, $this->getHeaders($endpoint),
                 true);
         }
 
