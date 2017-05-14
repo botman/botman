@@ -193,7 +193,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
@@ -242,7 +242,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'custom' => 'payload',
         ]));
@@ -288,7 +288,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], m::mock(Curl::class));
 
-        $message = new Message('Red', '1234567890', '0987654321', [
+        $message = new Message('Red', '0987654321', '1234567890', [
             'sender' => [
                 'id' => '1234567890',
             ],
@@ -345,7 +345,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
@@ -417,7 +417,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
     }
 
@@ -470,7 +470,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url//foo.png')), $message));
     }
 
@@ -523,7 +523,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Audio::url('http://image.url//foo.mp3')), $message));
     }
 
@@ -576,7 +576,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
             'facebook_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '1234567890', '');
+        $message = new Message('', '', '1234567890');
         $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', File::url('http://image.url//foo.pdf')), $message));
     }
 
