@@ -249,7 +249,7 @@ class FacebookDriver extends Driver
         if ($this->driverEvent) {
             $recipient = $this->driverEvent->getPayload()['sender']['id'];
         } else {
-            $recipient = $matchingMessage->getSender();
+            $recipient = $matchingMessage->getRecipient();
         }
         $parameters = array_merge_recursive([
             'recipient' => [
