@@ -165,10 +165,12 @@ trait HandlesConversations
 
                     if (! $this->isBot() && $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) && $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) && $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) && $this->loadedConversation === false) {
 
-                        if ($command->shouldConversationStop()) {
+                        if ($command->shouldStopConversation()) {
                             $this->cache->pull($message->getConversationIdentifier());
                             $this->cache->pull($message->getOriginatedConversationIdentifier());
 
+                            return;
+                        } elseif($command->shouldSkipConversation()) {
                             return;
                         }
                     }

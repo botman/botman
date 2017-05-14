@@ -29,6 +29,9 @@ class Command
     /** @var  boolean */
     protected $stopsConversation = false;
 
+    /** @var  boolean */
+    protected $skipsConversation = false;
+
     /**
      * Command constructor.
      * @param string $pattern
@@ -94,9 +97,27 @@ class Command
      *
      * @return bool
      */
-    public function shouldConversationStop()
+    public function shouldStopConversation()
     {
         return $this->stopsConversation;
+    }
+
+    /**
+     * With this command a current conversation should be stopped
+     */
+    public function skipsConversation()
+    {
+        $this->skipsConversation = true;
+    }
+
+    /**
+     * Tells if a current conversation should be skipped through this command
+     *
+     * @return bool
+     */
+    public function shouldSkipConversation()
+    {
+        return $this->skipsConversation;
     }
 
     /**
