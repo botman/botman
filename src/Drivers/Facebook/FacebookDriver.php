@@ -98,6 +98,7 @@ class FacebookDriver extends Driver
 
         if (! is_null($event)) {
             $this->driverEvent = $this->getEventFromEventData($event);
+
             return $this->driverEvent;
         }
 
