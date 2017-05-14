@@ -26,6 +26,9 @@ class Command
     /** @var array */
     protected $middleware = [];
 
+    /** @var  boolean */
+    protected $stopsConversation = false;
+
     /**
      * Command constructor.
      * @param string $pattern
@@ -76,6 +79,24 @@ class Command
         });
 
         return $this;
+    }
+
+    /**
+     * With this command a current conversation should be stopped
+     */
+    public function stopsConversation()
+    {
+        $this->stopsConversation = true;
+    }
+
+    /**
+     * Tells if a current conversation should be stopped through this command
+     *
+     * @return bool
+     */
+    public function shouldConversationStop()
+    {
+        return $this->stopsConversation;
     }
 
     /**
