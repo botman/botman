@@ -288,7 +288,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 
         $user_id = '29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1';
         $botman->say('Test', $user_id, $driver, [
-            'serviceUrl' => 'https://skype.botframework.com'
+            'serviceUrl' => 'https://skype.botframework.com',
         ]);
 
         $this->assertInstanceOf(BotFrameworkDriver::class, $botman->getDriver());
