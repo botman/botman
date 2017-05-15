@@ -276,10 +276,11 @@ class SlackDriver extends Driver
     public function getUser(Message $matchingMessage)
     {
         $response = $this->sendRequest('users.info', [
-            'user' => $matchingMessage->getSender()
+            'user' => $matchingMessage->getSender(),
         ], $matchingMessage);
         try {
             $content = json_decode($response->getContent());
+
             return new User($content->user->id, $content->user->profile->first_name, $content->user->profile->last_name, $content->user->name);
         } catch (\Exception $e) {
             return new User($matchingMessage->getSender());
