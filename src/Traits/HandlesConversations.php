@@ -3,7 +3,6 @@
 namespace Mpociot\BotMan\Traits;
 
 use Closure;
-use Illuminate\Support\Facades\Log;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Mpociot\BotMan\Conversation;
@@ -170,7 +169,7 @@ trait HandlesConversations
                             $this->cache->pull($message->getOriginatedConversationIdentifier());
 
                             return;
-                        } elseif($command->shouldSkipConversation()) {
+                        } elseif ($command->shouldSkipConversation()) {
                             return;
                         }
                     }

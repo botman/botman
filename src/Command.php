@@ -26,10 +26,10 @@ class Command
     /** @var array */
     protected $middleware = [];
 
-    /** @var  boolean */
+    /** @var  bool */
     protected $stopsConversation = false;
 
-    /** @var  boolean */
+    /** @var  bool */
     protected $skipsConversation = false;
 
     /**
@@ -85,7 +85,7 @@ class Command
     }
 
     /**
-     * With this command a current conversation should be stopped
+     * With this command a current conversation should be stopped.
      */
     public function stopsConversation()
     {
@@ -93,7 +93,7 @@ class Command
     }
 
     /**
-     * Tells if a current conversation should be stopped through this command
+     * Tells if a current conversation should be stopped through this command.
      *
      * @return bool
      */
@@ -103,7 +103,7 @@ class Command
     }
 
     /**
-     * With this command a current conversation should be stopped
+     * With this command a current conversation should be stopped.
      */
     public function skipsConversation()
     {
@@ -111,7 +111,7 @@ class Command
     }
 
     /**
-     * Tells if a current conversation should be skipped through this command
+     * Tells if a current conversation should be skipped through this command.
      *
      * @return bool
      */
