@@ -175,9 +175,13 @@ class BotFrameworkDriver extends Driver
             $parameters['text'] = $message;
         }
 
+        /**
+         * Originated messages use the getSender method, otherwise getRecipient.
+         */
+        $recipient = $matchingMessage->getSender() === '' ? $matchingMessage->getRecipient() : $matchingMessage->getSender();
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
         $this->apiURL = Collection::make($payload)->get('serviceUrl',
-                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($matchingMessage->getRecipient()).'/activities';
+                Collection::make($additionalParameters)->get('serviceUrl')).'/v3/conversations/'.urlencode($recipient).'/activities';
 
         if (strstr($this->apiURL, 'webchat.botframework')) {
             $parameters['from'] = [

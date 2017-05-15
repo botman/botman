@@ -15,6 +15,7 @@ use Mpociot\BotMan\Cache\ArrayCache;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
@@ -190,20 +191,39 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_the_user_object()
     {
-        $driver = $this->getDriver([
+        $responseData = [
             'event' => [
                 'user' => 'U0X12345',
-                'text' => 'Hi Julia',
+                'channel' => 'general',
+                'text' => 'response',
             ],
-        ]);
+        ];
+
+        $response = new Response('{"ok":true,"user":{"id":"U0X12345","team_id":"T123456","name":"botman","deleted":false,"color":"9f69e7","real_name":"Bot Man","tz":"Europe\/Amsterdam","tz_label":"Central European Summer Time","tz_offset":7200,"profile":{"first_name":"Bot","last_name":"Man","phone":"","status_emoji":":unicorn_face:","status_text":"","real_name":"Bot Man","real_name_normalized":"Bot Man","email":"botman@foo.bar"},"is_admin":false,"is_owner":false,"is_primary_owner":false,"is_restricted":false,"is_ultra_restricted":false,"is_bot":false,"updated":1493726225}}');
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/users.info', [], [
+                'token' => 'Foo',
+                'user' => 'U0X12345',
+            ])
+            ->andReturn($response);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
 
         $message = $driver->getMessages()[0];
         $user = $driver->getUser($message);
 
         $this->assertSame($user->getId(), 'U0X12345');
-        $this->assertNull($user->getFirstName());
-        $this->assertNull($user->getLastName());
-        $this->assertNull($user->getUsername());
+        $this->assertSame('Bot', $user->getFirstName());
+        $this->assertSame('Man', $user->getLastName());
+        $this->assertSame('botman', $user->getUsername());
     }
 
     /** @test */
@@ -353,6 +373,41 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
 
         $message = new Message('', '', '');
         $this->assertSame('yes', $driver->getConversationAnswer($message)->getValue());
+    }
+
+    /** @test */
+    public function it_can_originate_messages()
+    {
+        $botman = BotManFactory::create([], new ArrayCache());
+
+        $responseData = [
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+                'text' => 'response',
+            ],
+        ];
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/chat.postMessage', [], [
+                'token' => 'Foo',
+                'channel' => 'general',
+                'text' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
+
+        $user_id = 'general';
+        $botman->say('Test', $user_id, $driver);
+
+        $this->assertInstanceOf(SlackDriver::class, $botman->getDriver());
     }
 
     /** @test */

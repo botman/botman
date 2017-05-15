@@ -80,4 +80,39 @@ class ElementButtonTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('clickme', Arr::get($button->toArray(), 'payload'));
     }
+
+    /**
+     * @test
+     **/
+    public function it_can_set_fallback_url()
+    {
+        $button = new ElementButton('click me');
+        $button->enableExtensions();
+        $button->fallbackUrl('www.google.de');
+
+        $this->assertTrue(Arr::get($button->toArray(), 'messenger_extensions'));
+        $this->assertSame('www.google.de', Arr::get($button->toArray(), 'fallback_url'));
+    }
+
+    /**
+     * @test
+     **/
+    public function it_can_disable_share()
+    {
+        $button = new ElementButton('click me');
+        $button->disableShare();
+
+        $this->assertSame('hide', Arr::get($button->toArray(), 'webview_share_button'));
+    }
+
+    /**
+     * @test
+     **/
+    public function it_can_set_height_ratio()
+    {
+        $button = new ElementButton('click me');
+        $button->heightRatio(ElementButton::RATIO_COMPACT);
+
+        $this->assertSame('compact', Arr::get($button->toArray(), 'webview_height_ratio'));
+    }
 }
