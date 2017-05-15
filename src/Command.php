@@ -26,14 +26,15 @@ class Command
     /** @var array */
     protected $middleware = [];
 
-    /** @var  bool */
+    /** @var bool */
     protected $stopsConversation = false;
 
-    /** @var  bool */
+    /** @var bool */
     protected $skipsConversation = false;
 
     /**
      * Command constructor.
+     *
      * @param string $pattern
      * @param Closure|string $callback
      * @param string|null $recipient
