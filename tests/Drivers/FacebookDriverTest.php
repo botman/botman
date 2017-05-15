@@ -87,6 +87,37 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_originate_messages()
+    {
+        $botman = BotManFactory::create([], new ArrayCache());
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890',
+                ],
+                'message' => [
+                    'text' => 'Test',
+                ],
+                'access_token' => 'Foo',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo',
+        ], $html);
+
+        $user_id = '1234567890';
+        $botman->say('Test', $user_id, $driver);
+
+        $this->assertInstanceOf(FacebookDriver::class, $botman->getDriver());
+    }
+
+    /** @test */
     public function it_returns_the_message()
     {
         $request = '{"object":"page","entry":[{"id":"111899832631525","time":1480279487271,"messaging":[{"sender":{"id":"1433960459967306"},"recipient":{"id":"111899832631525"},"timestamp":1480279487147,"message":{"mid":"mid.1480279487147:4388d3b344","seq":36,"text":"Hi Julia"}}]}]}';

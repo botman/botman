@@ -403,12 +403,14 @@ class BotMan
     {
         if (is_null($driver)) {
             $drivers = DriverManager::getConfiguredDrivers($this->config);
-        } else {
+        } elseif (is_string($driver)) {
             $drivers = [DriverManager::loadFromName($driver, $this->config)];
+        } else {
+            $drivers = [$driver];
         }
 
         foreach ($drivers as $driver) {
-            $this->message = new Message('', '', $recipient);
+            $this->message = new Message('', $recipient, '');
             $this->setDriver($driver);
             $this->reply($message, $additionalParameters);
         }

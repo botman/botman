@@ -22,7 +22,7 @@ trait HandlesConversations
     public function startConversation(Conversation $instance, $channel = null, $driver = null)
     {
         if (! is_null($channel) && ! is_null($driver)) {
-            $this->message = new Message('', '', $channel);
+            $this->message = new Message('', $channel, '');
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
         $instance->setBot($this);

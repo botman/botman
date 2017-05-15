@@ -1106,7 +1106,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'foo' && $match->getRecipient() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getSender() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1137,7 +1137,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) use ($additionalParameters) {
-                return $message->getText() === 'foo' && $match->getRecipient() === '1234567890' && $arguments === $additionalParameters;
+                return $message->getText() === 'foo' && $match->getSender() === '1234567890' && $arguments === $additionalParameters;
             });
         $driver->shouldReceive('sendPayload')
             ->once();
@@ -1164,7 +1164,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'foo' && $match->getRecipient() === 'channel' && $arguments === [];
+                return $message->getText() === 'foo' && $match->getSender() === 'channel' && $arguments === [];
             });
         $driver->shouldReceive('sendPayload')
             ->once();

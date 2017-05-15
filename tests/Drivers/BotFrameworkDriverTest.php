@@ -248,6 +248,53 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_originate_messages()
+    {
+        $botman = BotManFactory::create([], new ArrayCache());
+
+        $responseData = $this->getResponseData();
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token', [], [
+                'client_id' => 'app_id',
+                'client_secret' => 'app_key',
+                'grant_type' => 'client_credentials',
+                'scope' => 'https://api.botframework.com/.default',
+            ])
+            ->andReturn(new Response(json_encode([
+                'access_token' => 'SECRET_TOKEN',
+            ])));
+
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://skype.botframework.com/v3/conversations/29%3A1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1/activities', [], [
+                'type' => 'message',
+                'serviceUrl' => 'https://skype.botframework.com',
+                'text' => 'Test',
+            ], [
+                'Content-Type:application/json',
+                'Authorization:Bearer SECRET_TOKEN',
+            ], true);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new BotFrameworkDriver($request, [
+            'microsoft_app_id' => 'app_id',
+            'microsoft_app_key' => 'app_key',
+        ], $html);
+
+        $user_id = '29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1';
+        $botman->say('Test', $user_id, $driver, [
+            'serviceUrl' => 'https://skype.botframework.com'
+        ]);
+
+        $this->assertInstanceOf(BotFrameworkDriver::class, $botman->getDriver());
+    }
+
+    /** @test */
     public function it_can_reply_string_messages()
     {
         $responseData = $this->getResponseData();
