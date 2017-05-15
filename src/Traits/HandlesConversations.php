@@ -163,7 +163,6 @@ trait HandlesConversations
                     $pattern = $messageData['pattern'];
 
                     if (! $this->isBot() && $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) && $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) && $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) && $this->loadedConversation === false) {
-
                         if ($command->shouldStopConversation()) {
                             $this->cache->pull($message->getConversationIdentifier());
                             $this->cache->pull($message->getOriginatedConversationIdentifier());
