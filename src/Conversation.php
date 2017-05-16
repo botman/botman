@@ -155,7 +155,7 @@ abstract class Conversation
      * @param  Message $message
      * @return bool
      */
-    public function skipConversation(Message $message)
+    public function skipsConversation(Message $message)
     {
         //
     }
@@ -165,7 +165,7 @@ abstract class Conversation
      * @param  Message $message
      * @return bool
      */
-    public function stopConversation(Message $message)
+    public function stopsConversation(Message $message)
     {
         //
     }

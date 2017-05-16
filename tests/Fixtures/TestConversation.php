@@ -23,12 +23,12 @@ class TestConversation extends Conversation
         });
     }
 
-    public function skipConversation(Message $message)
+    public function skipsConversation(Message $message)
     {
         return $message->getText() === 'skip_keyword';
     }
 
-    public function stopConversation(Message $message)
+    public function stopsConversation(Message $message)
     {
         return $message->getText() === 'stop_keyword';
     }
