@@ -342,7 +342,6 @@ class BotMan
     {
         $matchingMessages = [];
         foreach ($this->getMessages() as $message) {
-
             if ($withReceivedMiddleware) {
                 $message = $this->middleware->applyMiddleware('received', $message);
             }
@@ -351,7 +350,7 @@ class BotMan
                 $messageData = $command->toArray();
                 $pattern = $messageData['pattern'];
 
-                if (!$this->isBot() &&
+                if (! $this->isBot() &&
                     $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern,
                         $messageData['middleware'] + $this->middleware->heard()) &&
                     $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
@@ -362,6 +361,7 @@ class BotMan
                 }
             }
         }
+
         return $matchingMessages;
     }
 
@@ -382,7 +382,7 @@ class BotMan
             $this->command = $matchingMessage->getCommand();
             $callback = $this->command->getCallback();
 
-            if (!$callback instanceof Closure) {
+            if (! $callback instanceof Closure) {
                 $callback = $this->getCallable($callback);
             }
 
