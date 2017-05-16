@@ -48,6 +48,7 @@ trait HandlesConversations
 
     /**
      * Get a stored conversation array from the cache for a given message.
+     *
      * @param null|Message $message
      * @return array
      */
@@ -67,6 +68,7 @@ trait HandlesConversations
 
     /**
      * Remove a stored conversation array from the cache for a given message.
+     *
      * @param null|Message $message
      */
     public function removeStoredConversation($message = null)
@@ -155,16 +157,26 @@ trait HandlesConversations
                 return;
             }
 
+            $matchingMessages = $this->getMatchingMessages(false);
+            foreach ($matchingMessages as $matchingMessage) {
+                $command = $matchingMessage->getCommand();
+                if ($command->shouldStopConversation()) {
+                    $this->cache->pull($message->getConversationIdentifier());
+                    $this->cache->pull($message->getOriginatedConversationIdentifier());
+
+                    return;
+                } elseif ($command->shouldSkipConversation()) {
+                    return;
+                }
+            }
+
             // Ongoing conversation - let's find the callback.
             $next = false;
             $parameters = [];
             if (is_array($convo['next'])) {
                 foreach ($convo['next'] as $callback) {
-                    if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(),
-                        $callback['pattern'])
-                    ) {
-                        $parameters = array_combine($this->compileParameterNames($callback['pattern']),
-                            $this->matcher->getMatches());
+                    if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $callback['pattern'])) {
+                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), $this->matcher->getMatches());
                         $this->matches = $parameters;
                         $next = $this->unserializeClosure($callback['callback']);
                         break;
@@ -201,9 +213,7 @@ trait HandlesConversations
          */
         $additionalParameters = Collection::make(unserialize($convo['additionalParameters']));
         if ($additionalParameters->has('__pattern')) {
-            if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(),
-                $additionalParameters->get('__pattern'))
-            ) {
+            if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $additionalParameters->get('__pattern'))) {
                 $getter = $additionalParameters->get('__getter');
                 array_unshift($parameters, $this->getConversationAnswer()->getMessage()->$getter());
                 $this->prepareConversationClosure($next, $conversation, $parameters);

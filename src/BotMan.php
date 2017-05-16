@@ -14,6 +14,7 @@ use Mpociot\BotMan\Attachments\Location;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;
+use Mpociot\BotMan\Messages\MatchingMessage;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
@@ -334,6 +335,37 @@ class BotMan
     }
 
     /**
+     * @param bool $withReceivedMiddleware
+     * @return MatchingMessage[]
+     */
+    protected function getMatchingMessages($withReceivedMiddleware = true)
+    {
+        $matchingMessages = [];
+        foreach ($this->getMessages() as $message) {
+
+            if ($withReceivedMiddleware) {
+                $message = $this->middleware->applyMiddleware('received', $message);
+            }
+
+            foreach ($this->listenTo as $command) {
+                $messageData = $command->toArray();
+                $pattern = $messageData['pattern'];
+
+                if (!$this->isBot() &&
+                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern,
+                        $messageData['middleware'] + $this->middleware->heard()) &&
+                    $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
+                    $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) &&
+                    $this->loadedConversation === false
+                ) {
+                    $matchingMessages[] = new MatchingMessage($command, $message, $this->matcher->getMatches());
+                }
+            }
+        }
+        return $matchingMessages;
+    }
+
+    /**
      * Try to match messages with the ones we should
      * listen to.
      */
@@ -345,48 +377,33 @@ class BotMan
             $this->loadActiveConversation();
         }
 
-        $heardMessage = false;
-        foreach ($this->getMessages() as $message) {
-            // Call received middleware
-            $message = $this->middleware->applyMiddleware('received', $message);
+        $matchingMessages = $this->getMatchingMessages();
+        foreach ($matchingMessages as $matchingMessage) {
+            $this->command = $matchingMessage->getCommand();
+            $callback = $this->command->getCallback();
 
-            foreach ($this->listenTo as $command) {
-                $messageData = $command->toArray();
-                $pattern = $messageData['pattern'];
-                $callback = $messageData['callback'];
-
-                if (! $callback instanceof Closure) {
-                    $callback = $this->getCallable($callback);
-                }
-
-                if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern, $messageData['middleware'] + $this->middleware->heard()) &&
-                    $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) &&
-                    $this->loadedConversation === false
-                ) {
-                    $heardMessage = true;
-                    $this->command = $command;
-                    $this->message = $this->middleware->applyMiddleware('heard', $message, $messageData['middleware']);
-                    $parameterNames = $this->compileParameterNames($pattern);
-
-                    $matches = $this->matcher->getMatches();
-                    if (count($parameterNames) === count($matches)) {
-                        $parameters = array_combine($parameterNames, $matches);
-                    } else {
-                        $parameters = $matches;
-                    }
-
-                    $this->matches = $parameters;
-                    array_unshift($parameters, $this);
-
-                    $parameters = $this->addDataParameters($this->message, $parameters);
-
-                    call_user_func_array($callback, $parameters);
-                }
+            if (!$callback instanceof Closure) {
+                $callback = $this->getCallable($callback);
             }
+
+            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
+            $parameterNames = $this->compileParameterNames($this->command->getPattern());
+
+            $matches = $matchingMessage->getMatches();
+            if (count($parameterNames) === count($matches)) {
+                $parameters = array_combine($parameterNames, $matches);
+            } else {
+                $parameters = $matches;
+            }
+
+            $this->matches = $parameters;
+            array_unshift($parameters, $this);
+
+            $parameters = $this->addDataParameters($this->message, $parameters);
+
+            call_user_func_array($callback, $parameters);
         }
-        if ($heardMessage === false && ! $this->isBot() && is_callable($this->fallbackMessage) && $this->loadedConversation === false) {
+        if (empty($matchingMessages) && ! $this->isBot() && is_callable($this->fallbackMessage) && $this->loadedConversation === false) {
             $this->message = $this->getMessages()[0];
             call_user_func($this->fallbackMessage, $this);
         }

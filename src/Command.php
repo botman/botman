@@ -26,8 +26,15 @@ class Command
     /** @var array */
     protected $middleware = [];
 
+    /** @var bool */
+    protected $stopsConversation = false;
+
+    /** @var bool */
+    protected $skipsConversation = false;
+
     /**
      * Command constructor.
+     *
      * @param string $pattern
      * @param Closure|string $callback
      * @param string|null $recipient
@@ -79,6 +86,42 @@ class Command
     }
 
     /**
+     * With this command a current conversation should be stopped.
+     */
+    public function stopsConversation()
+    {
+        $this->stopsConversation = true;
+    }
+
+    /**
+     * Tells if a current conversation should be stopped through this command.
+     *
+     * @return bool
+     */
+    public function shouldStopConversation()
+    {
+        return $this->stopsConversation;
+    }
+
+    /**
+     * With this command a current conversation should be stopped.
+     */
+    public function skipsConversation()
+    {
+        $this->skipsConversation = true;
+    }
+
+    /**
+     * Tells if a current conversation should be skipped through this command.
+     *
+     * @return bool
+     */
+    public function shouldSkipConversation()
+    {
+        return $this->skipsConversation;
+    }
+
+    /**
      * @param $recipient
      * @return $this
      */
@@ -118,5 +161,29 @@ class Command
             'middleware' => $this->middleware,
             'recipient' => $this->recipient,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getPattern(): string
+    {
+        return $this->pattern;
+    }
+
+    /**
+     * @return Closure|string
+     */
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMiddleware(): array
+    {
+        return $this->middleware;
     }
 }
