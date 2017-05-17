@@ -145,12 +145,12 @@ trait HandlesConversations
             $convo = $this->getStoredConversation($message);
 
             // Should we skip the conversation?
-            if ($convo['conversation']->skipConversation($message) === true) {
+            if ($convo['conversation']->skipsConversation($message) === true) {
                 return;
             }
 
             // Or stop it entirely?
-            if ($convo['conversation']->stopConversation($message) === true) {
+            if ($convo['conversation']->stopsConversation($message) === true) {
                 $this->cache->pull($message->getConversationIdentifier());
                 $this->cache->pull($message->getOriginatedConversationIdentifier());
 
