@@ -224,12 +224,12 @@ class FacebookDriver extends Driver
         $questionData = $question->toArray();
 
         $replies = Collection::make($question->getButtons())->map(function ($button) {
-            return [
+            return array_merge([
                 'content_type' => 'text',
                 'title' => $button['text'],
                 'payload' => $button['value'],
                 'image_url' => $button['image_url'],
-            ];
+            ], $button['additional']);
         });
 
         return [

@@ -381,6 +381,52 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reply_questions_with_additional_button_parameters()
+    {
+        $question = Question::create('How are you doing?')
+            ->addButton(Button::create('Great')->value('great')->additionalParameters(['foo' => 'bar']))
+            ->addButton(Button::create('Good')->value('good'));
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://graph.facebook.com/v2.6/me/messages', [], [
+                'recipient' => [
+                    'id' => '1234567890',
+                ],
+                'message' => [
+                    'text' => 'How are you doing?',
+                    'quick_replies' => [
+                        [
+                            'content_type' => 'text',
+                            'title' => 'Great',
+                            'payload' => 'great',
+                            'image_url' => null,
+                            'foo' => 'bar',
+                        ],
+                        [
+                            'content_type' => 'text',
+                            'title' => 'Good',
+                            'payload' => 'good',
+                            'image_url' => null,
+                        ],
+                    ],
+                ],
+                'access_token' => 'Foo',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('[]');
+
+        $driver = new FacebookDriver($request, [
+            'facebook_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '1234567890', '');
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
+    }
+
+    /** @test */
     public function it_is_configured()
     {
         $request = m::mock(Request::class.'[getContent]');
