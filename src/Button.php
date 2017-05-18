@@ -103,7 +103,7 @@ class Button implements JsonSerializable, QuestionActionInterface
             'image_url' => $this->imageUrl,
             'type' => 'button',
             'value' => $this->value,
-            'additional' => $this->additional
+            'additional' => $this->additional,
         ];
     }
 

@@ -55,10 +55,10 @@ class ButtonTest extends PHPUnit_Framework_TestCase
     public function it_can_have_additional_parameters()
     {
         $button = Button::create('text')->additionalParameters([
-            'foo' => 'bar'
+            'foo' => 'bar',
         ]);
         $this->assertSame([
-            'foo' => 'bar'
+            'foo' => 'bar',
         ], Arr::get($button->toArray(), 'additional'));
     }
 
