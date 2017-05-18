@@ -131,6 +131,30 @@ class SlackDriver extends Driver
     }
 
     /**
+     * Convert a Question object into a valid Slack response.
+     *
+     * @param Question $question
+     * @return array
+     */
+    private function convertQuestion(Question $question)
+    {
+        $questionData = $question->toArray();
+
+        $buttons = Collection::make($question->getButtons())->map(function ($button) {
+            return array_merge([
+                'name' => $button['name'],
+                'text' => $button['text'],
+                'image_url' => $button['image_url'],
+                'type' => $button['type'],
+                'value' => $button['value'],
+            ], $button['additional']);
+        })->toArray();
+        $questionData['actions'] = $buttons;
+
+        return $questionData;
+    }
+
+    /**
      * @param string|Question $message
      * @param Message $matchingMessage
      * @param array $additionalParameters
@@ -193,7 +217,7 @@ class SlackDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['text'] = $this->format($message->getText());
-            $parameters['attachments'] = json_encode([$message->toArray()]);
+            $parameters['attachments'] = json_encode([$this->convertQuestion($message)]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
@@ -227,7 +251,7 @@ class SlackDriver extends Driver
          */
         if ($message instanceof Question) {
             $parameters['text'] = '';
-            $parameters['attachments'] = json_encode([$message->toArray()]);
+            $parameters['attachments'] = json_encode([$this->convertQuestion($message)]);
         } elseif ($message instanceof IncomingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();

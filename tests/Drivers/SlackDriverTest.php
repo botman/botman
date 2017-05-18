@@ -544,6 +544,42 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reply_questions_with_additional_button_parameters()
+    {
+        $responseData = [
+            'event' => [
+                'user' => 'U0X12345',
+                'channel' => 'general',
+                'text' => 'response',
+            ],
+        ];
+
+        $question = Question::create('How are you doing?')
+            ->addButton(Button::create('Great')->additionalParameters(['style' => 'danger']))
+            ->addButton(Button::create('Good'));
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://slack.com/api/chat.postMessage', [], [
+                'token' => 'Foo',
+                'channel' => 'general',
+                'text' => '',
+                'attachments' => '[{"text":"How are you doing?","fallback":null,"callback_id":null,"actions":[{"name":"Great","text":"Great","image_url":null,"type":"button","value":null,"style":"danger"},{"name":"Good","text":"Good","image_url":null,"type":"button","value":null}]}]',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new SlackDriver($request, [
+            'slack_token' => 'Foo',
+        ], $html);
+
+        $message = new Message('', '', 'general');
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
+    }
+
+    /** @test */
     public function it_can_reply_questions()
     {
         $responseData = [
@@ -565,7 +601,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'token' => 'Foo',
                 'channel' => 'general',
                 'text' => '',
-                'attachments' => json_encode([$question]),
+                'attachments' => '[{"text":"How are you doing?","fallback":null,"callback_id":null,"actions":[{"name":"Great","text":"Great","image_url":null,"type":"button","value":null},{"name":"Good","text":"Good","image_url":null,"type":"button","value":null}]}]',
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
