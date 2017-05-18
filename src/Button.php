@@ -16,8 +16,11 @@ class Button implements JsonSerializable, QuestionActionInterface
     /** @var string */
     protected $name;
 
+    /** @var array */
+    protected $additional = [];
+
     /** @var string */
-    protected $image_url;
+    protected $imageUrl;
 
     /**
      * @param string $text
@@ -64,14 +67,27 @@ class Button implements JsonSerializable, QuestionActionInterface
     }
 
     /**
-     * Set the button image (Facebook only).
+     * Set the button additional parameters to pass to the service.
      *
-     * @param string $image_url
+     * @param array $additional
      * @return $this
      */
-    public function image($image_url)
+    public function additionalParameters(array $additional)
     {
-        $this->image_url = $image_url;
+        $this->additional = $additional;
+
+        return $this;
+    }
+
+    /**
+     * Set the button image (Facebook only).
+     *
+     * @param string $imageUrl
+     * @return $this
+     */
+    public function image($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
@@ -84,9 +100,10 @@ class Button implements JsonSerializable, QuestionActionInterface
         return [
             'name' => isset($this->name) ? $this->name : $this->text,
             'text' => $this->text,
-            'image_url' => $this->image_url,
+            'image_url' => $this->imageUrl,
             'type' => 'button',
             'value' => $this->value,
+            'additional' => $this->additional
         ];
     }
 
