@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [1.5.6]
 ### Fixed
 Custom drivers now get loaded first.
+Fixed an error with Slack crashing with unknown attachment types (#371)
 
 ## [1.5.5]
 ### Fixed
