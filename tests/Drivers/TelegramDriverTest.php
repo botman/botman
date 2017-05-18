@@ -424,6 +424,64 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reply_questions_with_additional_button_parameters()
+    {
+        $responseData = [
+            'update_id' => '1234567890',
+            'message' => [
+                'message_id' => '123',
+                'from' => [
+                    'id' => 'from_id',
+                ],
+                'chat' => [
+                    'id' => '12345',
+                ],
+                'date' => '1480369277',
+                'text' => 'Telegram Text',
+            ],
+        ];
+
+        $question = Question::create('How are you doing?')
+            ->addButton(Button::create('Great')->value('great')->additionalParameters(['foo' => 'bar']))
+            ->addButton(Button::create('Good')->value('good'));
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendMessage', [], [
+                'chat_id' => '12345',
+                'text' => 'How are you doing?',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [
+                        [
+                            [
+                                'text' => 'Great',
+                                'callback_data' => 'great',
+                                'foo' => 'bar',
+                            ],
+                        ],
+                        [
+                            [
+                                'text' => 'Good',
+                                'callback_data' => 'good',
+                            ],
+                        ],
+                    ],
+                ], true),
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
+    }
+
+    /** @test */
     public function it_can_reply_with_additional_parameters()
     {
         $responseData = [

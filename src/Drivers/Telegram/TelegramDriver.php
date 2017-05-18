@@ -140,10 +140,10 @@ class TelegramDriver extends Driver
     {
         $replies = Collection::make($question->getButtons())->map(function ($button) {
             return [
-                [
+                array_merge([
                     'text' => (string) $button['text'],
                     'callback_data' => (string) $button['value'],
-                ],
+                ], $button['additional']),
             ];
         });
 

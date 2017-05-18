@@ -200,6 +200,51 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reply_questions_with_additional_button_parameters()
+    {
+        $xmlData = '<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>
+<FromUserName><![CDATA[from_user_name]]></FromUserName>
+<CreateTime>1483534197</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[foo]]></Content>
+<MsgId>1234567890</MsgId>
+</xml>';
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.wechat.com/cgi-bin/token?grant_type=client_credential&appid=WECHAT-APP-ID&secret=WECHAT-APP-KEY', [], [])
+            ->andReturn(new Response(json_encode([
+                'access_token' => 'SECRET_TOKEN',
+            ])));
+
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.wechat.com/cgi-bin/message/custom/send?access_token=SECRET_TOKEN', [], [
+                'touser' => 'from_user_name',
+                'msgtype' => 'text',
+                'text' => [
+                    'content' => 'How are you doing?',
+                ],
+            ], [], true);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn($xmlData);
+
+        $question = Question::create('How are you doing?')
+            ->addButton(Button::create('Great')->value('great')->additionalParameters(['foo' => 'bar']))
+            ->addButton(Button::create('Good')->value('good'));
+
+        $driver = new WeChatDriver($request, [
+            'wechat_app_id' => 'WECHAT-APP-ID',
+            'wechat_app_key' => 'WECHAT-APP-KEY',
+        ], $html);
+
+        $message = $driver->getMessages()[0];
+        $driver->sendPayload($driver->buildServicePayload($question, $message));
+    }
+
+    /** @test */
     public function it_can_reply_with_additional_parameters()
     {
         $xmlData = '<xml><ToUserName><![CDATA[to_user_name]]></ToUserName>

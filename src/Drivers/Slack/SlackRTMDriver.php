@@ -114,6 +114,30 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
+     * Convert a Question object into a valid Slack response.
+     *
+     * @param Question $question
+     * @return array
+     */
+    private function convertQuestion(Question $question)
+    {
+        $questionData = $question->toArray();
+
+        $buttons = Collection::make($question->getButtons())->map(function ($button) {
+            return array_merge([
+                'name' => $button['name'],
+                'text' => $button['text'],
+                'image_url' => $button['image_url'],
+                'type' => $button['type'],
+                'value' => $button['value'],
+            ], $button['additional']);
+        })->toArray();
+        $questionData['actions'] = $buttons;
+
+        return $questionData;
+    }
+
+    /**
      * Retrieve the chat message.
      *
      * @return array
@@ -193,7 +217,7 @@ class SlackRTMDriver implements DriverInterface
             }
         } elseif ($message instanceof Question) {
             $parameters['text'] = '';
-            $parameters['attachments'] = json_encode([$message->toArray()]);
+            $parameters['attachments'] = json_encode([$this->convertQuestion($message)]);
         } else {
             $parameters['text'] = $message;
         }

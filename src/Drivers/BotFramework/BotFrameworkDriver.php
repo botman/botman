@@ -103,11 +103,11 @@ class BotFrameworkDriver extends Driver
     private function convertQuestion(Question $question)
     {
         $replies = Collection::make($question->getButtons())->map(function ($button) {
-            return [
+            return array_merge([
                 'type' => 'imBack',
                 'title' => $button['text'],
                 'value' => $button['text'].'<botman value="'.$button['value'].'" />',
-            ];
+            ], $button['additional']);
         });
 
         return $replies->toArray();
