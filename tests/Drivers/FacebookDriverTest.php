@@ -25,6 +25,12 @@ use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
+
+    public function tearDown()
+    {
+        m::close();
+    }
+
     private function getRequest($responseData)
     {
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');

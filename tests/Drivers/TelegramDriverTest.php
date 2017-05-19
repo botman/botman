@@ -20,6 +20,11 @@ use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
 class TelegramDriverTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+    }
+
     private function getDriver($responseData, $htmlInterface = null)
     {
         $request = m::mock(Request::class.'[getContent]');
@@ -281,6 +286,30 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame($payload, $driver->getMessages()[0]->getPayload());
+    }
+
+    /** @test */
+    public function it_can_originate_messages()
+    {
+        $botman = BotManFactory::create([], new ArrayCache());
+
+        $html = m::mock(Curl::class);
+        $html->shouldReceive('post')
+            ->once()
+            ->with('https://api.telegram.org/botTELEGRAM-BOT-TOKEN/sendMessage', [], [
+                'chat_id' => '12345',
+                'text' => 'Test',
+            ]);
+
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
+        $request->shouldReceive('getContent')->andReturn('');
+
+        $driver = new TelegramDriver($request, [
+            'telegram_token' => 'TELEGRAM-BOT-TOKEN',
+        ], $html);
+        $botman->say('Test', '12345', $driver);
+
+        $this->assertInstanceOf(TelegramDriver::class, $botman->getDriver());
     }
 
     /** @test */
