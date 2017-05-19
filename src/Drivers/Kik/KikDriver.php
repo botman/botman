@@ -63,7 +63,7 @@ class KikDriver extends Driver
     public function getMessages()
     {
         return $this->event->map(function ($message) {
-            return new Message($message['body'], $message['from'], $message['chatId']);
+            return new Message($message['body'], $message['from'], $message['chatId'], $message);
         })->toArray();
     }
 
@@ -173,7 +173,6 @@ class KikDriver extends Driver
             $payload['keyboards'] = $this->convertQuestion($message);
             $payload['type'] = 'text';
         }
-        \Log::info(print_r($payload, true));
 
         return [
             'messages' => [$payload],

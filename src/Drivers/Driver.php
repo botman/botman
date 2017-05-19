@@ -46,6 +46,16 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Return the driver configuration.
+     *
+     * @return Collection
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * @param Message $matchingMessage
      * @return void
      */
