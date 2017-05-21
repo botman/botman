@@ -4,6 +4,7 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 /**
@@ -126,7 +127,9 @@ abstract class Conversation
             $next = unserialize($next)->getClosure();
         } elseif (is_array($next)) {
             $next = Collection::make($next)->map(function ($callback) {
-                $callback['callback'] = unserialize($callback['callback'])->getClosure();
+                if($this->bot->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+                    $callback['callback'] = unserialize($callback['callback'])->getClosure();
+                }
 
                 return $callback;
             })->toArray();
