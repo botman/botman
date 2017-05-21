@@ -12,7 +12,6 @@ use Mpociot\BotMan\Interfaces\ShouldQueue;
  */
 abstract class Conversation
 {
-
     /**
      * @var BotMan
      */
@@ -111,13 +110,14 @@ abstract class Conversation
 
     /**
      * Repeat the previously asked question.
+     *
      * @param string|Question $question
      */
     public function repeat($question = '')
     {
         $conversation = $this->bot->getStoredConversation();
 
-        if ( ! $question instanceof Question && ! $question) {
+        if (! $question instanceof Question && ! $question) {
             $question = unserialize($conversation['question']);
         }
 
@@ -152,6 +152,7 @@ abstract class Conversation
 
     /**
      * Should the conversation be skipped (temporarily).
+     *
      * @param  Message $message
      * @return bool
      */
@@ -162,6 +163,7 @@ abstract class Conversation
 
     /**
      * Should the conversation be removed and stopped (permanently).
+     *
      * @param  Message $message
      * @return bool
      */
@@ -181,7 +183,7 @@ abstract class Conversation
     public function __sleep()
     {
         $properties = get_object_vars($this);
-        if ( ! $this instanceof ShouldQueue) {
+        if (! $this instanceof ShouldQueue) {
             unset($properties['bot']);
         }
 
