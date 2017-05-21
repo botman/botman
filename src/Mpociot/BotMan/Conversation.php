@@ -12,6 +12,7 @@ use Mpociot\BotMan\Interfaces\ShouldQueue;
  */
 abstract class Conversation
 {
+
     /**
      * @var BotMan
      */
@@ -116,7 +117,7 @@ abstract class Conversation
     {
         $conversation = $this->bot->getStoredConversation();
 
-        if (! $question instanceof Question && ! $question) {
+        if ( ! $question instanceof Question && ! $question) {
             $question = unserialize($conversation['question']);
         }
 
@@ -127,7 +128,7 @@ abstract class Conversation
             $next = unserialize($next)->getClosure();
         } elseif (is_array($next)) {
             $next = Collection::make($next)->map(function ($callback) {
-                if($this->bot->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+                if ($this->bot->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
                     $callback['callback'] = unserialize($callback['callback'])->getClosure();
                 }
 
@@ -180,7 +181,7 @@ abstract class Conversation
     public function __sleep()
     {
         $properties = get_object_vars($this);
-        if (! $this instanceof ShouldQueue) {
+        if ( ! $this instanceof ShouldQueue) {
             unset($properties['bot']);
         }
 
