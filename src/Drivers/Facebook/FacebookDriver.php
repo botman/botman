@@ -157,7 +157,7 @@ class FacebookDriver extends Driver
     {
         $parameters = [
             'recipient' => [
-                'id' => $matchingMessage->getRecipient(),
+                'id' => $matchingMessage->getSender(),
             ],
             'access_token' => $this->config->get('facebook_token'),
             'sender_action' => 'typing_on',
