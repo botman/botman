@@ -766,6 +766,55 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_use_parameters_in_callback_patterns()
+    {
+        $GLOBALS['answer'] = '';
+        $GLOBALS['called'] = false;
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => 'Hi Julia',
+            ],
+        ]);
+
+        $botman->hears('Hi Julia', function () {
+        });
+        $botman->listen();
+
+        $conversation = new TestConversation();
+
+        $botman->storeConversation($conversation, [
+            [
+                'pattern' => '([0]?[0-2][0-3]|[0-9])',
+                'callback' => function (Answer $answer, $number) use (&$called) {
+                    $GLOBALS['answer'] = $answer;
+                    $GLOBALS['called'] = true;
+                },
+            ],
+        ]);
+
+        /*
+         * Now that the first message is saved, fake a reply
+         */
+        $botman = $this->getBot([
+            'token' => 'foo',
+            'event' => [
+                'user' => 'UX12345',
+                'channel' => 'general',
+                'text' => '023',
+            ],
+        ]);
+        $botman->listen();
+
+        $this->assertInstanceOf(Answer::class, $GLOBALS['answer']);
+        $this->assertFalse($GLOBALS['answer']->isInteractiveMessageReply());
+        $this->assertSame('023', $GLOBALS['answer']->getText());
+        $this->assertTrue($GLOBALS['called']);
+    }
+
+    /** @test */
     public function it_picks_up_conversations_with_patterns()
     {
         $GLOBALS['answer'] = '';

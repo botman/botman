@@ -176,7 +176,14 @@ trait HandlesConversations
             if (is_array($convo['next'])) {
                 foreach ($convo['next'] as $callback) {
                     if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $callback['pattern'])) {
-                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), $this->matcher->getMatches());
+                        $parameterNames = $this->compileParameterNames($callback['pattern']);
+                        $matches = $this->matcher->getMatches();
+
+                        if (count($parameterNames) === count($matches)) {
+                            $parameters = array_combine($parameterNames, $matches);
+                        } else {
+                            $parameters = $matches;
+                        }
                         $this->matches = $parameters;
                         $next = $this->unserializeClosure($callback['callback']);
                         break;
