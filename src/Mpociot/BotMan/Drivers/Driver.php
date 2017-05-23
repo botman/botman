@@ -79,6 +79,4 @@ abstract class Driver implements DriverInterface
     {
         return true;
     }
-
-
 }

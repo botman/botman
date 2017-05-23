@@ -4,7 +4,6 @@ namespace Mpociot\BotMan;
 
 use Closure;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\SlackRTMDriver;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
 
 /**
