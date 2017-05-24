@@ -259,4 +259,14 @@ class SlackRTMDriver implements DriverInterface
     {
         return $this->client->apiCall($endpoint, $parameters, false, false);
     }
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function convCallbacksAreSerialized()
+    {
+        return false;
+    }
 }

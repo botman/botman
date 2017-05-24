@@ -98,4 +98,14 @@ class TestDriver implements DriverInterface
     {
         return new User();
     }
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function convCallbacksAreSerialized()
+    {
+        return false;
+    }
 }

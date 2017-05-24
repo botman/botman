@@ -66,4 +66,11 @@ interface DriverInterface
      * @return mixed
      */
     public function types(Message $matchingMessage);
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function convCallbacksAreSerialized();
 }
