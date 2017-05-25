@@ -41,5 +41,12 @@ trait VerifiesServices
                 return Response::create($request->get('echostr'))->send();
             }
         }
+
+
+        // Glip verification
+        if ($request->headers->has('Validation-Token'))
+        {
+            return Response::create('',200,array('Validation-Token' => getallheaders()['Validation-Token']))->send();
+        }
     }
 }
