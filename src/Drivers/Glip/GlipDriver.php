@@ -254,6 +254,72 @@ class GlipDriver extends Driver
     }
 
     /**
+     * @param string|Question|IncomingMessage $message
+     * @param Message $matchingMessage
+     * @param array $additionalParameters
+     * @return Response
+     */
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
+    {
+        $recipient = $matchingMessage->getRecipient() === '' ? $matchingMessage->getSender() : $matchingMessage->getRecipient();
+        $parameters = array_merge_recursive([
+            'chat_id' => $recipient,
+        ], $additionalParameters);
+        /*
+         * If we send a Question with buttons, ignore
+         * the text and append the question.
+         */
+        if ($message instanceof Question) {
+            $parameters['text'] = $message->getText();
+            $parameters['reply_markup'] = json_encode([
+                'inline_keyboard' => $this->convertQuestion($message),
+            ], true);
+        } elseif ($message instanceof IncomingMessage) {
+            if (! is_null($message->getAttachment())) {
+                $attachment = $message->getAttachment();
+                $parameters['caption'] = $message->getText();
+                if ($attachment instanceof Image) {
+                    if (strtolower(pathinfo($attachment->getUrl(), PATHINFO_EXTENSION)) === 'gif') {
+                        $this->endpoint = 'sendDocument';
+                        $parameters['document'] = $attachment->getUrl();
+                    } else {
+                        $this->endpoint = 'sendPhoto';
+                        $parameters['photo'] = $attachment->getUrl();
+                    }
+                } elseif ($attachment instanceof Video) {
+                    $this->endpoint = 'sendVideo';
+                    $parameters['video'] = $attachment->getUrl();
+                } elseif ($attachment instanceof Audio) {
+                    $this->endpoint = 'sendAudio';
+                    $parameters['audio'] = $attachment->getUrl();
+                } elseif ($attachment instanceof File) {
+                    $this->endpoint = 'sendDocument';
+                    $parameters['document'] = $attachment->getUrl();
+                } elseif ($attachment instanceof Location) {
+                    $this->endpoint = 'sendLocation';
+                    $parameters['latitude'] = $attachment->getLatitude();
+                    $parameters['longitude'] = $attachment->getLongitude();
+                }
+            } else {
+                $parameters['text'] = $message->getText();
+            }
+        } else {
+            $parameters['text'] = $message;
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @param mixed $payload
+     * @return Response
+     */
+    public function sendPayload($payload)
+    {
+        return $this->getPlatform()->post($this->endpoint, $payload);
+    }
+    
+    /**
      * @return bool
      */
     public function isConfigured()
