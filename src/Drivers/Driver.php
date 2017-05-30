@@ -87,4 +87,14 @@ abstract class Driver implements DriverInterface
      * @return void
      */
     abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function serializesCallbacks()
+    {
+        return true;
+    }
 }

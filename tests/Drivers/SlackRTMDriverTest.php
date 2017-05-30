@@ -128,4 +128,12 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
 
         $driver->sendPayload($driver->buildServicePayload($message, $matchingMessage));
     }
+
+    /**
+     * @test
+     **/
+    public function it_returns_false_for_check_if_conv_callbacks_are_stored_serialized()
+    {
+        $this->assertFalse($this->getDriver()->serializesCallbacks());
+    }
 }
