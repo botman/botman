@@ -46,7 +46,6 @@ class BotManFactory
         return new BotMan($cache, $driver, $config, $storageDriver);
     }
 
-
     /**
      * Create a new BotMan instance that listens on a socket.
      *
@@ -63,7 +62,7 @@ class BotManFactory
         StorageInterface $storageDriver = null
     ) {
         $port = isset($config['port']) ? $config['port'] : 8080;
-        
+
         $socket = new Server($loop);
 
         if (empty($cache)) {
@@ -79,7 +78,7 @@ class BotManFactory
         $botman = new BotMan($cache, DriverManager::loadFromName('Null', $config), $config, $storageDriver);
 
         $socket->on('connection', function ($conn) use ($botman, $driverManager) {
-            $conn->on('data', function($data) use ($botman, $driverManager) {
+            $conn->on('data', function ($data) use ($botman, $driverManager) {
                 $requestData = json_decode($data, true);
                 $request = new Request($requestData['query'], $requestData['request'], $requestData['attributes'], [], [], [], $requestData['content']);
                 $driver = $driverManager->getMatchingDriver($request);
@@ -94,8 +93,8 @@ class BotManFactory
 
     /**
      * Pass an incoming HTTP request to the socket.
-     * 
-     * @param  integer      $port    The port to use. Default is 8080
+     *
+     * @param  int      $port    The port to use. Default is 8080
      * @param  Request|null $request
      * @return void
      */
@@ -110,7 +109,7 @@ class BotManFactory
             'attributes' => $request->attributes->all(),
             'query' => $request->query->all(),
             'request' => $request->request->all(),
-            'content' => $request->getContent()
+            'content' => $request->getContent(),
         ]));
         fclose($client);
     }
