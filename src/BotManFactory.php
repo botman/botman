@@ -77,6 +77,7 @@ class BotManFactory
         $driverManager = new DriverManager($config, new Curl());
 
         $botman = new BotMan($cache, DriverManager::loadFromName('Null', $config), $config, $storageDriver);
+        $botman->runsOnSocket(true);
 
         $socket->on('connection', function ($conn) use ($botman, $driverManager) {
             $conn->on('data', function($data) use ($botman, $driverManager) {

@@ -94,6 +94,9 @@ class BotMan
     /** @var bool */
     protected $loadedConversation = false;
 
+    /** @var bool */
+    protected $runsOnSocket = false;
+
     /**
      * BotMan constructor.
      * @param CacheInterface $cache
@@ -170,6 +173,17 @@ class BotMan
     public function isBot()
     {
         return $this->getDriver()->isBot();
+    }
+
+    /**
+     * @return bool
+     */
+    public function runsOnSocket($running = null)
+    {
+        if (is_bool($running)) {
+            $this->runsOnSocket = $running;
+        }
+        return $this->runsOnSocket;
     }
 
     /**

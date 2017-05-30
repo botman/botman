@@ -88,7 +88,7 @@ trait HandlesConversations
      */
     public function serializeClosure(Closure $closure)
     {
-        if ($this->getDriver()->serializesCallbacks()) {
+        if ($this->getDriver()->serializesCallbacks() && !$this->runsOnSocket) {
             return serialize(new SerializableClosure($closure, true));
         }
 
@@ -101,7 +101,7 @@ trait HandlesConversations
      */
     protected function unserializeClosure($closure)
     {
-        if ($this->getDriver()->serializesCallbacks()) {
+        if ($this->getDriver()->serializesCallbacks() && !$this->runsOnSocket) {
             return unserialize($closure);
         }
 
