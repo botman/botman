@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Added Facebook Referral driver.
 - Allow replying to an existing thread for Slack drivers (#327).
 - Added `loadDriver` method to BotMan.
+- Added ability to use BotMan with a local socket.
 
 ### Changed
 - Switched from plain text to JSON responses for Slack slash commands, to allow richer message formatting.
