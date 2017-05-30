@@ -86,5 +86,5 @@ interface DriverInterface
      *
      * @return bool
      */
-    public function convCallbacksAreSerialized();
+    public function serializesCallbacks();
 }

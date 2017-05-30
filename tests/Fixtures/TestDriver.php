@@ -121,7 +121,7 @@ class TestDriver implements DriverInterface
      *
      * @return bool
      */
-    public function convCallbacksAreSerialized()
+    public function serializesCallbacks()
     {
         return false;
     }

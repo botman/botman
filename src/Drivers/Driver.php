@@ -93,7 +93,7 @@ abstract class Driver implements DriverInterface
      *
      * @return bool
      */
-    public function convCallbacksAreSerialized()
+    public function serializesCallbacks()
     {
         return true;
     }

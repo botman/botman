@@ -147,9 +147,9 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      **/
-    public function it_returns_false_for_check_if_conv_callbacks_are_stored_serialized()
+    public function it_returns_true_for_check_if_conv_callbacks_are_stored_serialized()
     {
-        $this->assertFalse($this->fakeDriver->convCallbacksAreSerialized());
+        $this->assertTrue($this->fakeDriver->serializesCallbacks());
     }
 
     private function listenToFakeMessage($message, $username, $channel)

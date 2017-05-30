@@ -157,8 +157,8 @@ class FakeDriver implements DriverInterface
      *
      * @return bool
      */
-    public function convCallbacksAreSerialized()
+    public function serializesCallbacks()
     {
-        return false;
+        return true;
     }
 }

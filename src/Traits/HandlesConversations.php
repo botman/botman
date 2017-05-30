@@ -89,7 +89,7 @@ trait HandlesConversations
      */
     public function serializeClosure(Closure $closure)
     {
-        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+        if ($this->getDriver()->serializesCallbacks()) {
             return serialize(new SerializableClosure($closure, true));
         }
 
@@ -102,7 +102,7 @@ trait HandlesConversations
      */
     protected function unserializeClosure($closure)
     {
-        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+        if ($this->getDriver()->serializesCallbacks()) {
             return unserialize($closure);
         }
 

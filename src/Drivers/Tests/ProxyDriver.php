@@ -100,8 +100,8 @@ final class ProxyDriver implements DriverInterface
      *
      * @return bool
      */
-    public function convCallbacksAreSerialized()
+    public function serializesCallbacks()
     {
-        return false;
+        return self::instance()->serializesCallbacks();
     }
 }
