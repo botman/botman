@@ -183,6 +183,7 @@ class BotMan
         if (is_bool($running)) {
             $this->runsOnSocket = $running;
         }
+
         return $this->runsOnSocket;
     }
 
