@@ -130,7 +130,7 @@ abstract class Conversation
             $next = unserialize($next)->getClosure();
         } elseif (is_array($next)) {
             $next = Collection::make($next)->map(function ($callback) {
-                if ($this->bot->getDriver()->serializesCallbacks()  && !$this->bot->runsOnSocket()) {
+                if ($this->bot->getDriver()->serializesCallbacks() && ! $this->bot->runsOnSocket()) {
                     $callback['callback'] = unserialize($callback['callback'])->getClosure();
                 }
 
