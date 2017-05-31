@@ -109,6 +109,7 @@ abstract class Conversation
 
     /**
      * Repeat the previously asked question.
+     *
      * @param string|Question $question
      */
     public function repeat($question = '')
@@ -126,7 +127,9 @@ abstract class Conversation
             $next = unserialize($next)->getClosure();
         } elseif (is_array($next)) {
             $next = Collection::make($next)->map(function ($callback) {
-                $callback['callback'] = unserialize($callback['callback'])->getClosure();
+                if ($this->bot->getDriver()->convCallbacksAreSerialized()) {
+                    $callback['callback'] = unserialize($callback['callback'])->getClosure();
+                }
 
                 return $callback;
             })->toArray();
@@ -148,6 +151,7 @@ abstract class Conversation
 
     /**
      * Should the conversation be skipped (temporarily).
+     *
      * @param  Message $message
      * @return bool
      */
@@ -158,6 +162,7 @@ abstract class Conversation
 
     /**
      * Should the conversation be removed and stopped (permanently).
+     *
      * @param  Message $message
      * @return bool
      */
