@@ -8,7 +8,7 @@ use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 
-abstract class Driver implements DriverInterface
+abstract class HttpDriver implements DriverInterface
 {
     /** @var Collection|ParameterBag */
     protected $payload;

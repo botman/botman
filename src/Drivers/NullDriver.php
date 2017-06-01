@@ -8,7 +8,7 @@ use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Symfony\Component\HttpFoundation\Request;
 
-class NullDriver extends Driver
+class NullDriver extends HttpDriver
 {
     /**
      * @param Request $request

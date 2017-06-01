@@ -7,7 +7,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Drivers\HttpDriver;
 use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
@@ -29,7 +29,7 @@ use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
 use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
 
-class FacebookDriver extends Driver
+class FacebookDriver extends HttpDriver
 {
     /** @var string */
     protected $signature;

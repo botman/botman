@@ -7,7 +7,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Drivers\HttpDriver;
 use Mpociot\BotMan\Attachments\File;
 use Mpociot\BotMan\Attachments\Audio;
 use Mpociot\BotMan\Attachments\Image;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
-class TelegramDriver extends Driver
+class TelegramDriver extends HttpDriver
 {
     const DRIVER_NAME = 'Telegram';
 
