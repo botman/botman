@@ -190,7 +190,12 @@ class FacebookDriver extends HttpDriver
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
-                return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
+                $message = new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
+                if (isset($msg['message']['attachments'])) {
+                    $message->setAttachments(Collection::make($msg['message']['attachments'])->where('type', 'fallback')->toArray());
+                }
+
+                return $message;
             }
 
             return new Message('', '', '');
