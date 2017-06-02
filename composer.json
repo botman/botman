@@ -53,5 +53,15 @@
         "psr-4": {
             "Mpociot\\BotMan\\Tests\\": "tests/"
         }
+    },
+    "extras": {
+        "laravel": {
+            "providers": [
+                "Mpociot\\BotMan\\BotManServiceProvider"
+            ],
+            "aliases": {
+                "BotMan": "Mpociot\\BotMan\\Facades\\BotMan"
+            }
+        }
     }
 }
