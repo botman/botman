@@ -151,4 +151,14 @@ class FakeDriver implements DriverInterface
         $this->botIsTyping = false;
         $this->botMessages = [];
     }
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function serializesCallbacks()
+    {
+        return true;
+    }
 }

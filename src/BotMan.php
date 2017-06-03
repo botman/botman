@@ -94,6 +94,9 @@ class BotMan
     /** @var bool */
     protected $loadedConversation = false;
 
+    /** @var bool */
+    protected $runsOnSocket = false;
+
     /**
      * BotMan constructor.
      * @param CacheInterface $cache
@@ -170,6 +173,18 @@ class BotMan
     public function isBot()
     {
         return $this->getDriver()->isBot();
+    }
+
+    /**
+     * @return bool
+     */
+    public function runsOnSocket($running = null)
+    {
+        if (is_bool($running)) {
+            $this->runsOnSocket = $running;
+        }
+
+        return $this->runsOnSocket;
     }
 
     /**
@@ -340,6 +355,8 @@ class BotMan
      */
     protected function getMatchingMessages($withReceivedMiddleware = true)
     {
+        $answer = $this->getConversationAnswer();
+
         $matchingMessages = [];
         foreach ($this->getMessages() as $message) {
             if ($withReceivedMiddleware) {
@@ -351,7 +368,7 @@ class BotMan
                 $pattern = $messageData['pattern'];
 
                 if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $pattern,
+                    $this->matcher->isMessageMatching($message, $answer->getValue(), $pattern,
                         $messageData['middleware'] + $this->middleware->heard()) &&
                     $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
                     $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) &&

@@ -8,7 +8,7 @@ use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 
-abstract class Driver implements DriverInterface
+abstract class HttpDriver implements DriverInterface
 {
     /** @var Collection|ParameterBag */
     protected $payload;
@@ -87,4 +87,14 @@ abstract class Driver implements DriverInterface
      * @return void
      */
     abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function serializesCallbacks()
+    {
+        return true;
+    }
 }

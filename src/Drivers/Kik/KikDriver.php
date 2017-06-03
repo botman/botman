@@ -7,15 +7,15 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Message;
 use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\Driver;
 use Mpociot\BotMan\Attachments\Image;
 use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Drivers\HttpDriver;
 use Mpociot\BotMan\Interfaces\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Messages\Message as OutgoingMessage;
 
-class KikDriver extends Driver
+class KikDriver extends HttpDriver
 {
     protected $headers = [];
 

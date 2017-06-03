@@ -144,6 +144,14 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         static::assertEquals('Hello, Helloman', $this->fakeDriver->getBotMessages()[1]->getText());
     }
 
+    /**
+     * @test
+     **/
+    public function it_returns_true_for_check_if_conv_callbacks_are_stored_serialized()
+    {
+        $this->assertTrue($this->fakeDriver->serializesCallbacks());
+    }
+
     private function listenToFakeMessage($message, $username, $channel)
     {
         $this->fakeDriver->messages = [new Message($message, $username, $channel)];

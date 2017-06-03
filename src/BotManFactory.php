@@ -47,6 +47,75 @@ class BotManFactory
     }
 
     /**
+     * Create a new BotMan instance that listens on a socket.
+     *
+     * @param array $config
+     * @param LoopInterface $loop
+     * @param CacheInterface $cache
+     * @param StorageInterface $storageDriver
+     * @return \Mpociot\BotMan\BotMan
+     */
+    public static function createForSocket(
+        array $config,
+        LoopInterface $loop,
+        CacheInterface $cache = null,
+        StorageInterface $storageDriver = null
+    ) {
+        $port = isset($config['port']) ? $config['port'] : 8080;
+
+        $socket = new Server($loop);
+
+        if (empty($cache)) {
+            $cache = new ArrayCache();
+        }
+
+        if (empty($storageDriver)) {
+            $storageDriver = new FileStorage(__DIR__);
+        }
+
+        $driverManager = new DriverManager($config, new Curl());
+
+        $botman = new BotMan($cache, DriverManager::loadFromName('Null', $config), $config, $storageDriver);
+        $botman->runsOnSocket(true);
+
+        $socket->on('connection', function ($conn) use ($botman, $driverManager) {
+            $conn->on('data', function ($data) use ($botman, $driverManager) {
+                $requestData = json_decode($data, true);
+                $request = new Request($requestData['query'], $requestData['request'], $requestData['attributes'], [], [], [], $requestData['content']);
+                $driver = $driverManager->getMatchingDriver($request);
+                $botman->setDriver($driver);
+                $botman->listen();
+            });
+        });
+        $socket->listen($port);
+
+        return $botman;
+    }
+
+    /**
+     * Pass an incoming HTTP request to the socket.
+     *
+     * @param  int      $port    The port to use. Default is 8080
+     * @param  Request|null $request
+     * @return void
+     */
+    public static function passRequestToSocket($port = 8080, Request $request = null)
+    {
+        if (empty($request)) {
+            $request = Request::createFromGlobals();
+        }
+
+        $client = stream_socket_client('tcp://127.0.0.1:'.$port);
+        fwrite($client, json_encode([
+            'attributes' => $request->attributes->all(),
+            'query' => $request->query->all(),
+            'request' => $request->request->all(),
+            'content' => $request->getContent(),
+        ]));
+        fclose($client);
+    }
+
+    /**
      * Create a new BotMan instance.
      *
      * @param array $config

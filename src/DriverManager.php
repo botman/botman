@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan;
 
 use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Drivers\Driver;
+use Mpociot\BotMan\Drivers\HttpDriver;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Mpociot\BotMan\Drivers\Kik\KikDriver;
 use Mpociot\BotMan\Interfaces\HttpInterface;
@@ -94,7 +94,7 @@ class DriverManager
      * @param string $name
      * @param array $config
      * @param Request|null $request
-     * @return mixed|Driver|NullDriver
+     * @return mixed|HttpDriver|NullDriver
      */
     public static function loadFromName($name, array $config, Request $request = null)
     {
@@ -109,14 +109,14 @@ class DriverManager
          * Use the driver name constant if we try to load a driver by it's
          * fully qualified class name.
          */
-        if (class_exists($name) && is_subclass_of($name, Driver::class)) {
+        if (class_exists($name) && is_subclass_of($name, HttpDriver::class)) {
             $name = $name::DRIVER_NAME;
         }
         if (is_null($request)) {
             $request = Request::createFromGlobals();
         }
         foreach (self::getAvailableDrivers() as $driver) {
-            /** @var Driver $driver */
+            /** @var HttpDriver $driver */
             $driver = new $driver($request, $config, new Curl());
             if ($driver->getName() === $name) {
                 return $driver;
@@ -168,12 +168,12 @@ class DriverManager
 
     /**
      * @param Request $request
-     * @return Driver
+     * @return HttpDriver
      */
     public function getMatchingDriver(Request $request)
     {
         foreach (self::getAvailableDrivers() as $driver) {
-            /** @var Driver $driver */
+            /** @var HttpDriver $driver */
             $driver = new $driver($request, $this->config, $this->http);
             if ($driver->matchesRequest() || $driver->hasMatchingEvent()) {
                 return $driver;

@@ -10,7 +10,6 @@ use Mpociot\BotMan\DriverManager;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
-use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
 
 trait HandlesConversations
 {
@@ -89,7 +88,7 @@ trait HandlesConversations
      */
     public function serializeClosure(Closure $closure)
     {
-        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+        if ($this->getDriver()->serializesCallbacks() && ! $this->runsOnSocket) {
             return serialize(new SerializableClosure($closure, true));
         }
 
@@ -102,7 +101,7 @@ trait HandlesConversations
      */
     protected function unserializeClosure($closure)
     {
-        if ($this->getDriver()->getName() !== SlackRTMDriver::DRIVER_NAME) {
+        if ($this->getDriver()->serializesCallbacks() && ! $this->runsOnSocket) {
             return unserialize($closure);
         }
 
@@ -176,7 +175,14 @@ trait HandlesConversations
             if (is_array($convo['next'])) {
                 foreach ($convo['next'] as $callback) {
                     if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $callback['pattern'])) {
-                        $parameters = array_combine($this->compileParameterNames($callback['pattern']), $this->matcher->getMatches());
+                        $parameterNames = $this->compileParameterNames($callback['pattern']);
+                        $matches = $this->matcher->getMatches();
+
+                        if (count($parameterNames) === count($matches)) {
+                            $parameters = array_combine($parameterNames, $matches);
+                        } else {
+                            $parameters = $matches;
+                        }
                         $this->matches = $parameters;
                         $next = $this->unserializeClosure($callback['callback']);
                         break;

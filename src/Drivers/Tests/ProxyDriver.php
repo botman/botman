@@ -94,4 +94,14 @@ final class ProxyDriver implements DriverInterface
     {
         return self::instance()->types($matchingMessage);
     }
+
+    /**
+     * Tells if the stored conversation callbacks are serialized.
+     *
+     * @return bool
+     */
+    public function serializesCallbacks()
+    {
+        return self::instance()->serializesCallbacks();
+    }
 }
