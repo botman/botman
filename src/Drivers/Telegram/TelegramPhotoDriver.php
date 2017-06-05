@@ -48,10 +48,14 @@ class TelegramPhotoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return [
-            new Image('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
-                $largetstPhoto),
-        ];
+	    // In case of file too large, this return only the attachment with the original payload, not the link.
+	    // This need a proper logging and exception system in the future
+	    $url = null;
+	    if (isset($path->result)) {
+		    $url = 'https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path;
+	    }
+
+	    return [new Image($url, $largetstPhoto)];
     }
 
     /**

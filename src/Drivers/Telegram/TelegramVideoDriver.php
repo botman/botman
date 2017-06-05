@@ -46,10 +46,14 @@ class TelegramVideoDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        return [
-            new Video('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
-                $video),
-        ];
+	    // In case of file too large, this return only the attachment with the original payload, not the link.
+	    // This need a proper logging and exception system in the future
+	    $url = null;
+	    if (isset($path->result)) {
+		    $url = 'https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path;
+	    }
+
+	    return [new Video($url, $video)];
     }
 
     /**

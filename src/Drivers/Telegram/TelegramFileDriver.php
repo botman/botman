@@ -47,16 +47,14 @@ class TelegramFileDriver extends TelegramDriver
 
         $path = json_decode($response->getContent());
 
-        // In case of file too large, don't return anything
+        // In case of file too large, this return only the attachment with the original payload, not the link.
 	    // This need a proper logging and exception system in the future
-        if (!isset($path->result)) {
-        	return [];
+	    $url = null;
+        if (isset($path->result)) {
+        	$url = 'https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path;
         }
 
-        return [
-            new File('https://api.telegram.org/file/bot'.$this->config->get('telegram_token').'/'.$path->result->file_path,
-                $file),
-        ];
+        return [new File($url, $file),];
     }
 
     /**
