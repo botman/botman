@@ -54,6 +54,16 @@
             "Mpociot\\BotMan\\Tests\\": "tests/"
         }
     },
+    "extras": {
+        "laravel": {
+            "providers": [
+                "Mpociot\\BotMan\\BotManServiceProvider"
+            ],
+            "aliases": {
+                "BotMan": "Mpociot\\BotMan\\Facades\\BotMan"
+            }
+        }
+    },
     "scripts": {
         "test": "vendor/bin/phpunit",
         "cs": "php-cs-fixer fix"
