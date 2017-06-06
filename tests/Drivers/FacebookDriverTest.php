@@ -3,19 +3,19 @@
 namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Messages\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Messages\Attachments\File;
+use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Messages\Attachments\Audio;
 use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Drivers\Events\GenericEvent;
-use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReads;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingOptins;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingPostbacks;

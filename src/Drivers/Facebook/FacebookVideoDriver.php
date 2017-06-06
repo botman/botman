@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class FacebookVideoDriver extends FacebookDriver
 {

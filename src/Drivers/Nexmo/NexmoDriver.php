@@ -3,13 +3,13 @@
 namespace Mpociot\BotMan\Drivers\Nexmo;
 
 use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class NexmoDriver extends HttpDriver

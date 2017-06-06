@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\tests;
 
+use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use PHPUnit_Framework_TestCase;
 
 class AnswerTest extends PHPUnit_Framework_TestCase
 {

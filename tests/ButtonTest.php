@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\tests;
 
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
 
 class ButtonTest extends PHPUnit_Framework_TestCase
 {

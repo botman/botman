@@ -4,9 +4,9 @@ namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\Users\User;
 use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestDriver implements DriverInterface
 {

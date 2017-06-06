@@ -3,10 +3,10 @@
 namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Drivers\Facebook\FacebookVideoDriver;
 
 class FacebookVideoDriverTest extends PHPUnit_Framework_TestCase

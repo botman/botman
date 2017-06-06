@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class WeChatPhotoDriver extends WeChatDriver
 {

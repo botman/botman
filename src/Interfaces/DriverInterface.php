@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 interface DriverInterface
 {

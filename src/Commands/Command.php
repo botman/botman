@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Commands;
 
-use Illuminate\Support\Collection;
 use Mpociot\BotMan\Closure;
+use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 

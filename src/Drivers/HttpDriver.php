@@ -2,11 +2,11 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\DriverInterface;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 abstract class HttpDriver implements DriverInterface
 {

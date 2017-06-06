@@ -3,11 +3,11 @@
 namespace Mpociot\BotMan\Middleware;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class Wit implements MiddlewareInterface
 {

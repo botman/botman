@@ -2,14 +2,14 @@
 
 namespace Mpociot\BotMan\tests\Drivers;
 
-use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * @covers \Mpociot\BotMan\Drivers\FakeDriver
