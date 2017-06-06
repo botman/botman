@@ -4,19 +4,19 @@ namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
 {

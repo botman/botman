@@ -2,14 +2,14 @@
 
 namespace Mpociot\BotMan\Drivers\Slack;
 
-use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Users\User;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Incoming\IncomingMessage;

@@ -3,15 +3,15 @@
 namespace Mpociot\BotMan\Messages\Conversations;
 
 use Closure;
+use Mpociot\BotMan\BotMan;
 use Illuminate\Support\Collection;
+use Mpociot\BotMan\Interfaces\ShouldQueue;
 use Mpociot\BotMan\Messages\Attachments\Audio;
 use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Interfaces\ShouldQueue;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Messages\Attachments\Location;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * Class Conversation.

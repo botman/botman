@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Drivers;
 
 use Mpociot\BotMan\Users\User;
 use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class NullDriver extends HttpDriver
 {

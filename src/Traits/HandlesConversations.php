@@ -3,13 +3,13 @@
 namespace Mpociot\BotMan\Traits;
 
 use Closure;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Messages\Conversations\Conversation;
-use Mpociot\BotMan\Drivers\DriverManager;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
+use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
 
 trait HandlesConversations
 {

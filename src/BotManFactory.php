@@ -2,12 +2,12 @@
 
 namespace Mpociot\BotMan;
 
-use Mpociot\BotMan\Drivers\DriverManager;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
 use Mpociot\BotMan\Cache\ArrayCache;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Interfaces\StorageInterface;

@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\tests;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@ namespace Mpociot\BotMan\tests\Drivers;
 use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Mpociot\BotMan\Drivers\WeChat\WeChatLocationDriver;
 
 class WeChatLocationDriverTest extends PHPUnit_Framework_TestCase

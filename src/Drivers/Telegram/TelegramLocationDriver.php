@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Attachments\Location;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class TelegramLocationDriver extends TelegramDriver
 {

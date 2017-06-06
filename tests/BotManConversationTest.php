@@ -3,16 +3,16 @@
 namespace Mpociot\BotMan\tests;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Drivers\DriverManager;
+use Mpociot\BotMan\Drivers\Tests\FakeDriver;
+use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 use Mpociot\BotMan\Messages\Attachments\Audio;
 use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Messages\Attachments\Video;
 use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Drivers\Tests\FakeDriver;
-use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
 
 class BotManConversationTest extends PHPUnit_Framework_TestCase

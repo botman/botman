@@ -3,21 +3,21 @@
 namespace Mpociot\BotMan\Drivers\Slack;
 
 use Slack\File;
-use Mpociot\BotMan\Users\User;
 use Slack\RealTimeClient;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Users\User;
 use Illuminate\Support\Collection;
 use React\Promise\PromiseInterface;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Messages\Attachments\Audio;
 use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Drivers\Events\GenericEvent;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Attachments\File as BotManFile;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use Mpociot\BotMan\Messages\Attachments\File as BotManFile;
 
 class SlackRTMDriver implements DriverInterface
 {

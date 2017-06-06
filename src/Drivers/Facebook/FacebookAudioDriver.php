@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class FacebookAudioDriver extends FacebookDriver
 {

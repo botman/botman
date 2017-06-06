@@ -3,14 +3,14 @@
 namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
 
 class WeChatDriverTest extends PHPUnit_Framework_TestCase
 {

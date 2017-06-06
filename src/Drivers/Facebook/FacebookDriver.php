@@ -3,29 +3,29 @@
 namespace Mpociot\BotMan\Drivers\Facebook;
 
 use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\Messages\Attachments\File;
+use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Messages\Attachments\Audio;
 use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ListTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
-use Mpociot\BotMan\Drivers\Events\GenericEvent;
-use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
+use Mpociot\BotMan\Drivers\Events\GenericEvent;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReads;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingOptins;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReferrals;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use Mpociot\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
 
 class FacebookDriver extends HttpDriver
 {

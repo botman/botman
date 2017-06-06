@@ -3,12 +3,12 @@
 namespace Mpociot\BotMan\Middleware;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class Botanalytics implements MiddlewareInterface
 {

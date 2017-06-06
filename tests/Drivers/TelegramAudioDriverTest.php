@@ -7,8 +7,8 @@ use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Messages\Attachments\Audio;
 use Symfony\Component\HttpFoundation\Request;
+use Mpociot\BotMan\Messages\Attachments\Audio;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\Telegram\TelegramAudioDriver;
 

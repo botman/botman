@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Conversations\Conversation;
 use Mpociot\BotMan\Messages\Attachments\Location;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
 
 class TestDataConversation extends Conversation
 {

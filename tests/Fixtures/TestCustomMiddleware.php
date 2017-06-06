@@ -3,8 +3,8 @@
 namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestCustomMiddleware implements MiddlewareInterface
 {
