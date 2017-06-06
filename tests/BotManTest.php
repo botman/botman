@@ -1,22 +1,22 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Conversation;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
 use Mpociot\BotMan\Drivers\NullDriver;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Interfaces\UserInterface;
 use Mpociot\BotMan\Tests\Fixtures\TestClass;
@@ -1160,7 +1160,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
             ->with('Slack', [])
@@ -1191,7 +1191,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
             ->with('Facebook', [])
@@ -1218,7 +1218,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\DriverManager');
+        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('getConfiguredDrivers')
             ->andReturn([$driver]);
 
@@ -1253,7 +1253,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(TestDriver::class);
         $driver->shouldReceive('dummyMethod')
             ->once()
-            ->with('bar', 'baz', m::type(Message::class), m::type(BotMan::class));
+            ->with('bar', 'baz', m::type(IncomingMessage::class), m::type(BotMan::class));
 
         DriverManager::loadDriver(TestDriver::class);
 
@@ -1290,12 +1290,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1326,12 +1326,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn(Answer::create('repeat'));
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('repeat', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('repeat', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1348,12 +1348,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1384,12 +1384,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->andReturn(Answer::create('repeat_modified'));
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('repeat_modified', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('repeat_modified', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a modified test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a modified test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1428,12 +1428,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1508,12 +1508,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1588,12 +1588,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1668,12 +1668,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver = m::mock(NullDriver::class)->makePartial();
 
         $driver->shouldReceive('getMessages')
-            ->andReturn([new Message('Hi Julia', 'UX12345', 'general')]);
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
 
         $driver->shouldReceive('buildServicePayload')
             ->once()
             ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof Message) && $arguments === [];
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
             });
 
         $driver->shouldReceive('sendPayload')
@@ -1798,7 +1798,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(Image::PATTERN, '', '');
+        $message = new IncomingMessage(Image::PATTERN, '', '');
         $message->setImages([
             'http://foo.com/bar.png',
         ]);
@@ -1827,7 +1827,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(Video::PATTERN, '', '');
+        $message = new IncomingMessage(Video::PATTERN, '', '');
         $message->setVideos([
             'http://foo.com/bar.png',
         ]);
@@ -1856,7 +1856,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $message = new Message(Audio::PATTERN, '', '');
+        $message = new IncomingMessage(Audio::PATTERN, '', '');
         $message->setAudio([
             'http://foo.com/bar.png',
         ]);
@@ -1889,7 +1889,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $location = new Location($lat, $lng);
 
-        $message = new Message(Location::PATTERN, '', '');
+        $message = new IncomingMessage(Location::PATTERN, '', '');
         $message->setLocation($location);
 
         $botman = $this->getBot([]);

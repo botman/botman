@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 
 class TestDriver implements DriverInterface
@@ -27,7 +27,7 @@ class TestDriver implements DriverInterface
      */
     public function getMessages()
     {
-        return [new Message('', '', '')];
+        return [new IncomingMessage('', '', '')];
     }
 
     /**
@@ -47,18 +47,18 @@ class TestDriver implements DriverInterface
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      *
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create();
     }
 
     /**
      * @param string|Question $message
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return mixed
      */
@@ -77,10 +77,10 @@ class TestDriver implements DriverInterface
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return string
      */
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
     }
 
@@ -108,10 +108,10 @@ class TestDriver implements DriverInterface
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return UserInterface
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return new User();
     }

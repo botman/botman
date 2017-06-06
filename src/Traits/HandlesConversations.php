@@ -3,10 +3,10 @@
 namespace Mpociot\BotMan\Traits;
 
 use Closure;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
-use Mpociot\BotMan\Conversation;
-use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
 use Mpociot\BotMan\Interfaces\ShouldQueue;
@@ -14,14 +14,14 @@ use Mpociot\BotMan\Interfaces\ShouldQueue;
 trait HandlesConversations
 {
     /**
-     * @param Conversation $instance
+     * @param \Mpociot\BotMan\Messages\Conversations\Conversation $instance
      * @param null|string $channel
      * @param null|string $driver
      */
     public function startConversation(Conversation $instance, $channel = null, $driver = null)
     {
         if (! is_null($channel) && ! is_null($driver)) {
-            $this->message = new Message('', $channel, '');
+            $this->message = new IncomingMessage('', $channel, '');
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
         $instance->setBot($this);
@@ -29,7 +29,7 @@ trait HandlesConversations
     }
 
     /**
-     * @param Conversation $instance
+     * @param \Mpociot\BotMan\Messages\Conversations\Conversation $instance
      * @param array|Closure $next
      * @param string|Question $question
      * @param array $additionalParameters
@@ -48,7 +48,7 @@ trait HandlesConversations
     /**
      * Get a stored conversation array from the cache for a given message.
      *
-     * @param null|Message $message
+     * @param null|IncomingMessage $message
      * @return array
      */
     public function getStoredConversation($message = null)
@@ -68,7 +68,7 @@ trait HandlesConversations
     /**
      * Remove a stored conversation array from the cache for a given message.
      *
-     * @param null|Message $message
+     * @param null|IncomingMessage $message
      */
     public function removeStoredConversation($message = null)
     {
@@ -204,12 +204,12 @@ trait HandlesConversations
     /**
      * @param callable $next
      * @param array $convo
-     * @param Message $message
+     * @param IncomingMessage $message
      * @param array $parameters
      */
-    protected function callConversation($next, $convo, Message $message, array $parameters)
+    protected function callConversation($next, $convo, IncomingMessage $message, array $parameters)
     {
-        /** @var Conversation $conversation */
+        /** @var \Mpociot\BotMan\Messages\Conversations\Conversation $conversation */
         $conversation = $convo['conversation'];
         if (! $conversation instanceof ShouldQueue) {
             $conversation->setBot($this);

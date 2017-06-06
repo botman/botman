@@ -4,7 +4,7 @@ namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptAddress;
 
 class ReceiptAddressTest extends PHPUnit_Framework_TestCase
 {

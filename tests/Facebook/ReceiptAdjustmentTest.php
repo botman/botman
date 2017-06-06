@@ -4,7 +4,7 @@ namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Facebook\ReceiptAdjustment;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptAdjustment;
 
 class ReceiptAdjustmentTest extends PHPUnit_Framework_TestCase
 {

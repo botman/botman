@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Audio;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\Telegram\TelegramAudioDriver;

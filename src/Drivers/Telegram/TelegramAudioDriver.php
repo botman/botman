@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\Audio;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\Audio;
 
 class TelegramAudioDriver extends TelegramDriver
 {
@@ -26,7 +26,7 @@ class TelegramAudioDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Audio::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+        $message = new IncomingMessage(Audio::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
             $this->event);
         $message->setAudio($this->getAudio());
 

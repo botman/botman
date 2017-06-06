@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,7 +64,7 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $_SERVER['middleware_received_count']);
 
         $_SERVER['middleware_received_count'] = 0;
-        $this->fakeDriver->messages = [new Message('Hello', 'foo', 'bar'), new Message('Hello 2', 'foo', 'bar')];
+        $this->fakeDriver->messages = [new IncomingMessage('Hello', 'foo', 'bar'), new IncomingMessage('Hello 2', 'foo', 'bar')];
         $this->botman->listen();
         $this->assertEquals(2, $_SERVER['middleware_received_count']);
     }
@@ -86,10 +86,10 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
 
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')
     {
-        if ($message instanceof Message) {
+        if ($message instanceof IncomingMessage) {
             $this->fakeDriver->messages = [$message];
         } else {
-            $this->fakeDriver->messages = [new Message($message, $username, $channel)];
+            $this->fakeDriver->messages = [new IncomingMessage($message, $username, $channel)];
         }
         $this->botman->listen();
     }

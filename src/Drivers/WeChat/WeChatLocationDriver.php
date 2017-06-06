@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\Location;
 
 class WeChatLocationDriver extends WeChatDriver
 {
@@ -36,7 +36,7 @@ class WeChatLocationDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Location::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
+        $message = new IncomingMessage(Location::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
             $this->event);
         $message->setLocation($this->getLocation());
 

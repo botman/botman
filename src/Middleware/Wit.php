@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan\Middleware;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
@@ -46,7 +46,7 @@ class Wit implements MiddlewareInterface
         return new static($token, $minimumConfidence, new Curl());
     }
 
-    protected function getResponse(Message $message)
+    protected function getResponse(IncomingMessage $message)
     {
         $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
 
@@ -60,13 +60,13 @@ class Wit implements MiddlewareInterface
     /**
      * Handle a captured message.
      *
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function captured(Message $message, $next, BotMan $bot)
+    public function captured(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }
@@ -74,13 +74,13 @@ class Wit implements MiddlewareInterface
     /**
      * Handle an incoming message.
      *
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function received(Message $message, $next, BotMan $bot)
+    public function received(IncomingMessage $message, $next, BotMan $bot)
     {
         $response = $this->getResponse($message);
 
@@ -91,12 +91,12 @@ class Wit implements MiddlewareInterface
     }
 
     /**
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
      */
-    public function matching(Message $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
@@ -118,13 +118,13 @@ class Wit implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function heard(Message $message, $next, BotMan $bot)
+    public function heard(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }

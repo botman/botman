@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 
 class AnswerTest extends PHPUnit_Framework_TestCase
@@ -66,7 +66,7 @@ class AnswerTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_returns_the_message_object()
     {
-        $message = new Message('foo', 'bar', 'baz');
+        $message = new IncomingMessage('foo', 'bar', 'baz');
 
         $answer = new Answer('foo');
         $answer->setMessage($message);

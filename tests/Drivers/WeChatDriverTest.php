@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
@@ -357,7 +357,7 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
     /** @test */
@@ -403,6 +403,6 @@ class WeChatDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Mpociot\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class WeChatDriver extends HttpDriver
 {
@@ -43,19 +43,19 @@ class WeChatDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
-     * @return Answer
+     * @param  IncomingMessage $message
+     * @return \Mpociot\BotMan\Messages\Incoming\Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $response = $this->http->post('https://api.wechat.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$matchingMessage->getRecipient().'&lang=en_US',
             [], [], [], true);
@@ -73,7 +73,7 @@ class WeChatDriver extends HttpDriver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('Content'), $this->event->get('FromUserName'),
+            new IncomingMessage($this->event->get('Content'), $this->event->get('FromUserName'),
                 $this->event->get('ToUserName'), $this->event),
         ];
     }
@@ -99,8 +99,8 @@ class WeChatDriver extends HttpDriver
     }
 
     /**
-     * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
@@ -115,7 +115,7 @@ class WeChatDriver extends HttpDriver
             $parameters['text'] = [
                 'content' => $message->getText(),
             ];
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['msgtype'] = 'news';
 
             $attachment = $message->getAttachment();
@@ -168,10 +168,10 @@ class WeChatDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         return $this->http->post('https://api.wechat.com/cgi-bin/'.$endpoint.'?access_token='.$this->getAccessToken(),
             [], $parameters, [], true);

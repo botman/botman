@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 
 class MessageTest extends PHPUnit_Framework_TestCase
@@ -10,35 +10,35 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_be_created()
     {
-        $message = new Message('', '', '');
-        $this->assertInstanceOf(Message::class, $message);
+        $message = new IncomingMessage('', '', '');
+        $this->assertInstanceOf(IncomingMessage::class, $message);
     }
 
     /** @test */
     public function it_can_return_the_channel()
     {
-        $message = new Message('', '', 'channel');
+        $message = new IncomingMessage('', '', 'channel');
         $this->assertSame('channel', $message->getRecipient());
     }
 
     /** @test */
     public function it_can_return_the_user()
     {
-        $message = new Message('', 'user', '');
+        $message = new IncomingMessage('', 'user', '');
         $this->assertSame('user', $message->getSender());
     }
 
     /** @test */
     public function it_can_return_the_message()
     {
-        $message = new Message('my message', '', '');
+        $message = new IncomingMessage('my message', '', '');
         $this->assertSame('my message', $message->getText());
     }
 
     /** @test */
     public function it_can_return_the_conversation_identifier()
     {
-        $message = new Message('', 'user', 'channel');
+        $message = new IncomingMessage('', 'user', 'channel');
         $identifier = 'conversation-'.sha1('user').'-'.sha1('channel');
         $this->assertSame($identifier, $message->getConversationIdentifier());
     }
@@ -46,7 +46,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_return_the_originated_conversation_identifier()
     {
-        $message = new Message('', 'user', 'channel');
+        $message = new IncomingMessage('', 'user', 'channel');
         $identifier = 'conversation-da39a3ee5e6b4b0d3255bfef95601890afd80709-'.sha1('channel');
         $this->assertSame($identifier, $message->getOriginatedConversationIdentifier());
     }
@@ -54,17 +54,17 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_return_the_payload()
     {
-        $message = new Message('', '', '', 'payload');
+        $message = new IncomingMessage('', '', '', 'payload');
         $this->assertSame('payload', $message->getPayload());
 
-        $message = new Message('', '', '', ['foo' => 'bar']);
+        $message = new IncomingMessage('', '', '', ['foo' => 'bar']);
         $this->assertSame(['foo' => 'bar'], $message->getPayload());
     }
 
     /** @test */
     public function it_can_set_and_return_an_image()
     {
-        $message = new Message('', '', '');
+        $message = new IncomingMessage('', '', '');
         $this->assertSame([], $message->getImages());
 
         $message->setImages(['foo']);
@@ -74,7 +74,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_set_and_return_extras()
     {
-        $message = new Message('', '', '');
+        $message = new IncomingMessage('', '', '');
         $this->assertSame([], $message->getExtras());
 
         $message->addExtras('intents', [1, 2, 3]);
@@ -86,7 +86,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_set_and_return_single_extra()
     {
-        $message = new Message('', '', '');
+        $message = new IncomingMessage('', '', '');
         $message->addExtras('intents', [1, 2, 3]);
         $this->assertSame([1, 2, 3], $message->getExtras('intents'));
 

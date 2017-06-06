@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Middleware;
+namespace Mpociot\BotMan\tests\Middleware;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
@@ -24,7 +24,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     {
         $messageChannel = '1234567890';
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '', $messageChannel);
+        $message = new IncomingMessage($messageText, '', $messageChannel);
 
         $apiResponse = [
             'result' => [
@@ -75,7 +75,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     public function it_matches_messages()
     {
         $messageText = 'my_api_ai_action_name';
-        $message = new Message($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $apiResponse = [
             'result' => [
@@ -110,7 +110,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     public function it_matches_messages_with_regular_expressions()
     {
         $messageText = 'my_api_ai_.*';
-        $message = new Message($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $apiResponse = [
             'result' => [

@@ -2,9 +2,7 @@
 
 namespace Mpociot\BotMan\Interfaces;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Symfony\Component\HttpFoundation\Response;
 
 interface DriverInterface
@@ -35,20 +33,20 @@ interface DriverInterface
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return UserInterface
      */
-    public function getUser(Message $matchingMessage);
+    public function getUser(IncomingMessage $matchingMessage);
 
     /**
-     * @param Message $message
-     * @return Answer
+     * @param IncomingMessage $message
+     * @return \Mpociot\BotMan\Messages\Incoming\Answer
      */
-    public function getConversationAnswer(Message $message);
+    public function getConversationAnswer(IncomingMessage $message);
 
     /**
-     * @param string|Question $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return $this
      */
@@ -76,10 +74,10 @@ interface DriverInterface
 
     /**
      * Send a typing indicator.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return mixed
      */
-    public function types(Message $matchingMessage);
+    public function types(IncomingMessage $matchingMessage);
 
     /**
      * Tells if the stored conversation callbacks are serialized.

@@ -3,26 +3,31 @@
 namespace Mpociot\BotMan;
 
 use Closure;
+use Mpociot\BotMan\Commands\Command;
+use Mpociot\BotMan\Drivers\DriverManager;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\File;
 use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Mpociot\BotMan\Traits\ProvidesStorage;
 use Mpociot\BotMan\Traits\VerifiesServices;
 use Mpociot\BotMan\Interfaces\UserInterface;
-use Mpociot\BotMan\Messages\MatchingMessage;
+use Mpociot\BotMan\Messages\Matching\MatchingMessage;
 use Mpociot\BotMan\Interfaces\CacheInterface;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Mpociot\BotMan\Interfaces\StorageInterface;
 use Mpociot\BotMan\Traits\HandlesConversations;
 use Mpociot\BotMan\Middleware\MiddlewareManager;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Conversations\InlineConversation;
-use Mpociot\BotMan\Messages\Message as OutgoingMessage;
+use Mpociot\BotMan\Messages\Conversations\InlineConversation;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
 
 /**
  * Class BotMan.
@@ -39,7 +44,7 @@ class BotMan
     /** @var Command */
     protected $command;
 
-    /** @var Message */
+    /** @var IncomingMessage */
     protected $message;
 
     /** @var string */
@@ -55,7 +60,7 @@ class BotMan
     protected $listenTo = [];
 
     /**
-     * Message service events.
+     * IncomingMessage service events.
      * @var array
      */
     protected $events = [];
@@ -107,7 +112,7 @@ class BotMan
     public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
         $this->cache = $cache;
-        $this->message = new Message('', '', '');
+        $this->message = new IncomingMessage('', '', '');
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
@@ -296,11 +301,11 @@ class BotMan
      * Add additional data (image,video,audio,location,files) data to
      * callable parameters.
      *
-     * @param Message $message
+     * @param IncomingMessage $message
      * @param array $parameters
      * @return array
      */
-    private function addDataParameters(Message $message, array $parameters)
+    private function addDataParameters(IncomingMessage $message, array $parameters)
     {
         $messageText = $message->getText();
 
@@ -444,7 +449,7 @@ class BotMan
         }
 
         foreach ($drivers as $driver) {
-            $this->message = new Message('', $recipient, '');
+            $this->message = new IncomingMessage('', $recipient, '');
             $this->setDriver($driver);
             $this->reply($message, $additionalParameters);
         }
@@ -581,7 +586,7 @@ class BotMan
     }
 
     /**
-     * @return Message
+     * @return IncomingMessage
      */
     public function getMessage()
     {

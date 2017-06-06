@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\File;
 
 class FacebookFileDriver extends FacebookDriver
 {
@@ -41,14 +41,14 @@ class FacebookFileDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(File::PATTERN, $msg['sender']['id'], $msg['recipient']['id'], $msg);
+            $message = new IncomingMessage(File::PATTERN, $msg['sender']['id'], $msg['recipient']['id'], $msg);
             $message->setFiles($this->getFiles($msg));
 
             return $message;
         })->toArray();
 
         if (count($messages) === 0) {
-            return [new Message('', '', '')];
+            return [new IncomingMessage('', '', '')];
         }
 
         return $messages;

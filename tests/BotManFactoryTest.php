@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
 use Mpociot\BotMan\BotMan;
 use React\EventLoop\Factory;

@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Conversation;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
+use Mpociot\BotMan\Messages\Attachments\Location;
 
 class TestDataConversation extends Conversation
 {

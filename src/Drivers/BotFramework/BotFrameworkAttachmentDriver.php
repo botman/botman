@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\BotFramework;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\File;
 
 class BotFrameworkAttachmentDriver extends BotFrameworkDriver
 {
@@ -29,7 +29,7 @@ class BotFrameworkAttachmentDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(File::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+        $message = new IncomingMessage(File::PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
             $this->payload);
         $message->setFiles($this->getAttachmentUrls());
 

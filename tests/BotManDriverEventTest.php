@@ -5,7 +5,7 @@ namespace Mpociot\BotMan\Tests;
 use Mpociot\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;

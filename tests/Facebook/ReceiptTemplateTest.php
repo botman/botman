@@ -4,11 +4,11 @@ namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Facebook\ReceiptAddress;
-use Mpociot\BotMan\Facebook\ReceiptElement;
-use Mpociot\BotMan\Facebook\ReceiptSummary;
-use Mpociot\BotMan\Facebook\ReceiptTemplate;
-use Mpociot\BotMan\Facebook\ReceiptAdjustment;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptAddress;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptElement;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptSummary;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptAdjustment;
 
 class ReceiptTemplateTest extends PHPUnit_Framework_TestCase
 {

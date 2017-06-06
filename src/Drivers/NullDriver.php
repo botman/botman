@@ -2,10 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Symfony\Component\HttpFoundation\Request;
 
 class NullDriver extends HttpDriver
@@ -38,11 +37,11 @@ class NullDriver extends HttpDriver
     }
 
     /**
-     * @param Message $message
+     * @param IncomingMessage $message
      *
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create('')->setMessage($message);
     }
@@ -54,7 +53,7 @@ class NullDriver extends HttpDriver
      */
     public function getMessages()
     {
-        return [new Message('', '', '')];
+        return [new IncomingMessage('', '', '')];
     }
 
     /**
@@ -66,8 +65,8 @@ class NullDriver extends HttpDriver
     }
 
     /**
-     * @param string|Question $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return $this
      */
@@ -101,10 +100,10 @@ class NullDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return new User();
     }
@@ -114,10 +113,10 @@ class NullDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return void
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
     }
 }

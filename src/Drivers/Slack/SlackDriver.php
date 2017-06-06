@@ -2,18 +2,18 @@
 
 namespace Mpociot\BotMan\Drivers\Slack;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class SlackDriver extends HttpDriver
 {
@@ -62,10 +62,10 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
-     * @return Answer
+     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @return \Mpociot\BotMan\Messages\Incoming\Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         if ($this->payload instanceof Collection) {
             $action = Collection::make($this->payload['actions'][0]);
@@ -111,7 +111,7 @@ class SlackDriver extends HttpDriver
             $channel_id = $this->event->get('channel_id');
         }
 
-        return [new Message($messageText, $user_id, $channel_id, $this->event)];
+        return [new IncomingMessage($messageText, $user_id, $channel_id, $this->event)];
     }
 
     /**
@@ -133,7 +133,7 @@ class SlackDriver extends HttpDriver
     /**
      * Convert a Question object into a valid Slack response.
      *
-     * @param Question $question
+     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -155,8 +155,8 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param string|Question $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
      */
@@ -189,7 +189,7 @@ class SlackDriver extends HttpDriver
     /**
      * @param $message
      * @param array $additionalParameters
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return array
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage, BotMan $bot)
@@ -205,7 +205,7 @@ class SlackDriver extends HttpDriver
 
     /**
      * @param string|Question $message
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $parameters
      * @return array
      */
@@ -218,7 +218,7 @@ class SlackDriver extends HttpDriver
         if ($message instanceof Question) {
             $parameters['text'] = $this->format($message->getText());
             $parameters['attachments'] = json_encode([$this->convertQuestion($message)]);
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
             if (! is_null($attachment)) {
@@ -234,8 +234,8 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
      */
@@ -252,7 +252,7 @@ class SlackDriver extends HttpDriver
         if ($message instanceof Question) {
             $parameters['text'] = '';
             $parameters['attachments'] = json_encode([$this->convertQuestion($message)]);
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
             if (! is_null($attachment)) {
@@ -294,10 +294,10 @@ class SlackDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $response = $this->sendRequest('users.info', [
             'user' => $matchingMessage->getSender(),
@@ -316,10 +316,10 @@ class SlackDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         $parameters = array_replace_recursive([
             'token' => $this->config->get('slack_token'),

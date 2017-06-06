@@ -1,18 +1,18 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Image;
 use Mpociot\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -321,7 +321,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $message = new Message('response', 'U0X12345', 'general');
+        $message = new IncomingMessage('response', 'U0X12345', 'general');
         $this->assertSame('response', $driver->getConversationAnswer($message)->getText());
         $this->assertSame($message, $driver->getConversationAnswer($message)->getMessage());
     }
@@ -371,7 +371,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
-        $message = new Message('', '', '');
+        $message = new IncomingMessage('', '', '');
         $this->assertSame('yes', $driver->getConversationAnswer($message)->getValue());
     }
 
@@ -437,7 +437,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', 'general');
+        $message = new IncomingMessage('', '', 'general');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
@@ -468,8 +468,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', 'general');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
+        $message = new IncomingMessage('', '', 'general');
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
     /** @test */
@@ -500,8 +500,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', 'general');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
+        $message = new IncomingMessage('', '', 'general');
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */
@@ -575,7 +575,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', 'general');
+        $message = new IncomingMessage('', '', 'general');
         $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
@@ -611,7 +611,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('', '', 'general');
+        $message = new IncomingMessage('', '', 'general');
         $driver->sendPayload($driver->buildServicePayload($question, $message));
     }
 
@@ -647,7 +647,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('response', '', 'general');
+        $message = new IncomingMessage('response', '', 'general');
         $driver->sendPayload($driver->buildServicePayload('Test', $message, [
             'username' => 'ReplyBot',
             'icon_emoji' => ':dash:',
@@ -691,7 +691,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new Message('response', '', 'general', Collection::make([
+        $message = new IncomingMessage('response', '', 'general', Collection::make([
             'ts' => '1234.5678',
         ]));
 

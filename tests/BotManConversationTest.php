@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\DriverManager;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Drivers\DriverManager;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 use Mpociot\BotMan\Tests\Fixtures\TestDataConversation;
@@ -99,7 +99,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $this->replyWithFakeMessage('images');
         static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[1]->getText());
 
-        $message = new Message(Image::PATTERN, 'helloman', '#helloworld');
+        $message = new IncomingMessage(Image::PATTERN, 'helloman', '#helloworld');
         $message->setImages(['http://foo.com/bar.png']);
         $this->replyWithFakeMessage($message);
 
@@ -153,7 +153,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $this->replyWithFakeMessage('videos');
         static::assertEquals('Please supply a video', $this->fakeDriver->getBotMessages()[1]->getText());
 
-        $message = new Message(Video::PATTERN, 'helloman', '#helloworld');
+        $message = new IncomingMessage(Video::PATTERN, 'helloman', '#helloworld');
         $message->setVideos(['http://foo.com/bar.mp4']);
         $this->replyWithFakeMessage($message);
 
@@ -207,7 +207,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $this->replyWithFakeMessage('audio');
         static::assertEquals('Please supply an audio', $this->fakeDriver->getBotMessages()[1]->getText());
 
-        $message = new Message(Audio::PATTERN, 'helloman', '#helloworld');
+        $message = new IncomingMessage(Audio::PATTERN, 'helloman', '#helloworld');
         $message->setAudio(['http://foo.com/bar.mp3']);
         $this->replyWithFakeMessage($message);
 
@@ -261,7 +261,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         $this->replyWithFakeMessage('location');
         static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
 
-        $message = new Message(Location::PATTERN, 'helloman', '#helloworld');
+        $message = new IncomingMessage(Location::PATTERN, 'helloman', '#helloworld');
         $location = new Location(41.123, -12.123);
         $message->setLocation($location);
         $this->replyWithFakeMessage($message);
@@ -271,10 +271,10 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
 
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')
     {
-        if ($message instanceof Message) {
+        if ($message instanceof IncomingMessage) {
             $this->fakeDriver->messages = [$message];
         } else {
-            $this->fakeDriver->messages = [new Message($message, $username, $channel)];
+            $this->fakeDriver->messages = [new IncomingMessage($message, $username, $channel)];
         }
         $this->botman->listen();
     }

@@ -2,16 +2,16 @@
 
 namespace Mpociot\BotMan\Drivers\HipChat;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class HipChatDriver extends HttpDriver
 {
@@ -39,10 +39,10 @@ class HipChatDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
+     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
     }
@@ -55,7 +55,7 @@ class HipChatDriver extends HttpDriver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('message')['message'], $this->event->get('message')['from']['id'],
+            new IncomingMessage($this->event->get('message')['message'], $this->event->get('message')['from']['id'],
                 $this->event->get('room')['id'], $this->event),
         ];
     }
@@ -70,7 +70,7 @@ class HipChatDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response|null
      */
@@ -85,7 +85,7 @@ class HipChatDriver extends HttpDriver
          */
         if ($message instanceof Question) {
             $parameters['message'] = $message->getText();
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['message'] = $message->getText();
         } else {
             $parameters['message'] = $message;
@@ -131,10 +131,10 @@ class HipChatDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $payload = $matchingMessage->getPayload();
 
@@ -147,10 +147,10 @@ class HipChatDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         //
     }

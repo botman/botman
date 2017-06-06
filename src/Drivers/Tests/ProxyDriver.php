@@ -2,7 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers\Tests;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use Mpociot\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,12 +65,12 @@ final class ProxyDriver implements DriverInterface
         return self::instance()->isConfigured();
     }
 
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return self::instance()->getUser($matchingMessage);
     }
 
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return self::instance()->getConversationAnswer($message);
     }
@@ -90,7 +90,7 @@ final class ProxyDriver implements DriverInterface
         return self::instance()->getName();
     }
 
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         return self::instance()->types($matchingMessage);
     }

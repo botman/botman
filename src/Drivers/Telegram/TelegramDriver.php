@@ -2,21 +2,21 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class TelegramDriver extends HttpDriver
 {
@@ -34,10 +34,10 @@ class TelegramDriver extends HttpDriver
     }
 
     /**
-     * @param Message $matchingMessage
-     * @return User
+     * @param IncomingMessage $matchingMessage
+     * @return \Mpociot\BotMan\Users\User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $parameters = [
             'chat_id' => $matchingMessage->getRecipient(),
@@ -64,10 +64,10 @@ class TelegramDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
+     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         if ($this->payload->get('callback_query') !== null) {
             $callback = Collection::make($this->payload->get('callback_query'));
@@ -96,12 +96,12 @@ class TelegramDriver extends HttpDriver
             $callback = Collection::make($this->payload->get('callback_query'));
 
             return [
-                new Message($callback->get('data'), $callback->get('from')['id'],
+                new IncomingMessage($callback->get('data'), $callback->get('from')['id'],
                     $callback->get('message')['chat']['id'], $callback->get('message')),
             ];
         } else {
             return [
-                new Message($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'],
+                new IncomingMessage($this->event->get('text'), $this->event->get('from')['id'], $this->event->get('chat')['id'],
                     $this->event),
             ];
         }
@@ -116,10 +116,10 @@ class TelegramDriver extends HttpDriver
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return void
      */
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         $parameters = [
             'chat_id' => $matchingMessage->getRecipient(),
@@ -133,7 +133,7 @@ class TelegramDriver extends HttpDriver
      * Convert a Question object into a valid
      * quick reply response object.
      *
-     * @param Question $question
+     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -171,7 +171,7 @@ class TelegramDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
@@ -190,7 +190,7 @@ class TelegramDriver extends HttpDriver
             $parameters['reply_markup'] = json_encode([
                 'inline_keyboard' => $this->convertQuestion($message),
             ], true);
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             if (! is_null($message->getAttachment())) {
                 $attachment = $message->getAttachment();
                 $parameters['caption'] = $message->getText();
@@ -249,10 +249,10 @@ class TelegramDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         $parameters = array_replace_recursive([
             'chat_id' => $matchingMessage->getRecipient(),

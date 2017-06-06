@@ -3,7 +3,7 @@
 namespace Mpociot\BotMan\Tests\Fixtures;
 
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Interfaces\MiddlewareInterface;
 
 class TestNoMatchMiddleware implements MiddlewareInterface
@@ -11,13 +11,13 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     /**
      * Handle a captured message.
      *
-     * @param Message $message
+     * @param IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function captured(Message $message, $next, BotMan $bot)
+    public function captured(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }
@@ -25,24 +25,24 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     /**
      * Handle an incoming message.
      *
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function received(Message $message, $next, BotMan $bot)
+    public function received(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }
 
     /**
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
      */
-    public function matching(Message $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
         return false;
     }
@@ -50,13 +50,13 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param Message $message
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
      * @return mixed
      */
-    public function heard(Message $message, $next, BotMan $bot)
+    public function heard(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }

@@ -1,20 +1,19 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Button;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\File;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
 
@@ -608,7 +607,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
     /** @test */
@@ -646,7 +645,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.png')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */
@@ -684,7 +683,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Image::url('http://image.url/foo.gif')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.gif')), $message));
     }
 
     /** @test */
@@ -722,7 +721,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', Video::url('http://image.url/foo.mp4')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Video::url('http://image.url/foo.mp4')), $message));
     }
 
     /** @test */
@@ -760,7 +759,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test',
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test',
             Audio::url('http://image.url/foo.mp3')), $message));
     }
 
@@ -799,7 +798,7 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', File::url('http://image.url/foo.pdf')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', File::url('http://image.url/foo.pdf')), $message));
     }
 
     /** @test */
@@ -838,6 +837,6 @@ class TelegramDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test', new Location('123', '321')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', new Location('123', '321')), $message));
     }
 }

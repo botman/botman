@@ -2,6 +2,7 @@
 
 namespace Mpociot\BotMan;
 
+use Mpociot\BotMan\Drivers\DriverManager;
 use Slack\RealTimeClient;
 use Mpociot\BotMan\Http\Curl;
 use Illuminate\Support\Collection;

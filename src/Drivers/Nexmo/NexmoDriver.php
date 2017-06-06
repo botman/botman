@@ -2,15 +2,15 @@
 
 namespace Mpociot\BotMan\Drivers\Nexmo;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class NexmoDriver extends HttpDriver
 {
@@ -26,10 +26,10 @@ class NexmoDriver extends HttpDriver
     }
 
     /**
-     * @param Message $matchingMessage
-     * @return User
+     * @param IncomingMessage $matchingMessage
+     * @return \Mpociot\BotMan\Users\User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return new User($matchingMessage->getSender());
     }
@@ -45,10 +45,10 @@ class NexmoDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
-     * @return Answer
+     * @param  IncomingMessage $message
+     * @return \Mpociot\BotMan\Messages\Incoming\Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
     }
@@ -61,7 +61,7 @@ class NexmoDriver extends HttpDriver
     public function getMessages()
     {
         return [
-            new Message($this->event->get('text'), $this->event->get('msisdn'), $this->event->get('to'), $this->payload),
+            new IncomingMessage($this->event->get('text'), $this->event->get('msisdn'), $this->event->get('to'), $this->payload),
         ];
     }
 
@@ -75,7 +75,7 @@ class NexmoDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
@@ -93,7 +93,7 @@ class NexmoDriver extends HttpDriver
          */
         if ($message instanceof Question) {
             $parameters['text'] = $message->getText();
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['text'] = $message->getText();
         } else {
             $parameters['text'] = $message;
@@ -124,10 +124,10 @@ class NexmoDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         $parameters = array_replace_recursive([
             'api_key' => $this->config->get('nexmo_key'),

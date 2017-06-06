@@ -2,32 +2,30 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Attachments\File;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\Facebook\ListTemplate;
-use Mpociot\BotMan\Facebook\ButtonTemplate;
-use Mpociot\BotMan\Facebook\GenericTemplate;
-use Mpociot\BotMan\Facebook\ReceiptTemplate;
-use Mpociot\BotMan\DriverEvents\GenericEvent;
+use Mpociot\BotMan\Messages\Attachments\File;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ListTemplate;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
+use Mpociot\BotMan\Drivers\Events\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingReads;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingOptins;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingPostbacks;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingReferrals;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingDeliveries;
-use Mpociot\BotMan\DriverEvents\Facebook\MessagingCheckoutUpdates;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReads;
+use Mpociot\BotMan\Drivers\Facebook\Events\MessagingOptins;
+use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReferrals;
+use Mpociot\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
 
 class FacebookDriver extends HttpDriver
 {
@@ -114,7 +112,7 @@ class FacebookDriver extends HttpDriver
         $name = Collection::make($eventData)->except(['sender', 'recipient', 'timestamp', 'message'])->keys()->first();
         switch ($name) {
             case 'postback':
-                return new MessagingPostbacks($eventData);
+                return new Events\MessagingPostbacks($eventData);
             break;
             case 'referral':
                 return new MessagingReferrals($eventData);
@@ -129,7 +127,7 @@ class FacebookDriver extends HttpDriver
                 return new MessagingReads($eventData);
             break;
             case 'checkout_update':
-                return new MessagingCheckoutUpdates($eventData);
+                return new Events\MessagingCheckoutUpdates($eventData);
             break;
             default:
                 $event = new GenericEvent($eventData);
@@ -150,10 +148,10 @@ class FacebookDriver extends HttpDriver
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         $parameters = [
             'recipient' => [
@@ -167,10 +165,10 @@ class FacebookDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
+     * @param  IncomingMessage $message
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         $payload = $message->getPayload();
         if (isset($payload['message']['quick_reply'])) {
@@ -190,14 +188,14 @@ class FacebookDriver extends HttpDriver
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
             if (isset($msg['message']) && isset($msg['message']['text'])) {
-                return new Message($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
+                return new IncomingMessage($msg['message']['text'], $msg['sender']['id'], $msg['recipient']['id'], $msg);
             }
 
-            return new Message('', '', '');
+            return new IncomingMessage('', '', '');
         })->toArray();
 
         if (count($messages) === 0) {
-            return [new Message('', '', '')];
+            return [new IncomingMessage('', '', '')];
         }
 
         return $messages;
@@ -240,7 +238,7 @@ class FacebookDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -267,7 +265,7 @@ class FacebookDriver extends HttpDriver
             $parameters['message'] = $this->convertQuestion($message);
         } elseif (is_object($message) && in_array(get_class($message), $this->templates)) {
             $parameters['message'] = $message->toArray();
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $attachment = $message->getAttachment();
             if (in_array(get_class($attachment), $this->supportedAttachments)) {
                 $attachmentType = strtolower(basename(str_replace('\\', '/', get_class($attachment))));
@@ -308,10 +306,10 @@ class FacebookDriver extends HttpDriver
     /**
      * Retrieve User information.
      *
-     * @param Message $matchingMessage
-     * @return User
+     * @param IncomingMessage $matchingMessage
+     * @return \Mpociot\BotMan\Users\User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $profileData = $this->http->get($this->facebookProfileEndpoint.$matchingMessage->getSender().'?fields=first_name,last_name&access_token='.$this->config->get('facebook_token'));
 
@@ -327,10 +325,10 @@ class FacebookDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         $parameters = array_replace_recursive([
             'access_token' => $this->config->get('facebook_token'),

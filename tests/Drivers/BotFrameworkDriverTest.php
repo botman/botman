@@ -1,15 +1,15 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
@@ -372,7 +372,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $user = '29:1zPNq1EP2_H-mik_1MQgKYp0nZu9tUljr2VEdTlGhEo7VlZ1YVDVSUZ0g70sk1';
-        $message = new Message('hey there', $user, $user);
+        $message = new IncomingMessage('hey there', $user, $user);
         $payload = $driver->buildServicePayload('Test', $message);
         $driver->sendPayload($payload);
     }
@@ -459,7 +459,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test'), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message);
         $driver->sendPayload($payload);
     }
 
@@ -506,7 +506,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
         $driver->sendPayload($payload);
     }
 
@@ -553,7 +553,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Message::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
+        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
         $driver->sendPayload($payload);
     }
 
@@ -567,7 +567,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ]);
 
         $text = 'I use botman with Skype<botman value="yes"></botman>';
-        $message = new Message($text, '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us', '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us');
+        $message = new IncomingMessage($text, '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us', '29:2ZC81QtrQQti_yclfvcaNZnRgNSihIXUc6rgigeq82us');
 
         $answer = $driver->getConversationAnswer($message);
         $this->assertSame($text, $answer->getText());

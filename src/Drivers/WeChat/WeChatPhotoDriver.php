@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\Image;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\Image;
 
 class WeChatPhotoDriver extends WeChatDriver
 {
@@ -36,7 +36,7 @@ class WeChatPhotoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Image::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
+        $message = new IncomingMessage(Image::PATTERN, $this->event->get('ToUserName'), $this->event->get('FromUserName'),
             $this->event);
         $message->setImages($this->getImages());
 

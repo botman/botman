@@ -2,10 +2,10 @@
 
 namespace Mpociot\BotMan\Drivers\Tests;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Mpociot\BotMan\Interfaces\DriverInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +32,7 @@ class FakeDriver implements DriverInterface
     public $matchesRequest = true;
     /** @var bool */
     public $hasMatchingEvent = false;
-    /** @var Message[] */
+    /** @var \Mpociot\BotMan\Messages\Incoming\IncomingMessage[] */
     public $messages = [];
     /** @var bool */
     public $isBot = false;
@@ -83,12 +83,12 @@ class FakeDriver implements DriverInterface
         return $this->isConfigured;
     }
 
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return new User($matchingMessage->getSender());
     }
 
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
     }
@@ -110,7 +110,7 @@ class FakeDriver implements DriverInterface
         return 'Fake Driver';
     }
 
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         $this->botIsTyping = true;
     }

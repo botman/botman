@@ -4,8 +4,8 @@ namespace Mpociot\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Facebook\Element;
-use Mpociot\BotMan\Facebook\ElementButton;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\Element;
+use Mpociot\BotMan\Drivers\Facebook\Extensions\ElementButton;
 
 class ElementTest extends PHPUnit_Framework_TestCase
 {

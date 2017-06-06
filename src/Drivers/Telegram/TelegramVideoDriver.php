@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\Video;
 
 class TelegramVideoDriver extends TelegramDriver
 {
@@ -26,7 +26,7 @@ class TelegramVideoDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(Video::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+        $message = new IncomingMessage(Video::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
             $this->event);
         $message->setVideos($this->getVideos());
 

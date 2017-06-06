@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
-use Mpociot\BotMan\Answer;
+use Mpociot\BotMan\Messages\Incoming\Answer;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\DriverManager;
+use Mpociot\BotMan\Drivers\DriverManager;
 use Mpociot\BotMan\Drivers\Tests\FakeDriver;
 use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
 
@@ -154,13 +154,13 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
 
     private function listenToFakeMessage($message, $username, $channel)
     {
-        $this->fakeDriver->messages = [new Message($message, $username, $channel)];
+        $this->fakeDriver->messages = [new IncomingMessage($message, $username, $channel)];
         $this->botman->listen();
     }
 
     private function replyWithFakeMessage($message, $username, $channel)
     {
-        $this->fakeDriver->messages = [new Message($message, $username, $channel)];
+        $this->fakeDriver->messages = [new IncomingMessage($message, $username, $channel)];
         $this->botman->loadActiveConversation();
     }
 }

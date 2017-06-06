@@ -3,21 +3,21 @@
 namespace Mpociot\BotMan\Drivers\Slack;
 
 use Slack\File;
-use Mpociot\BotMan\User;
+use Mpociot\BotMan\Users\User;
 use Slack\RealTimeClient;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use React\Promise\PromiseInterface;
-use Mpociot\BotMan\Attachments\Audio;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
-use Mpociot\BotMan\DriverEvents\GenericEvent;
+use Mpociot\BotMan\Messages\Attachments\Audio;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
+use Mpociot\BotMan\Drivers\Events\GenericEvent;
 use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Attachments\File as BotManFile;
+use Mpociot\BotMan\Messages\Attachments\File as BotManFile;
 use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class SlackRTMDriver implements DriverInterface
 {
@@ -105,10 +105,10 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
-     * @param  Message $message
+     * @param  IncomingMessage $message
      * @return Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($this->event->get('text'))->setMessage($message);
     }
@@ -116,7 +116,7 @@ class SlackRTMDriver implements DriverInterface
     /**
      * Convert a Question object into a valid Slack response.
      *
-     * @param Question $question
+     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -150,26 +150,26 @@ class SlackRTMDriver implements DriverInterface
 
         if ($this->event->get('subtype') === 'file_share') {
             $file = Collection::make($this->event->get('file'));
-            $message = new Message('', '', '');
+            $message = new IncomingMessage('', '', '');
 
             if (strstr($file->get('mimetype'), 'image')) {
-                $message = new Message(Image::PATTERN, $user_id, $channel_id, $this->event);
+                $message = new IncomingMessage(Image::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setImages([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'audio')) {
-                $message = new Message(Audio::PATTERN, $user_id, $channel_id, $this->event);
+                $message = new IncomingMessage(Audio::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setAudio([$file->get('permalink')]);
             } elseif (strstr($file->get('mimetype'), 'video')) {
-                $message = new Message(Video::PATTERN, $user_id, $channel_id, $this->event);
+                $message = new IncomingMessage(Video::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
             } else {
-                $message = new Message(\Mpociot\BotMan\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
+                $message = new IncomingMessage(\Mpociot\BotMan\Messages\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setFiles([$file->get('permalink')]);
             }
 
             return [$message];
         }
 
-        return [new Message($messageText, $user_id, $channel_id, $this->event)];
+        return [new IncomingMessage($messageText, $user_id, $channel_id, $this->event)];
     }
 
     /**
@@ -181,8 +181,8 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
-     * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return mixed
      */
@@ -195,7 +195,7 @@ class SlackRTMDriver implements DriverInterface
 
         $this->file = null;
 
-        if ($message instanceof IncomingMessage) {
+        if ($message instanceof OutgoingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
             if (! is_null($attachment)) {
@@ -241,7 +241,7 @@ class SlackRTMDriver implements DriverInterface
     /**
      * @param $message
      * @param array $additionalParameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return SlackRTMDriver
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage)
@@ -263,10 +263,10 @@ class SlackRTMDriver implements DriverInterface
 
     /**
      * Send a typing indicator.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return mixed
      */
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         $channel = null;
         $this->getChannelGroupOrDM($matchingMessage)->then(function ($_channel) use (&$channel) {
@@ -280,10 +280,10 @@ class SlackRTMDriver implements DriverInterface
 
     /**
      * Retrieve User information.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         $user = null;
         $this->client->getUserById($matchingMessage->getSender())->then(function ($_user) use (&$user) {
@@ -299,20 +299,20 @@ class SlackRTMDriver implements DriverInterface
 
     /**
      * Retrieve Channel information.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return \Slack\Channel
      */
-    public function getChannel(Message $matchingMessage)
+    public function getChannel(IncomingMessage $matchingMessage)
     {
         return $this->client->getChannelById($matchingMessage->getRecipient());
     }
 
     /**
      * Retrieve Channel, Group, or DM channel information.
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return \Slack\Channel|\Slack\Group|\Slack\DirectMessageChannel
      */
-    public function getChannelGroupOrDM(Message $matchingMessage)
+    public function getChannelGroupOrDM(IncomingMessage $matchingMessage)
     {
         return $this->client->getChannelGroupOrDMByID($matchingMessage->getRecipient());
     }
@@ -330,10 +330,10 @@ class SlackRTMDriver implements DriverInterface
      *
      * @param $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return \React\Promise\PromiseInterface
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         return $this->client->apiCall($endpoint, $parameters, false, false);
     }

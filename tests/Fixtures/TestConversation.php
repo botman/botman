@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Conversation;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Conversations\Conversation;
 
 class TestConversation extends Conversation
 {
@@ -23,12 +23,12 @@ class TestConversation extends Conversation
         });
     }
 
-    public function skipsConversation(Message $message)
+    public function skipsConversation(IncomingMessage $message)
     {
         return $message->getText() === 'skip_keyword';
     }
 
-    public function stopsConversation(Message $message)
+    public function stopsConversation(IncomingMessage $message)
     {
         return $message->getText() === 'stop_keyword';
     }

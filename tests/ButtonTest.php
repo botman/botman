@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace Mpociot\BotMan\tests;
 
-use Mpociot\BotMan\Button;
+use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
 

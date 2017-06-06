@@ -2,7 +2,7 @@
 
 namespace Mpociot\BotMan\Drivers;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,10 +56,10 @@ abstract class HttpDriver implements DriverInterface
     }
 
     /**
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return void
      */
-    public function types(Message $matchingMessage)
+    public function types(IncomingMessage $matchingMessage)
     {
         // Do nothing
     }
@@ -83,10 +83,10 @@ abstract class HttpDriver implements DriverInterface
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
-    abstract public function sendRequest($endpoint, array $parameters, Message $matchingMessage);
+    abstract public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage);
 
     /**
      * Tells if the stored conversation callbacks are serialized.

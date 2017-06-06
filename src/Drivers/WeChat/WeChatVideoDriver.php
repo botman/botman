@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\Video;
 
 class WeChatVideoDriver extends WeChatDriver
 {
@@ -33,7 +33,7 @@ class WeChatVideoDriver extends WeChatDriver
      */
     public function getMessages()
     {
-        $message = new Message(Video::PATTERN, $this->event->get('ToUserName'),
+        $message = new IncomingMessage(Video::PATTERN, $this->event->get('ToUserName'),
             $this->event->get('FromUserName'), $this->event);
         $message->setVideos($this->getVideo());
 

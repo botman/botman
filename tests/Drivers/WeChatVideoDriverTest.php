@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Illuminate\Http\Response;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
 

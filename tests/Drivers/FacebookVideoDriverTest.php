@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,7 +123,7 @@ class FacebookVideoDriverTest extends PHPUnit_Framework_TestCase
         $messages = $driver->getMessages();
         $this->assertTrue(is_array($messages));
         $this->assertEquals(1, count($messages));
-        $this->assertInstanceOf(Message::class, $messages[0]);
+        $this->assertInstanceOf(IncomingMessage::class, $messages[0]);
     }
 
     /**

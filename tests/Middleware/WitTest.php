@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Middleware;
+namespace Mpociot\BotMan\tests\Middleware;
 
 use Mockery as m;
 use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Mpociot\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\BotManFactory;
@@ -23,7 +23,7 @@ class WitTest extends PHPUnit_Framework_TestCase
     public function it_adds_entities_to_the_message()
     {
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $response = new Response(json_encode(['entities' => ['foo' => 'bar']]));
 
@@ -51,7 +51,7 @@ class WitTest extends PHPUnit_Framework_TestCase
     public function it_matches_intents()
     {
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",
@@ -95,7 +95,7 @@ class WitTest extends PHPUnit_Framework_TestCase
     public function it_does_not_match_intents_with_lower_confidence()
     {
         $messageText = 'This will be my message text!';
-        $message = new Message($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Drivers;
+namespace Mpociot\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Mpociot\BotMan\Http\Curl;

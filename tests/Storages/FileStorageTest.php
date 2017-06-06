@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Storages;
+namespace Mpociot\BotMan\tests\Storages;
 
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Storages\Drivers\FileStorage;

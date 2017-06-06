@@ -2,18 +2,18 @@
 
 namespace Mpociot\BotMan\Drivers\BotFramework;
 
-use Mpociot\BotMan\User;
-use Mpociot\BotMan\Answer;
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Question;
+use Mpociot\BotMan\Users\User;
+use Mpociot\BotMan\Messages\Incoming\Answer;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Attachments\Image;
-use Mpociot\BotMan\Attachments\Video;
+use Mpociot\BotMan\Messages\Attachments\Image;
+use Mpociot\BotMan\Messages\Attachments\Video;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Message as IncomingMessage;
+use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class BotFrameworkDriver extends HttpDriver
 {
@@ -41,10 +41,10 @@ class BotFrameworkDriver extends HttpDriver
     }
 
     /**
-     * @param  Message $message
-     * @return Answer
+     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @return \Mpociot\BotMan\Messages\Incoming\Answer
      */
-    public function getConversationAnswer(Message $message)
+    public function getConversationAnswer(IncomingMessage $message)
     {
         if (false !== strpos($message->getText(), '<botman value="')) {
             preg_match('/<botman value="(.*)"><\/botman>/', $message->getText(), $matches);
@@ -70,7 +70,7 @@ class BotFrameworkDriver extends HttpDriver
         $message = preg_replace($pattern, '', $this->event->get('text'));
 
         return [
-            new Message($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
+            new IncomingMessage($message, $this->event->get('from')['id'], $this->event->get('conversation')['id'],
                 $this->payload),
         ];
     }
@@ -84,10 +84,10 @@ class BotFrameworkDriver extends HttpDriver
     }
 
     /**
-     * @param Message $matchingMessage
-     * @return User
+     * @param IncomingMessage $matchingMessage
+     * @return \Mpociot\BotMan\Users\User
      */
-    public function getUser(Message $matchingMessage)
+    public function getUser(IncomingMessage $matchingMessage)
     {
         return new User($matchingMessage->getRecipient(), null, null,
             Collection::make($matchingMessage->getPayload())->get('from')['name']);
@@ -128,7 +128,7 @@ class BotFrameworkDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
@@ -151,7 +151,7 @@ class BotFrameworkDriver extends HttpDriver
                     ],
                 ],
             ];
-        } elseif ($message instanceof IncomingMessage) {
+        } elseif ($message instanceof OutgoingMessage) {
             $parameters['text'] = $message->getText();
             $attachment = $message->getAttachment();
             if (! is_null($attachment)) {
@@ -219,10 +219,10 @@ class BotFrameworkDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param Message $matchingMessage
+     * @param IncomingMessage $matchingMessage
      * @return Response
      */
-    public function sendRequest($endpoint, array $parameters, Message $matchingMessage)
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
         $headers = [
             'Content-Type:application/json',

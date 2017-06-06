@@ -2,8 +2,8 @@
 
 namespace Mpociot\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Message;
-use Mpociot\BotMan\Attachments\File;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use Mpociot\BotMan\Messages\Attachments\File;
 
 class TelegramFileDriver extends TelegramDriver
 {
@@ -26,7 +26,7 @@ class TelegramFileDriver extends TelegramDriver
      */
     public function getMessages()
     {
-        $message = new Message(File::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
+        $message = new IncomingMessage(File::PATTERN, $this->event->get('from')['id'], $this->event->get('chat')['id'],
             $this->event);
         $message->setFiles($this->getFiles());
 

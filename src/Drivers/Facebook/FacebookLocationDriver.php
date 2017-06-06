@@ -2,9 +2,9 @@
 
 namespace Mpociot\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Attachments\Location;
+use Mpociot\BotMan\Messages\Attachments\Location;
 
 class FacebookLocationDriver extends FacebookDriver
 {
@@ -41,14 +41,14 @@ class FacebookLocationDriver extends FacebookDriver
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['attachments']) && isset($msg['message']['attachments']);
         })->transform(function ($msg) {
-            $message = new Message(Location::PATTERN, $msg['sender']['id'], $msg['recipient']['id'], $msg);
+            $message = new IncomingMessage(Location::PATTERN, $msg['sender']['id'], $msg['recipient']['id'], $msg);
             $message->setLocation($this->getLocation($msg));
 
             return $message;
         })->toArray();
 
         if (count($messages) === 0) {
-            return [new Message('', '', '')];
+            return [new IncomingMessage('', '', '')];
         }
 
         return $messages;
@@ -58,7 +58,7 @@ class FacebookLocationDriver extends FacebookDriver
      * Retrieve location from an incoming message.
      *
      * @param array $messages
-     * @return Location
+     * @return \Mpociot\BotMan\Messages\Attachments\Location
      */
     public function getLocation(array $messages)
     {
