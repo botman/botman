@@ -7,6 +7,7 @@ use Mockery\MockInterface;
 use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\BotMan;
 use Mpociot\BotMan\Message;
+use Mpociot\BotMan\Tests\Fixtures\TestFallback;
 use PHPUnit_Framework_TestCase;
 use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\BotManFactory;
@@ -233,6 +234,30 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
         $this->assertFalse($called);
     }
+
+	/** @test */
+	public function it_calls_fallback_without_closures()
+	{
+		$botman = $this->getBot([
+			'event' => [
+				'user' => 'U0X12345',
+				'text' => 'foo',
+			],
+		]);
+
+		$called = false;
+		TestFallback::$called = false;
+
+		$botman->fallback( TestFallback::class.'@foo');
+
+		$botman->hears('bar', function ($bot) use (&$called) {
+			$called = true;
+		});
+
+		$botman->listen();
+		$this->assertFalse($called);
+		$this->assertTrue(TestFallback::$called);
+	}
 
     /** @test */
     public function it_hears_matching_commands_without_closures()
