@@ -31,6 +31,7 @@ use Mpociot\BotMan\Drivers\Facebook\FacebookLocationDriver;
 use Mpociot\BotMan\Drivers\Telegram\TelegramLocationDriver;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
 use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkAttachmentDriver;
+use Mpociot\BotMan\Drivers\Glip\GlipDriver;
 
 class DriverManager
 {
@@ -61,6 +62,7 @@ class DriverManager
         WeChatLocationDriver::class,
         WeChatVideoDriver::class,
         WeChatDriver::class,
+        GlipDriver::class
     ];
 
     /** @var array */
