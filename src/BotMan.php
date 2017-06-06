@@ -420,8 +420,13 @@ class BotMan
 
             call_user_func_array($callback, $parameters);
         }
-        if (empty($matchingMessages) && ! $this->isBot() && is_callable($this->fallbackMessage) && $this->loadedConversation === false) {
+        if (empty($matchingMessages) && ! $this->isBot() && ! is_null($this->fallbackMessage) && $this->loadedConversation === false) {
             $this->message = $this->getMessages()[0];
+
+            if (! $this->fallbackMessage instanceof Closure) {
+                $this->fallbackMessage = $this->getCallable($this->fallbackMessage);
+            }
+
             call_user_func($this->fallbackMessage, $this);
         }
     }
