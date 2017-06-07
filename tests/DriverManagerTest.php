@@ -8,7 +8,6 @@ use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
-use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -60,7 +59,6 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(NullDriver::class, DriverManager::loadFromName('foo', []));
         $this->assertInstanceOf(SlackDriver::class, DriverManager::loadFromName('Slack', []));
-        $this->assertInstanceOf(FacebookDriver::class, DriverManager::loadFromName(FacebookDriver::class, []));
     }
 
     /**

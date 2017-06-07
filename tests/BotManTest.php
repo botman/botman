@@ -23,7 +23,6 @@ use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
-use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
 use BotMan\BotMan\Drivers\Telegram\TelegramDriver;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -1219,12 +1218,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
-            ->with('Facebook', [])
+            ->with('NullDriver', [])
             ->andReturn($driver);
 
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
-        $botman->say('foo', '1234567890', FacebookDriver::DRIVER_NAME, $additionalParameters);
+        $botman->say('foo', '1234567890', 'NullDriver', $additionalParameters);
     }
 
     /**
