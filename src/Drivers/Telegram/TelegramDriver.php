@@ -60,10 +60,10 @@ class TelegramDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        $noAttachments = $this->event->keys()->filter(function($key) {
+        $noAttachments = $this->event->keys()->filter(function ($key) {
             return in_array($key, ['audio', 'voice', 'video', 'photo', 'location', 'document']);
         })->isEmpty();
-        
+
         return $noAttachments && (! is_null($this->event->get('from')) || ! is_null($this->payload->get('callback_query'))) && ! is_null($this->payload->get('update_id'));
     }
 
