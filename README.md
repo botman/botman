@@ -1,7 +1,7 @@
 # BotMan 🤖 Create messaging bots in PHP with ease
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mpociot/botman.svg?style=flat-square)](https://packagist.org/packages/mpociot/botman)
-[![Build Status](https://travis-ci.org/mpociot/botman.svg?branch=master)](https://travis-ci.org/mpociot/botman)
+[![Build Status](https://travis-ci.org/botman/botman.svg?branch=master)](https://travis-ci.org/botman/botman)
 [![codecov](https://codecov.io/gh/mpociot/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/mpociot/botman)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mpociot/botman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mpociot/botman/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
