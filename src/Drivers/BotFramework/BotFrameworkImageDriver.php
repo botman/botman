@@ -19,7 +19,7 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
     {
         $hasImages = ! Collection::make($this->event->get('attachments'))->where('contentType', 'image')->isEmpty();
 
-        return parent::matchesRequest() && $hasImages;
+        return $hasImages && (! is_null($this->event->get('recipient')) && ! is_null($this->event->get('serviceUrl')));
     }
 
     /**
