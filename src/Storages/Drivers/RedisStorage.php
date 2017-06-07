@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Storages\Drivers;
+namespace BotMan\BotMan\Storages\Drivers;
 
 use Redis;
 use RuntimeException;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Interfaces\StorageInterface;
 
 class RedisStorage implements StorageInterface
 {

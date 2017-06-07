@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Traits;
+namespace BotMan\BotMan\Traits;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;

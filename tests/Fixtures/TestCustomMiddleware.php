@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Fixtures;
+namespace BotMan\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestCustomMiddleware implements MiddlewareInterface
 {
@@ -40,7 +40,7 @@ class TestCustomMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool

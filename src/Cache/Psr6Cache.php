@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\CacheInterface;
 
 class Psr6Cache implements CacheInterface
 {

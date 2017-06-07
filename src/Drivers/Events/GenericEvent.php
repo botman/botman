@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Events;
+namespace BotMan\BotMan\Drivers\Events;
 
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
 
 class GenericEvent implements DriverEventInterface
 {

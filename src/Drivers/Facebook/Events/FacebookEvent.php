@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook\Events;
+namespace BotMan\BotMan\Drivers\Facebook\Events;
 
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
 
 abstract class FacebookEvent implements DriverEventInterface
 {

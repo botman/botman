@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Middleware;
+namespace BotMan\BotMan\tests\Middleware;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Middleware\ApiAi;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Middleware\ApiAi;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ApiAiTest extends PHPUnit_Framework_TestCase
 {

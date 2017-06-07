@@ -1,19 +1,19 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Kik;
+namespace BotMan\BotMan\Drivers\Kik;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Interfaces\UserInterface;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class KikDriver extends HttpDriver
 {
@@ -37,7 +37,7 @@ class KikDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
@@ -85,7 +85,7 @@ class KikDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return UserInterface
      */
     public function getUser(IncomingMessage $matchingMessage)
@@ -100,7 +100,7 @@ class KikDriver extends HttpDriver
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @return Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
@@ -112,7 +112,7 @@ class KikDriver extends HttpDriver
      * Convert a Question object into a valid Kik
      * keyboard object.
      *
-     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param \BotMan\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -144,8 +144,8 @@ class KikDriver extends HttpDriver
     }
 
     /**
-     * @param OutgoingMessage|\Mpociot\BotMan\Messages\Outgoing\Question $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param OutgoingMessage|\BotMan\BotMan\Messages\Outgoing\Question $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
      */
@@ -197,7 +197,7 @@ class KikDriver extends HttpDriver
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
     public function types(IncomingMessage $matchingMessage)

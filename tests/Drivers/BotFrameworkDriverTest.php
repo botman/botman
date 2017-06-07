@@ -1,18 +1,18 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Drivers\BotFramework\BotFrameworkDriver;
 
 class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -459,7 +459,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message);
+        $payload = $driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message);
         $driver->sendPayload($payload);
     }
 
@@ -506,7 +506,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
+        $payload = $driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Image::url('http://foo.com/bar.png')), $message);
         $driver->sendPayload($payload);
     }
 
@@ -553,7 +553,7 @@ class BotFrameworkDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = $driver->getMessages()[0];
-        $payload = $driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
+        $payload = $driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test')->withAttachment(Video::url('http://foo.com/bar.mp4')), $message);
         $driver->sendPayload($payload);
     }
 

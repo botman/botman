@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Drivers\Tests\FakeDriver;
-use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Drivers\Tests\ProxyDriver;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Tests\Fixtures\TestCustomMiddleware;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\TestCustomMiddleware;
 
 class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
 {

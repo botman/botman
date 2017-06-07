@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Psr\Cache\CacheItemInterface;
-use Mpociot\BotMan\Cache\SymfonyCache;
+use BotMan\BotMan\Cache\SymfonyCache;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

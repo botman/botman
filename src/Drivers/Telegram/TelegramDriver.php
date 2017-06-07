@@ -1,22 +1,22 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Telegram;
+namespace BotMan\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Attachments\File;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Location;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class TelegramDriver extends HttpDriver
 {
@@ -35,7 +35,7 @@ class TelegramDriver extends HttpDriver
 
     /**
      * @param IncomingMessage $matchingMessage
-     * @return \Mpociot\BotMan\Users\User
+     * @return \BotMan\BotMan\Users\User
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
@@ -68,7 +68,7 @@ class TelegramDriver extends HttpDriver
     }
 
     /**
-     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @return Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
@@ -137,7 +137,7 @@ class TelegramDriver extends HttpDriver
      * Convert a Question object into a valid
      * quick reply response object.
      *
-     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param \BotMan\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -175,7 +175,7 @@ class TelegramDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
      */
@@ -253,7 +253,7 @@ class TelegramDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return Response
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)

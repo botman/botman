@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Storages;
+namespace BotMan\BotMan\tests\Storages;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Storages\Storage;
-use Mpociot\BotMan\Storages\BotManStorage;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Storages\Storage;
+use BotMan\BotMan\Storages\BotManStorage;
 
 class BotManStorageTest extends PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Fixtures;
+namespace BotMan\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestNoMatchMiddleware implements MiddlewareInterface
 {
@@ -25,7 +25,7 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     /**
      * Handle an incoming message.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
@@ -37,7 +37,7 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
@@ -50,7 +50,7 @@ class TestNoMatchMiddleware implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *

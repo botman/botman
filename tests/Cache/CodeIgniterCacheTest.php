@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use CI_Cache;
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Cache\CodeIgniterCache;
+use BotMan\BotMan\Cache\CodeIgniterCache;
 
 class CodeIgniterCacheTest extends PHPUnit_Framework_TestCase
 {

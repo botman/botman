@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Psr\Cache\CacheItemInterface;
-use Mpociot\BotMan\Cache\Psr6Cache;
+use BotMan\BotMan\Cache\Psr6Cache;
 use Psr\Cache\CacheItemPoolInterface;
 
 class Psr6CacheTest extends PHPUnit_Framework_TestCase

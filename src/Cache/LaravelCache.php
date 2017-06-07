@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
 use Cache;
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\CacheInterface;
 
 /**
  * The Laravel Cache implementation.

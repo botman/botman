@@ -1,35 +1,35 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Drivers\NullDriver;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Drivers\Tests\FakeDriver;
-use Mpociot\BotMan\Interfaces\UserInterface;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Tests\Fixtures\TestClass;
-use Mpociot\BotMan\Drivers\Slack\SlackDriver;
-use Mpociot\BotMan\Tests\Fixtures\TestDriver;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Tests\Fixtures\TestFallback;
-use Mpociot\BotMan\Middleware\MiddlewareManager;
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Tests\Fixtures\TestMiddleware;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Tests\Fixtures\TestMatchMiddleware;
-use Mpociot\BotMan\Messages\Conversations\Conversation;
-use Mpociot\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Drivers\NullDriver;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Tests\Fixtures\TestClass;
+use BotMan\BotMan\Drivers\Slack\SlackDriver;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Tests\Fixtures\TestFallback;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
+use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramDriver;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
 /**
  * Class BotManTest.
@@ -1185,7 +1185,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
+        $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
             ->with('Slack', [])
@@ -1216,7 +1216,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
+        $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
             ->with('Facebook', [])
@@ -1243,7 +1243,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:Mpociot\BotMan\Drivers\DriverManager');
+        $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('getConfiguredDrivers')
             ->andReturn([$driver]);
 

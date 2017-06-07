@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use SuperClosure\Serializer;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
 
 class ConversationTest extends PHPUnit_Framework_TestCase
 {

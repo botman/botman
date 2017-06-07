@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook;
+namespace BotMan\BotMan\Drivers\Facebook;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class FacebookLocationDriver extends FacebookDriver
 {
@@ -58,7 +58,7 @@ class FacebookLocationDriver extends FacebookDriver
      * Retrieve location from an incoming message.
      *
      * @param array $messages
-     * @return \Mpociot\BotMan\Messages\Attachments\Location
+     * @return \BotMan\BotMan\Messages\Attachments\Location
      */
     public function getLocation(array $messages)
     {

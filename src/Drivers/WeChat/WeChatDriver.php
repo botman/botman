@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\WeChat;
+namespace BotMan\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class WeChatDriver extends HttpDriver
 {
@@ -44,7 +44,7 @@ class WeChatDriver extends HttpDriver
 
     /**
      * @param  IncomingMessage $message
-     * @return \Mpociot\BotMan\Messages\Incoming\Answer
+     * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
@@ -52,7 +52,7 @@ class WeChatDriver extends HttpDriver
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
     public function getUser(IncomingMessage $matchingMessage)
@@ -99,7 +99,7 @@ class WeChatDriver extends HttpDriver
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question|IncomingMessage $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response
@@ -168,7 +168,7 @@ class WeChatDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return Response
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)

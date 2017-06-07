@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Redis;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Storages\Drivers\RedisStorage;
+use BotMan\BotMan\Storages\Drivers\RedisStorage;
 
 /**
  * @group integration

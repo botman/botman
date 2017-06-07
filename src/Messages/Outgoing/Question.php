@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Outgoing;
+namespace BotMan\BotMan\Messages\Outgoing;
 
 use JsonSerializable;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Interfaces\QuestionActionInterface;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Interfaces\QuestionActionInterface;
 
 class Question implements JsonSerializable
 {
@@ -72,7 +72,7 @@ class Question implements JsonSerializable
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Outgoing\Actions\Button $button
+     * @param \BotMan\BotMan\Messages\Outgoing\Actions\Button $button
      * @return $this
      */
     public function addButton(Button $button)

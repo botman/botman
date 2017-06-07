@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Storages;
+namespace BotMan\BotMan\Storages;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Interfaces\StorageInterface;
 
 class Storage implements StorageInterface
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\Nexmo\NexmoDriver;
+use BotMan\BotMan\Drivers\Nexmo\NexmoDriver;
 use Symfony\Component\HttpFoundation\Request;
 
 class NexmoDriverTest extends PHPUnit_Framework_TestCase

@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace BotMan\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 abstract class HttpDriver implements DriverInterface
 {
@@ -83,7 +83,7 @@ abstract class HttpDriver implements DriverInterface
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
     abstract public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage);

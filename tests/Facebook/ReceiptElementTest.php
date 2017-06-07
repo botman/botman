@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptElement;
+use BotMan\BotMan\Drivers\Facebook\Extensions\ReceiptElement;
 
 class ReceiptElementTest extends PHPUnit_Framework_TestCase
 {

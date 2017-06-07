@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Incoming;
+namespace BotMan\BotMan\Messages\Incoming;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Location;
 
 class IncomingMessage
 {
@@ -34,7 +34,7 @@ class IncomingMessage
     /** @var array */
     private $files = [];
 
-    /** @var \Mpociot\BotMan\Messages\Attachments\Location */
+    /** @var \BotMan\BotMan\Messages\Attachments\Location */
     private $location;
 
     public function __construct($message, $sender, $recipient, $payload = null)
@@ -188,7 +188,7 @@ class IncomingMessage
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Attachments\Location $location
+     * @param \BotMan\BotMan\Messages\Attachments\Location $location
      */
     public function setLocation(Location $location)
     {
@@ -196,7 +196,7 @@ class IncomingMessage
     }
 
     /**
-     * @return \Mpociot\BotMan\Messages\Attachments\Location
+     * @return \BotMan\BotMan\Messages\Attachments\Location
      */
     public function getLocation()
     {

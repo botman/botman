@@ -1,17 +1,17 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\HipChat;
+namespace BotMan\BotMan\Drivers\HipChat;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class HipChatDriver extends HttpDriver
 {
@@ -39,7 +39,7 @@ class HipChatDriver extends HttpDriver
     }
 
     /**
-     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @return Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
@@ -70,7 +70,7 @@ class HipChatDriver extends HttpDriver
 
     /**
      * @param string|Question|IncomingMessage $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return Response|null
      */
@@ -131,7 +131,7 @@ class HipChatDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
     public function getUser(IncomingMessage $matchingMessage)
@@ -147,7 +147,7 @@ class HipChatDriver extends HttpDriver
      *
      * @param string $endpoint
      * @param array $parameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return void
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)

@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace BotMan\BotMan\Drivers;
 
-use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Users\User;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class NullDriver extends HttpDriver
 {
@@ -65,7 +65,7 @@ class NullDriver extends HttpDriver
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return $this

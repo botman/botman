@@ -1,34 +1,34 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers;
+namespace BotMan\BotMan\Drivers;
 
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Drivers\Kik\KikDriver;
-use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Drivers\Nexmo\NexmoDriver;
-use Mpociot\BotMan\Drivers\Slack\SlackDriver;
+use BotMan\BotMan\Http\Curl;
+use BotMan\BotMan\Drivers\Kik\KikDriver;
+use BotMan\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Drivers\Nexmo\NexmoDriver;
+use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
-use Mpociot\BotMan\Drivers\HipChat\HipChatDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramDriver;
-use Mpociot\BotMan\Drivers\WeChat\WeChatPhotoDriver;
-use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookFileDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramFileDriver;
-use Mpociot\BotMan\Drivers\WeChat\WeChatLocationDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookAudioDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookImageDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookVideoDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramAudioDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramPhotoDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramVideoDriver;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookLocationDriver;
-use Mpociot\BotMan\Drivers\Telegram\TelegramLocationDriver;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkAttachmentDriver;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Drivers\WeChat\WeChatDriver;
+use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramDriver;
+use BotMan\BotMan\Drivers\WeChat\WeChatPhotoDriver;
+use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookFileDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramFileDriver;
+use BotMan\BotMan\Drivers\WeChat\WeChatLocationDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookAudioDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookImageDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookVideoDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramAudioDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramPhotoDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramVideoDriver;
+use BotMan\BotMan\Drivers\BotFramework\BotFrameworkDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookLocationDriver;
+use BotMan\BotMan\Drivers\Telegram\TelegramLocationDriver;
+use BotMan\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
+use BotMan\BotMan\Drivers\BotFramework\BotFrameworkAttachmentDriver;
 
 class DriverManager
 {
@@ -44,15 +44,15 @@ class DriverManager
         FacebookLocationDriver::class,
         FacebookFileDriver::class,
         KikDriver::class,
+        TelegramDriver::class,
         TelegramPhotoDriver::class,
         TelegramVideoDriver::class,
         TelegramLocationDriver::class,
         TelegramAudioDriver::class,
         TelegramFileDriver::class,
-        TelegramDriver::class,
+        BotFrameworkDriver::class,
         BotFrameworkImageDriver::class,
         BotFrameworkAttachmentDriver::class,
-        BotFrameworkDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
         WeChatPhotoDriver::class,

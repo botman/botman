@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Attachments;
+namespace BotMan\BotMan\Messages\Attachments;
 
 class Video extends Attachment
 {

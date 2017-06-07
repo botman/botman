@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Tests;
+namespace BotMan\BotMan\Drivers\Tests;
 
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Drivers\NullDriver;
+use BotMan\BotMan\Http\Curl;
+use BotMan\BotMan\Drivers\NullDriver;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * A driver that acts as a proxy for a global driver instance. Useful for mock/fake drivers in integration tests.

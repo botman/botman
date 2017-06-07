@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Nexmo;
+namespace BotMan\BotMan\Drivers\Nexmo;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class NexmoDriver extends HttpDriver
 {
@@ -27,7 +27,7 @@ class NexmoDriver extends HttpDriver
 
     /**
      * @param IncomingMessage $matchingMessage
-     * @return \Mpociot\BotMan\Users\User
+     * @return \BotMan\BotMan\Users\User
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
@@ -46,7 +46,7 @@ class NexmoDriver extends HttpDriver
 
     /**
      * @param  IncomingMessage $message
-     * @return \Mpociot\BotMan\Messages\Incoming\Answer
+     * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {

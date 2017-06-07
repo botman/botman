@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Outgoing\Actions;
+namespace BotMan\BotMan\Messages\Outgoing\Actions;
 
 use JsonSerializable;
-use Mpociot\BotMan\Interfaces\QuestionActionInterface;
+use BotMan\BotMan\Interfaces\QuestionActionInterface;
 
 class Button implements JsonSerializable, QuestionActionInterface
 {

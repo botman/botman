@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook;
+namespace BotMan\BotMan\Drivers\Facebook;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Attachments\File;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class FacebookFileDriver extends FacebookDriver
 {

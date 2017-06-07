@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\Middleware;
+namespace BotMan\BotMan\Middleware;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Drivers\WeChat\WeChatDriver;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Http\Curl;
+use BotMan\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Drivers\WeChat\WeChatDriver;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class Botanalytics implements MiddlewareInterface
 {
@@ -121,7 +121,7 @@ class Botanalytics implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *

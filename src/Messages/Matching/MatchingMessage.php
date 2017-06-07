@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Matching;
+namespace BotMan\BotMan\Messages\Matching;
 
-use Mpociot\BotMan\Commands\Command;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Commands\Command;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class MatchingMessage
 {
@@ -38,7 +38,7 @@ class MatchingMessage
     }
 
     /**
-     * @return \Mpociot\BotMan\Messages\Incoming\IncomingMessage
+     * @return \BotMan\BotMan\Messages\Incoming\IncomingMessage
      */
     public function getMessage(): IncomingMessage
     {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Tests;
+namespace BotMan\BotMan\Drivers\Tests;
 
-use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Users\User;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
@@ -32,7 +32,7 @@ class FakeDriver implements DriverInterface
     public $matchesRequest = true;
     /** @var bool */
     public $hasMatchingEvent = false;
-    /** @var \Mpociot\BotMan\Messages\Incoming\IncomingMessage[] */
+    /** @var \BotMan\BotMan\Messages\Incoming\IncomingMessage[] */
     public $messages = [];
     /** @var bool */
     public $isBot = false;

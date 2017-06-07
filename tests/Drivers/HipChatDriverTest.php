@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Drivers\HipChat\HipChatDriver;
+use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
 
 class HipChatDriverTest extends PHPUnit_Framework_TestCase
 {

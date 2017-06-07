@@ -1,19 +1,19 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\BotFramework;
+namespace BotMan\BotMan\Drivers\BotFramework;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class BotFrameworkDriver extends HttpDriver
 {
@@ -43,8 +43,8 @@ class BotFrameworkDriver extends HttpDriver
     }
 
     /**
-     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
-     * @return \Mpociot\BotMan\Messages\Incoming\Answer
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
@@ -87,7 +87,7 @@ class BotFrameworkDriver extends HttpDriver
 
     /**
      * @param IncomingMessage $matchingMessage
-     * @return \Mpociot\BotMan\Users\User
+     * @return \BotMan\BotMan\Users\User
      */
     public function getUser(IncomingMessage $matchingMessage)
     {

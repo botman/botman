@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Messages;
+namespace BotMan\BotMan\tests\Messages;
 
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {

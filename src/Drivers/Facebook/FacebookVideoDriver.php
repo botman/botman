@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook;
+namespace BotMan\BotMan\Drivers\Facebook;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class FacebookVideoDriver extends FacebookDriver
 {

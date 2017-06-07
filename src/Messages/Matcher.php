@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Messages;
+namespace BotMan\BotMan\Messages;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class Matcher
 {

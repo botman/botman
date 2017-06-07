@@ -1,31 +1,31 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook;
+namespace BotMan\BotMan\Drivers\Facebook;
 
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Attachments\File;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Drivers\Events\GenericEvent;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReads;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingOptins;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ListTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReferrals;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingReads;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingOptins;
+use BotMan\BotMan\Drivers\Facebook\Extensions\ListTemplate;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingReferrals;
+use BotMan\BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
+use BotMan\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\BotMan\Drivers\Facebook\Extensions\ReceiptTemplate;
 
 class FacebookDriver extends HttpDriver
 {
@@ -307,7 +307,7 @@ class FacebookDriver extends HttpDriver
      * Retrieve User information.
      *
      * @param IncomingMessage $matchingMessage
-     * @return \Mpociot\BotMan\Users\User
+     * @return \BotMan\BotMan\Users\User
      */
     public function getUser(IncomingMessage $matchingMessage)
     {

@@ -1,27 +1,27 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Messages\Attachments\File;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Drivers\Events\GenericEvent;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReads;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingOptins;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingPostbacks;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingReferrals;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
-use Mpociot\BotMan\Drivers\Facebook\Events\MessagingCheckoutUpdates;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
+use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingReads;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingOptins;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingPostbacks;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingReferrals;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingDeliveries;
+use BotMan\BotMan\Drivers\Facebook\Events\MessagingCheckoutUpdates;
 
 class FacebookDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -500,7 +500,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '1234567890', '');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
     /** @test */
@@ -553,7 +553,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '1234567890', '');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url//foo.png')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url//foo.png')), $message));
     }
 
     /** @test */
@@ -606,7 +606,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '1234567890', '');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Audio::url('http://image.url//foo.mp3')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Audio::url('http://image.url//foo.mp3')), $message));
     }
 
     /** @test */
@@ -659,7 +659,7 @@ class FacebookDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '1234567890', '');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', File::url('http://image.url//foo.pdf')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', File::url('http://image.url//foo.pdf')), $message));
     }
 
     /** @test */

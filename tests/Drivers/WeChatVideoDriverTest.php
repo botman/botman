@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
 use Illuminate\Http\Response;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Drivers\WeChat\WeChatVideoDriver;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
 
 class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\WeChat;
+namespace BotMan\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class WeChatVideoDriver extends WeChatDriver
 {

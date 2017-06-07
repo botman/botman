@@ -1,19 +1,19 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Slack;
+namespace BotMan\BotMan\Drivers\Slack;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Drivers\HttpDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class SlackDriver extends HttpDriver
 {
@@ -62,8 +62,8 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
-     * @return \Mpociot\BotMan\Messages\Incoming\Answer
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
@@ -133,7 +133,7 @@ class SlackDriver extends HttpDriver
     /**
      * Convert a Question object into a valid Slack response.
      *
-     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param \BotMan\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -155,7 +155,7 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
@@ -189,7 +189,7 @@ class SlackDriver extends HttpDriver
     /**
      * @param $message
      * @param array $additionalParameters
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return array
      */
     public function replyInThread($message, $additionalParameters, $matchingMessage, BotMan $bot)
@@ -205,7 +205,7 @@ class SlackDriver extends HttpDriver
 
     /**
      * @param string|Question $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $parameters
      * @return array
      */
@@ -234,8 +234,8 @@ class SlackDriver extends HttpDriver
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
      */
@@ -294,7 +294,7 @@ class SlackDriver extends HttpDriver
 
     /**
      * Retrieve User information.
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return User
      */
     public function getUser(IncomingMessage $matchingMessage)

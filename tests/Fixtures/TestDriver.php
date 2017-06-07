@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Fixtures;
+namespace BotMan\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\Users\User;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Users\User;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestDriver implements DriverInterface
 {
@@ -58,7 +58,7 @@ class TestDriver implements DriverInterface
 
     /**
      * @param string|Question $message
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return mixed
      */
@@ -77,7 +77,7 @@ class TestDriver implements DriverInterface
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return string
      */
     public function types(IncomingMessage $matchingMessage)
@@ -108,7 +108,7 @@ class TestDriver implements DriverInterface
 
     /**
      * Retrieve User information.
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
      * @return UserInterface
      */
     public function getUser(IncomingMessage $matchingMessage)

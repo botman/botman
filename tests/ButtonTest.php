@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class ButtonTest extends PHPUnit_Framework_TestCase
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\NullDriver;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Drivers\Slack\SlackDriver;
-use Mpociot\BotMan\Tests\Fixtures\TestDriver;
-use Mpociot\BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\BotMan\Drivers\NullDriver;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Slack\SlackDriver;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Drivers\Facebook\FacebookDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {

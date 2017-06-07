@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Fixtures;
+namespace BotMan\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 
 class TestClass
 {

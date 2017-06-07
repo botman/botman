@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Illuminate\Support\Arr;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\Element;
-use Mpociot\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class GenericTemplateTest extends PHPUnit_Framework_TestCase
 {

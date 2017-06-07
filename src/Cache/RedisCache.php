@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
 use Redis;
 use RuntimeException;
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\CacheInterface;
 
 /**
  * Redis <http://redis.io> cache backend

@@ -1,15 +1,15 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
 
 class BotFrameworkImageDriverTest extends PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Cache\DoctrineCache;
+use BotMan\BotMan\Cache\DoctrineCache;
 use Doctrine\Common\Cache\CacheProvider;
 
 class DoctrineCacheTest extends PHPUnit_Framework_TestCase

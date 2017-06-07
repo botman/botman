@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Storages\Drivers;
+namespace BotMan\BotMan\Storages\Drivers;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Interfaces\StorageInterface;
 
 class FileStorage implements StorageInterface
 {

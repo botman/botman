@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Slack\Extensions;
+namespace BotMan\BotMan\Drivers\Slack\Extensions;
 
-use Mpociot\BotMan\Interfaces\QuestionActionInterface;
+use BotMan\BotMan\Interfaces\QuestionActionInterface;
 
 class Menu implements QuestionActionInterface
 {

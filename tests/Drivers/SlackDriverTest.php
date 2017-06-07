@@ -1,22 +1,22 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
+use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Drivers\Slack\SlackDriver;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Middleware\MiddlewareManager;
-use Mpociot\BotMan\Messages\Outgoing\Actions\Button;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class SlackDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -469,7 +469,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '', 'general');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
     /** @test */
@@ -501,7 +501,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ], $html);
 
         $message = new IncomingMessage('', '', 'general');
-        $driver->sendPayload($driver->buildServicePayload(\Mpociot\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
+        $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
     /** @test */

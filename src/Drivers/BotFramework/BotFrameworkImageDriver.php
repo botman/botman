@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\BotFramework;
+namespace BotMan\BotMan\Drivers\BotFramework;
 
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class BotFrameworkImageDriver extends BotFrameworkDriver
 {

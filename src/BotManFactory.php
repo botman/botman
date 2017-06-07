@@ -1,18 +1,18 @@
 <?php
 
-namespace Mpociot\BotMan;
+namespace BotMan\BotMan;
 
 use Slack\RealTimeClient;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Mpociot\BotMan\Interfaces\StorageInterface;
-use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
-use Mpociot\BotMan\Storages\Drivers\FileStorage;
+use BotMan\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Drivers\Slack\SlackRTMDriver;
+use BotMan\BotMan\Storages\Drivers\FileStorage;
 
 class BotManFactory
 {
@@ -23,7 +23,7 @@ class BotManFactory
      * @param CacheInterface $cache
      * @param Request $request
      * @param StorageInterface $storageDriver
-     * @return \Mpociot\BotMan\BotMan
+     * @return \BotMan\BotMan\BotMan
      */
     public static function create(
         array $config,
@@ -54,7 +54,7 @@ class BotManFactory
      * @param LoopInterface $loop
      * @param CacheInterface $cache
      * @param StorageInterface $storageDriver
-     * @return \Mpociot\BotMan\BotMan
+     * @return \BotMan\BotMan\BotMan
      */
     public static function createForSocket(
         array $config,
@@ -123,7 +123,7 @@ class BotManFactory
      * @param LoopInterface $loop
      * @param CacheInterface $cache
      * @param StorageInterface $storageDriver
-     * @return \Mpociot\BotMan\BotMan
+     * @return \BotMan\BotMan\BotMan
      */
     public static function createForRTM(
         array $config,

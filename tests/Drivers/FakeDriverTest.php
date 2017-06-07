@@ -1,19 +1,19 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Drivers\Tests\FakeDriver;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\Tests\ProxyDriver;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
- * @covers \Mpociot\BotMan\Drivers\FakeDriver
- * @covers \Mpociot\BotMan\Drivers\Tests\ProxyDriver
+ * @covers \BotMan\BotMan\Drivers\FakeDriver
+ * @covers \BotMan\BotMan\Drivers\Tests\ProxyDriver
  */
 class FakeDriverTest extends PHPUnit_Framework_TestCase
 {

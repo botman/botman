@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Users;
+namespace BotMan\BotMan\Users;
 
-use Mpociot\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Interfaces\UserInterface;
 
 class User implements UserInterface
 {

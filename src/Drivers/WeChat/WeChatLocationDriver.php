@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\WeChat;
+namespace BotMan\BotMan\Drivers\WeChat;
 
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class WeChatLocationDriver extends WeChatDriver
 {

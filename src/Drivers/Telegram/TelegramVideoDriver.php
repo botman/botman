@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Telegram;
+namespace BotMan\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TelegramVideoDriver extends TelegramDriver
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\tests\Drivers;
+namespace BotMan\BotMan\tests\Drivers;
 
 use Slack\File;
 use Mockery as m;
@@ -8,9 +8,9 @@ use Slack\RealTimeClient;
 use React\EventLoop\Factory;
 use PHPUnit_Framework_TestCase;
 use React\Promise\FulfilledPromise;
-use Mpociot\BotMan\Drivers\Slack\SlackRTMDriver;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
+use BotMan\BotMan\Drivers\Slack\SlackRTMDriver;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
 
 class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
 {
@@ -122,7 +122,7 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
         $driver = new SlackRTMDriver([], $clientMock);
 
         $message = OutgoingMessage::create('File')
-            ->withAttachment(\Mpociot\BotMan\Messages\Attachments\File::url($filePath));
+            ->withAttachment(\BotMan\BotMan\Messages\Attachments\File::url($filePath));
 
         $matchingMessage = new IncomingMessage('A command', 'U0X12345', $channelId);
 

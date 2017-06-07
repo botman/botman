@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook\Extensions;
+namespace BotMan\BotMan\Drivers\Facebook\Extensions;
 
 class ElementButton
 {

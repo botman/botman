@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class MessageTest extends PHPUnit_Framework_TestCase
 {

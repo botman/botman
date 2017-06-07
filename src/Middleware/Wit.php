@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\BotMan\Middleware;
+namespace BotMan\BotMan\Middleware;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class Wit implements MiddlewareInterface
 {
@@ -60,7 +60,7 @@ class Wit implements MiddlewareInterface
     /**
      * Handle a captured message.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
@@ -74,7 +74,7 @@ class Wit implements MiddlewareInterface
     /**
      * Handle an incoming message.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
@@ -91,7 +91,7 @@ class Wit implements MiddlewareInterface
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
@@ -118,7 +118,7 @@ class Wit implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Interfaces;
+namespace BotMan\BotMan\Interfaces;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 interface MiddlewareInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Http;
+namespace BotMan\BotMan\Http;
 
-use Mpociot\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Interfaces\HttpInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class Curl implements HttpInterface

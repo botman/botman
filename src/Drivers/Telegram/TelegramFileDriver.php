@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Telegram;
+namespace BotMan\BotMan\Drivers\Telegram;
 
-use Mpociot\BotMan\Messages\Attachments\File;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TelegramFileDriver extends TelegramDriver
 {

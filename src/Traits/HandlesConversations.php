@@ -1,20 +1,20 @@
 <?php
 
-namespace Mpociot\BotMan\Traits;
+namespace BotMan\BotMan\Traits;
 
 use Closure;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Interfaces\ShouldQueue;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Interfaces\ShouldQueue;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Conversations\Conversation;
 
 trait HandlesConversations
 {
     /**
-     * @param \Mpociot\BotMan\Messages\Conversations\Conversation $instance
+     * @param \BotMan\BotMan\Messages\Conversations\Conversation $instance
      * @param null|string $channel
      * @param null|string $driver
      */
@@ -29,7 +29,7 @@ trait HandlesConversations
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Conversations\Conversation $instance
+     * @param \BotMan\BotMan\Messages\Conversations\Conversation $instance
      * @param array|Closure $next
      * @param string|Question $question
      * @param array $additionalParameters
@@ -209,7 +209,7 @@ trait HandlesConversations
      */
     protected function callConversation($next, $convo, IncomingMessage $message, array $parameters)
     {
-        /** @var \Mpociot\BotMan\Messages\Conversations\Conversation $conversation */
+        /** @var \BotMan\BotMan\Messages\Conversations\Conversation $conversation */
         $conversation = $convo['conversation'];
         if (! $conversation instanceof ShouldQueue) {
             $conversation->setBot($this);

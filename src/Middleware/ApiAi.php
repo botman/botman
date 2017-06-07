@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\BotMan\Middleware;
+namespace BotMan\BotMan\Middleware;
 
-use Mpociot\BotMan\BotMan;
-use Mpociot\BotMan\Http\Curl;
-use Mpociot\BotMan\Interfaces\HttpInterface;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Http\Curl;
+use BotMan\BotMan\Interfaces\HttpInterface;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ApiAi implements MiddlewareInterface
 {
@@ -63,7 +63,7 @@ class ApiAi implements MiddlewareInterface
 
     /**
      * Perform the API.ai API call and cache it for the message.
-     * @param  \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @return stdClass
      */
     protected function getResponse(IncomingMessage $message)
@@ -85,7 +85,7 @@ class ApiAi implements MiddlewareInterface
     /**
      * Handle a captured message.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *
@@ -125,7 +125,7 @@ class ApiAi implements MiddlewareInterface
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
@@ -144,7 +144,7 @@ class ApiAi implements MiddlewareInterface
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
-     * @param \Mpociot\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param BotMan $bot
      * @param $next
      *

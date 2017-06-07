@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
 use Cache;
 use BotMan;
 use Orchestra\Testbench\TestCase;
-use Mpociot\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
 
 class LaravelTest extends TestCase
 {
@@ -17,13 +17,13 @@ class LaravelTest extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return [\Mpociot\BotMan\BotManServiceProvider::class];
+        return [\BotMan\BotMan\BotManServiceProvider::class];
     }
 
     protected function getPackageAliases($app)
     {
         return [
-            'BotMan' => \Mpociot\BotMan\Facades\BotMan::class,
+            'BotMan' => \BotMan\BotMan\Facades\BotMan::class,
         ];
     }
 

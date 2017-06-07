@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\CacheInterface;
 
 class CodeIgniterCache implements CacheInterface
 {

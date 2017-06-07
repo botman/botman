@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests\Fixtures;
+namespace BotMan\BotMan\Tests\Fixtures;
 
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class TestConversation extends Conversation
 {

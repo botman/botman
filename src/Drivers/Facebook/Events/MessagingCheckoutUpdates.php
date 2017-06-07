@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Facebook\Events;
+namespace BotMan\BotMan\Drivers\Facebook\Events;
 
 class MessagingCheckoutUpdates extends FacebookEvent
 {

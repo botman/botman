@@ -1,23 +1,23 @@
 <?php
 
-namespace Mpociot\BotMan\Drivers\Slack;
+namespace BotMan\BotMan\Drivers\Slack;
 
 use Slack\File;
 use Slack\RealTimeClient;
-use Mpociot\BotMan\Users\User;
+use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
 use React\Promise\PromiseInterface;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Drivers\Events\GenericEvent;
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage;
-use Mpociot\BotMan\Messages\Attachments\File as BotManFile;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Attachments\File as BotManFile;
 
 class SlackRTMDriver implements DriverInterface
 {
@@ -116,7 +116,7 @@ class SlackRTMDriver implements DriverInterface
     /**
      * Convert a Question object into a valid Slack response.
      *
-     * @param \Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param \BotMan\BotMan\Messages\Outgoing\Question $question
      * @return array
      */
     private function convertQuestion(Question $question)
@@ -162,7 +162,7 @@ class SlackRTMDriver implements DriverInterface
                 $message = new IncomingMessage(Video::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setVideos([$file->get('permalink')]);
             } else {
-                $message = new IncomingMessage(\Mpociot\BotMan\Messages\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
+                $message = new IncomingMessage(\BotMan\BotMan\Messages\Attachments\File::PATTERN, $user_id, $channel_id, $this->event);
                 $message->setFiles([$file->get('permalink')]);
             }
 
@@ -181,7 +181,7 @@ class SlackRTMDriver implements DriverInterface
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question|IncomingMessage $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question|IncomingMessage $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return mixed

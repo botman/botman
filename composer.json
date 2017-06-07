@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/botman",
+    "name": "botman/botman",
     "license": "MIT",
     "description": "Create messaging bots in PHP with ease.",
     "keywords": [
@@ -46,21 +46,21 @@
     },
     "autoload": {
         "psr-4": {
-            "Mpociot\\BotMan\\": "src/"
+            "BotMan\\BotMan\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mpociot\\BotMan\\Tests\\": "tests/"
+            "BotMan\\BotMan\\Tests\\": "tests/"
         }
     },
     "extras": {
         "laravel": {
             "providers": [
-                "Mpociot\\BotMan\\BotManServiceProvider"
+                "BotMan\\BotMan\\BotManServiceProvider"
             ],
             "aliases": {
-                "BotMan": "Mpociot\\BotMan\\Facades\\BotMan"
+                "BotMan": "BotMan\\BotMan\\Facades\\BotMan"
             }
         }
     },

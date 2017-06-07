@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Interfaces;
+namespace BotMan\BotMan\Interfaces;
 
 use Symfony\Component\HttpFoundation\Response;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 interface DriverInterface
 {
@@ -40,12 +40,12 @@ interface DriverInterface
 
     /**
      * @param IncomingMessage $message
-     * @return \Mpociot\BotMan\Messages\Incoming\Answer
+     * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message);
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return $this

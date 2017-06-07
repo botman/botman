@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Traits\VerifiesServices;
+use BotMan\BotMan\Traits\VerifiesServices;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

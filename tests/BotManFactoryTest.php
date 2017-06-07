@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\tests;
+namespace BotMan\BotMan\tests;
 
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use React\EventLoop\Factory;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
+use BotMan\BotMan\BotManFactory;
 
 class BotManFactoryTest extends PHPUnit_Framework_TestCase
 {

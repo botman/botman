@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\BotManFactory;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Drivers\Tests\FakeDriver;
-use Mpociot\BotMan\Drivers\Tests\ProxyDriver;
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Drivers\Tests\ProxyDriver;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
 
 class BotManDriverEventTest extends PHPUnit_Framework_TestCase
 {

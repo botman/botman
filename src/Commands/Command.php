@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Commands;
+namespace BotMan\BotMan\Commands;
 
-use Mpociot\BotMan\Closure;
+use BotMan\BotMan\Closure;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
 
 class Command
 {

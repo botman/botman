@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Middleware;
+namespace BotMan\BotMan\Middleware;
 
 use Closure;
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use Mpociot\Pipeline\Pipeline;
-use Mpociot\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Interfaces\MiddlewareInterface;
 
 class MiddlewareManager
 {

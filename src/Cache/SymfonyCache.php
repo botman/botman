@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

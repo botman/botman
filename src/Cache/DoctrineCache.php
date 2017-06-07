@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\BotMan\Cache;
+namespace BotMan\BotMan\Cache;
 
 use Doctrine\Common\Cache\Cache;
-use Mpociot\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\CacheInterface;
 
 class DoctrineCache implements CacheInterface
 {

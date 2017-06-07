@@ -1,17 +1,17 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Conversations;
+namespace BotMan\BotMan\Messages\Conversations;
 
 use Closure;
-use Mpociot\BotMan\BotMan;
+use BotMan\BotMan\BotMan;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Interfaces\ShouldQueue;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Interfaces\ShouldQueue;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * Class Conversation.
@@ -51,7 +51,7 @@ abstract class Conversation
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $question
      * @param array|Closure $next
      * @param array|Closure $repeat
      * @param array $additionalParameters
@@ -67,7 +67,7 @@ abstract class Conversation
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $question
      * @param array|Closure $next
      * @param array|Closure $repeat
      * @param array $additionalParameters
@@ -83,7 +83,7 @@ abstract class Conversation
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $question
      * @param array|Closure $next
      * @param array|Closure $repeat
      * @param array $additionalParameters
@@ -99,7 +99,7 @@ abstract class Conversation
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $question
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $question
      * @param array|Closure $next
      * @param array|Closure $repeat
      * @param array $additionalParameters
@@ -144,7 +144,7 @@ abstract class Conversation
     }
 
     /**
-     * @param string|\Mpociot\BotMan\Messages\Outgoing\Question $message
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $message
      * @param array $additionalParameters
      * @return $this
      */

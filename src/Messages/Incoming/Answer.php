@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Incoming;
+namespace BotMan\BotMan\Messages\Incoming;
 
 class Answer
 {

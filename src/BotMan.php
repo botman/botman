@@ -1,33 +1,33 @@
 <?php
 
-namespace Mpociot\BotMan;
+namespace BotMan\BotMan;
 
 use Closure;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
-use Mpociot\BotMan\Commands\Command;
-use Mpociot\BotMan\Messages\Matcher;
-use Mpociot\BotMan\Drivers\DriverManager;
-use Mpociot\BotMan\Traits\ProvidesStorage;
-use Mpociot\BotMan\Traits\VerifiesServices;
-use Mpociot\BotMan\Interfaces\UserInterface;
-use Mpociot\BotMan\Messages\Incoming\Answer;
-use Mpociot\BotMan\Interfaces\CacheInterface;
-use Mpociot\BotMan\Messages\Attachments\File;
-use Mpociot\BotMan\Interfaces\DriverInterface;
-use Mpociot\BotMan\Messages\Attachments\Audio;
-use Mpociot\BotMan\Messages\Attachments\Image;
-use Mpociot\BotMan\Messages\Attachments\Video;
-use Mpociot\BotMan\Messages\Outgoing\Question;
-use Mpociot\BotMan\Interfaces\StorageInterface;
-use Mpociot\BotMan\Traits\HandlesConversations;
-use Mpociot\BotMan\Middleware\MiddlewareManager;
-use Mpociot\BotMan\Messages\Attachments\Location;
-use Mpociot\BotMan\Interfaces\DriverEventInterface;
-use Mpociot\BotMan\Messages\Incoming\IncomingMessage;
-use Mpociot\BotMan\Messages\Matching\MatchingMessage;
-use Mpociot\BotMan\Messages\Conversations\InlineConversation;
-use Mpociot\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
+use BotMan\BotMan\Commands\Command;
+use BotMan\BotMan\Messages\Matcher;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Traits\ProvidesStorage;
+use BotMan\BotMan\Traits\VerifiesServices;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Traits\HandlesConversations;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matching\MatchingMessage;
+use BotMan\BotMan\Messages\Conversations\InlineConversation;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
 
 /**
  * Class BotMan.

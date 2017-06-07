@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpociot\BotMan\Traits;
+namespace BotMan\BotMan\Traits;
 
-use Mpociot\BotMan\Storages\Storage;
+use BotMan\BotMan\Storages\Storage;
 
 trait ProvidesStorage
 {

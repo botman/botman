@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Conversations;
+namespace BotMan\BotMan\Messages\Conversations;
 
 class InlineConversation extends Conversation
 {

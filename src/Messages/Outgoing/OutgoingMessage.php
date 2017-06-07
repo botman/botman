@@ -1,15 +1,15 @@
 <?php
 
-namespace Mpociot\BotMan\Messages\Outgoing;
+namespace BotMan\BotMan\Messages\Outgoing;
 
-use Mpociot\BotMan\Messages\Attachments\Attachment;
+use BotMan\BotMan\Messages\Attachments\Attachment;
 
 class OutgoingMessage
 {
     /** @var string */
     protected $message;
 
-    /** @var \Mpociot\BotMan\Messages\Attachments\Attachment */
+    /** @var \BotMan\BotMan\Messages\Attachments\Attachment */
     protected $attachment;
 
     /**
@@ -45,7 +45,7 @@ class OutgoingMessage
     }
 
     /**
-     * @param \Mpociot\BotMan\Messages\Attachments\Attachment $attachment
+     * @param \BotMan\BotMan\Messages\Attachments\Attachment $attachment
      * @return $this
      */
     public function withAttachment(Attachment $attachment)
@@ -56,7 +56,7 @@ class OutgoingMessage
     }
 
     /**
-     * @return \Mpociot\BotMan\Messages\Attachments\Attachment
+     * @return \BotMan\BotMan\Messages\Attachments\Attachment
      */
     public function getAttachment()
     {

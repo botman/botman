@@ -1,11 +1,11 @@
 <?php
 
-namespace Mpociot\BotMan\Tests;
+namespace BotMan\BotMan\Tests;
 
 use Redis;
 use PHPUnit_Framework_TestCase;
-use Mpociot\BotMan\Cache\ArrayCache;
-use Mpociot\BotMan\Cache\RedisCache;
+use BotMan\BotMan\Cache\ArrayCache;
+use BotMan\BotMan\Cache\RedisCache;
 
 /**
  * @group integration

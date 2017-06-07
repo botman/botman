@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\BotMan\Facades;
+namespace BotMan\BotMan\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
