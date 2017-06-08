@@ -516,7 +516,7 @@ class BotMan
     }
 
     /**
-     * @param string|Question $message
+     * @param string|\JsonSerializable $message
      * @param array $additionalParameters
      * @return mixed
      */
