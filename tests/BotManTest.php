@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\tests;
 
 use Mockery as m;
-use Mockery\MockInterface;
 use BotMan\BotMan\BotMan;
+use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Cache\ArrayCache;
@@ -26,8 +26,8 @@ use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
-use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
 /**

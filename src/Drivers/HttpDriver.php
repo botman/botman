@@ -4,8 +4,8 @@ namespace BotMan\BotMan\Drivers;
 
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\HttpInterface;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 abstract class HttpDriver implements DriverInterface

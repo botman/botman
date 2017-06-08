@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\tests;
 
 use Mockery as m;
-use Mockery\MockInterface;
 use BotMan\BotMan\BotMan;
+use Mockery\MockInterface;
 use SuperClosure\Serializer;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
