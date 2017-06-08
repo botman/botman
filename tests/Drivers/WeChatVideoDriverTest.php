@@ -3,11 +3,11 @@
 namespace BotMan\BotMan\tests\Drivers;
 
 use Mockery as m;
-use Illuminate\Http\Response;
 use BotMan\BotMan\Http\Curl;
+use Illuminate\Http\Response;
 use PHPUnit_Framework_TestCase;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Attachments\Video;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
 
 class WeChatVideoDriverTest extends PHPUnit_Framework_TestCase

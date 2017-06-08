@@ -8,8 +8,8 @@ use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Request;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class TestAdditionalDriver extends HttpDriver
 {
@@ -36,6 +36,7 @@ class TestAdditionalDriver extends HttpDriver
     public function getMessages()
     {
         $messageText = $this->event->get('text');
+
         return [new IncomingMessage($messageText, 0, 0, $this->event)];
     }
 

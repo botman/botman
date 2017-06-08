@@ -5,11 +5,11 @@ namespace BotMan\BotMan\tests\Drivers;
 use Mockery as m;
 use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Drivers\WeChat\WeChatDriver;
+use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class WeChatDriverTest extends PHPUnit_Framework_TestCase
