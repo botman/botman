@@ -14,9 +14,6 @@ use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatLocationDriver;
-use BotMan\BotMan\Drivers\BotFramework\BotFrameworkDriver;
-use BotMan\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
-use BotMan\BotMan\Drivers\BotFramework\BotFrameworkAttachmentDriver;
 
 class DriverManager
 {
@@ -26,9 +23,6 @@ class DriverManager
     protected static $drivers = [
         SlackDriver::class,
         KikDriver::class,
-        BotFrameworkDriver::class,
-        BotFrameworkImageDriver::class,
-        BotFrameworkAttachmentDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
         WeChatPhotoDriver::class,
