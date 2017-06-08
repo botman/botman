@@ -23,10 +23,10 @@ use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
-use BotMan\BotMan\Drivers\Telegram\TelegramDriver;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
+use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 
@@ -323,8 +323,10 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_hears_for_specific_drivers_only()
     {
         $called = false;
+        DriverManager::loadDriver(TestAdditionalDriver::class);
 
         $botman = $this->getBot([
+            'additional' => true,
             'event' => [
                 'user' => 'U0X12345',
                 'channel' => 'D12345',
@@ -334,7 +336,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        })->driver(TelegramDriver::DRIVER_NAME);
+        })->driver(TestAdditionalDriver::class);
         $botman->listen();
         $this->assertFalse($called);
 
@@ -366,7 +368,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        })->driver([TelegramDriver::DRIVER_NAME, SlackDriver::DRIVER_NAME]);
+        })->driver([TestAdditionalDriver::class, SlackDriver::DRIVER_NAME]);
         $botman->listen();
         $this->assertTrue($called);
     }
@@ -962,7 +964,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_group_commands_by_driver()
     {
         $calledSlack = false;
-        $calledTelegram = false;
+        $calledAdditional = false;
 
         $botman = $this->getBot([
             'event' => [
@@ -971,9 +973,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $botman->group(['driver' => TelegramDriver::DRIVER_NAME], function ($botman) use (&$calledTelegram) {
+        $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledTelegram) {
             $botman->hears('bar', function ($bot) use (&$calledTelegram) {
-                $calledTelegram = true;
+                $calledAdditional = true;
             });
         });
 
@@ -985,7 +987,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
         $botman->listen();
 
-        $this->assertFalse($calledTelegram);
+        $this->assertFalse($calledAdditional);
         $this->assertTrue($calledSlack);
     }
 

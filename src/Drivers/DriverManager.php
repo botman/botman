@@ -11,16 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Drivers\WeChat\WeChatDriver;
 use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatPhotoDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramFileDriver;
 use BotMan\BotMan\Drivers\WeChat\WeChatLocationDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramAudioDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramPhotoDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramVideoDriver;
 use BotMan\BotMan\Drivers\BotFramework\BotFrameworkDriver;
-use BotMan\BotMan\Drivers\Telegram\TelegramLocationDriver;
 use BotMan\BotMan\Drivers\BotFramework\BotFrameworkImageDriver;
 use BotMan\BotMan\Drivers\BotFramework\BotFrameworkAttachmentDriver;
 
@@ -32,12 +26,6 @@ class DriverManager
     protected static $drivers = [
         SlackDriver::class,
         KikDriver::class,
-        TelegramDriver::class,
-        TelegramPhotoDriver::class,
-        TelegramVideoDriver::class,
-        TelegramLocationDriver::class,
-        TelegramAudioDriver::class,
-        TelegramFileDriver::class,
         BotFrameworkDriver::class,
         BotFrameworkImageDriver::class,
         BotFrameworkAttachmentDriver::class,
