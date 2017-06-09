@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan;
 
+use React\Socket\Server;
 use Slack\RealTimeClient;
 use BotMan\BotMan\Http\Curl;
 use Illuminate\Support\Collection;
