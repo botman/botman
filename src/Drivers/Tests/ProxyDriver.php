@@ -4,8 +4,8 @@ namespace BotMan\BotMan\Drivers\Tests;
 
 use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Drivers\NullDriver;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
