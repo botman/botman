@@ -73,18 +73,5 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, DriverManager::getConfiguredDrivers([
             'slack_token' => 'foo',
         ]));
-
-        $this->assertCount(2, DriverManager::getConfiguredDrivers([
-            'slack_token' => 'foo',
-            'nexmo_key' => 'foo',
-            'nexmo_secret' => 'foo',
-        ]));
-
-        $this->assertCount(3, DriverManager::getConfiguredDrivers([
-            'slack_token' => 'foo',
-            'hipchat_urls' => ['foo'],
-            'nexmo_key' => 'foo',
-            'nexmo_secret' => 'foo',
-        ]));
     }
 }
