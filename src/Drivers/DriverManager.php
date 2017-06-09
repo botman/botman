@@ -9,11 +9,7 @@ use BotMan\BotMan\Drivers\Nexmo\NexmoDriver;
 use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Drivers\WeChat\WeChatDriver;
 use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
-use BotMan\BotMan\Drivers\WeChat\WeChatPhotoDriver;
-use BotMan\BotMan\Drivers\WeChat\WeChatVideoDriver;
-use BotMan\BotMan\Drivers\WeChat\WeChatLocationDriver;
 
 class DriverManager
 {
@@ -25,10 +21,6 @@ class DriverManager
         KikDriver::class,
         NexmoDriver::class,
         HipChatDriver::class,
-        WeChatPhotoDriver::class,
-        WeChatLocationDriver::class,
-        WeChatVideoDriver::class,
-        WeChatDriver::class,
     ];
 
     /** @var array */
