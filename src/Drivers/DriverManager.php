@@ -6,8 +6,8 @@ use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Drivers\Kik\KikDriver;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Drivers\Slack\SlackDriver;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
 
 class DriverManager
