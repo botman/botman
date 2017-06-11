@@ -37,7 +37,7 @@ class IncomingMessage
     /** @var \BotMan\BotMan\Messages\Attachments\Location */
     private $location;
 
-    /** @var boolean */
+    /** @var bool */
     protected $isFromBot = false;
 
     public function __construct($message, $sender, $recipient, $payload = null)
