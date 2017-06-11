@@ -37,6 +37,9 @@ class IncomingMessage
     /** @var \BotMan\BotMan\Messages\Attachments\Location */
     private $location;
 
+    /** @var boolean */
+    protected $isFromBot = false;
+
     public function __construct($message, $sender, $recipient, $payload = null)
     {
         $this->message = $message;
@@ -198,8 +201,24 @@ class IncomingMessage
     /**
      * @return \BotMan\BotMan\Messages\Attachments\Location
      */
-    public function getLocation()
+    public function getLocation() : Location
     {
         return $this->location;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFromBot(): bool
+    {
+        return $this->isFromBot;
+    }
+
+    /**
+     * @param bool $isFromBot
+     */
+    public function setIsFromBot(bool $isFromBot)
+    {
+        $this->isFromBot = $isFromBot;
     }
 }

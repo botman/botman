@@ -156,7 +156,7 @@ trait HandlesConversations
                 return;
             }
 
-            $matchingMessages = $this->getMatchingMessages(false);
+            $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver(), false);
             foreach ($matchingMessages as $matchingMessage) {
                 $command = $matchingMessage->getCommand();
                 if ($command->shouldStopConversation()) {
@@ -174,7 +174,7 @@ trait HandlesConversations
             $parameters = [];
             if (is_array($convo['next'])) {
                 foreach ($convo['next'] as $callback) {
-                    if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $callback['pattern'])) {
+                    if ($this->matcher->isPatternValid($message, $this->getConversationAnswer(), $callback['pattern'])) {
                         $parameterNames = $this->compileParameterNames($callback['pattern']);
                         $matches = $this->matcher->getMatches();
 
@@ -219,7 +219,7 @@ trait HandlesConversations
          */
         $additionalParameters = Collection::make(unserialize($convo['additionalParameters']));
         if ($additionalParameters->has('__pattern')) {
-            if ($this->matcher->isMessageMatching($message, $this->getConversationAnswer()->getValue(), $additionalParameters->get('__pattern'))) {
+            if ($this->matcher->isPatternValid($message, $this->getConversationAnswer(), $additionalParameters->get('__pattern'))) {
                 $getter = $additionalParameters->get('__getter');
                 array_unshift($parameters, $this->getConversationAnswer()->getMessage()->$getter());
                 $this->prepareConversationClosure($next, $conversation, $parameters);

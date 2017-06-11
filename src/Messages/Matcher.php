@@ -2,9 +2,12 @@
 
 namespace BotMan\BotMan\Messages;
 
+use BotMan\BotMan\Commands\Command;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class Matcher
 {
@@ -18,29 +21,44 @@ class Matcher
     protected $matches;
 
     /**
-     * @param OutgoingMessage $message
-     * @param string $answerText
+     * @param IncomingMessage $message
+     * @param Answer $answer
+     * @param Command $command
+     * @param DriverInterface $driver
+     * @param MiddlewareInterface[] $middleware
+     * @return bool
+     */
+    public function isMessageMatching(IncomingMessage $message, Answer $answer, Command $command, DriverInterface $driver, $middleware = [])
+    {
+        return $this->isPatternValid($message, $answer, $command->getPattern(), $command->getMiddleware() + $middleware) &&
+            $this->isDriverValid($driver->getName(), $command->getDriver()) &&
+            $this->isRecipientValid($message->getRecipient(), $command->getRecipient());
+    }
+
+    /**
+     * @param IncomingMessage $message
+     * @param Answer $answer
      * @param string $pattern
      * @param MiddlewareInterface[] $middleware
      * @return int
      */
-    public function isMessageMatching(Incoming\IncomingMessage $message, $answerText, $pattern, $middleware = [])
+    public function isPatternValid(IncomingMessage $message, Answer $answer, $pattern, $middleware = [])
     {
         $this->matches = [];
 
-        $messageText = $message->getText();
+        $answerText = $answer->getValue();
         if (is_array($answerText)) {
             $answerText = '';
         }
 
         $pattern = str_replace('/', '\/', $pattern);
         $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(.*)', $pattern).'$/iu';
-        $regexMatched = (bool) preg_match($text, $messageText, $this->matches) || (bool) preg_match($text, $answerText,
-                $this->matches);
+
+        $regexMatched = (bool) preg_match($text, $message->getText(), $this->matches) || (bool) preg_match($text, $answerText, $this->matches);
 
         // Try middleware first
         if (count($middleware)) {
-            return Collection::make($middleware)->reject(function ($middleware) use (
+            return Collection::make($middleware)->reject(function (MiddlewareInterface $middleware) use (
                     $message,
                     $pattern,
                     $regexMatched
@@ -57,7 +75,7 @@ class Matcher
      * @param string|array $allowedDrivers
      * @return bool
      */
-    public function isDriverValid($driverName, $allowedDrivers)
+    protected function isDriverValid($driverName, $allowedDrivers)
     {
         if (! is_null($allowedDrivers)) {
             return Collection::make($allowedDrivers)->contains($driverName);
@@ -71,7 +89,7 @@ class Matcher
      * @param $allowedRecipient
      * @return bool
      */
-    public function isRecipientValid($givenRecipient, $allowedRecipient)
+    protected function isRecipientValid($givenRecipient, $allowedRecipient)
     {
         return $givenRecipient == $allowedRecipient || $allowedRecipient === null;
     }

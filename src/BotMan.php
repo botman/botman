@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan;
 
+use BotMan\BotMan\Commands\ConversationManager;
 use Closure;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
@@ -25,9 +26,8 @@ use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Matching\MatchingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Conversations\InlineConversation;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage as OutgoingMessage;
 
 /**
  * Class BotMan.
@@ -52,12 +52,6 @@ class BotMan
 
     /** @var array|null */
     protected $currentConversationData;
-
-    /**
-     * Messages to listen to.
-     * @var Command[]
-     */
-    protected $listenTo = [];
 
     /**
      * IncomingMessage service events.
@@ -86,6 +80,9 @@ class BotMan
 
     /** @var MiddlewareManager */
     public $middleware;
+
+    /** @var ConversationManager */
+    protected $conversationManager;
 
     /** @var CacheInterface */
     private $cache;
@@ -118,6 +115,7 @@ class BotMan
         $this->storage = $storage;
         $this->matcher = new Matcher();
         $this->middleware = new MiddlewareManager($this);
+        $this->conversationManager = new ConversationManager();
     }
 
     /**
@@ -226,7 +224,7 @@ class BotMan
         $command = new Command($pattern, $callback, $in);
         $command->applyGroupAttributes($this->groupAttributes);
 
-        $this->listenTo[] = $command;
+        $this->conversationManager->listenTo($command);
 
         return $command;
     }
@@ -298,33 +296,6 @@ class BotMan
     }
 
     /**
-     * Add additional data (image,video,audio,location,files) data to
-     * callable parameters.
-     *
-     * @param IncomingMessage $message
-     * @param array $parameters
-     * @return array
-     */
-    private function addDataParameters(IncomingMessage $message, array $parameters)
-    {
-        $messageText = $message->getText();
-
-        if ($messageText === Image::PATTERN) {
-            $parameters[] = $message->getImages();
-        } elseif ($messageText === Video::PATTERN) {
-            $parameters[] = $message->getVideos();
-        } elseif ($messageText === Audio::PATTERN) {
-            $parameters[] = $message->getAudio();
-        } elseif ($messageText === Location::PATTERN) {
-            $parameters[] = $message->getLocation();
-        } elseif ($messageText === File::PATTERN) {
-            $parameters[] = $message->getFiles();
-        }
-
-        return $parameters;
-    }
-
-    /**
      * Create a command group with shared attributes.
      *
      * @param  array $attributes
@@ -355,39 +326,6 @@ class BotMan
     }
 
     /**
-     * @param bool $withReceivedMiddleware
-     * @return MatchingMessage[]
-     */
-    protected function getMatchingMessages($withReceivedMiddleware = true)
-    {
-        $answer = $this->getConversationAnswer();
-
-        $matchingMessages = [];
-        foreach ($this->getMessages() as $message) {
-            if ($withReceivedMiddleware) {
-                $message = $this->middleware->applyMiddleware('received', $message);
-            }
-
-            foreach ($this->listenTo as $command) {
-                $messageData = $command->toArray();
-                $pattern = $messageData['pattern'];
-
-                if (! $this->isBot() &&
-                    $this->matcher->isMessageMatching($message, $answer->getValue(), $pattern,
-                        $messageData['middleware'] + $this->middleware->heard()) &&
-                    $this->matcher->isDriverValid($this->driver->getName(), $messageData['driver']) &&
-                    $this->matcher->isRecipientValid($message->getRecipient(), $messageData['recipient']) &&
-                    $this->loadedConversation === false
-                ) {
-                    $matchingMessages[] = new MatchingMessage($command, $message, $this->matcher->getMatches());
-                }
-            }
-        }
-
-        return $matchingMessages;
-    }
-
-    /**
      * Try to match messages with the ones we should
      * listen to.
      */
@@ -397,9 +335,13 @@ class BotMan
 
         if (! $this->isBot()) {
             $this->loadActiveConversation();
+            if ($this->loadedConversation) {
+                return;
+            }
         }
 
-        $matchingMessages = $this->getMatchingMessages();
+        $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver());
+
         foreach ($matchingMessages as $matchingMessage) {
             $this->command = $matchingMessage->getCommand();
             $callback = $this->command->getCallback();
@@ -421,7 +363,7 @@ class BotMan
             $this->matches = $parameters;
             array_unshift($parameters, $this);
 
-            $parameters = $this->addDataParameters($this->message, $parameters);
+            $parameters = $this->conversationManager->addDataParameters($this->message, $parameters);
 
             call_user_func_array($callback, $parameters);
         }
