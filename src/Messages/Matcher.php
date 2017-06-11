@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Messages;
 
-use BotMan\BotMan\Commands\Command;
-use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use Illuminate\Support\Collection;
+use BotMan\BotMan\Commands\Command;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 

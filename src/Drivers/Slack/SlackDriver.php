@@ -113,6 +113,7 @@ class SlackDriver extends HttpDriver
 
         $message = new IncomingMessage($messageText, $user_id, $channel_id, $this->event);
         $message->setIsFromBot($this->isBot());
+
         return [$message];
     }
 

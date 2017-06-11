@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan;
 
-use BotMan\BotMan\Commands\ConversationManager;
 use Closure;
 use UnexpectedValueException;
 use Illuminate\Support\Collection;
@@ -22,6 +21,7 @@ use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
+use BotMan\BotMan\Commands\ConversationManager;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
