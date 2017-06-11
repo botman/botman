@@ -331,6 +331,8 @@ class BotMan
      */
     public function listen()
     {
+        $this->verifyServices();
+
         $this->fireDriverEvents();
 
         if (! $this->isBot()) {

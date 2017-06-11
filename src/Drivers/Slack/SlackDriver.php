@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Drivers\Slack;
 
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Drivers\HttpDriver;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
-class SlackDriver extends HttpDriver
+class SlackDriver extends HttpDriver implements VerifiesService
 {
     const DRIVER_NAME = 'Slack';
 
@@ -329,5 +330,17 @@ class SlackDriver extends HttpDriver
         ], $parameters);
 
         return $this->http->post('https://slack.com/api/'.$endpoint, [], $parameters);
+    }
+
+    /**
+     * @param Request $request
+     * @return null|Response
+     */
+    public function verifyRequest(Request $request): ?Response
+    {
+        $payload = Collection::make(json_decode($request->getContent(), true));
+        if ($payload->get('type') === 'url_verification') {
+            return Response::create($payload->get('challenge'))->send();
+        }
     }
 }
