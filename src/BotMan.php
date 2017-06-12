@@ -339,19 +339,24 @@ class BotMan
         $this->fireDriverEvents();
 
         $this->loadActiveConversation();
-        if ($this->loadedConversation) {
-            return;
-        }
 
+        if ($this->loadedConversation === false) {
+            $this->callMatchingMessages();
+        }
+    }
+
+    /**
+     * Call matching message callbacks.
+     */
+    protected function callMatchingMessages()
+    {
         $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver());
 
         foreach ($matchingMessages as $matchingMessage) {
             $this->command = $matchingMessage->getCommand();
             $callback = $this->command->getCallback();
 
-            if (! $callback instanceof Closure) {
-                $callback = $this->getCallable($callback);
-            }
+            $callback = $this->getCallable($callback);
 
             $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
@@ -370,15 +375,22 @@ class BotMan
 
             call_user_func_array($callback, $parameters);
         }
+
         if (empty($matchingMessages) && empty($this->getBotMessages()) && ! is_null($this->fallbackMessage)) {
-            $this->message = $this->getMessages()[0];
-
-            if (! $this->fallbackMessage instanceof Closure) {
-                $this->fallbackMessage = $this->getCallable($this->fallbackMessage);
-            }
-
-            call_user_func($this->fallbackMessage, $this);
+            $this->callFallbackMessage();
         }
+    }
+
+    /**
+     * Call the fallback method.
+     */
+    protected function callFallbackMessage()
+    {
+        $this->message = $this->getMessages()[0];
+
+        $this->fallbackMessage = $this->getCallable($this->fallbackMessage);
+
+        call_user_func($this->fallbackMessage, $this);
     }
 
     /**
@@ -524,10 +536,14 @@ class BotMan
 
     /**
      * @param string $callback
-     * @return array
+     * @return callable
      */
     protected function getCallable($callback)
     {
+        if ($callback instanceof Closure) {
+            return $callback;
+        }
+
         if (strpos($callback, '@') === false) {
             $callback = $this->makeInvokableAction($callback);
         }
