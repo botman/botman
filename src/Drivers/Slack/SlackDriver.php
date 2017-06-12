@@ -336,7 +336,7 @@ class SlackDriver extends HttpDriver implements VerifiesService
      * @param Request $request
      * @return null|Response
      */
-    public function verifyRequest(Request $request): ?Response
+    public function verifyRequest(Request $request)
     {
         $payload = Collection::make(json_decode($request->getContent(), true));
         if ($payload->get('type') === 'url_verification') {

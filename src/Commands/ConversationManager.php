@@ -23,7 +23,7 @@ class ConversationManager
      */
     protected $listenTo = [];
 
-    public function listenTo(Command $command) : void
+    public function listenTo(Command $command)
     {
         $this->listenTo[] = $command;
     }
