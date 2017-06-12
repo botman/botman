@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
-use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -171,6 +171,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     public function verifyRequest(Request $request)
     {
         $_SERVER['driver_verified'] = true;
+
         return true;
     }
 }
