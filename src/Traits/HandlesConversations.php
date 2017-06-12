@@ -136,7 +136,9 @@ trait HandlesConversations
     {
         $this->loadedConversation = false;
 
-        Collection::make($this->getMessages())->filter(function ($message) {
+        Collection::make($this->getMessages())->reject(function (IncomingMessage $message) {
+            return $message->isFromBot();
+        })->filter(function (IncomingMessage $message) {
             return $this->cache->has($message->getConversationIdentifier()) || $this->cache->has($message->getOriginatedConversationIdentifier());
         })->each(function ($message) {
             $message = $this->middleware->applyMiddleware('received', $message);

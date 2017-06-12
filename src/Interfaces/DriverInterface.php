@@ -24,11 +24,6 @@ interface DriverInterface
     /**
      * @return bool
      */
-    public function isBot();
-
-    /**
-     * @return bool
-     */
     public function isConfigured();
 
     /**

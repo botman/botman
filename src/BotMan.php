@@ -162,19 +162,23 @@ class BotMan
     }
 
     /**
+     * Retrieve the chat message that are sent from bots.
+     *
+     * @return array
+     */
+    public function getBotMessages()
+    {
+        return Collection::make($this->getDriver()->getMessages())->filter(function (IncomingMessage $message) {
+            return $message->isFromBot();
+        })->toArray();
+    }
+
+    /**
      * @return Answer
      */
     public function getConversationAnswer()
     {
         return $this->getDriver()->getConversationAnswer($this->message);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBot()
-    {
-        return $this->getDriver()->isBot();
     }
 
     /**
@@ -334,11 +338,9 @@ class BotMan
 
         $this->fireDriverEvents();
 
-        if (! $this->isBot()) {
-            $this->loadActiveConversation();
-            if ($this->loadedConversation) {
-                return;
-            }
+        $this->loadActiveConversation();
+        if ($this->loadedConversation) {
+            return;
         }
 
         $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver());
@@ -368,7 +370,7 @@ class BotMan
 
             call_user_func_array($callback, $parameters);
         }
-        if (empty($matchingMessages) && ! $this->isBot() && ! is_null($this->fallbackMessage) && $this->loadedConversation === false) {
+        if (empty($matchingMessages) && empty($this->getBotMessages()) && ! is_null($this->fallbackMessage)) {
             $this->message = $this->getMessages()[0];
 
             if (! $this->fallbackMessage instanceof Closure) {

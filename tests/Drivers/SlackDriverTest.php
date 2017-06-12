@@ -235,7 +235,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertFalse($driver->isBot());
+        $messages = $driver->getMessages();
+        $this->assertFalse($messages[0]->isFromBot());
 
         $driver = $this->getDriver([
             'event' => [
@@ -244,7 +245,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'text' => 'Hi Julia',
             ],
         ]);
-        $this->assertTrue($driver->isBot());
+        $messages = $driver->getMessages();
+        $this->assertTrue($messages[0]->isFromBot());
     }
 
     /** @test */
@@ -347,7 +349,8 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
         ]);
         $driver = new SlackDriver($request, [], new Curl());
 
-        $this->assertFalse($driver->isBot());
+        $messages = $driver->getMessages();
+        $this->assertFalse($messages[0]->isFromBot());
     }
 
     /** @test */

@@ -70,14 +70,16 @@ class SlackRTMDriverTest extends PHPUnit_Framework_TestCase
             'user' => 'U0X12345',
             'text' => 'Hi Julia',
         ]);
-        $this->assertFalse($driver->isBot());
+        $messages = $driver->getMessages();
+        $this->assertFalse($messages[0]->isFromBot());
 
         $driver = $this->getDriver([
             'user' => 'U0X12345',
             'bot_id' => 'foo',
             'text' => 'Hi Julia',
         ]);
-        $this->assertTrue($driver->isBot());
+        $messages = $driver->getMessages();
+        $this->assertTrue($messages[0]->isFromBot());
     }
 
     /** @test */

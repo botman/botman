@@ -79,7 +79,7 @@ class FakeDriver implements DriverInterface, VerifiesService
         return $this->messages;
     }
 
-    public function isBot()
+    protected function isBot()
     {
         return $this->isBot;
     }

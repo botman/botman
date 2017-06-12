@@ -121,7 +121,7 @@ class SlackDriver extends HttpDriver implements VerifiesService
     /**
      * @return bool
      */
-    public function isBot()
+    protected function isBot()
     {
         return $this->event->has('bot_id');
     }
