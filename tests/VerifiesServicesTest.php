@@ -2,11 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
-use Mockery as m;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use PHPUnit_Framework_TestCase;
-use BotMan\BotMan\Traits\VerifiesServices;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class VerifiesServicesTest.
@@ -14,30 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 class VerifiesServicesTest extends PHPUnit_Framework_TestCase
 {
     /** @test */
-    public function it_can_verify_facebook()
+    public function it_can_verify_drivers()
     {
-        $data = [
-            'hub_challenge' => 'facebook_hub_challenge',
-            'hub_mode' => 'subscribe',
-            'hub_verify_token' => 'facebook_token',
-        ];
-        $request = m::mock(Request::class.'[getContent]');
-        $request->shouldReceive('getContent')
-            ->once()
-            ->andReturn(json_encode($data));
+        $this->assertFalse(isset($_SERVER['driver_verified']));
 
-        $verification = new VerifyServices();
-        $verification->request = new Request($data);
-        $response = $verification->verifyServices('facebook_token');
+        DriverManager::loadDriver(FakeDriver::class);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertSame('facebook_hub_challenge', $response->getContent());
+        $botman = BotManFactory::create([]);
+        $botman->listen();
+
+        $this->assertTrue($_SERVER['driver_verified']);
     }
-}
-
-class VerifyServices
-{
-    use VerifiesServices;
-
-    public $request;
 }

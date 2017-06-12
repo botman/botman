@@ -2,10 +2,12 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
+use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
@@ -26,7 +28,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
  *  }
  * </code>
  */
-class FakeDriver implements DriverInterface
+class FakeDriver implements DriverInterface, VerifiesService
 {
     /** @var bool */
     public $matchesRequest = true;
@@ -163,6 +165,12 @@ class FakeDriver implements DriverInterface
      */
     public function serializesCallbacks()
     {
+        return true;
+    }
+
+    public function verifyRequest(Request $request)
+    {
+        $_SERVER['driver_verified'] = true;
         return true;
     }
 }
