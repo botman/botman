@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Moved each driver into their own repository.
 - Facebook - Added support to send file and audio attachments.
 - Telegram - Added support to send file, audio and location attachments.
 - Added Kik driver.
