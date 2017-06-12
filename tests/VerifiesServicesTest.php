@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
+use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Class VerifiesServicesTest.

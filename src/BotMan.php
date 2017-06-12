@@ -9,21 +9,20 @@ use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Matcher;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Traits\ProvidesStorage;
-use BotMan\BotMan\Traits\VerifiesServices;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\CacheInterface;
 use BotMan\BotMan\Messages\Attachments\File;
 use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Interfaces\VerifiesService;
+use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
+use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Commands\ConversationManager;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
@@ -381,7 +380,6 @@ class BotMan
             call_user_func($this->fallbackMessage, $this);
         }
     }
-
 
     /**
      * Verify service webhook URLs.
