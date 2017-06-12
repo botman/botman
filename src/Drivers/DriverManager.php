@@ -7,7 +7,9 @@ use BotMan\BotMan\Drivers\Kik\KikDriver;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
 
 class DriverManager
@@ -121,6 +123,23 @@ class DriverManager
     {
         foreach (array_keys(self::$drivers, $driver) as $key) {
             unset(self::$drivers[$key]);
+        }
+    }
+
+    /**
+     * Verify service webhook URLs.
+     *
+     * @param array $config
+     * @param Request|null $request
+     * @return Response|null
+     */
+    public static function verifyServices(array $config, Request $request = null)
+    {
+        $request = (isset($request)) ? $request : Request::createFromGlobals();
+        foreach (self::getConfiguredDrivers($config) as $driver) {
+            if ($driver instanceof VerifiesService) {
+                return $driver->verifyRequest($request);
+            }
         }
     }
 

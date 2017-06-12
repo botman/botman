@@ -14,12 +14,10 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\CacheInterface;
 use BotMan\BotMan\Messages\Attachments\File;
 use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
 use Symfony\Component\HttpFoundation\Response;
@@ -388,12 +386,7 @@ class BotMan
      */
     protected function verifyServices()
     {
-        $request = (isset($this->request)) ? $this->request : Request::createFromGlobals();
-        foreach (DriverManager::getConfiguredDrivers($this->config) as $driver) {
-            if ($driver instanceof VerifiesService) {
-                return $driver->verifyRequest($request);
-            }
-        }
+        return DriverManager::verifyServices($this->config);
     }
 
     /**
