@@ -1,4 +1,5 @@
-# BotMan 🤖 Create messaging bots in PHP with ease
+<p align="center"><img height="188" width="198" src="https://botman.io/img/botman.png"></p>
+<h1 align="center">BotMan</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mpociot/botman.svg?style=flat-square)](https://packagist.org/packages/mpociot/botman)
 [![Build Status](https://travis-ci.org/botman/botman.svg?branch=master)](https://travis-ci.org/botman/botman)
