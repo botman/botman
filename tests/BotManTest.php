@@ -449,6 +449,26 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_allows_multiline_expressions()
+    {
+        $called = false;
+
+        $botman = $this->getBot([
+            'event' => [
+                'user' => 'U0X12345',
+                'text' => 'Start new order by link:'.PHP_EOL.'/new_order_{hash}',
+            ],
+        ]);
+
+        $botman->hears('.*/new_order_(.*)', function ($bot, $name) use (&$called) {
+            $called = true;
+            $this->assertSame('{hash}', $name);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_allows_complex_regular_expressions()
     {
         $called = false;
