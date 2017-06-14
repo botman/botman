@@ -247,7 +247,7 @@ class SlackDriver extends HttpDriver implements VerifiesService
     {
         $parameters = array_merge_recursive([
             'token' => $this->payload->get('token'),
-            'channel' => $matchingMessage->getSender() === '' ? $matchingMessage->getRecipient() : $matchingMessage->getSender(),
+            'channel' => $matchingMessage->getRecipient() === '' ? $matchingMessage->getSender() : $matchingMessage->getRecipient(),
         ], $additionalParameters);
         /*
          * If we send a Question with buttons, ignore

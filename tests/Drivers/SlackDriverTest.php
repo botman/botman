@@ -440,7 +440,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new IncomingMessage('', '', 'general');
+        $message = new IncomingMessage('', 'U0X12345', 'general');
         $driver->sendPayload($driver->buildServicePayload('Test', $message));
     }
 
@@ -471,7 +471,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new IncomingMessage('', '', 'general');
+        $message = new IncomingMessage('', 'U0X12345', 'general');
         $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test'), $message));
     }
 
@@ -503,7 +503,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
             'slack_token' => 'Foo',
         ], $html);
 
-        $message = new IncomingMessage('', '', 'general');
+        $message = new IncomingMessage('', 'U0X12345', 'general');
         $driver->sendPayload($driver->buildServicePayload(\BotMan\BotMan\Messages\Outgoing\OutgoingMessage::create('Test', Image::url('http://image.url/foo.png')), $message));
     }
 
