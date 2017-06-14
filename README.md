@@ -8,6 +8,7 @@
 [![Packagist](https://img.shields.io/packagist/l/mpociot/botman.svg)]()
 [![StyleCI](https://styleci.io/repos/65017574/shield?branch=master)](https://styleci.io/repos/65017574)
 [![Slack](https://rauchg-slackin-jtdkltstsj.now.sh/badge.svg)](https://rauchg-slackin-jtdkltstsj.now.sh)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/mpociot/botman.svg?style=flat-square)](https://packagist.org/packages/mpociot/botman)
 
 ## About BotMan
 
