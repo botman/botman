@@ -3,6 +3,7 @@
 namespace Mpociot\BotMan\Tests;
 
 use Redis;
+use RedisException;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Collection;
 use Mpociot\BotMan\Storages\Drivers\RedisStorage;
@@ -21,10 +22,38 @@ class RedisStorageTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
+
         $redis = new Redis();
         $redis->connect('127.0.0.1');
-        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
         $redis->eval($script);
+        $redis->close();
+
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6380);
+        $redis->auth('secret');
+        $redis->eval($script);
+        $redis->close();
+    }
+
+    /** @test */
+    public function valid_auth()
+    {
+        $storage = new RedisStorage('127.0.0.1', 6380, 'secret');
+        $key = 'key';
+        $data = ['foo' => 1, 'bar' => new \DateTime()];
+        $storage->save($data, $key);
+        self::assertEquals(Collection::make($data), $storage->get($key));
+    }
+
+    /** @test */
+    public function invalid_auth()
+    {
+        static::setExpectedException(RedisException::class);
+        $storage = new RedisStorage('127.0.0.1', 6380, 'invalid');
+        $key = 'key';
+        $data = ['foo' => 1, 'bar' => new \DateTime()];
+        $storage->save($data, $key);
     }
 
     /** @test */

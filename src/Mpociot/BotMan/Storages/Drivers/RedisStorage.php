@@ -17,19 +17,22 @@ class RedisStorage implements StorageInterface
     private $redis;
     private $host;
     private $port;
+    private $auth;
 
     /**
      * RedisCache constructor.
      * @param $host
      * @param $port
+     * @param $auth
      */
-    public function __construct($host = '127.0.0.1', $port = 6379)
+    public function __construct($host = '127.0.0.1', $port = 6379, $auth = null)
     {
         if (! class_exists(Redis::class)) {
             throw new RuntimeException('phpredis extension is required for RedisStorage');
         }
         $this->host = $host;
         $this->port = $port;
+        $this->auth = $auth;
         $this->connect();
     }
 
@@ -99,6 +102,10 @@ class RedisStorage implements StorageInterface
     {
         $this->redis = new Redis();
         $this->redis->connect($this->host, $this->port);
+        if ($this->auth !== null) {
+            $this->redis->auth($this->auth);
+        }
+
         if (function_exists('igbinary_serialize') && defined('Redis::SERIALIZER_IGBINARY')) {
             $this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
         } else {
