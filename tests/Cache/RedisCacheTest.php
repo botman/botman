@@ -22,10 +22,18 @@ class RedisCacheTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
+
         $redis = new Redis();
         $redis->connect('127.0.0.1');
-        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
         $redis->eval($script);
+        $redis->close();
+
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6380);
+        $redis->auth('secret');
+        $redis->eval($script);
+        $redis->close();
     }
 
     /** @test */
