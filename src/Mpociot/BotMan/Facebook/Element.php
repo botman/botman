@@ -83,12 +83,12 @@ class Element implements JsonSerializable
     }
 
     /**
-     * @param ElementButton $button
+     * @param array|ElementButton $button
      * @return $this
      */
-    public function addButton(ElementButton $button)
+    public function addButton($button)
     {
-        $this->buttons[] = $button->toArray();
+        $this->buttons[] = $button instanceof ElementButton ? $button->toArray() : $button;
 
         return $this;
     }
@@ -101,9 +101,7 @@ class Element implements JsonSerializable
     {
         if (isset($buttons) && is_array($buttons)) {
             foreach ($buttons as $button) {
-                if ($button instanceof ElementButton) {
-                    $this->buttons[] = $button->toArray();
-                }
+                $this->buttons[] = $button instanceof ElementButton ? $button->toArray() : $button;
             }
         }
 
