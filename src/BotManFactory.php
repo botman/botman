@@ -3,16 +3,13 @@
 namespace BotMan\BotMan;
 
 use React\Socket\Server;
-use Slack\RealTimeClient;
 use BotMan\BotMan\Http\Curl;
-use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Interfaces\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\StorageInterface;
-use BotMan\BotMan\Drivers\Slack\SlackRTMDriver;
 use BotMan\BotMan\Storages\Drivers\FileStorage;
 
 class BotManFactory
@@ -140,65 +137,5 @@ class BotManFactory
             'content' => $request->getContent(),
         ]));
         fclose($client);
-    }
-
-    /**
-     * Create a new BotMan instance.
-     *
-     * @param array $config
-     * @param LoopInterface $loop
-     * @param CacheInterface $cache
-     * @param StorageInterface $storageDriver
-     * @return \BotMan\BotMan\BotMan
-     */
-    public static function createForRTM(
-        array $config,
-        LoopInterface $loop,
-        CacheInterface $cache = null,
-        StorageInterface $storageDriver = null
-    ) {
-        $client = new RealTimeClient($loop);
-
-        return self::createUsingRTM($config, $client, $cache, $storageDriver);
-    }
-
-    /**
-     * Create a new BotMan instance.
-     *
-     * @param array $config
-     * @param RealTimeClient $client
-     * @param CacheInterface $cache
-     * @param StorageInterface $storageDriver
-     * @return BotMan
-     * @internal param LoopInterface $loop
-     */
-    public static function createUsingRTM(
-        array $config,
-        RealTimeClient $client,
-        CacheInterface $cache = null,
-        StorageInterface $storageDriver = null
-    ) {
-        if (empty($cache)) {
-            $cache = new ArrayCache();
-        }
-
-        if (empty($storageDriver)) {
-            $storageDriver = new FileStorage(__DIR__);
-        }
-
-        $client->setToken(Collection::make($config)->get('slack_token'));
-
-        $driver = new SlackRTMDriver($config, $client);
-        $botman = new BotMan($cache, $driver, $config, $storageDriver);
-
-        $client->on('_internal_message', function () use ($botman) {
-            $botman->listen();
-        });
-
-        $client->connect()->then(function () use ($driver) {
-            $driver->connected();
-        });
-
-        return $botman;
     }
 }
