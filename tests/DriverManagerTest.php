@@ -3,10 +3,10 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\Http\Curl;
-use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,6 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
         DriverManager::loadDriver(TestDriver::class);
         $this->assertSame($count + 1, count(DriverManager::getAvailableDrivers()));
     }
-
 
     /** @test */
     public function it_loads_drivers_extensions()
