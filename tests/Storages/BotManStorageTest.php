@@ -11,7 +11,6 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class BotManStorageTest extends PHPUnit_Framework_TestCase
 {
-
     protected function getBot()
     {
         $botman = BotManFactory::create([]);
