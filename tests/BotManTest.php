@@ -178,7 +178,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'sender' => 'UX12345',
             'recipient' => 'general',
             'message' => 'Hello again',
-            'is_from_bot' => true
+            'is_from_bot' => true,
         ]);
 
         $botman->fallback(function ($bot) use (&$fallbackCalled) {
@@ -670,7 +670,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'sender' => 'UX12345',
             'recipient' => 'general',
             'message' => 'Hello again',
-            'is_from_bot' => true
+            'is_from_bot' => true,
         ]);
         $botman->listen();
 
