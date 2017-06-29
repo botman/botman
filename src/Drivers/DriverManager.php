@@ -93,7 +93,7 @@ class DriverManager
         $drivers = [];
 
         foreach (self::getAvailableDrivers() as $driver) {
-            if ($driver instanceof HttpDriver) {
+            if (is_subclass_of($driver , HttpDriver::class)) {
                 $driver = new $driver(Request::createFromGlobals(), $config, new Curl());
                 if ($driver->isConfigured()) {
                     $drivers[] = $driver;
