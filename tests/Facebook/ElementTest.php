@@ -116,5 +116,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame('element_share', Arr::get($template->toArray(), 'buttons.0.type'));
+        $this->assertSame('postback', Arr::get($template->toArray(), 'buttons.1.type'));
+        $this->assertSame('button3', Arr::get($template->toArray(), 'buttons.2.title'));
     }
 }
