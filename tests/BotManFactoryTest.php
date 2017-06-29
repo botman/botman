@@ -13,4 +13,18 @@ class BotManFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(BotMan::class, BotManFactory::create([]));
     }
+
+    /** @test */
+    public function it_can_be_extended()
+    {
+        BotManFactory::extend('createCustomBot', function(){
+            return 'foo';
+        });
+        $this->assertSame('foo', BotManFactory::createCustomBot());
+
+        BotManFactory::extend('createCustomBotWithArgs', function($arg1, $arg2){
+            return $arg1.' '.$arg2;
+        });
+        $this->assertSame('foo bar', BotManFactory::createCustomBotWithArgs('foo', 'bar'));
+    }
 }

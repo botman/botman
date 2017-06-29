@@ -125,4 +125,9 @@ class TestDriver implements DriverInterface
     {
         return false;
     }
+
+    public static function loadExtension()
+    {
+        $_SERVER['loadedTestDriver'] = true;
+    }
 }

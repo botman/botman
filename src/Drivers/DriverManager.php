@@ -7,6 +7,7 @@ use BotMan\BotMan\Drivers\Kik\KikDriver;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
@@ -110,6 +111,9 @@ class DriverManager
     public static function loadDriver($driver)
     {
         array_unshift(self::$drivers, $driver);
+        if (method_exists($driver, 'loadExtension')) {
+            call_user_func([$driver, 'loadExtension']);
+        }
     }
 
     /**

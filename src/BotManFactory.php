@@ -17,6 +17,31 @@ use BotMan\BotMan\Storages\Drivers\FileStorage;
 
 class BotManFactory
 {
+    private static $extensions = [];
+
+    /**
+     * @param $methodName
+     * @param $callable
+     */
+    public static function extend($methodName, $callable)
+    {
+        self::$extensions[$methodName] = $callable;
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        try {
+            return call_user_func_array(self::$extensions[$name], $arguments);
+        } catch (\Exception $e) {
+            throw new \BadMethodCallException("Method [$name] does not exist.");
+        }
+    }
+
     /**
      * Create a new BotMan instance.
      *
