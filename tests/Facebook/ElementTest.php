@@ -90,7 +90,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $template = new Element('Here are some buttons');
 
         $template->addButton([
-            'type' => 'element_share'
+            'type' => 'element_share',
         ]);
 
         $this->assertSame('element_share', Arr::get($template->toArray(), 'buttons.0.type'));
@@ -105,14 +105,14 @@ class ElementTest extends PHPUnit_Framework_TestCase
 
         $template->addButtons([
             [
-                'type' => 'element_share'
+                'type' => 'element_share',
             ],
             [
-                'type'    => 'postback',
-                'title'   => 'Element 2',
-                'payload' => 'ELEMENT_2'
+                'type' => 'postback',
+                'title' => 'Element 2',
+                'payload' => 'ELEMENT_2',
             ],
-            ElementButton::create('button3')
+            ElementButton::create('button3'),
         ]);
 
         $this->assertSame('element_share', Arr::get($template->toArray(), 'buttons.0.type'));
