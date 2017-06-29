@@ -357,7 +357,7 @@ class BotMan
                     $this->message = $message;
                     $heardMessage = true;
                     $parameterNames = $this->compileParameterNames($pattern);
-                    $matches = array_slice($matches, 1);
+                    $matches = array_slice($matches, count($matches) - 1);
                     if (count($parameterNames) === count($matches)) {
                         $parameters = array_combine($parameterNames, $matches);
                     } else {
