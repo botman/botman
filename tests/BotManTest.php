@@ -7,6 +7,7 @@ use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
+use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
@@ -14,7 +15,6 @@ use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Tests\Fixtures\TestClass;
-use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
@@ -52,12 +52,20 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->cache = new ArrayCache();
     }
 
-    protected function getBot($responseData)
+    protected function getBot($data)
     {
-        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
-        $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
+        $botman = BotManFactory::create([], $this->cache);
 
-        return BotManFactory::create([], $this->cache, $request);
+        $data = Collection::make($data);
+        /** @var FakeDriver $driver */
+        $driver = m::mock(FakeDriver::class)->makePartial();
+
+        $driver->isBot = $data->get('is_from_bot', false);
+        $driver->messages = [new IncomingMessage($data->get('message'), $data->get('sender'), $data->get('recipient'))];
+
+        $botman->setDriver($driver);
+
+        return $botman;
     }
 
     protected function getBotWithInteractiveData($payload)
@@ -77,10 +85,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'bar',
-            ],
+            'user' => 'U0X12345',
+            'text' => 'bar',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called) {
@@ -124,12 +130,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $fallbackCalled = false;
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -147,12 +150,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hello again',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hello again',
         ]);
 
         $botman->fallback(function ($bot) use (&$fallbackCalled) {
@@ -175,11 +175,10 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $fallbackCalled = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'bar',
-                'bot_id' => 'i_am_a_bot',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hello again',
+            'is_from_bot' => true
         ]);
 
         $botman->fallback(function ($bot) use (&$fallbackCalled) {
@@ -201,10 +200,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
 
         $botman->hears('Foo', function ($bot) use (&$called) {
@@ -262,10 +260,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_hears_matching_commands_without_closures()
     {
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
         TestClass::$called = false;
         $botman->hears('foo', TestClass::class.'@foo');
@@ -277,10 +274,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_uses_invoke_method()
     {
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
         TestClass::$called = false;
         $botman->hears('foo', TestClass::class);
@@ -291,10 +287,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Invalid hears action: [stdClass]');
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
         $botman->hears('foo', \stdClass::class);
         $botman->listen();
@@ -343,32 +338,28 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'C12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        })->driver(SlackDriver::class);
+        })->driver(FakeDriver::class);
         $botman->listen();
         $this->assertTrue($called);
 
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'C12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-        })->driver([TestAdditionalDriver::class, SlackDriver::DRIVER_NAME]);
+        })->driver([TestAdditionalDriver::class, FakeDriver::class]);
         $botman->listen();
         $this->assertTrue($called);
     }
@@ -379,10 +370,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called) {
@@ -399,15 +389,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called) {
             $called = true;
-            $this->assertSame('U0X12345', $bot->getMessage()->getSender());
+            $this->assertSame('UX12345', $bot->getMessage()->getSender());
         });
         $botman->listen();
         $this->assertTrue($called);
@@ -419,10 +408,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('hi {name}', function ($bot, $name) use (&$called) {
@@ -434,10 +422,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => '/Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => '/hi Julia',
         ]);
 
         $botman->hears('/hi {name}', function ($bot, $name) use (&$called) {
@@ -454,10 +441,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'Start new order by link:'.PHP_EOL.'/new_order_{hash}',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Start new order by link:'.PHP_EOL.'/new_order_{hash}',
         ]);
 
         $botman->hears('.*/new_order_(.*)', function ($bot, $name) use (&$called) {
@@ -474,10 +460,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'deploy site to dev',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'deploy site to dev',
         ]);
 
         $botman->hears('deploy\s+([a-zA-Z]*)(?:\s*to\s*)?([a-zA-Z]*)?', function ($bot, $project, $env) use (&$called) {
@@ -495,10 +480,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'Какая погода в Минске',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Какая погода в Минске',
         ]);
 
         $botman->hears('какая\s+погода\s+в\s+([а-яa-z0-9]+)\s*', function ($bot, $city) use (&$called) {
@@ -515,10 +499,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'look at order #123456789',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'look at order #123456789',
         ]);
 
         $botman->hears('.*?#(\d{8,9})\b.*', function ($bot, $orderId) use (&$called) {
@@ -535,10 +518,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'I am Gandalf the grey',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'I am Gandalf the grey',
         ]);
 
         $botman->hears('I am {name} the {attribute}', function ($bot, $name, $attribute) use (&$called) {
@@ -556,10 +538,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'I am Gandalf',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'I am Gandalf',
         ]);
 
         $botman->hears('I am {name}', function ($bot, $name) use (&$called) {
@@ -575,12 +556,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_store_conversations()
     {
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'foo',
         ]);
 
         $botman->hears('foo', function () {
@@ -605,12 +583,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_start_conversations()
     {
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-            ],
-            'text' => 'foo',
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'foo',
         ]);
 
         $botman->hears('foo', function () {
@@ -634,12 +609,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -657,12 +629,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hello again',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hello again',
         ]);
         $botman->listen();
 
@@ -678,12 +647,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -701,13 +667,10 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'bot_id' => '1234',
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hello again',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hello again',
+            'is_from_bot' => true
         ]);
         $botman->listen();
 
@@ -721,12 +684,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('called conversation');
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -743,12 +703,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hello again',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hello again',
         ]);
         $botman->listen();
     }
@@ -760,12 +717,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['called_foo'] = false;
         $GLOBALS['called_bar'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -795,12 +749,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'token_one',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'token_one',
         ]);
         $botman->listen();
 
@@ -817,12 +768,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -845,12 +793,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => '023',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => '023',
         ]);
         $botman->listen();
 
@@ -866,12 +811,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['answer'] = '';
         $GLOBALS['called'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function () {
@@ -894,12 +836,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'call me Heisenberg',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'call me Heisenberg',
         ]);
         $botman->listen();
 
@@ -911,16 +850,15 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_applies_received_middlewares()
     {
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'foo',
         ]);
         $botman->middleware->received(new TestMiddleware());
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
-                'driver_name' => 'Slack',
+                'driver_name' => 'Fake',
                 'test' => 'successful',
             ], $bot->getMessage()->getExtras());
         });
@@ -943,7 +881,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             $botman->hears('successful', function ($bot) use (&$called) {
                 $called = true;
                 $this->assertSame([
-                    'driver_name' => 'Slack',
+                    'driver_name' => 'Fake',
                     'test' => 'successful',
                 ], $bot->getMessage()->getExtras());
             });
@@ -987,10 +925,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $calledAdditional = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'bar',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'bar',
         ]);
 
         $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledTelegram) {
@@ -999,7 +936,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             });
         });
 
-        $botman->group(['driver' => SlackDriver::DRIVER_NAME], function ($botman) use (&$calledSlack) {
+        $botman->group(['driver' => FakeDriver::class], function ($botman) use (&$calledSlack) {
             $botman->hears('bar', function ($bot) use (&$calledSlack) {
                 $calledSlack = true;
             });
@@ -1016,14 +953,11 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called_one = false;
         $called_two = false;
-        $called_group = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'C12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'foo',
         ]);
 
         $botman->hears('foo', function ($bot) use (&$called_one) {
@@ -1048,11 +982,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called_group = false;
 
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'channel' => 'C12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'foo',
         ]);
 
         $botman->group(['recipient' => 'C12345'], function ($botman) use (&$called_one) {
@@ -1077,16 +1009,15 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_applies_multiple_middlewares()
     {
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'foo',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'foo',
         ]);
         $botman->middleware->received(new TestMiddleware(), new TestMiddleware());
 
         $botman->hears('foo', function ($bot) {
             $this->assertSame([
-                'driver_name' => 'Slack',
+                'driver_name' => 'Fake',
                 'test' => 'successful',
             ], $bot->getMessage()->getExtras());
         });
@@ -1099,10 +1030,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called_one = false;
         $called_two = false;
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'open the pod bay doors',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'open the pod bay doors',
         ]);
         $botman->middleware->heard(new TestMatchMiddleware());
 
@@ -1126,10 +1056,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $called_one = false;
         $called_two = false;
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'open the pod bay doors',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'open the pod bay doors',
         ]);
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
@@ -1151,10 +1080,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called = false;
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'open the pod bay doors',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'open the pod bay doors',
         ]);
         $botman->middleware->heard(new TestNoMatchMiddleware());
 
@@ -1209,12 +1137,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
         $mock->shouldReceive('loadFromName')
             ->once()
-            ->with('Slack', [])
+            ->with(FakeDriver::class, [])
             ->andReturn($driver);
 
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
-        $botman->say('foo', 'channel', SlackDriver::DRIVER_NAME);
+        $botman->say('foo', 'channel', FakeDriver::class);
     }
 
     /**
@@ -1316,11 +1244,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $botman = $this->getBot('');
 
-        $this->assertInstanceOf(NullDriver::class, $botman->getDriver());
-
-        $botman->loadDriver('Slack');
-
-        $this->assertInstanceOf(SlackDriver::class, $botman->getDriver());
+        $this->assertInstanceOf(FakeDriver::class, $botman->getDriver());
     }
 
     /** @test */
@@ -1348,12 +1272,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->setDriver($driver);
@@ -1406,12 +1327,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->setDriver($driver);
@@ -1451,10 +1369,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $called_one = false;
         $botman = $this->getBot([
-            'event' => [
-                'user' => 'U0X12345',
-                'text' => 'open the pod bay doors',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'open the pod bay doors',
         ]);
         $botman->middleware->heard(new TestMatchMiddleware());
         $botman->middleware->heard(new TestNoMatchMiddleware());
@@ -1471,30 +1388,12 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_skip_a_running_conversation()
     {
         $called = false;
-        $driver = m::mock(NullDriver::class)->makePartial();
-
-        $driver->shouldReceive('getMessages')
-            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
-
-        $driver->shouldReceive('buildServicePayload')
-            ->once()
-            ->withArgs(function ($message, $match, $arguments) {
-                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
-            });
-
-        $driver->shouldReceive('sendPayload')
-            ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
-
-        $botman->setDriver($driver);
 
         $botman->hears('Hi Julia', function ($bot) {
             $bot->startConversation(new TestConversation());
@@ -1506,12 +1405,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * This should get skipped!
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'skip_keyword',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'skip_keyword',
         ]);
 
         $botman->hears('skip_keyword', function ($bot) use (&$called) {
@@ -1530,12 +1426,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          */
         $called = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'repeat',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
         ]);
 
         $botman->hears('repeat', function ($bot) use (&$called) {
@@ -1566,12 +1459,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->setDriver($driver);
@@ -1586,12 +1476,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * This should get skipped!
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'fluent_skip_keyword',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'fluent_skip_keyword',
         ]);
 
         $botman->hears('fluent_skip_keyword', function ($bot) use (&$called) {
@@ -1610,12 +1497,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          */
         $called = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'repeat',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
         ]);
 
         $botman->hears('repeat', function ($bot) use (&$called) {
@@ -1646,12 +1530,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->setDriver($driver);
@@ -1666,12 +1547,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * This should get skipped!
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'fluent_stop_keyword',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'fluent_stop_keyword',
         ]);
 
         $botman->hears('fluent_stop_keyword', function ($bot) use (&$called) {
@@ -1690,12 +1568,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          */
         $called = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'repeat',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
         ]);
 
         $botman->hears('repeat', function ($bot) use (&$called) {
@@ -1726,12 +1601,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->setDriver($driver);
@@ -1746,12 +1618,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * This should get skipped!
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'stop_keyword',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'stop_keyword',
         ]);
 
         $botman->hears('stop_keyword', function ($bot) use (&$called) {
@@ -1770,12 +1639,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          */
         $called = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'repeat',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
         ]);
 
         $botman->hears('repeat', function ($bot) use (&$called) {
@@ -1794,12 +1660,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $GLOBALS['conversation'] = null;
         $GLOBALS['called'] = false;
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hi Julia',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
         ]);
 
         $botman->hears('Hi Julia', function ($bot) {
@@ -1814,12 +1677,9 @@ class BotManTest extends PHPUnit_Framework_TestCase
          * Now that the first message is saved, fake a reply
          */
         $botman = $this->getBot([
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Great!',
-            ],
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Great!',
         ]);
         $botman->listen();
 

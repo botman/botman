@@ -113,7 +113,7 @@ class FakeDriver implements DriverInterface, VerifiesService
 
     public function getName()
     {
-        return 'Fake Driver';
+        return 'Fake';
     }
 
     public function types(IncomingMessage $matchingMessage)

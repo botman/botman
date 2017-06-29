@@ -5,7 +5,6 @@ namespace BotMan\BotMan\Drivers;
 use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Drivers\Kik\KikDriver;
 use BotMan\BotMan\Interfaces\HttpInterface;
-use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +17,6 @@ class DriverManager
      * @var array
      */
     protected static $drivers = [
-        SlackDriver::class,
         KikDriver::class,
         HipChatDriver::class,
     ];

@@ -6,28 +6,23 @@ use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Storages\Storage;
-use BotMan\BotMan\Storages\BotManStorage;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class BotManStorageTest extends PHPUnit_Framework_TestCase
 {
-    /** @var BotManStorage */
-    protected $storage;
 
     protected function getBot()
     {
-        $data = [
-            'token' => 'foo',
-            'event' => [
-                'user' => 'UX12345',
-                'channel' => 'general',
-                'text' => 'Hello again',
-            ],
-        ];
+        $botman = BotManFactory::create([]);
 
-        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
-        $request->shouldReceive('getContent')->andReturn(json_encode($data));
+        /** @var FakeDriver $driver */
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->messages = [new IncomingMessage('Hello again', 'UX12345', 'general')];
 
-        return BotManFactory::create([], null, $request);
+        $botman->setDriver($driver);
+
+        return $botman;
     }
 
     public function tearDown()
@@ -77,6 +72,6 @@ class BotManStorageTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Storage::class, $storage);
         $this->assertSame('driver_', $storage->getPrefix());
-        $this->assertSame('Slack', $storage->getDefaultKey());
+        $this->assertSame('Fake', $storage->getDefaultKey());
     }
 }

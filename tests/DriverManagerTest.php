@@ -6,7 +6,6 @@ use BotMan\BotMan\Http\Curl;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Drivers\Slack\SlackDriver;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
@@ -58,7 +57,6 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_find_a_driver_by_name()
     {
         $this->assertInstanceOf(NullDriver::class, DriverManager::loadFromName('foo', []));
-        $this->assertInstanceOf(SlackDriver::class, DriverManager::loadFromName('Slack', []));
     }
 
     /**
@@ -69,9 +67,5 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_get_configured_drivers()
     {
         $this->assertCount(0, DriverManager::getConfiguredDrivers([]));
-
-        $this->assertCount(1, DriverManager::getConfiguredDrivers([
-            'slack_token' => 'foo',
-        ]));
     }
 }

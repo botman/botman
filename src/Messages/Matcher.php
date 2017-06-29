@@ -30,9 +30,9 @@ class Matcher
      */
     public function isMessageMatching(IncomingMessage $message, Answer $answer, Command $command, DriverInterface $driver, $middleware = [])
     {
-        return $this->isPatternValid($message, $answer, $command->getPattern(), $command->getMiddleware() + $middleware) &&
-            $this->isDriverValid($driver->getName(), $command->getDriver()) &&
-            $this->isRecipientValid($message->getRecipient(), $command->getRecipient());
+        return $this->isDriverValid($driver->getName(), $command->getDriver()) &&
+            $this->isRecipientValid($message->getRecipient(), $command->getRecipient()) &&
+            $this->isPatternValid($message, $answer, $command->getPattern(), $command->getMiddleware() + $middleware);
     }
 
     /**

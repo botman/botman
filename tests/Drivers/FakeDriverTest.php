@@ -53,7 +53,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver();
-        $this->assertSame('Fake Driver', $driver->getName());
+        $this->assertSame('Fake', $driver->getName());
     }
 
     /** @test */
