@@ -567,7 +567,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'sender' => 'UX12345',
                 'recipient' => 'general',
                 'message' => 'You are Gandalf a grey',
-            ])
+            ]),
         ];
 
         foreach ($botmans as $botman) {
@@ -598,7 +598,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
                 'sender' => 'UX12345',
                 'recipient' => 'general',
                 'message' => 'You are Gandalf',
-            ])
+            ]),
         ];
 
         foreach ($botmans as $botman) {
