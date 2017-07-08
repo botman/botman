@@ -553,6 +553,67 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_returns_regular_expression_combined_matches()
+    {
+        $called = false;
+
+        $botmans = [
+            $this->getBot([
+                'sender' => 'UX12345',
+                'recipient' => 'general',
+                'message' => 'I am Gandalf the grey',
+            ]),
+            $this->getBot([
+                'sender' => 'UX12345',
+                'recipient' => 'general',
+                'message' => 'You are Gandalf a grey',
+            ])
+        ];
+
+        foreach ($botmans as $botman) {
+            $botman->hears('(I am|You are) {name} (the|a) {attribute}', function ($bot, $name, $attribute) use (&$called) {
+                $called = true;
+
+                $this->assertSame('Gandalf', $name);
+                $this->assertSame('grey', $attribute);
+            });
+        }
+
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_the_combined_matches()
+    {
+        $called = false;
+
+        $botmans = [
+            $this->getBot([
+                'sender' => 'UX12345',
+                'recipient' => 'general',
+                'message' => 'I am Gandalf',
+            ]),
+            $this->getBot([
+                'sender' => 'UX12345',
+                'recipient' => 'general',
+                'message' => 'You are Gandalf',
+            ])
+        ];
+
+        foreach ($botmans as $botman) {
+            $botman->hears('(I am|You are) {name}', function ($bot, $name) use (&$called) {
+                $called = true;
+
+                $this->assertSame('Gandalf', $name);
+            });
+        }
+
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
     public function it_can_store_conversations()
     {
         $botman = $this->getBot([
