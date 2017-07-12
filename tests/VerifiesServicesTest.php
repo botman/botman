@@ -2,16 +2,16 @@
 
 namespace BotMan\BotMan\Tests;
 
-use BotMan\BotMan\Drivers\HttpDriver;
-use BotMan\BotMan\Interfaces\UserInterface;
-use BotMan\BotMan\Interfaces\VerifiesService;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * Class VerifiesServicesTest.
@@ -34,7 +34,6 @@ class VerifiesServicesTest extends PHPUnit_Framework_TestCase
 
 class DummyDriver extends HttpDriver implements VerifiesService
 {
-
     /**
      * Determine if the request is for this driver.
      *
@@ -70,7 +69,6 @@ class DummyDriver extends HttpDriver implements VerifiesService
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
-
     }
 
     /**
@@ -90,7 +88,6 @@ class DummyDriver extends HttpDriver implements VerifiesService
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-
     }
 
     /**
@@ -99,7 +96,6 @@ class DummyDriver extends HttpDriver implements VerifiesService
      */
     public function sendPayload($payload)
     {
-
     }
 
     /**
@@ -108,7 +104,6 @@ class DummyDriver extends HttpDriver implements VerifiesService
      */
     public function buildPayload(Request $request)
     {
-
     }
 
     /**
@@ -121,7 +116,6 @@ class DummyDriver extends HttpDriver implements VerifiesService
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-
     }
 
     public function verifyRequest(Request $request)

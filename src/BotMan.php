@@ -361,11 +361,22 @@ class BotMan
             $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
-            $matches = $matchingMessage->getMatches();
-            if (count($parameterNames) === count($matches)) {
-                $parameters = array_combine($parameterNames, $matches);
-            } else {
-                $parameters = $matches;
+            $parameters = $matchingMessage->getMatches();
+            if (count($parameterNames) !== count($parameters)) {
+                $parameters = array_merge(
+                    //First, all named parameters (eg. function ($a, $b, $c))
+                    array_filter(
+                        $parameters,
+                        'is_string',
+                        ARRAY_FILTER_USE_KEY
+                    ),
+                    //Then, all other unsorted parameters (regex non named results)
+                    array_filter(
+                        $parameters,
+                        'is_integer',
+                        ARRAY_FILTER_USE_KEY
+                    )
+                );
             }
 
             $this->matches = $parameters;
