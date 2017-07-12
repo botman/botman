@@ -81,4 +81,42 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertSame('button1', Arr::get($template->toArray(), 'buttons.0.title'));
         $this->assertSame('button2', Arr::get($template->toArray(), 'buttons.1.title'));
     }
+
+    /**
+     * @test
+     */
+    public function it_can_add_a_plain_array_button()
+    {
+        $template = new Element('Here are some buttons');
+
+        $template->addButton([
+            'type' => 'element_share',
+        ]);
+
+        $this->assertSame('element_share', Arr::get($template->toArray(), 'buttons.0.type'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_add_multiple_plain_array_buttons()
+    {
+        $template = new Element('Here are some buttons');
+
+        $template->addButtons([
+            [
+                'type' => 'element_share',
+            ],
+            [
+                'type' => 'postback',
+                'title' => 'Element 2',
+                'payload' => 'ELEMENT_2',
+            ],
+            ElementButton::create('button3'),
+        ]);
+
+        $this->assertSame('element_share', Arr::get($template->toArray(), 'buttons.0.type'));
+        $this->assertSame('postback', Arr::get($template->toArray(), 'buttons.1.type'));
+        $this->assertSame('button3', Arr::get($template->toArray(), 'buttons.2.title'));
+    }
 }
