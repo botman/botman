@@ -93,13 +93,24 @@ class Storage implements StorageInterface
      * @param  string $key
      * @return Collection
      */
-    public function get($key = null)
+    public function find($key = null)
     {
         if (is_null($key)) {
             $key = $this->defaultKey;
         }
 
         return $this->driver->get($this->getKey($key));
+    }
+
+    /**
+     * Retrieve an item from the default key object.
+     * 
+     * @param  string $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return $this->find()->get($key);
     }
 
     /**
