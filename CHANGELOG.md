@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.5.8]
+### Added
+- Fixes an issue with Facebook attachment detection. (#463)
+- Allow adding of plain array buttons on Element class (#448)
+- Added Authentication to RedisStorage (#439)
+
 ### Fixed
 - Fixes an issue with Facebook attachment detection. (#463)
 
