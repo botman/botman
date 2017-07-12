@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.5.8]
+### Fixed
+- Fixes an issue with Facebook attachment detection. (#463)
+
 ## [1.5.7]
 ### Added
 - Added support for Symfony 3.3
