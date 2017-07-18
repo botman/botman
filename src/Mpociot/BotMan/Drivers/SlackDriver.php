@@ -9,6 +9,7 @@ use Mpociot\BotMan\Question;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Mpociot\BotMan\Messages\Message as IncomingMessage;
 
@@ -124,7 +125,7 @@ class SlackDriver extends Driver
         if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
             $this->replyWithToken($message, $matchingMessage, $additionalParameters);
         } elseif ($this->isSlashCommand()) {
-            $this->respondText($message, $matchingMessage, $additionalParameters);
+            $this->respondJSON($message, $matchingMessage, $additionalParameters);
         } else {
             $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
@@ -167,7 +168,7 @@ class SlackDriver extends Driver
             $parameters['text'] = $this->format($message);
         }
 
-        Response::create(json_encode($parameters))->send();
+        JsonResponse::create($parameters)->send();
     }
 
     /**
