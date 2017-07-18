@@ -124,8 +124,6 @@ class SlackDriver extends Driver
     {
         if (! Collection::make($matchingMessage->getPayload())->has('team_domain')) {
             $this->replyWithToken($message, $matchingMessage, $additionalParameters);
-        } elseif ($this->isSlashCommand()) {
-            $this->respondJSON($message, $matchingMessage, $additionalParameters);
         } else {
             $this->respondJSON($message, $matchingMessage, $additionalParameters);
         }
