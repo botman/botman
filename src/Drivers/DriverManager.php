@@ -3,23 +3,18 @@
 namespace BotMan\BotMan\Drivers;
 
 use BotMan\BotMan\Http\Curl;
-use BotMan\BotMan\Drivers\Kik\KikDriver;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use BotMan\BotMan\Drivers\HipChat\HipChatDriver;
 
 class DriverManager
 {
     /**
      * @var array
      */
-    protected static $drivers = [
-        KikDriver::class,
-        HipChatDriver::class,
-    ];
+    protected static $drivers = [];
 
     /** @var array */
     protected $config;
