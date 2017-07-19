@@ -4,4 +4,7 @@ You can join the backers in supporting the BotMan development by [pledging on Pa
 Backers in the same pledge level appear in the order of pledge date.
 
 ### $50+
+- Andreas Kviby
+
+### $10+
 - Taylor Otwell
