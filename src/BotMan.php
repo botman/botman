@@ -96,6 +96,9 @@ class BotMan
     protected $loadedConversation = false;
 
     /** @var bool */
+    protected $firedDriverEvents = false;
+
+    /** @var bool */
     protected $runsOnSocket = false;
 
     /**
@@ -320,6 +323,8 @@ class BotMan
     {
         $driverEvent = $this->getDriver()->hasMatchingEvent();
         if ($driverEvent instanceof DriverEventInterface) {
+            $this->firedDriverEvents = true;
+
             Collection::make($this->events)->filter(function ($event) use ($driverEvent) {
                 return $driverEvent->getName() === $event['name'];
             })->each(function ($event) use ($driverEvent) {
@@ -346,11 +351,15 @@ class BotMan
 
         $this->fireDriverEvents();
 
-        $this->loadActiveConversation();
+        if ($this->firedDriverEvents === false) {
+            $this->loadActiveConversation();
 
-        if ($this->loadedConversation === false) {
-            $this->callMatchingMessages();
+            if ($this->loadedConversation === false) {
+                $this->callMatchingMessages();
+            }
         }
+
+        $this->firedDriverEvents = false;
     }
 
     /**
