@@ -323,6 +323,14 @@ class BotMan
             Collection::make($this->events)->filter(function ($event) use ($driverEvent) {
                 return $driverEvent->getName() === $event['name'];
             })->each(function ($event) use ($driverEvent) {
+                /**
+                 * Load the message, so driver events can reply.
+                 */
+                $messages = $this->getDriver()->getMessages();
+                if (isset($messages[0])) {
+                    $this->message = $messages[0];
+                }
+
                 call_user_func_array($event['closure'], [$driverEvent->getPayload(), $this]);
             });
         }
