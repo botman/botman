@@ -100,7 +100,6 @@ class FakeDriver implements DriverInterface, VerifiesService
     {
         $answer = Answer::create($message->getText())->setMessage($message);
         $answer->setInteractiveReply($this->isInteractiveMessageReply);
-        $this->isInteractiveMessageReply = false;
 
         return $answer;
     }

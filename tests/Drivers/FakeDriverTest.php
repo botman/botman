@@ -115,7 +115,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_resets_interactive_message_replies()
+    public function it_can_set_interactive_message_replies()
     {
         $message = new IncomingMessage('test', 'user', 'channel');
         $answer = $this->fakeDriver->getConversationAnswer($message);
@@ -124,7 +124,6 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         $this->fakeDriver->isInteractiveMessageReply = true;
         $answer = $this->fakeDriver->getConversationAnswer($message);
         static::assertTrue($answer->isInteractiveMessageReply());
-        static::assertFalse($this->fakeDriver->isInteractiveMessageReply);
     }
 
     /** @test */
