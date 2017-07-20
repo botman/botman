@@ -39,6 +39,8 @@ class FakeDriver implements DriverInterface, VerifiesService
     /** @var bool */
     public $isBot = false;
     /** @var bool */
+    public $isInteractiveMessageReply = false;
+    /** @var bool */
     public $isConfigured = true;
 
     /** @var array */
@@ -96,7 +98,11 @@ class FakeDriver implements DriverInterface, VerifiesService
 
     public function getConversationAnswer(IncomingMessage $message)
     {
-        return Answer::create($message->getText())->setMessage($message);
+        $answer = Answer::create($message->getText())->setMessage($message);
+        $answer->setInteractiveReply($this->isInteractiveMessageReply);
+        $this->isInteractiveMessageReply = false;
+
+        return $answer;
     }
 
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])

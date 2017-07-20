@@ -112,6 +112,21 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
         static::assertFalse($fakeDriver->isBotTyping());
     }
 
+    /**
+     * @test
+     */
+    public function it_resets_interactive_message_replies()
+    {
+        $message = new IncomingMessage('test', 'user', 'channel');
+        $answer = $this->fakeDriver->getConversationAnswer($message);
+        static::assertFalse($answer->isInteractiveMessageReply());
+
+        $this->fakeDriver->isInteractiveMessageReply = true;
+        $answer = $this->fakeDriver->getConversationAnswer($message);
+        static::assertTrue($answer->isInteractiveMessageReply());
+        static::assertFalse($this->fakeDriver->isInteractiveMessageReply);
+    }
+
     /** @test */
     public function it_can_identify_itself_as_bot()
     {
