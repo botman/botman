@@ -14,7 +14,6 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ExceptionTest extends PHPUnit_Framework_TestCase
 {
-
     /** @var ArrayCache */
     protected $cache;
 
@@ -48,14 +47,13 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_catches_exceptions()
     {
-
         $botman = $this->getBot([
             'sender' => 'UX12345',
             'recipient' => 'general',
             'message' => 'Hi Julia',
         ]);
 
-        $botman->exception(Exception::class, function(Exception $exception, $bot) {
+        $botman->exception(Exception::class, function (Exception $exception, $bot) {
             $this->assertInstanceOf(Exception::class, $exception);
             $this->assertInstanceOf(BotMan::class, $bot);
             $this->assertSame('Whoops', $exception->getMessage());

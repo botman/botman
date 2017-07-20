@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\Exceptions;
 
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
 use Illuminate\Support\Collection;
+use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
 
 class ExceptionHandler implements ExceptionHandlerInterface
 {
@@ -27,7 +27,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
     {
         $exceptions = $this->exceptions->where('exception', class_basename($e));
 
-        $exceptions->each(function($handler) use ($e, $bot) {
+        $exceptions->each(function ($handler) use ($e, $bot) {
             call_user_func_array($handler['closure'], [$e, $bot]);
         });
 
@@ -48,7 +48,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
     {
         $this->exceptions->push([
             'exception' => $exception,
-            'closure' => $closure
+            'closure' => $closure,
         ]);
     }
 }
