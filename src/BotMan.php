@@ -644,6 +644,7 @@ class BotMan
 
         return [
             'event',
+            'exceptionHandler',
             'driverName',
             'storage',
             'message',
@@ -653,13 +654,5 @@ class BotMan
             'config',
             'middleware',
         ];
-    }
-
-    /**
-     * @param ExceptionHandlerInterface $exceptionHandler
-     */
-    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
-    {
-        $this->exceptionHandler = $exceptionHandler;
     }
 }
