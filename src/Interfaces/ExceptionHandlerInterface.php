@@ -6,7 +6,6 @@ use BotMan\BotMan\BotMan;
 
 interface ExceptionHandlerInterface
 {
-
     /**
      * Handle an exception.
      *
@@ -24,5 +23,4 @@ interface ExceptionHandlerInterface
      * @return mixed
      */
     public function register(string $exception, callable $closure);
-
 }
