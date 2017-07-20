@@ -9,6 +9,7 @@ use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Matcher;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Traits\ProvidesStorage;
+use BotMan\BotMan\Traits\HandlesExceptions;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\CacheInterface;
@@ -18,6 +19,7 @@ use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Exceptions\ExceptionHandler;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +29,7 @@ use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
 use BotMan\BotMan\Messages\Conversations\InlineConversation;
 
 /**
@@ -35,7 +38,8 @@ use BotMan\BotMan\Messages\Conversations\InlineConversation;
 class BotMan
 {
     use ProvidesStorage,
-        HandlesConversations;
+        HandlesConversations,
+        HandlesExceptions;
 
     /** @var \Illuminate\Support\Collection */
     protected $event;
@@ -51,6 +55,9 @@ class BotMan
 
     /** @var array|null */
     protected $currentConversationData;
+
+    /** @var ExceptionHandlerInterface */
+    protected $exceptionHandler;
 
     /**
      * IncomingMessage service events.
@@ -118,6 +125,7 @@ class BotMan
         $this->matcher = new Matcher();
         $this->middleware = new MiddlewareManager($this);
         $this->conversationManager = new ConversationManager();
+        $this->exceptionHandler = new ExceptionHandler();
     }
 
     /**
@@ -347,19 +355,23 @@ class BotMan
      */
     public function listen()
     {
-        $this->verifyServices();
+        try {
+            $this->verifyServices();
 
-        $this->fireDriverEvents();
+            $this->fireDriverEvents();
 
-        if ($this->firedDriverEvents === false) {
-            $this->loadActiveConversation();
+            if ($this->firedDriverEvents === false) {
+                $this->loadActiveConversation();
 
-            if ($this->loadedConversation === false) {
-                $this->callMatchingMessages();
+                if ($this->loadedConversation === false) {
+                    $this->callMatchingMessages();
+                }
             }
-        }
 
-        $this->firedDriverEvents = false;
+            $this->firedDriverEvents = false;
+        } catch (\Throwable $e) {
+            $this->exceptionHandler->handleException($e, $this);
+        }
     }
 
     /**
@@ -641,5 +653,13 @@ class BotMan
             'config',
             'middleware',
         ];
+    }
+
+    /**
+     * @param ExceptionHandlerInterface $exceptionHandler
+     */
+    public function setExceptionHandler(ExceptionHandlerInterface $exceptionHandler)
+    {
+        $this->exceptionHandler = $exceptionHandler;
     }
 }
