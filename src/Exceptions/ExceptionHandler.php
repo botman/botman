@@ -25,7 +25,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function handleException($e, BotMan $bot)
     {
-        $exceptions = $this->exceptions->where('exception', class_basename($e));
+        $exceptions = $this->exceptions->where('exception', (new \ReflectionClass($e))->getShortName());
 
         $exceptions->each(function ($handler) use ($e, $bot) {
             call_user_func_array($handler['closure'], [$e, $bot]);
