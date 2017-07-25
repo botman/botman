@@ -16,7 +16,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         'name' => 'bobby',
         'deleted' => false,
         'color' => '9f69e7',
-        'profile' =>  [
+        'profile' => [
             'avatar_hash' => 'ge3b51ca72de',
             'current_status' => ':mountain_railway => riding a train',
             'first_name' => 'Bobby',
@@ -32,12 +32,12 @@ class UserTest extends PHPUnit_Framework_TestCase
             'image_32' => 'https:\/\/...',
             'image_48' => 'https:\/\/...',
             'image_72' => 'https:\/\/...',
-            'image_192' => 'https:\/\/...'
+            'image_192' => 'https:\/\/...',
         ],
         'is_admin' => true,
         'is_owner' => true,
         'updated' => 1490054400,
-        'has_2fa' => true
+        'has_2fa' => true,
     ];
 
     private function getTestUser()
