@@ -43,6 +43,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     private function getTestUser()
     {
         $user = new User($this->userId, $this->userFirstName, $this->userLastName, $this->userUsername, $this->userUserInfos);
+
         return $user;
     }
 
