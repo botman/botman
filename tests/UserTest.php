@@ -18,7 +18,8 @@ class UserTest extends PHPUnit_Framework_TestCase
         'color' => '9f69e7',
         'profile' => [
             'avatar_hash' => 'ge3b51ca72de',
-            'current_status' => ':mountain_railway => riding a train',
+            'status_emoji' => ':mountain_railway:',
+            'status_text' => 'riding a train',
             'first_name' => 'Bobby',
             'last_name' => 'Tables',
             'real_name' => 'Bobby Tables',
