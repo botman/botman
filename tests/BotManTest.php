@@ -1191,7 +1191,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman = $this->getBot([]);
         $botman->setDriver($driver);
 
-        $botman->ask('Some question', function($answer) {
+        $botman->ask('Some question', function ($answer) {
             $_SERVER['expectedAnswer'] = $answer->getText();
             $_SERVER['called'] = true;
         }, [], 'channel', $driver);
