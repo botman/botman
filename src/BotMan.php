@@ -473,10 +473,20 @@ class BotMan
      * @param string|Question $question
      * @param array|Closure $next
      * @param array $additionalParameters
+     * @param null|string $recipient
+     * @param null|string $driver
      * @return $this
      */
-    public function ask($question, $next, $additionalParameters = [])
+    public function ask($question, $next, $additionalParameters = [], $recipient = null, $driver = null)
     {
+        if (! is_null($recipient) && ! is_null($driver)) {
+            if (is_string($driver)) {
+                $driver = DriverManager::loadFromName($driver, $this->config);
+            }
+            $this->message = new IncomingMessage('', $recipient, '');
+            $this->setDriver($driver);
+        }
+
         $this->reply($question, $additionalParameters);
         $this->storeConversation(new InlineConversation, $next, $question, $additionalParameters);
 

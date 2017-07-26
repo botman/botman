@@ -1181,6 +1181,33 @@ class BotManTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function it_can_originate_inline_questions()
+    {
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $_SERVER['called'] = false;
+        $_SERVER['expectedAnswer'] = null;
+
+        $botman = $this->getBot([]);
+        $botman->setDriver($driver);
+
+        $botman->ask('Some question', function($answer) {
+            $_SERVER['expectedAnswer'] = $answer->getText();
+            $_SERVER['called'] = true;
+        }, [], 'channel', $driver);
+
+        $message = $botman->getDriver()->getBotMessages()[0]->getText();
+        $this->assertSame('Some question', $message);
+
+        $botman->getDriver()->messages[] = new IncomingMessage('My answer', 'channel', '');
+        $botman->listen();
+
+        $this->assertTrue($_SERVER['called']);
+        $this->assertSame('My answer', $_SERVER['expectedAnswer']);
+    }
+
+    /**
+     * @test
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
