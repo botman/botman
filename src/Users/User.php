@@ -18,19 +18,24 @@ class User implements UserInterface
     /** @var string */
     protected $username;
 
+    /** @var array */
+    protected $user_info;
+
     /**
      * User constructor.
      * @param $id
      * @param $first_name
      * @param $last_name
      * @param $username
+     * @param $user_info
      */
-    public function __construct($id = null, $first_name = null, $last_name = null, $username = null)
+    public function __construct($id = null, $first_name = null, $last_name = null, $username = null, $user_info = [])
     {
         $this->id = $id;
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->username = $username;
+        $this->user_info = (array) $user_info;
     }
 
     /**
@@ -63,5 +68,13 @@ class User implements UserInterface
     public function getLastName()
     {
         return $this->last_name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInfo()
+    {
+        return $this->user_info;
     }
 }
