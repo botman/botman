@@ -219,7 +219,7 @@ class SlackDriver extends Driver
                         [
                             'title' => $message->getImage(),
                             'image_url' => $message->getImage(),
-                        ]
+                        ],
                     ]
                 );
             }
