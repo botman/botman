@@ -12,6 +12,9 @@ class Image extends Attachment
     /** @var string */
     protected $url;
 
+    /** @var string */
+    protected $title;
+
     /**
      * Video constructor.
      * @param string $url
@@ -38,5 +41,24 @@ class Image extends Attachment
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @param $title
+     * @return Image
+     */
+    public function title($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

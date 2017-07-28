@@ -37,6 +37,14 @@ class MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_set_an_image_title()
+    {
+        $message = OutgoingMessage::create()->withAttachment(Image::url('foo')->title('title'));
+        $this->assertSame('foo', $message->getAttachment()->getUrl());
+        $this->assertSame('title', $message->getAttachment()->getTitle());
+    }
+
+    /** @test */
     public function it_can_set_a_videoimage()
     {
         $message = OutgoingMessage::create()->withAttachment(Video::url('foo'));
