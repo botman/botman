@@ -387,6 +387,9 @@ class BotMan
 
             $callback = $this->getCallable($callback);
 
+            // Set the message first, so it's available for middlewares
+            $this->message = $matchingMessage->getMessage();
+
             $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
