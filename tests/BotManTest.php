@@ -1145,7 +1145,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'recipient' => 'C12345',
             'message' => 'open the pod bay doors',
         ]);
-        $botman->middleware->heard(new TestNoMatchMiddleware());
+        $botman->middleware->matching(new TestNoMatchMiddleware());
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called) {
             $called = true;
@@ -1461,8 +1461,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             'recipient' => 'C12345',
             'message' => 'open the pod bay doors',
         ]);
-        $botman->middleware->heard(new TestMatchMiddleware());
-        $botman->middleware->heard(new TestNoMatchMiddleware());
+        $botman->middleware->matching(new TestMatchMiddleware());
+        $botman->middleware->matching(new TestNoMatchMiddleware());
 
         $botman->hears('open the {doorType} doors', function ($bot, $doorType) use (&$called_one) {
             $called_one = true;
