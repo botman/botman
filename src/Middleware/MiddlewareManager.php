@@ -12,6 +12,8 @@ class MiddlewareManager
     /** @var MiddlewareInterface[] */
     protected $received = [];
     /** @var MiddlewareInterface[] */
+    protected $matching = [];
+    /** @var MiddlewareInterface[] */
     protected $heard = [];
     /** @var MiddlewareInterface[] */
     protected $sending = [];
@@ -33,6 +35,20 @@ class MiddlewareManager
             return $this->received;
         }
         $this->received = array_merge($this->received, $middleware);
+
+        return $this;
+    }
+
+    /**
+     * @param MiddlewareInterface[] ...$middleware
+     * @return $this
+     */
+    public function matching(MiddlewareInterface ...$middleware)
+    {
+        if (empty($middleware)) {
+            return $this->matching;
+        }
+        $this->matching = array_merge($this->matching, $middleware);
 
         return $this;
     }
