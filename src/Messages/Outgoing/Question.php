@@ -3,10 +3,11 @@
 namespace BotMan\BotMan\Messages\Outgoing;
 
 use JsonSerializable;
+use BotMan\BotMan\Interfaces\WebAccess;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Interfaces\QuestionActionInterface;
 
-class Question implements JsonSerializable
+class Question implements JsonSerializable, WebAccess
 {
     /** @var array */
     protected $actions;
@@ -138,5 +139,22 @@ class Question implements JsonSerializable
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Get the instance as a web accessible array.
+     * This will be used within the WebDriver.
+     *
+     * @return array
+     */
+    public function toWebDriver()
+    {
+        return [
+            'type' => (count($this->actions) > 0) ? 'actions': 'text',
+            'text' => $this->text,
+            'fallback' => $this->fallback,
+            'callback_id' => $this->callback_id,
+            'actions' => $this->actions
+        ];
     }
 }
