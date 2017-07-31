@@ -63,6 +63,7 @@ class Location extends Attachment
     public function toWebDriver()
     {
         return [
+            'type' => 'location',
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
         ];

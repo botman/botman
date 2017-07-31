@@ -71,6 +71,7 @@ class Image extends Attachment
     public function toWebDriver()
     {
         return [
+            'type' => 'image',
             'url' => $this->url,
             'title' => $this->title,
         ];
