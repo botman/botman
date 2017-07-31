@@ -53,4 +53,18 @@ class Location extends Attachment
     {
         return $this->latitude;
     }
+
+    /**
+     * Get the instance as a web accessible array.
+     * This will be used within the WebDriver.
+     *
+     * @return array
+     */
+    public function toWebDriver()
+    {
+        return [
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+        ];
+    }
 }

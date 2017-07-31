@@ -61,4 +61,18 @@ class Image extends Attachment
     {
         return $this->title;
     }
+
+    /**
+     * Get the instance as a web accessible array.
+     * This will be used within the WebDriver.
+     *
+     * @return array
+     */
+    public function toWebDriver()
+    {
+        return [
+            'url' => $this->url,
+            'title' => $this->title,
+        ];
+    }
 }

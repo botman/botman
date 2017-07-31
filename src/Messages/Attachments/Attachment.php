@@ -2,7 +2,9 @@
 
 namespace BotMan\BotMan\Messages\Attachments;
 
-abstract class Attachment
+use BotMan\BotMan\Interfaces\WebAccess;
+
+abstract class Attachment implements WebAccess
 {
     /** @var mixed */
     protected $payload;
