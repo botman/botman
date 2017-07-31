@@ -52,7 +52,8 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_calls_global_matching_middleware()
     {
-        $this->botman->hears('Hello(.*)', function(){});
+        $this->botman->hears('Hello(.*)', function () {
+        });
         $this->botman->middleware->matching(new TestCustomMiddleware());
         $this->replyWithFakeMessage('Hello middleware');
         $this->assertEquals('Hello middleware-Hello(.*)', $_SERVER['middleware_matching']);
@@ -61,7 +62,8 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_calls_heard_middleware()
     {
-        $this->botman->hears('Foo', function(){});
+        $this->botman->hears('Foo', function () {
+        });
 
         $this->botman->middleware->heard(new TestCustomMiddleware());
         $this->replyWithFakeMessage('Hello middleware');

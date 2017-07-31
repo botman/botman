@@ -47,7 +47,8 @@ class TestCustomMiddleware implements MiddlewareInterface
      */
     public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
-        $_SERVER['middleware_matching'] = $message->getText() . '-' . $pattern;
+        $_SERVER['middleware_matching'] = $message->getText().'-'.$pattern;
+
         return $regexMatched;
     }
 
@@ -63,6 +64,7 @@ class TestCustomMiddleware implements MiddlewareInterface
     public function heard(IncomingMessage $message, $next, BotMan $bot)
     {
         $_SERVER['middleware_heard_count'] = isset($_SERVER['middleware_heard_count']) ? $_SERVER['middleware_heard_count'] + 1 : 1;
+
         return $next($message);
     }
 
