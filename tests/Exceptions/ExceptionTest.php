@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Tests\Fixtures\TestClass;
 use Exception;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
@@ -11,6 +10,7 @@ use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
+use BotMan\BotMan\Tests\Fixtures\TestClass;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ExceptionTest extends PHPUnit_Framework_TestCase
@@ -84,6 +84,6 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 
         $botman->listen();
 
-	    $this->assertTrue(TestClass::$called);
+        $this->assertTrue(TestClass::$called);
     }
 }
