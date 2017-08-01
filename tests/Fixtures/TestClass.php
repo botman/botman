@@ -20,6 +20,10 @@ class TestClass
         self::$called = true;
     }
 
+    public function exceptionHandler($exception, $bot) {
+	    self::$called = true;
+    }
+
     public function __invoke(BotMan $bot)
     {
         self::$called = true;
