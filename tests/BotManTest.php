@@ -29,6 +29,8 @@ use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
+use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
+use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 
 /**
  * Class BotManTest.
@@ -283,7 +285,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
         $this->assertTrue(TestClass::$called);
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Invalid hears action: [stdClass]');
 
         $botman = $this->getBot([
@@ -1783,7 +1785,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $botman = $this->getBot([]);
         $botman->setDriver(new FakeDriver());
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $botman->sendRequest('foo', []);
     }
 
