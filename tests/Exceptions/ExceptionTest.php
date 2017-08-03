@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Exceptions\Base\BotManException;
 use Exception;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
@@ -12,6 +11,7 @@ use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Tests\Fixtures\TestClass;
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ExceptionTest extends PHPUnit_Framework_TestCase
@@ -88,26 +88,25 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(TestClass::$called);
     }
 
+    /** @test */
+    public function it_catches_inherited_exceptions()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
+        ]);
 
-	/** @test */
-	public function it_catches_inherited_exceptions()
-	{
-		$botman = $this->getBot([
-			'sender' => 'UX12345',
-			'recipient' => 'general',
-			'message' => 'Hi Julia',
-		]);
+        $botman->exception(Exception::class, function (Exception $exception, $bot) {
+            $this->assertInstanceOf(BotManException::class, $exception);
+            $this->assertInstanceOf(BotMan::class, $bot);
+            $this->assertSame('Whoops', $exception->getMessage());
+        });
 
-		$botman->exception(Exception::class, function (Exception $exception, $bot) {
-			$this->assertInstanceOf(BotManException::class, $exception);
-			$this->assertInstanceOf(BotMan::class, $bot);
-			$this->assertSame('Whoops', $exception->getMessage());
-		});
+        $botman->hears('Hi Julia', function () {
+            throw new BotManException('Whoops');
+        });
 
-		$botman->hears('Hi Julia', function () {
-			throw new BotManException('Whoops');
-		});
-
-		$botman->listen();
-	}
+        $botman->listen();
+    }
 }

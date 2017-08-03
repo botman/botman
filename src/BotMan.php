@@ -2,8 +2,6 @@
 
 namespace BotMan\BotMan;
 
-use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
-use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 use Closure;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
@@ -13,6 +11,7 @@ use BotMan\BotMan\Traits\ProvidesStorage;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Traits\HandlesExceptions;
+use BotMan\BotMan\Handlers\ExceptionHandler;
 use BotMan\BotMan\Interfaces\CacheInterface;
 use BotMan\BotMan\Messages\Attachments\File;
 use BotMan\BotMan\Interfaces\DriverInterface;
@@ -20,7 +19,6 @@ use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use BotMan\BotMan\Handlers\ExceptionHandler;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +29,8 @@ use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
+use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
+use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 use BotMan\BotMan\Messages\Conversations\InlineConversation;
 
 /**
@@ -528,14 +528,14 @@ class BotMan
         return $this;
     }
 
-	/**
-	 * Low-level method to perform driver specific API requests.
-	 *
-	 * @param string $endpoint
-	 * @param array $additionalParameters
-	 * @return $this
-	 * @throws BadMethodCallException
-	 */
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $additionalParameters
+     * @return $this
+     * @throws BadMethodCallException
+     */
     public function sendRequest($endpoint, $additionalParameters = [])
     {
         $driver = $this->getDriver();
@@ -579,13 +579,13 @@ class BotMan
         return $this->reply($messages[array_rand($messages)]);
     }
 
-	/**
-	 * Make an action for an invokable controller.
-	 *
-	 * @param string $action
-	 * @return string
-	 * @throws UnexpectedValueException
-	 */
+    /**
+     * Make an action for an invokable controller.
+     *
+     * @param string $action
+     * @return string
+     * @throws UnexpectedValueException
+     */
     protected function makeInvokableAction($action)
     {
         if (! method_exists($action, '__invoke')) {
@@ -632,12 +632,12 @@ class BotMan
         return $this->message;
     }
 
-	/**
-	 * @param string $name
-	 * @param mixed $arguments
-	 * @return mixed
-	 * @throws BadMethodCallException
-	 */
+    /**
+     * @param string $name
+     * @param mixed $arguments
+     * @return mixed
+     * @throws BadMethodCallException
+     */
     public function __call($name, $arguments)
     {
         if (method_exists($this->getDriver(), $name)) {

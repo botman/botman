@@ -2,8 +2,6 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
-use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
@@ -31,6 +29,8 @@ use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
+use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
+use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 
 /**
  * Class BotManTest.

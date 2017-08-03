@@ -25,27 +25,28 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function handleException($e, BotMan $bot)
     {
-		$class = get_class($e);
-    	$handler = $this->exceptions->get($class);
+        $class = get_class($e);
+        $handler = $this->exceptions->get($class);
 
-	    // Exact exception handler found, call it.
-	    if ($handler !== null) {
-		    call_user_func_array($handler, [$e, $bot]);
-		    return;
-	    }
+        // Exact exception handler found, call it.
+        if ($handler !== null) {
+            call_user_func_array($handler, [$e, $bot]);
 
-	    $parentExceptions = Collection::make(class_parents($class));
+            return;
+        }
 
-	    foreach ($parentExceptions as $exceptionClass) {
+        $parentExceptions = Collection::make(class_parents($class));
 
-	    	if ($this->exceptions->has($exceptionClass)) {
-			    call_user_func_array($this->exceptions->get($exceptionClass), [$e, $bot]);
-			    return;
-		    }
-	    }
+        foreach ($parentExceptions as $exceptionClass) {
+            if ($this->exceptions->has($exceptionClass)) {
+                call_user_func_array($this->exceptions->get($exceptionClass), [$e, $bot]);
 
-	    // No matching parent exception, throw the exception away
-	    throw $e;
+                return;
+            }
+        }
+
+        // No matching parent exception, throw the exception away
+        throw $e;
     }
 
     /**

@@ -23,9 +23,9 @@ class StorageTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-	    foreach (glob(__DIR__.'/../Fixtures/storage/*.json') as $file) {
-		    unlink($file);
-	    }
+        foreach (glob(__DIR__.'/../Fixtures/storage/*.json') as $file) {
+            unlink($file);
+        }
     }
 
     /** @test */

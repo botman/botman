@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan\Exceptions\Base;
 
-
-class DriverException extends BotManException {
-
+class DriverException extends BotManException
+{
 }
