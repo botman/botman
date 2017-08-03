@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\tests;
 
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use Exception;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
@@ -86,4 +87,27 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(TestClass::$called);
     }
+
+
+	/** @test */
+	public function it_catches_inherited_exceptions()
+	{
+		$botman = $this->getBot([
+			'sender' => 'UX12345',
+			'recipient' => 'general',
+			'message' => 'Hi Julia',
+		]);
+
+		$botman->exception(Exception::class, function (Exception $exception, $bot) {
+			$this->assertInstanceOf(BotManException::class, $exception);
+			$this->assertInstanceOf(BotMan::class, $bot);
+			$this->assertSame('Whoops', $exception->getMessage());
+		});
+
+		$botman->hears('Hi Julia', function () {
+			throw new BotManException('Whoops');
+		});
+
+		$botman->listen();
+	}
 }

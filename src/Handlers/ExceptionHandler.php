@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Exceptions;
+namespace BotMan\BotMan\Handlers;
 
 use BotMan\BotMan\BotMan;
 use Illuminate\Support\Collection;
@@ -25,16 +25,27 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     public function handleException($e, BotMan $bot)
     {
-        $exceptions = $this->exceptions->where('exception', (new \ReflectionClass($e))->getShortName());
+		$class = get_class($e);
+    	$handler = $this->exceptions->get($class);
 
-        $exceptions->each(function ($handler) use ($e, $bot) {
-            call_user_func_array($handler['closure'], [$e, $bot]);
-        });
+	    // Exact exception handler found, call it.
+	    if ($handler !== null) {
+		    call_user_func_array($handler, [$e, $bot]);
+		    return;
+	    }
 
-        // No matching custom handler, throw the exception.
-        if ($exceptions->isEmpty()) {
-            throw $e;
-        }
+	    $parentExceptions = Collection::make(class_parents($class));
+
+	    foreach ($parentExceptions as $exceptionClass) {
+
+	    	if ($this->exceptions->has($exceptionClass)) {
+			    call_user_func_array($this->exceptions->get($exceptionClass), [$e, $bot]);
+			    return;
+		    }
+	    }
+
+	    // No matching parent exception, throw the exception away
+	    throw $e;
     }
 
     /**
@@ -42,13 +53,10 @@ class ExceptionHandler implements ExceptionHandlerInterface
      *
      * @param string $exception
      * @param callable $closure
-     * @return mixed
+     * @return void
      */
     public function register(string $exception, callable $closure)
     {
-        $this->exceptions->push([
-            'exception' => $exception,
-            'closure' => $closure,
-        ]);
+        $this->exceptions->put($exception, $closure);
     }
 }
