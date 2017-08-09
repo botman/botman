@@ -15,7 +15,9 @@ class ElementButton
 
     /** @var string */
     protected $payload;
-
+    
+    const TYPE_ACCOUNT_UNLINK = 'account_unlink';
+    
     const TYPE_ACCOUNT_LINK = 'account_link';
 
     /**
@@ -79,13 +81,13 @@ class ElementButton
             'type' => $this->type,
         ];
 
-        if ($this->type !== self::TYPE_ACCOUNT_LINK) {
+        if ($this->type !== self::TYPE_ACCOUNT_LINK && $this->type !== self::TYPE_ACCOUNT_UNLINK) {
             $buttonArray['title'] = $this->title;
         }
 
         if ($this->type === 'postback') {
             $buttonArray['payload'] = $this->payload;
-        } else {
+        } else if( $this->type !== self::TYPE_ACCOUNT_UNLINK) {
             $buttonArray['url'] = $this->url;
         }
 

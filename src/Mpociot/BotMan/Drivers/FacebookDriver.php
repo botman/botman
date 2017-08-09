@@ -54,9 +54,14 @@ class FacebookDriver extends Driver
      */
     public function matchesRequest()
     {
+
         $validSignature = ! $this->config->has('facebook_app_secret') || $this->validateSignature();
         $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
             return isset($msg['message']) && isset($msg['message']['text']);
+        });
+        $messages = Collection::make($this->event->get('messaging'))->filter(function ($msg) {
+           return isset($msg['account_linking']) && isset($msg['account_linking']['authorization_code'])
+               && isset($msg['account_linking']['status']) && $msg['account_linking']['status'] == 'linked';
         });
 
         return ! $messages->isEmpty() && $validSignature;
@@ -102,6 +107,8 @@ class FacebookDriver extends Driver
         return Answer::create($message->getMessage())->setMessage($message);
     }
 
+
+
     /**
      * Retrieve the chat message.
      *
@@ -111,8 +118,36 @@ class FacebookDriver extends Driver
     {
         $messages = Collection::make($this->event->get('messaging'));
         $messages = $messages->transform(function ($msg) {
+
             if (isset($msg['message']) && isset($msg['message']['text'])) {
                 return new Message($msg['message']['text'], $msg['recipient']['id'], $msg['sender']['id'], $msg);
+            }
+
+            return new Message('', '', '');
+        })->toArray();
+
+        if (count($messages) === 0) {
+            return [new Message('', '', '')];
+        }
+
+        return $messages;
+    }
+
+
+    /**
+     * Retrieve the chat message.
+     *
+     * @return array
+     */
+    public function getAccountLink()
+    {
+        $messages = Collection::make($this->event->get('messaging'));
+
+        $messages = $messages->transform(function ($msg) {
+            if (isset($msg['account_linking']) && isset($msg['account_linking']['authorization_code'])) {
+                $message = new Message('account linking', $msg['sender']['id'], $msg['recipient']['id'], $msg);
+                $message->addExtras('authorization_code', $msg['account_linking']['authorization_code']);
+                return $message;
             }
 
             return new Message('', '', '');

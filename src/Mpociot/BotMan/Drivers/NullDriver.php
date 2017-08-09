@@ -48,6 +48,16 @@ class NullDriver extends Driver
     }
 
     /**
+     * Retrieve the authorization code.
+     *
+     * @return string
+     */
+    public function getAccountLink()
+    {
+        return [new Message('', '', '')];
+    }
+
+    /**
      * Retrieve the chat message.
      *
      * @return string

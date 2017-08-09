@@ -159,6 +159,17 @@ class BotMan
     }
 
     /**
+     * Retrieve the Account Link Code.
+     *
+     * @return array
+     */
+    public function getAccountLink()
+    {
+        return $this->getDriver()->getAccountLink();
+    }
+
+
+    /**
      * Retrieve the chat message.
      *
      * @return array
@@ -365,7 +376,6 @@ class BotMan
                     }
                     $this->matches = $parameters;
                     array_unshift($parameters, $this);
-
                     $parameters = $this->addDataParameters($message, $parameters);
 
                     call_user_func_array($callback, $parameters);
