@@ -112,8 +112,9 @@ class FakeDriver implements DriverInterface, VerifiesService
     public function sendPayload($payload)
     {
         $this->botMessages[] = $payload;
+        $text = method_exists($payload, 'getText') ? $payload->getText() :  '';
 
-        return Response::create(json_encode($payload->getText()));
+        return Response::create(json_encode($text));
     }
 
     public function getName()
