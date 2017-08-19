@@ -13,9 +13,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
- *
  * Example to set it up in a unit test:
- *
  * <code>
  *  public static function setUpBeforeClass()
  *  {
@@ -32,19 +30,25 @@ class FakeDriver implements DriverInterface, VerifiesService
 {
     /** @var bool */
     public $matchesRequest = true;
+
     /** @var bool */
     public $hasMatchingEvent = false;
+
     /** @var \BotMan\BotMan\Messages\Incoming\IncomingMessage[] */
     public $messages = [];
+
     /** @var bool */
     public $isBot = false;
+
     /** @var bool */
     public $isInteractiveMessageReply = false;
+
     /** @var bool */
     public $isConfigured = true;
 
     /** @var array */
     private $botMessages = [];
+
     /** @var bool */
     private $botIsTyping = false;
 
@@ -112,7 +116,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     public function sendPayload($payload)
     {
         $this->botMessages[] = $payload;
-        $text = method_exists($payload, 'getText') ? $payload->getText() :  '';
+        $text = method_exists($payload, 'getText') ? $payload->getText() : '';
 
         return Response::create(json_encode($text));
     }
