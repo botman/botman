@@ -24,7 +24,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
  *      $this->fakeDriver = new FakeDriver();
  *      ProxyDriver::setInstance($this->fakeDriver);
  *  }
- * </code>
+ * </code>.
  */
 class FakeDriver implements DriverInterface, VerifiesService
 {
