@@ -50,6 +50,23 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_calls_captured_middleware()
+    {
+        $this->botman->middleware->captured(new TestCustomMiddleware());
+
+        $this->botman->hears('Foo', function ($bot) {
+            $bot->ask('what', function ($answer) {
+            });
+        });
+
+        $this->replyWithFakeMessage('Foo');
+        $this->assertFalse(isset($_SERVER['middleware_captured']));
+
+        $this->replyWithFakeMessage('My Answer');
+        $this->assertSame('My Answer', $_SERVER['middleware_captured']);
+    }
+
+    /** @test */
     public function it_calls_global_matching_middleware()
     {
         $this->botman->hears('Hello(.*)', function () {

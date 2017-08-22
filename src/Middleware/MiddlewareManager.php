@@ -12,6 +12,8 @@ class MiddlewareManager
     /** @var MiddlewareInterface[] */
     protected $received = [];
     /** @var MiddlewareInterface[] */
+    protected $captured = [];
+    /** @var MiddlewareInterface[] */
     protected $matching = [];
     /** @var MiddlewareInterface[] */
     protected $heard = [];
@@ -35,6 +37,20 @@ class MiddlewareManager
             return $this->received;
         }
         $this->received = array_merge($this->received, $middleware);
+
+        return $this;
+    }
+
+    /**
+     * @param MiddlewareInterface[] ...$middleware
+     * @return $this
+     */
+    public function captured(MiddlewareInterface ...$middleware)
+    {
+        if (empty($middleware)) {
+            return $this->captured;
+        }
+        $this->captured = array_merge($this->captured, $middleware);
 
         return $this;
     }
