@@ -403,7 +403,7 @@ class SlackDriverTest extends PHPUnit_Framework_TestCase
                 'token' => 'Foo',
                 'channel' => 'general',
                 'text' => 'Test',
-                'attachments' => json_encode(['image_url' => 'http://image.url/foo.png']),
+                'attachments' => json_encode([['title' => 'http://image.url/foo.png', 'image_url' => 'http://image.url/foo.png']]),
             ]);
 
         $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
