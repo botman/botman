@@ -174,7 +174,7 @@ class BotFrameworkDriver extends Driver
 
         if (strstr($apiURL, 'webchat.botframework')) {
             $parameters['from'] = [
-                'id' => $this->config->get('microsoft_bot_handle'),
+                'id' => $payload['recipient']['id'],
             ];
         }
 
