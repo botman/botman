@@ -22,6 +22,9 @@ abstract class HttpDriver implements DriverInterface
     /** @var Collection */
     protected $config;
 
+    /** @var string */
+    protected $content;
+
     /**
      * Driver constructor.
      * @param Request $request
@@ -32,6 +35,7 @@ abstract class HttpDriver implements DriverInterface
     {
         $this->http = $http;
         $this->config = Collection::make($config);
+        $this->content = $request->getContent();
         $this->buildPayload($request);
     }
 
@@ -53,6 +57,16 @@ abstract class HttpDriver implements DriverInterface
     public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * Return the raw request content.
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**

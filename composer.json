@@ -5,14 +5,9 @@
     "keywords": [
         "Bot",
         "BotMan",
-        "Slack",
-        "Facebook Messenger",
-        "Nexmo",
-        "Telegram",
-        "Skype",
-        "Laravel"
+        "Chatbot"
     ],
-    "homepage": "http://github.com/mpociot/botman",
+    "homepage": "http://github.com/botman/botman",
     "authors": [
         {
             "name": "Marcel Pociot",
