@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.0]
 ### Added
 - Added ability to originate inline conversations.
 - Moved each driver into their own repository.
