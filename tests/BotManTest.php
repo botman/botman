@@ -23,6 +23,7 @@ use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
@@ -1271,7 +1272,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function it_can_originate_messages_with_configured_drivers()
+    public function it_can_originate_messages_with_configured_driver()
     {
         $driver = m::mock(NullDriver::class);
         $driver->shouldReceive('buildServicePayload')
@@ -1282,12 +1283,22 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('sendPayload')
             ->once();
 
-        $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
-        $mock->shouldReceive('getConfiguredDrivers')
-            ->andReturn([$driver]);
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->setDriver($driver);
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
+        $botman->say('foo', 'channel');
+    }
 
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function it_throws_an_exception_with_no_drivers()
+    {
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
+        $this->expectException(BotManException::class);
         $botman->say('foo', 'channel');
     }
 

@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Commands\ConversationManager;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -462,22 +463,28 @@ class BotMan
      * @param DriverInterface|null $driver
      * @param array $additionalParameters
      * @return $this
+     * @throws BotManException
      */
     public function say($message, $recipient, $driver = null, $additionalParameters = [])
     {
-        if (is_null($driver)) {
-            $drivers = DriverManager::getConfiguredDrivers($this->config);
-        } elseif (is_string($driver)) {
-            $drivers = [DriverManager::loadFromName($driver, $this->config)];
-        } else {
-            $drivers = [$driver];
+        if ($driver === null && $this->driver === null) {
+            throw new BotManException('The current driver can\'t be NULL');
         }
 
-        foreach ($drivers as $driver) {
-            $this->message = new IncomingMessage('', $recipient, '');
+        $previousDriver = $this->driver;
+        $previousMessage = $this->message;
+
+        if ($driver instanceof DriverInterface) {
             $this->setDriver($driver);
-            $this->reply($message, $additionalParameters);
+        } elseif (is_string($driver)) {
+            $this->setDriver(DriverManager::loadFromName($driver, $this->config));
         }
+
+        $this->message = new IncomingMessage('', $recipient, '');
+        $this->reply($message, $additionalParameters);
+
+        $this->message = $previousMessage;
+        $this->driver = $previousDriver;
 
         return $this;
     }
