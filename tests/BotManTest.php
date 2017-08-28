@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Exceptions\Base\BotManException;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
@@ -24,6 +23,7 @@ use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
@@ -1298,7 +1298,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
-	    $this->expectException(BotManException::class);
+        $this->expectException(BotManException::class);
         $botman->say('foo', 'channel');
     }
 
