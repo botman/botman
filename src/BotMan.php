@@ -465,13 +465,13 @@ class BotMan
      */
     public function say($message, $recipient, $driver = null, $additionalParameters = [])
     {
-	    $previousDriver = $this->driver;
-	    $previousMessage = $this->message;
+        $previousDriver = $this->driver;
+        $previousMessage = $this->message;
 
         if ($driver instanceof DriverInterface) {
-	        $this->setDriver($driver);
+            $this->setDriver($driver);
         } elseif (is_string($driver)) {
-	        $this->setDriver(DriverManager::loadFromName($driver, $this->config));
+            $this->setDriver(DriverManager::loadFromName($driver, $this->config));
         }
 
         $this->message = new IncomingMessage('', $recipient, '');
