@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\tests;
 
+use BotMan\BotMan\Exceptions\Base\BotManException;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
@@ -1285,6 +1286,19 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->setDriver($driver);
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
+        $botman->say('foo', 'channel');
+    }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function it_throws_an_exception_with_no_drivers()
+    {
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
+	    $this->expectException(BotManException::class);
         $botman->say('foo', 'channel');
     }
 
