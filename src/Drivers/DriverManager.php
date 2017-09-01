@@ -103,13 +103,23 @@ class DriverManager
      * Append a driver to the list of loadable drivers.
      *
      * @param string $driver Driver class name
+     * @param bool $explicit Only load this one driver and not any additional (sub)-drivers
      */
-    public static function loadDriver($driver)
+    public static function loadDriver($driver, $explicit = false)
     {
         array_unshift(self::$drivers, $driver);
         if (method_exists($driver, 'loadExtension')) {
             call_user_func([$driver, 'loadExtension']);
         }
+
+        if (method_exists($driver, 'additionalDrivers') && $explicit === false) {
+            $additionalDrivers = (array)call_user_func([$driver, 'additionalDrivers']);
+            foreach ($additionalDrivers as $additionalDriver) {
+                self::loadDriver($additionalDriver);
+            }
+        }
+
+        self::$drivers = array_unique(self::$drivers);
     }
 
     /**

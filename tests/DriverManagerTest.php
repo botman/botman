@@ -7,12 +7,14 @@ use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Tests\Fixtures\TestDriverWithSubDriver;
 
 class DriverManagerTest extends PHPUnit_Framework_TestCase
 {
     protected function tearDown()
     {
         DriverManager::unloadDriver(TestDriver::class);
+        DriverManager::unloadDriver(TestDriverWithSubDriver::class);
         \Mockery::close();
     }
 
@@ -35,6 +37,24 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
         $count = count(DriverManager::getAvailableDrivers());
         DriverManager::loadDriver(TestDriver::class);
         $this->assertSame($count + 1, count(DriverManager::getAvailableDrivers()));
+    }
+
+    /** @test */
+    public function it_can_load_custom_child_drivers()
+    {
+        $this->assertSame([], DriverManager::getAvailableDrivers());
+        DriverManager::loadDriver(TestDriverWithSubDriver::class);
+        $this->assertSame(2, count(DriverManager::getAvailableDrivers()));
+    }
+
+    /** @test */
+    public function it_only_loads_drivers_once()
+    {
+        $this->assertSame([], DriverManager::getAvailableDrivers());
+        DriverManager::loadDriver(TestDriver::class);
+        DriverManager::loadDriver(TestDriver::class);
+        DriverManager::loadDriver(TestDriverWithSubDriver::class);
+        $this->assertSame(2, count(DriverManager::getAvailableDrivers()));
     }
 
     /** @test */
