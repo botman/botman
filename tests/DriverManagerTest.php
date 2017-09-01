@@ -42,19 +42,19 @@ class DriverManagerTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_load_custom_child_drivers()
     {
-        $this->assertSame([], DriverManager::getAvailableDrivers());
+        $count = count(DriverManager::getAvailableDrivers());
         DriverManager::loadDriver(TestDriverWithSubDriver::class);
-        $this->assertSame(2, count(DriverManager::getAvailableDrivers()));
+        $this->assertSame($count + 2, count(DriverManager::getAvailableDrivers()));
     }
 
     /** @test */
     public function it_only_loads_drivers_once()
     {
-        $this->assertSame([], DriverManager::getAvailableDrivers());
+        $count = count(DriverManager::getAvailableDrivers());
         DriverManager::loadDriver(TestDriver::class);
         DriverManager::loadDriver(TestDriver::class);
         DriverManager::loadDriver(TestDriverWithSubDriver::class);
-        $this->assertSame(2, count(DriverManager::getAvailableDrivers()));
+        $this->assertSame($count + 2, count(DriverManager::getAvailableDrivers()));
     }
 
     /** @test */
