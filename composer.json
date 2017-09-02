@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
-        "illuminate/support": "~5.0",
+        "illuminate/support": "^5.4",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~5.0",
         "mockery/mockery": "dev-master",
