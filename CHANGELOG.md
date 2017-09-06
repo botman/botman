@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.2]
+### Added
+- Drivers can have a method called `additionalDrivers` to simplify manual driver loading, when not using BotMan studio.
+
+### Fixed
+- Fixed matching middleware inside of conversations not receiving the manipulated `$message` object.
+
 ## [2.0.0]
 ### Added
 - Added ability to originate inline conversations.
