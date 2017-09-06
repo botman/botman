@@ -159,7 +159,7 @@ trait HandlesConversations
                 return;
             }
 
-            $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver(), false);
+            $matchingMessages = $this->conversationManager->getMatchingMessages([$message], $this->middleware, $this->getConversationAnswer(), $this->getDriver(), false);
             foreach ($matchingMessages as $matchingMessage) {
                 $command = $matchingMessage->getCommand();
                 if ($command->shouldStopConversation()) {
