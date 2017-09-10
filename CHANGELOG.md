@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.3]
+### Fixed
+- Use available drivers instead of configured ones for verification because of Slack events verification
+
 ## [2.0.2]
 ### Added
 - Drivers can have a method called `additionalDrivers` to simplify manual driver loading, when not using BotMan studio.
