@@ -144,7 +144,8 @@ class DriverManager
     public static function verifyServices(array $config, Request $request = null)
     {
         $request = (isset($request)) ? $request : Request::createFromGlobals();
-        foreach (self::getConfiguredDrivers($config) as $driver) {
+        foreach (self::getAvailableDrivers() as $driver) {
+            $driver = new $driver($request, $config, new Curl());
             if ($driver instanceof VerifiesService) {
                 return $driver->verifyRequest($request);
             }
