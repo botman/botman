@@ -8,6 +8,7 @@ use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,19 @@ class VerifiesServicesTest extends PHPUnit_Framework_TestCase
         $botman->listen();
 
         $this->assertTrue($_SERVER['driver_verified']);
+    }
+
+    /** @test */
+    public function it_can_only_verify_http_drivers()
+    {
+        $this->assertFalse(isset($_SERVER['verifiedTestDriver']));
+
+        DriverManager::loadDriver(TestDriver::class);
+
+        $botman = BotManFactory::create([]);
+        $botman->listen();
+
+        $this->assertFalse(isset($_SERVER['verifiedTestDriver']));
     }
 }
 
