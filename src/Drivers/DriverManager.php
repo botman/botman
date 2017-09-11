@@ -24,6 +24,7 @@ class DriverManager
 
     /**
      * DriverManager constructor.
+     *
      * @param array $config
      * @param HttpInterface $http
      */
@@ -145,9 +146,11 @@ class DriverManager
     {
         $request = (isset($request)) ? $request : Request::createFromGlobals();
         foreach (self::getAvailableDrivers() as $driver) {
-            $driver = new $driver($request, $config, new Curl());
-            if ($driver instanceof VerifiesService) {
-                return $driver->verifyRequest($request);
+            if (is_subclass_of($driver, HttpDriver::class)) {
+                $driver = new $driver($request, $config, new Curl());
+                if ($driver instanceof VerifiesService) {
+                    return $driver->verifyRequest($request);
+                }
             }
         }
     }
@@ -159,10 +162,12 @@ class DriverManager
     public function getMatchingDriver(Request $request)
     {
         foreach (self::getAvailableDrivers() as $driver) {
-            /** @var HttpDriver $driver */
-            $driver = new $driver($request, $this->config, $this->http);
-            if ($driver->matchesRequest() || $driver->hasMatchingEvent()) {
-                return $driver;
+            if (is_subclass_of($driver, HttpDriver::class)) {
+                /** @var HttpDriver $driver */
+                $driver = new $driver($request, $this->config, $this->http);
+                if ($driver->matchesRequest() || $driver->hasMatchingEvent()) {
+                    return $driver;
+                }
             }
         }
 
