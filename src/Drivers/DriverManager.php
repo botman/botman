@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Drivers;
 
 use BotMan\BotMan\Http\Curl;
+use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
@@ -39,6 +40,16 @@ class DriverManager
     public static function getAvailableDrivers()
     {
         return self::$drivers;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAvailableHttpDrivers()
+    {
+        return Collection::make(self::$drivers)->filter(function ($driver) {
+            return is_subclass_of($driver, HttpDriver::class);
+        })->toArray();
     }
 
     /**
@@ -87,12 +98,10 @@ class DriverManager
     {
         $drivers = [];
 
-        foreach (self::getAvailableDrivers() as $driver) {
-            if (is_subclass_of($driver, HttpDriver::class)) {
-                $driver = new $driver(Request::createFromGlobals(), $config, new Curl());
-                if ($driver->isConfigured()) {
-                    $drivers[] = $driver;
-                }
+        foreach (self::getAvailableHttpDrivers() as $driver) {
+            $driver = new $driver(Request::createFromGlobals(), $config, new Curl());
+            if ($driver->isConfigured()) {
+                $drivers[] = $driver;
             }
         }
 
@@ -144,7 +153,7 @@ class DriverManager
     public static function verifyServices(array $config, Request $request = null)
     {
         $request = (isset($request)) ? $request : Request::createFromGlobals();
-        foreach (self::getAvailableDrivers() as $driver) {
+        foreach (self::getAvailableHttpDrivers() as $driver) {
             $driver = new $driver($request, $config, new Curl());
             if ($driver instanceof VerifiesService) {
                 return $driver->verifyRequest($request);

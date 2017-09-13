@@ -5,10 +5,12 @@ namespace BotMan\BotMan\Tests\Fixtures;
 use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class TestDriver implements DriverInterface
+class TestDriver implements DriverInterface, VerifiesService
 {
     /**
      * Determine if the request is for this driver.
@@ -129,5 +131,10 @@ class TestDriver implements DriverInterface
     public static function loadExtension()
     {
         $_SERVER['loadedTestDriver'] = true;
+    }
+
+    public function verifyRequest(Request $request)
+    {
+        $_SERVER['verifiedTestDriver'] = true;
     }
 }
