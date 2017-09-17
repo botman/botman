@@ -39,9 +39,7 @@ use BotMan\BotMan\Messages\Conversations\InlineConversation;
  */
 class BotMan
 {
-    use ProvidesStorage,
-        HandlesConversations,
-        HandlesExceptions;
+    use ProvidesStorage, HandlesConversations, HandlesExceptions;
 
     /** @var \Illuminate\Support\Collection */
     protected $event;
@@ -63,6 +61,7 @@ class BotMan
 
     /**
      * IncomingMessage service events.
+     *
      * @var array
      */
     protected $events = [];
@@ -70,6 +69,7 @@ class BotMan
     /**
      * The fallback message to use, if no match
      * could be heard.
+     *
      * @var callable|null
      */
     protected $fallbackMessage;
@@ -112,6 +112,7 @@ class BotMan
 
     /**
      * BotMan constructor.
+     *
      * @param CacheInterface $cache
      * @param DriverInterface $driver
      * @param array $config
@@ -211,7 +212,14 @@ class BotMan
      */
     public function getUser()
     {
-        return $this->getDriver()->getUser($this->getMessage());
+        if ($user = $this->cache->get('user_'.$this->driverName.'_'.$this->getMessage()->getSender())) {
+            return $user;
+        }
+
+        $user = $this->getDriver()->getUser($this->getMessage());
+        $this->cache->put('user_'.$this->driverName.'_'.$user->getId(), $user, 30);
+
+        return $user;
     }
 
     /**
@@ -230,9 +238,9 @@ class BotMan
     }
 
     /**
-     * @param string $pattern the pattern to listen for
+     * @param string $pattern          the pattern to listen for
      * @param Closure|string $callback the callback to execute. Either a closure or a Class@method notation
-     * @param string $in the channel type to listen to (either direct message or public channel)
+     * @param string $in               the channel type to listen to (either direct message or public channel)
      * @return Command
      */
     public function hears($pattern, $callback, $in = null)
@@ -390,7 +398,8 @@ class BotMan
      */
     protected function callMatchingMessages()
     {
-        $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver());
+        $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware,
+            $this->getConversationAnswer(), $this->getDriver());
 
         foreach ($matchingMessages as $matchingMessage) {
             $this->command = $matchingMessage->getCommand();
@@ -401,25 +410,16 @@ class BotMan
             // Set the message first, so it's available for middlewares
             $this->message = $matchingMessage->getMessage();
 
-            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
+            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(),
+                $this->command->getMiddleware());
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
             $parameters = $matchingMessage->getMatches();
             if (count($parameterNames) !== count($parameters)) {
-                $parameters = array_merge(
-                    //First, all named parameters (eg. function ($a, $b, $c))
-                    array_filter(
-                        $parameters,
-                        'is_string',
-                        ARRAY_FILTER_USE_KEY
-                    ),
+                $parameters = array_merge(//First, all named parameters (eg. function ($a, $b, $c))
+                    array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY),
                     //Then, all other unsorted parameters (regex non named results)
-                    array_filter(
-                        $parameters,
-                        'is_integer',
-                        ARRAY_FILTER_USE_KEY
-                    )
-                );
+                    array_filter($parameters, 'is_integer', ARRAY_FILTER_USE_KEY));
             }
 
             $this->matches = $parameters;
@@ -562,7 +562,8 @@ class BotMan
     {
         $message = is_string($message) ? OutgoingMessage::create($message) : $message;
 
-        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
+        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message,
+            $additionalParameters));
     }
 
     /**
@@ -578,6 +579,7 @@ class BotMan
 
     /**
      * Return a random message.
+     *
      * @param array $messages
      * @return $this
      */
@@ -596,9 +598,7 @@ class BotMan
     protected function makeInvokableAction($action)
     {
         if (! method_exists($action, '__invoke')) {
-            throw new UnexpectedValueException(sprintf(
-                'Invalid hears action: [%s]', $action
-            ));
+            throw new UnexpectedValueException(sprintf('Invalid hears action: [%s]', $action));
         }
 
         return $action.'@__invoke';
