@@ -1417,7 +1417,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $driver->shouldReceive('getConversationAnswer')->andReturn(Answer::create('repeat_modified'));
 
         $driver->shouldReceive('getMessages')->andReturn([
-            new IncomingMessage('repeat_modified', 'UX12345', 'general')
+            new IncomingMessage('repeat_modified', 'UX12345', 'general'),
         ]);
 
         $driver->shouldReceive('buildServicePayload')->once()->withArgs(function ($message, $match, $arguments) {
