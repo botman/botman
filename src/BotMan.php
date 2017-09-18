@@ -212,12 +212,12 @@ class BotMan
      */
     public function getUser()
     {
-        if ($user = $this->cache->get('user_'.$this->driverName.'_'.$this->getMessage()->getSender())) {
+        if ($user = $this->cache->get('user_'.$this->driver->getName().'_'.$this->getMessage()->getSender())) {
             return $user;
         }
 
         $user = $this->getDriver()->getUser($this->getMessage());
-        $this->cache->put('user_'.$this->driverName.'_'.$user->getId(), $user, 30);
+        $this->cache->put('user_'.$this->driver->getName().'_'.$user->getId(), $user, $this->config['user_cache_time'] ?? 30);
 
         return $user;
     }
