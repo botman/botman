@@ -1917,4 +1917,24 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->listen();
         $this->assertTrue($called);
     }
+
+    /** @test */
+    public function it_can_cache_the_user()
+    {
+        $user = null;
+        $driverName = null;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+
+        $botman->hears('Foo', function ($bot) use (&$user, &$driverName) {
+            $user = $bot->getUser();
+            $driverName = $bot->getDriver()->getName();
+        });
+        $botman->listen();
+        $this->assertEquals($user, $this->cache->get('user_'.$driverName.'_UX12345'));
+    }
 }
