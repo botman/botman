@@ -75,6 +75,7 @@ trait HandlesConversations
     public function getStoredConversationQuestion($message = null)
     {
         $conversation = $this->getStoredConversation($message);
+
         return unserialize($conversation['question']);
     }
 
