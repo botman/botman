@@ -67,6 +67,22 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_has_access_to_previous_question()
+    {
+        $this->botman->middleware->captured(new TestCustomMiddleware());
+
+        $this->botman->hears('Foo', function ($bot) {
+            $bot->ask('My Question', function ($answer) {
+            });
+        });
+
+        $this->replyWithFakeMessage('Foo');
+
+        $this->replyWithFakeMessage('My Answer');
+        $this->assertSame('My Question', $_SERVER['middleware_captured_question']);
+    }
+
+    /** @test */
     public function it_calls_global_matching_middleware()
     {
         $this->botman->hears('Hello(.*)', function () {

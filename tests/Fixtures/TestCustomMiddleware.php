@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Tests\Fixtures;
 
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
@@ -20,6 +21,10 @@ class TestCustomMiddleware implements MiddlewareInterface
     public function captured(IncomingMessage $message, $next, BotMan $bot)
     {
         $_SERVER['middleware_captured'] = $message->getText();
+        $conversation = $bot->getStoredConversation();
+        /** @var Question $question */
+        $question = unserialize($conversation['question']);
+        $_SERVER['middleware_captured_question'] = $question;
 
         return $next($message);
     }

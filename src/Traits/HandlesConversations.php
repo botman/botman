@@ -66,6 +66,19 @@ trait HandlesConversations
     }
 
     /**
+     * Get the question that was asked in the currently stored conversation
+     * for a given message.
+     *
+     * @param null|IncomingMessage $message
+     * @return string|Question
+     */
+    public function getStoredConversationQuestion($message = null)
+    {
+        $conversation = $this->getStoredConversation($message);
+        return unserialize($conversation['question']);
+    }
+
+    /**
      * Remove a stored conversation array from the cache for a given message.
      *
      * @param null|IncomingMessage $message
