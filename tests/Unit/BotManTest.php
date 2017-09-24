@@ -14,7 +14,6 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class BotManTest extends PHPUnit_Framework_TestCase
 {
-
     protected $cache;
 
     public function tearDown()
@@ -53,7 +52,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
     {
         $botman = $this->getBot([]);
 
-        $botman->storeConversation(new TestConversation(), function (){}, 'This is my question');
+        $botman->storeConversation(new TestConversation(), function () {
+        }, 'This is my question');
 
         $this->assertSame('This is my question', $botman->getStoredConversationQuestion());
     }
