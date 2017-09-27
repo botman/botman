@@ -2,13 +2,13 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
-use BotMan\BotMan\Drivers\Events\GenericEvent;
 use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Request;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
@@ -120,7 +120,8 @@ class FakeDriver implements DriverInterface, VerifiesService
         return $this->isConfigured;
     }
 
-    public function setUser(Array $user_info){
+    public function setUser(array $user_info)
+    {
         $this->user_id = $user_info['id'] ?? $this->user_id;
         $this->user_first_name = $user_info['first_name'] ?? $this->user_first_name;
         $this->user_last_name = $user_info['last_name'] ?? $this->user_last_name;
@@ -154,7 +155,8 @@ class FakeDriver implements DriverInterface, VerifiesService
         return Response::create(json_encode($text));
     }
 
-    public function setName($name){
+    public function setName($name)
+    {
         $this->driver_name = $name;
     }
 
@@ -181,14 +183,16 @@ class FakeDriver implements DriverInterface, VerifiesService
     /**
      * @return void
      */
-    public function setEventName($name){
+    public function setEventName($name)
+    {
         $this->event_name = $name;
     }
 
     /**
      * @return void
      */
-    public function setEventPayload($payload){
+    public function setEventPayload($payload)
+    {
         $this->event_payload = $payload;
     }
 
@@ -197,11 +201,13 @@ class FakeDriver implements DriverInterface, VerifiesService
      */
     public function hasMatchingEvent()
     {
-        if(isset($this->event_name)){
+        if (isset($this->event_name)) {
             $event = new GenericEvent($this->event_payload);
             $event->setName($this->event_name);
+
             return $event;
         }
+
         return $this->hasMatchingEvent;
     }
 
