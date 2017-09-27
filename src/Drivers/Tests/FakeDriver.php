@@ -54,7 +54,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     private $botIsTyping = false;
 
     /** @var string */
-    private $driver_name = 'fake';
+    private $driver_name = 'Fake';
 
     /** @var string */
     private $event_name;
@@ -63,7 +63,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     private $event_payload;
 
     /** @var string */
-    private $user_id = '1';
+    private $user_id = null;
 
     /** @var string */
     private $user_first_name = 'Marcel';
@@ -130,7 +130,7 @@ class FakeDriver implements DriverInterface, VerifiesService
 
     public function getUser(IncomingMessage $matchingMessage)
     {
-        return new User($matchingMessage->getSender(), $this->user_first_name, $this->user_last_name, $this->username, $this->user_info);
+        return new User($this->user_id ?? $matchingMessage->getSender(), $this->user_first_name, $this->user_last_name, $this->username, $this->user_info);
     }
 
     public function getConversationAnswer(IncomingMessage $message)
@@ -202,7 +202,7 @@ class FakeDriver implements DriverInterface, VerifiesService
             $event->setName($this->event_name);
             return $event;
         }
-        return false;
+        return $this->hasMatchingEvent;
     }
 
     /**

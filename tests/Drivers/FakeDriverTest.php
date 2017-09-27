@@ -140,6 +140,47 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_fake_events()
+    {
+        $this->fakeDriver->setEventName('eventName');
+        $this->fakeDriver->setEventPayload(['event' => 'data']);
+        $this->botman->on('eventName', function ($payload, BotMan $bot) {
+            $this->assertSame(['event' => 'data'], $payload);
+        });
+
+        $this->botman->listen();
+    }
+
+    /** @test */
+    public function it_can_fake_users()
+    {
+        $userData = [
+            'id' => '987',
+            'first_name' => 'Marcel',
+            'last_name' => 'Pociot',
+            'username' => 'mpociot',
+        ];
+        $this->fakeDriver->setUser($userData);
+        $this->botman->hears('user', function (BotMan $bot) use ($userData) {
+            $user = $bot->getUser();
+            $this->assertSame($userData, $user->getInfo());
+            $this->assertSame('987', $user->getId());
+            $this->assertSame('Marcel', $user->getFirstname());
+            $this->assertSame('Pociot', $user->getLastname());
+            $this->assertSame('mpociot', $user->getUsername());
+        });
+        
+        $this->listenToFakeMessage('user', 'helloman123', '#helloworld');
+    }
+
+    /** @test */
+    public function it_can_fake_driver_name()
+    {
+        $this->fakeDriver->setName('custom_driver_name');
+        $this->assertSame('custom_driver_name', $this->fakeDriver->getName());
+    }
+
+    /** @test */
     public function it_works_with_questions_and_answers()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
