@@ -169,7 +169,7 @@ class FakeDriverTest extends PHPUnit_Framework_TestCase
             $this->assertSame('Pociot', $user->getLastname());
             $this->assertSame('mpociot', $user->getUsername());
         });
-        
+
         $this->listenToFakeMessage('user', 'helloman123', '#helloworld');
     }
 
