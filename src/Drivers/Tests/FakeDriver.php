@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
@@ -52,6 +53,30 @@ class FakeDriver implements DriverInterface, VerifiesService
     /** @var bool */
     private $botIsTyping = false;
 
+    /** @var string */
+    private $driver_name = 'Fake';
+
+    /** @var string */
+    private $event_name;
+
+    /** @var array */
+    private $event_payload;
+
+    /** @var string */
+    private $user_id = null;
+
+    /** @var string */
+    private $user_first_name = 'Marcel';
+
+    /** @var string */
+    private $user_last_name = 'Pociot';
+
+    /** @var string */
+    private $username = 'BotMan';
+
+    /** @var array */
+    private $user_info = [];
+
     /**
      * @return FakeDriver
      */
@@ -95,9 +120,17 @@ class FakeDriver implements DriverInterface, VerifiesService
         return $this->isConfigured;
     }
 
+    public function setUser(Array $user_info){
+        $this->user_id = $user_info['id'] ?? $this->user_id;
+        $this->user_first_name = $user_info['first_name'] ?? $this->user_first_name;
+        $this->user_last_name = $user_info['last_name'] ?? $this->user_last_name;
+        $this->username = $user_info['username'] ?? $this->username;
+        $this->user_info = $user_info;
+    }
+
     public function getUser(IncomingMessage $matchingMessage)
     {
-        return new User($matchingMessage->getSender());
+        return new User($this->user_id ?? $matchingMessage->getSender(), $this->user_first_name, $this->user_last_name, $this->username, $this->user_info);
     }
 
     public function getConversationAnswer(IncomingMessage $message)
@@ -121,9 +154,13 @@ class FakeDriver implements DriverInterface, VerifiesService
         return Response::create(json_encode($text));
     }
 
+    public function setName($name){
+        $this->driver_name = $name;
+    }
+
     public function getName()
     {
-        return 'Fake';
+        return $this->driver_name;
     }
 
     public function types(IncomingMessage $matchingMessage)
@@ -142,10 +179,29 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     /**
+     * @return void
+     */
+    public function setEventName($name){
+        $this->event_name = $name;
+    }
+
+    /**
+     * @return void
+     */
+    public function setEventPayload($payload){
+        $this->event_payload = $payload;
+    }
+
+    /**
      * @return bool
      */
     public function hasMatchingEvent()
     {
+        if(isset($this->event_name)){
+            $event = new GenericEvent($this->event_payload);
+            $event->setName($this->event_name);
+            return $event;
+        }
         return $this->hasMatchingEvent;
     }
 
