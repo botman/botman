@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0]
+### Added
+- Added ability to cache message user information (#542)
+- Added macro functionality to the Conversation method
+- Added `getStoredConversationQuestion` method
+
+### Fixed
+- Fix incorrect 'conversation_cache_time' config path (#557)
+
+## [2.0.4]
+### Fixed
+- Fixed an issue where non-HTTP drivers were validated
+
 ## [2.0.3]
 ### Fixed
 - Use available drivers instead of configured ones for verification because of Slack events verification
