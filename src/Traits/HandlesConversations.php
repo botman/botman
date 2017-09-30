@@ -72,7 +72,7 @@ trait HandlesConversations
      */
     public function touchCurrentConversation()
     {
-        if (!is_null($this->currentConversationData)) {
+        if (! is_null($this->currentConversationData)) {
             $touched = $this->currentConversationData;
             $touched['time'] = microtime();
 
