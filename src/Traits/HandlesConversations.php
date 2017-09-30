@@ -66,6 +66,21 @@ trait HandlesConversations
     }
 
     /**
+     * Touch and update the current conversation.
+     *
+     * @return void
+     */
+    public function touchCurrentConversation()
+    {
+        if (!is_null($this->currentConversationData)) {
+            $touched = $this->currentConversationData;
+            $touched['time'] = microtime();
+
+            $this->cache->put($this->message->getConversationIdentifier(), $touched, $this->config['conversation_cache_time'] ?? 30);
+        }
+    }
+
+    /**
      * Get the question that was asked in the currently stored conversation
      * for a given message.
      *
