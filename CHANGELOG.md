@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.1]
+### Added
+- Added incoming message setText method
+### Fixed
+- BotMan `say` and `ask` methods now return Response objects.
+
 ## [2.1.0]
 ### Added
 - Added ability to cache message user information (#542)
