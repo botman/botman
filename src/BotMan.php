@@ -469,7 +469,7 @@ class BotMan
      * @param string|array $recipient
      * @param DriverInterface|null $driver
      * @param array $additionalParameters
-     * @return $this
+     * @return Response
      * @throws BotManException
      */
     public function say($message, $recipient, $driver = null, $additionalParameters = [])
@@ -488,12 +488,12 @@ class BotMan
         }
 
         $this->message = new IncomingMessage('', $recipient, '');
-        $this->reply($message, $additionalParameters);
+        $response = $this->reply($message, $additionalParameters);
 
         $this->message = $previousMessage;
         $this->driver = $previousDriver;
 
-        return $this;
+        return $response;
     }
 
     /**
@@ -502,7 +502,7 @@ class BotMan
      * @param array $additionalParameters
      * @param null|string $recipient
      * @param null|string $driver
-     * @return $this
+     * @return Response
      */
     public function ask($question, $next, $additionalParameters = [], $recipient = null, $driver = null)
     {
@@ -514,10 +514,10 @@ class BotMan
             $this->setDriver($driver);
         }
 
-        $this->reply($question, $additionalParameters);
+        $response = $this->reply($question, $additionalParameters);
         $this->storeConversation(new InlineConversation, $next, $question, $additionalParameters);
 
-        return $this;
+        return $response;
     }
 
     /**
