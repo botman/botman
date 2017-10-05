@@ -221,4 +221,12 @@ class IncomingMessage
     {
         $this->isFromBot = $isFromBot;
     }
+
+    /**
+     * @param string $message
+     */
+    public function setText(string $message)
+    {
+        $this->message = $message;
+    }
 }
