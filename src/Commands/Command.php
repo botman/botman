@@ -67,6 +67,14 @@ class Command
         if (isset($attributes['recipient'])) {
             $this->recipient($attributes['recipient']);
         }
+
+        if (isset($attributes['stop_conversation']) && $attributes['stop_conversation'] === true) {
+            $this->stopsConversation();
+        }
+
+        if (isset($attributes['skip_conversation']) && $attributes['skip_conversation'] === true) {
+            $this->skipsConversation();
+        }
     }
 
     /**
