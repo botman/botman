@@ -960,6 +960,45 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_chain_multiple_group_commands()
+    {
+        $calledAdditionalDriverAndMiddleware = false;
+        $calledFakeDriverAndMiddleware = false;
+        $calledFakeDriver = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'bar',
+        ]);
+
+        $botman->middleware->received(new TestMiddleware());
+
+        $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledAdditionalDriverAndMiddleware) {
+            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledAdditionalDriverAndMiddleware) {
+                $botman->hears('successful', function ($bot) use (&$calledAdditionalDriverAndMiddleware) {
+                    $calledAdditionalDriverAndMiddleware = true;
+                });
+            });
+        });
+
+        $botman->group(['driver' => FakeDriver::class], function ($botman) use (&$calledFakeDriverAndMiddleware, &$calledFakeDriver) {
+            $botman->hears('successful', function ($bot) use (&$calledFakeDriver) {
+                $calledFakeDriver = true;
+            });
+            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledFakeDriverAndMiddleware, &$calledFakeDriver) {
+                $botman->hears('successful', function ($bot) use (&$calledFakeDriverAndMiddleware) {
+                    $calledFakeDriverAndMiddleware = true;
+                });
+            });
+        });
+
+        $this->assertFalse($calledAdditionalDriver);
+        $this->assertFalse($calledFakeDriver);
+        $this->assertTrue($calledFakeDriverAndMiddleware);
+    }
+
+    /** @test */
     public function it_can_match_grouped_middleware_commands()
     {
         $called = false;
@@ -995,7 +1034,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         ]);
 
         $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledTelegram) {
-            $botman->hears('bar', function ($bot) use (&$calledTelegram) {
+            $botman->hears('bar', function ($bot) use (&$calledTelegram) { // TODO: mistake - calledAddition vs calledTelegram
                 $calledAdditional = true;
             });
         });
