@@ -326,8 +326,7 @@ class BotMan
      */
     public function group(array $attributes, Closure $callback)
     {
-        $this->groupAttributes = $attributes;
-
+        $this->groupAttributes = array_merge_recursive($this->groupAttributes, $attributes);
         call_user_func($callback, $this);
 
         $this->groupAttributes = [];
