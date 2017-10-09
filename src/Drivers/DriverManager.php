@@ -156,7 +156,7 @@ class DriverManager
         foreach (self::getAvailableHttpDrivers() as $driver) {
             $driver = new $driver($request, $config, new Curl());
             if ($driver instanceof VerifiesService) {
-                return $driver->verifyRequest($request);
+                $driver->verifyRequest($request);
             }
         }
     }
