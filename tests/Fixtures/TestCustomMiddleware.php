@@ -87,6 +87,7 @@ class TestCustomMiddleware implements MiddlewareInterface
      */
     public function sending($payload, $next, BotMan $bot)
     {
+        $_SERVER['middleware_sending_outgoing'] = $bot->getOutgoingMessage();
         $text = $payload->getText();
         $payload->text($text.' - middleware');
         $response = $next($payload);

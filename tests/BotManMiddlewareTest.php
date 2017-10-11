@@ -141,6 +141,19 @@ class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($answers, $this->fakeDriver->getBotMessages()[0]->getText());
     }
 
+    /** @test */
+    public function it_can_access_outgoing_message_in_sending_middleware()
+    {
+        $this->botman->middleware->sending(new TestCustomMiddleware());
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->reply('Hello yourself!');
+            $this->assertSame('Hello yourself! - middleware', $_SERVER['middleware_sending_outgoing']->getText());
+        });
+
+        $this->replyWithFakeMessage('Hello');
+        $this->assertNull($this->botman->getOutgoingMessage());
+    }
+
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')
     {
         if ($message instanceof IncomingMessage) {

@@ -52,6 +52,9 @@ class BotMan
     /** @var IncomingMessage */
     protected $message;
 
+    /** @var OutgoingMessage|Question */
+    protected $ougoingMessage;
+
     /** @var string */
     protected $driverName;
 
@@ -567,9 +570,9 @@ class BotMan
      */
     public function reply($message, $additionalParameters = [])
     {
-        $message = is_string($message) ? OutgoingMessage::create($message) : $message;
+        $this->outgoingMessage = is_string($message) ? OutgoingMessage::create($message) : $message;
 
-        return $this->sendPayload($this->getDriver()->buildServicePayload($message, $this->message, $additionalParameters));
+        return $this->sendPayload($this->getDriver()->buildServicePayload($this->outgoingMessage, $this->message, $additionalParameters));
     }
 
     /**
@@ -579,6 +582,7 @@ class BotMan
     public function sendPayload($payload)
     {
         return $this->middleware->applyMiddleware('sending', $payload, [], function ($payload) {
+            $this->outgoingMessage = null;
             return $this->getDriver()->sendPayload($payload);
         });
     }
@@ -644,6 +648,14 @@ class BotMan
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return OutgoingMessage|Question
+     */
+    public function getOutgoingMessage()
+    {
+        return $this->outgoingMessage;
     }
 
     /**
