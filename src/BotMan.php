@@ -648,7 +648,7 @@ class BotMan
 
     /**
      * @param string $name
-     * @param mixed $arguments
+     * @param array $arguments
      * @return mixed
      * @throws BadMethodCallException
      */
