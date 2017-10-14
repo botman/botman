@@ -285,7 +285,7 @@ trait HandlesConversations
             $next = $next->getClosure()->bindTo($conversation, $conversation);
         }
 
-        array_push($parameters, $conversation);
+        $parameters[] = $conversation;
         call_user_func_array($next, $parameters);
     }
 }
