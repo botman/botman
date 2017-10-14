@@ -26,8 +26,8 @@ class BotManFactory
     }
 
     /**
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array $arguments
      * @return mixed
      */
     public static function __callStatic($name, $arguments)
