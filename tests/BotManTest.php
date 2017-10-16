@@ -963,8 +963,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
     public function it_can_chain_multiple_group_commands()
     {
         $calledAdditionalDriverAndMiddleware = false;
-        $calledFakeDriverAndMiddleware = false;
         $calledFakeDriver = false;
+        $calledFakeDriverAndMiddleware = false;
 
         $botman = $this->getBot([
             'sender' => 'UX12345',
@@ -986,14 +986,14 @@ class BotManTest extends PHPUnit_Framework_TestCase
             $botman->hears('successful', function ($bot) use (&$calledFakeDriver) {
                 $calledFakeDriver = true;
             });
-            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledFakeDriverAndMiddleware, &$calledFakeDriver) {
+            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledFakeDriverAndMiddleware) {
                 $botman->hears('successful', function ($bot) use (&$calledFakeDriverAndMiddleware) {
                     $calledFakeDriverAndMiddleware = true;
                 });
             });
         });
 
-        $this->assertFalse($calledAdditionalDriver);
+        $this->assertFalse($calledAdditionalDriverAndMiddleware);
         $this->assertFalse($calledFakeDriver);
         $this->assertTrue($calledFakeDriverAndMiddleware);
     }
