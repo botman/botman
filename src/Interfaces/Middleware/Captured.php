@@ -7,7 +7,6 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 interface Captured
 {
-
     /**
      * Handle a captured message.
      *

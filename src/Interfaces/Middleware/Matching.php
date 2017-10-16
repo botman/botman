@@ -2,12 +2,10 @@
 
 namespace BotMan\BotMan\Interfaces\Middleware;
 
-use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 interface Matching
 {
-
     /**
      * @param IncomingMessage $message
      * @param string $pattern

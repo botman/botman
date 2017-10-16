@@ -7,7 +7,6 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 interface Heard
 {
-
     /**
      * Handle a message that was successfully heard, but not processed yet.
      *
