@@ -6,7 +6,6 @@ use BotMan\BotMan\BotMan;
 
 interface Sending
 {
-
     /**
      * Handle an outgoing message payload before/after it
      * hits the message service.
