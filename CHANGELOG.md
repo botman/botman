@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.3]
+### Fixed
+- Fixed an issue with the driver verification (this time for real).
+
+## [2.1.2]
+### Fixed
+- Fixed an issue with the driver verification.
+
 ## [2.1.1]
 ### Added
 - Added incoming message setText method
