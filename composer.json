@@ -51,9 +51,7 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.1-dev"
-        }
-    },
-    "extras": {
+        },
         "laravel": {
             "providers": [
                 "BotMan\\BotMan\\BotManServiceProvider"
