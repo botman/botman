@@ -33,6 +33,22 @@ class File extends Attachment
     }
 
     /**
+     * @param string $content
+     * @param string $url
+     * @return File
+     */
+    public static function content($content, $url = null)
+    {
+        if ($url === null) {
+            $url = tempnam(sys_get_temp_dir(), 'BotMan');
+        }
+
+        file_put_contents($url, $content);
+
+        return new self($url);
+    }
+
+    /**
      * @return string
      */
     public function getUrl()

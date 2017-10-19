@@ -50,4 +50,19 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = OutgoingMessage::create()->withAttachment(Video::url('foo'));
         $this->assertSame('foo', $message->getAttachment()->getUrl());
     }
+
+    /** @test */
+    public function it_can_set_a_file()
+    {
+        $message = OutgoingMessage::create()->withAttachment(File::url('foo'));
+        $this->assertSame('foo', $message->getAttachment()->getUrl());
+    }
+
+    /** @test */
+    public function it_can_set_a_file_from_a_rawstring()
+    {
+        $tmpName = tempnam(sys_get_temp_dir(), 'BotMan');
+        $message = OutgoingMessage::create()->withAttachment(File::content('foo', $tmpName));
+        $this->assertSame($tmpName, $message->getAttachment()->getUrl());
+    }
 }
