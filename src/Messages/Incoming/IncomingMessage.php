@@ -65,7 +65,7 @@ class IncomingMessage
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getPayload()
     {
