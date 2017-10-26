@@ -198,6 +198,7 @@ class BotMan
     }
 
     /**
+     * @param bool $running
      * @return bool
      */
     public function runsOnSocket($running = null)
