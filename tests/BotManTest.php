@@ -1036,7 +1036,7 @@ class BotManTest extends PHPUnit_Framework_TestCase
         ]);
 
         $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledTelegram) {
-            $botman->hears('bar', function ($bot) use (&$calledTelegram) { // TODO: mistake - calledAddition vs calledTelegram
+            $botman->hears('bar', function ($bot) use (&$calledTelegram) {
                 $calledAdditional = true;
             });
         });
