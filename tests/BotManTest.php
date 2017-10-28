@@ -1613,6 +1613,79 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_skip_a_running_conversation_with_group_attribute()
+    {
+        $called = false;
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('buildServicePayload')
+            ->once()
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
+            });
+
+        $driver->shouldReceive('sendPayload')
+            ->once();
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply.
+         * This should get skipped!
+         */
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'group_skip_keyword',
+        ]);
+
+        $botman->group(['skip_conversation' => true], function ($bot) use (&$called) {
+            $bot->hears('group_skip_keyword', function ($bot) use (&$called) {
+                $called = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called);
+
+        $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
+        $this->assertTrue($this->cache->has($cacheKey));
+
+        /*
+         * This should now get picked up the usual way.
+         */
+        $called = false;
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
+        ]);
+
+        $botman->hears('repeat', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($called);
+    }
+
+    /** @test */
     public function it_can_stop_a_running_conversation_fluently()
     {
         $called = false;
@@ -1656,6 +1729,79 @@ class BotManTest extends PHPUnit_Framework_TestCase
         $botman->hears('fluent_stop_keyword', function ($bot) use (&$called) {
             $called = true;
         })->stopsConversation();
+        $botman->listen();
+
+        $this->assertTrue($called);
+
+        // Conversation should be removed from cache
+        $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
+        $this->assertFalse($this->cache->has($cacheKey));
+
+        /*
+         * This should now get picked up the usual way.
+         */
+        $called = false;
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'repeat',
+        ]);
+
+        $botman->hears('repeat', function ($bot) use (&$called) {
+            $called = true;
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_can_stop_a_running_conversation_with_group_attribute()
+    {
+        $called = false;
+        $driver = m::mock(NullDriver::class)->makePartial();
+
+        $driver->shouldReceive('getMessages')
+            ->andReturn([new IncomingMessage('Hi Julia', 'UX12345', 'general')]);
+
+        $driver->shouldReceive('buildServicePayload')
+            ->once()
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'This is a test question' && ($match instanceof IncomingMessage) && $arguments === [];
+            });
+
+        $driver->shouldReceive('sendPayload')
+            ->once();
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Hi Julia',
+        ]);
+
+        $botman->setDriver($driver);
+
+        $botman->hears('Hi Julia', function ($bot) {
+            $bot->startConversation(new TestConversation());
+        });
+        $botman->listen();
+
+        /*
+         * Now that the first message is saved, fake a reply.
+         * This should get skipped!
+         */
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'group_skip_keyword',
+        ]);
+
+        $botman->group(['stop_conversation' => true], function ($bot) use (&$called) {
+            $bot->hears('group_skip_keyword', function ($bot) use (&$called) {
+                $called = true;
+            });
+        });
         $botman->listen();
 
         $this->assertTrue($called);
