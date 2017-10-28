@@ -176,6 +176,15 @@ abstract class Conversation
     }
 
     /**
+     * Override default conversation cache time (only for this conversation).
+     * @return mixed
+     */
+    public function getConversationCacheTime()
+    {
+        return $this->cacheTime ?? null;
+    }
+
+    /**
      * @return mixed
      */
     abstract public function run();
