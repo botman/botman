@@ -993,6 +993,8 @@ class BotManTest extends PHPUnit_Framework_TestCase
             });
         });
 
+        $botman->listen();
+
         $this->assertFalse($calledAdditionalDriverAndMiddleware);
         $this->assertFalse($calledFakeDriver);
         $this->assertTrue($calledFakeDriverAndMiddleware);
