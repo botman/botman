@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Group commands can now be chained - #599
+- Skip and Stop conversation can be applied at groups - #600
+
 ## [2.1.3]
 ### Fixed
 - Fixed an issue with the driver verification (this time for real).
