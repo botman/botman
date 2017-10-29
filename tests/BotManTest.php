@@ -960,6 +960,70 @@ class BotManTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_chain_multiple_group_commands()
+    {
+        $calledAdditionalDriverAndMiddleware = false;
+        $calledAfterNestedGroup = false;
+        $calledFakeDriverAndMiddleware = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'bar',
+        ]);
+
+        $botman->middleware->received(new TestMiddleware());
+
+        $botman->group(['driver' => TestAdditionalDriver::class], function ($botman) use (&$calledAdditionalDriverAndMiddleware) {
+            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledAdditionalDriverAndMiddleware) {
+                $botman->hears('successful', function ($bot) use (&$calledAdditionalDriverAndMiddleware) {
+                    $calledAdditionalDriverAndMiddleware = true;
+                });
+            });
+        });
+
+        $botman->group(['driver' => FakeDriver::class], function ($botman) use (&$calledFakeDriverAndMiddleware, &$calledAfterNestedGroup) {
+            $botman->group(['middleware' => new TestMiddleware()], function ($botman) use (&$calledFakeDriverAndMiddleware) {
+                $botman->hears('successful', function ($bot) use (&$calledFakeDriverAndMiddleware) {
+                    $calledFakeDriverAndMiddleware = true;
+                });
+            });
+            $botman->hears('after_nested_group', function ($bot) use (&$calledAfterNestedGroup) {
+                $calledAfterNestedGroup = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($calledAdditionalDriverAndMiddleware);
+        $this->assertTrue($calledFakeDriverAndMiddleware);
+
+        $calledFakeDriverAndMiddleware = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'after_nested_group',
+        ]);
+
+        $botman->group(['driver' => FakeDriver::class], function ($botman) use (&$calledFakeDriverAndMiddleware, &$calledAfterNestedGroup) {
+            $botman->group(['middleware' => new TestNoMatchMiddleware()], function ($botman) use (&$calledFakeDriverAndMiddleware) {
+                $botman->hears('successful', function ($bot) use (&$calledFakeDriverAndMiddleware) {
+                    $calledFakeDriverAndMiddleware = true;
+                });
+            });
+            $botman->hears('after_nested_group', function ($bot) use (&$calledAfterNestedGroup) {
+                $calledAfterNestedGroup = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertFalse($calledFakeDriverAndMiddleware);
+        $this->assertTrue($calledAfterNestedGroup);
+    }
+
+    /** @test */
     public function it_can_match_grouped_middleware_commands()
     {
         $called = false;
