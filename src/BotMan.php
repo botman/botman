@@ -266,7 +266,7 @@ class BotMan
     {
         $this->events[] = [
             'name' => $name,
-            'callback' => $this->getCallable($callback)
+            'callback' => $this->getCallable($callback),
         ];
     }
 
