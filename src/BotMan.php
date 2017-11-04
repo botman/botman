@@ -260,11 +260,14 @@ class BotMan
      * Listen for messaging service events.
      *
      * @param string $name
-     * @param Closure $closure
+     * @param Closure|string $callback
      */
-    public function on($name, Closure $closure)
+    public function on($name, $callback)
     {
-        $this->events[] = compact('name', 'closure');
+        $this->events[] = [
+            'name' => $name,
+            'callback' => $this->getCallable($callback)
+        ];
     }
 
     /**
@@ -358,7 +361,7 @@ class BotMan
                     $this->message = $messages[0];
                 }
 
-                call_user_func_array($event['closure'], [$driverEvent->getPayload(), $this]);
+                call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
             });
         }
     }

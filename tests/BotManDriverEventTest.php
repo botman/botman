@@ -53,6 +53,19 @@ class BotManDriverEventTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_calls_driver_events_without_closure()
+    {
+        $this->fakeDriver->hasMatchingEvent = new TestEvent([]);
+        $this->botman->on('test_event', '\BotMan\BotMan\Tests\TestEventClass@event');
+        $this->botman->listen();
+
+        $this->assertSame([
+            'event' => 'test_event',
+            'data' => 'foo',
+        ], $_SERVER['event_payload']);
+    }
+
+    /** @test */
     public function it_passes_driver_event_data()
     {
         $this->fakeDriver->hasMatchingEvent = new TestEvent([]);
@@ -98,5 +111,13 @@ class TestEvent implements DriverEventInterface
             'event' => 'test_event',
             'data' => 'foo',
         ];
+    }
+}
+
+class TestEventClass
+{
+    public function event($payload, $bot)
+    {
+        $_SERVER['event_payload'] = $payload;
     }
 }
