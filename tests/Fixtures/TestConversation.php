@@ -8,6 +8,8 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class TestConversation extends Conversation
 {
+    protected $cacheTime = 900;
+
     /**
      * @return mixed
      */

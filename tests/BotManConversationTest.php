@@ -2,9 +2,11 @@
 
 namespace BotMan\BotMan\tests;
 
+use Mockery as m;
 use BotMan\BotMan\BotMan;
 use PHPUnit_Framework_TestCase;
 use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Drivers\Tests\ProxyDriver;
@@ -12,6 +14,7 @@ use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestDataConversation;
 
@@ -21,6 +24,8 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
     private $botman;
     /** @var FakeDriver */
     private $fakeDriver;
+    /** @var m\MockInterface */
+    private $cache;
 
     public static function setUpBeforeClass()
     {
@@ -35,13 +40,72 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fakeDriver = new FakeDriver();
+        $this->cache = m::mock(ArrayCache::class)->makePartial();
         ProxyDriver::setInstance($this->fakeDriver);
-        $this->botman = BotManFactory::create([]);
+        $this->botman = BotManFactory::create([], $this->cache);
     }
 
     protected function tearDown()
     {
         ProxyDriver::setInstance(FakeDriver::createInactive());
+        m::close();
+    }
+
+    /** @test */
+    public function it_caches_conversation_for_30_minutes()
+    {
+        $message = new IncomingMessage('Hello', 'helloman', '#helloworld');
+
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestDataConversation());
+        });
+
+        $this->cache->shouldReceive('put')
+            ->with($message->getConversationIdentifier(), m::any(), 30)
+            ->once();
+
+        $this->replyWithFakeMessage('Hello');
+    }
+
+    /** @test */
+    public function it_caches_conversation_for_custom_amount_of_minutes()
+    {
+        $this->fakeDriver = new FakeDriver();
+        $this->cache = m::mock(ArrayCache::class)->makePartial();
+        ProxyDriver::setInstance($this->fakeDriver);
+        $this->botman = BotManFactory::create([
+            'config' => [
+                'conversation_cache_time' => '50'
+            ],
+        ], $this->cache);
+
+        $message = new IncomingMessage('Hello', 'helloman', '#helloworld');
+
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestDataConversation());
+        });
+
+        $this->cache->shouldReceive('put')
+            ->with($message->getConversationIdentifier(), m::any(), 50)
+            ->once();
+
+        $this->replyWithFakeMessage('Hello');
+    }
+
+    /** @test */
+    public function it_uses_conversation_defined_cache_time()
+    {
+        $message = new IncomingMessage('Hello', 'helloman', '#helloworld');
+
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestConversation());
+        });
+
+        $this->cache->shouldReceive('put')
+            ->with($message->getConversationIdentifier(), m::any(), 900)
+            ->once();
+
+        $this->replyWithFakeMessage('Hello');
     }
 
     /** @test */

@@ -622,7 +622,7 @@ class BotMan
     }
 
     /**
-     * @param string $callback
+     * @param string|Closure $callback
      * @return callable
      */
     protected function getCallable($callback)

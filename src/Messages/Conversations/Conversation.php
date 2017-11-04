@@ -32,6 +32,12 @@ abstract class Conversation
     protected $token;
 
     /**
+     * Number of minutes this specific conversation should be cached.
+     * @var int
+     */
+    protected $cacheTime;
+
+    /**
      * @param BotMan $bot
      */
     public function setBot(BotMan $bot)
@@ -176,6 +182,15 @@ abstract class Conversation
     public function stopsConversation(IncomingMessage $message)
     {
         //
+    }
+
+    /**
+     * Override default conversation cache time (only for this conversation).
+     * @return mixed
+     */
+    public function getConversationCacheTime()
+    {
+        return $this->cacheTime ?? null;
     }
 
     /**

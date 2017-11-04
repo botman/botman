@@ -36,13 +36,15 @@ trait HandlesConversations
      */
     public function storeConversation(Conversation $instance, $next, $question = null, $additionalParameters = [])
     {
+        $conversation_cache_time = $instance->getConversationCacheTime();
+
         $this->cache->put($this->message->getConversationIdentifier(), [
             'conversation' => $instance,
             'question' => serialize($question),
             'additionalParameters' => serialize($additionalParameters),
             'next' => $this->prepareCallbacks($next),
             'time' => microtime(),
-        ], $this->config['config']['conversation_cache_time'] ?? 30);
+        ], $conversation_cache_time ?? $this->config['config']['conversation_cache_time'] ?? 30);
     }
 
     /**
