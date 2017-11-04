@@ -75,7 +75,7 @@ class BotManConversationTest extends PHPUnit_Framework_TestCase
         ProxyDriver::setInstance($this->fakeDriver);
         $this->botman = BotManFactory::create([
             'config' => [
-                'conversation_cache_time' => '50'
+                'conversation_cache_time' => '50',
             ],
         ], $this->cache);
 
