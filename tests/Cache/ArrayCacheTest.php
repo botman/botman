@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Cache\ArrayCache;
 
-class ArrayCacheTest extends PHPUnit_Framework_TestCase
+class ArrayCacheTest extends TestCase
 {
     /** @test */
     public function has()

@@ -3,7 +3,7 @@
 namespace BotMan\BotMan\tests\Drivers;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
@@ -15,7 +15,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
  * @covers \BotMan\BotMan\Drivers\FakeDriver
  * @covers \BotMan\BotMan\Drivers\Tests\ProxyDriver
  */
-class FakeDriverTest extends PHPUnit_Framework_TestCase
+class FakeDriverTest extends TestCase
 {
     /** @var BotMan */
     private $botman;

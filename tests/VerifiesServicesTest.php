@@ -2,7 +2,7 @@
 
 namespace BotMan\BotMan\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Drivers\DriverManager;
@@ -17,7 +17,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 /**
  * Class VerifiesServicesTest.
  */
-class VerifiesServicesTest extends PHPUnit_Framework_TestCase
+class VerifiesServicesTest extends TestCase
 {
     /** @test */
     public function it_can_verify_drivers()

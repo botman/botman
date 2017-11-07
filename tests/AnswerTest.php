@@ -2,11 +2,11 @@
 
 namespace BotMan\BotMan\tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class AnswerTest extends PHPUnit_Framework_TestCase
+class AnswerTest extends TestCase
 {
     /** @test */
     public function it_can_be_created()

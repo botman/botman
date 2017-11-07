@@ -3,13 +3,13 @@
 namespace BotMan\BotMan\tests\Storages;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Storages\Storage;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class BotManStorageTest extends PHPUnit_Framework_TestCase
+class BotManStorageTest extends TestCase
 {
     protected function getBot()
     {

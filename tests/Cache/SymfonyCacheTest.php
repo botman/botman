@@ -3,13 +3,13 @@
 namespace BotMan\BotMan\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use BotMan\BotMan\Cache\SymfonyCache;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
-class SymfonyCacheTest extends PHPUnit_Framework_TestCase
+class SymfonyCacheTest extends TestCase
 {
     public function tearDown()
     {

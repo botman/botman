@@ -3,10 +3,10 @@
 namespace BotMan\BotMan\tests;
 
 use Illuminate\Support\Arr;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
-class ButtonTest extends PHPUnit_Framework_TestCase
+class ButtonTest extends TestCase
 {
     /** @test */
     public function it_can_be_created()

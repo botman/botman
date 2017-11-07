@@ -5,14 +5,14 @@ namespace BotMan\BotMan\tests\Middleware;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Middleware\ApiAi;
 use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class ApiAiTest extends PHPUnit_Framework_TestCase
+class ApiAiTest extends TestCase
 {
     public function tearDown()
     {

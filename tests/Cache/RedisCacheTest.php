@@ -4,14 +4,14 @@ namespace BotMan\BotMan\Tests;
 
 use Redis;
 use RedisException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Cache\RedisCache;
 
 /**
  * @group integration
  */
-class RedisCacheTest extends PHPUnit_Framework_TestCase
+class RedisCacheTest extends TestCase
 {
     protected function setUp()
     {

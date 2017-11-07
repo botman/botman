@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\tests\Storages;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Storages\Drivers\FileStorage;
 
-class FileStorageTest extends PHPUnit_Framework_TestCase
+class FileStorageTest extends TestCase
 {
     /** @var FileStorage */
     protected $storage;
