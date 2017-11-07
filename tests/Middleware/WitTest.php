@@ -5,14 +5,14 @@ namespace BotMan\BotMan\tests\Middleware;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Middleware\Wit;
 use BotMan\BotMan\Cache\ArrayCache;
 use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class WitTest extends PHPUnit_Framework_TestCase
+class WitTest extends TestCase
 {
     public function tearDown()
     {

@@ -6,10 +6,10 @@ use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
 use SuperClosure\Serializer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 
-class ConversationTest extends PHPUnit_Framework_TestCase
+class ConversationTest extends TestCase
 {
     /** @var MockInterface */
     protected $commander;

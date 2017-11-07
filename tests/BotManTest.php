@@ -5,7 +5,7 @@ namespace BotMan\BotMan\tests;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
@@ -36,7 +36,7 @@ use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
 /**
  * Class BotManTest.
  */
-class BotManTest extends PHPUnit_Framework_TestCase
+class BotManTest extends TestCase
 {
     /** @var MockInterface */
     protected $commander;

@@ -5,7 +5,7 @@ namespace BotMan\BotMan\tests;
 use Exception;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
@@ -14,7 +14,7 @@ use BotMan\BotMan\Tests\Fixtures\TestClass;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class ExceptionTest extends PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     /** @var ArrayCache */
     protected $cache;

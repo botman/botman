@@ -4,7 +4,7 @@ namespace BotMan\BotMan\tests\Unit;
 
 use Mockery as m;
 use BotMan\BotMan\BotMan;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
@@ -12,7 +12,7 @@ use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class BotManTest extends PHPUnit_Framework_TestCase
+class BotManTest extends TestCase
 {
     protected $cache;
 

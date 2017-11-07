@@ -3,10 +3,10 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 
-class BotManFactoryTest extends PHPUnit_Framework_TestCase
+class BotManFactoryTest extends TestCase
 {
     /** @test */
     public function it_can_create_botman_instances()

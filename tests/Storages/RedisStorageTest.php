@@ -4,14 +4,14 @@ namespace BotMan\BotMan\Tests;
 
 use Redis;
 use RedisException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Storages\Drivers\RedisStorage;
 
 /**
  * @group integration
  */
-class RedisStorageTest extends PHPUnit_Framework_TestCase
+class RedisStorageTest extends TestCase
 {
     protected function setUp()
     {

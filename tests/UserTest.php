@@ -3,9 +3,9 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\Users\User;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
     private $userId = 'U023BECGF';
     private $userFirstName = 'Bobby';

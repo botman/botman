@@ -3,7 +3,7 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestCustomMiddleware;
 
-class BotManMiddlewareTest extends PHPUnit_Framework_TestCase
+class BotManMiddlewareTest extends TestCase
 {
     /** @var BotMan */
     private $botman;
