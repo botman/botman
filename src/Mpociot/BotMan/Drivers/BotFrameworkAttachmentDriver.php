@@ -29,7 +29,7 @@ class BotFrameworkAttachmentDriver extends BotFrameworkDriver
      */
     public function getMessages()
     {
-        $message = new Message(BotMan::ATTACHMENT_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
+        $message = new Message(BotMan::IMAGE_PATTERN, $this->event->get('from')['id'], $this->event->get('conversation')['id'], $this->payload);
         $message->setAttachments($this->getAttachmentUrls());
 
         return [$message];

@@ -172,11 +172,12 @@ class BotFrameworkDriver extends Driver
         $payload = is_null($matchingMessage->getPayload()) ? [] : $matchingMessage->getPayload()->all();
         $apiURL = Collection::make($payload)->get('serviceUrl', Collection::make($additionalParameters)->get('serviceUrl'));
 
-        if (strstr($apiURL, 'webchat.botframework')) {
-            $parameters['from'] = [
-                'id' => $payload['recipient']['id'],
-            ];
-        }
+		// comment the if to allow all bot framework integrations
+		// if (strstr($apiURL, 'webchat.botframework')) {
+		$parameters['from'] = $payload['recipient'];
+		$parameters['recipient'] = $payload['from'];
+		$parameters['conversation'] = $payload['conversation'];
+		// }
 
         return $this->http->post($apiURL.'/v3/conversations/'.urlencode($matchingMessage->getChannel()).'/activities', [], $parameters, $headers, true);
     }
