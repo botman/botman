@@ -17,8 +17,11 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function matchesRequest()
     {
-        $hasImages = ! Collection::make($this->event->get('attachments'))->where('contentType', 'image')->isEmpty();
+		$col = Collection::make($this->event->get('attachments'));
+        $hasImages = ! $col->where('contentType', 'image')->isEmpty() ||
+			! $col->where('contentType', 'image/jpeg')->isEmpty();
 
+		L("image matches request " . $hasImages);
         return parent::matchesRequest() && $hasImages;
     }
 
@@ -42,7 +45,12 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
      */
     public function getImagesUrls()
     {
-        return Collection::make($this->event->get('attachments'))->where('contentType', 'image')->pluck('contentUrl')->toArray();
+		$col = Collection::make($this->event->get('attachments'));
+		$mergedResults = array_merge(
+			$col->where('contentType', 'image')->pluck('contentUrl')->toArray(),
+			$col->where('contentType', 'image/jpeg')->pluck('contentUrl')->toArray()
+		);
+        return $mergedResults;
     }
 
     /**
