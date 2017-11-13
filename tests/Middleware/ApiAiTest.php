@@ -47,7 +47,7 @@ class ApiAiTest extends TestCase
             ->once()
             ->with('https://api.api.ai/v1/query?v=20150910', [], [
                 'query' => [$messageText],
-                'sessionId' => md5($messageChannel),
+                'sessionId' => md5($message->getConversationIdentifier()),
                 'lang' => 'en',
             ], [
                 'Authorization: Bearer token',
