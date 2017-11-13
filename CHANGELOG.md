@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 - Group commands can now be chained - #599
 - Skip and Stop conversation can be applied at groups - #600
 
+### Fixed
+- Fixed API.ai session management - #610
+
 ## [2.1.3]
 ### Fixed
 - Fixed an issue with the driver verification (this time for real).
