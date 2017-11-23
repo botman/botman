@@ -44,10 +44,12 @@ class RedisCacheTest extends TestCase
         static::assertTrue($cache->has('foo'));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @expectedException RedisException
+     */
     public function invalid_auth()
     {
-        static::setExpectedException(RedisException::class);
         $cache = new RedisCache('127.0.0.1', 6380, 'invalid');
         $cache->put('foo', 'bar', 1);
     }

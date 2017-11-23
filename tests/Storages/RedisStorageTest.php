@@ -46,10 +46,12 @@ class RedisStorageTest extends TestCase
         self::assertEquals(Collection::make($data), $storage->get($key));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @expectedException RedisException
+     */
     public function invalid_auth()
     {
-        static::setExpectedException(RedisException::class);
         $storage = new RedisStorage('127.0.0.1', 6380, 'invalid');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
