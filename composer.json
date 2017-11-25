@@ -28,7 +28,7 @@
         "illuminate/support": "^5.4",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~6.4",
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "dev-master",
         "sllh/php-cs-fixer-styleci-bridge": "^2.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",

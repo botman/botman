@@ -12,7 +12,7 @@ use BotMan\BotMan\Drivers\Tests\ProxyDriver;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
- * @covers \BotMan\BotMan\Drivers\FakeDriver
+ * @covers \BotMan\BotMan\Drivers\Tests\FakeDriver
  * @covers \BotMan\BotMan\Drivers\Tests\ProxyDriver
  */
 class FakeDriverTest extends TestCase
