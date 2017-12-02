@@ -53,7 +53,7 @@ class BotMan
     protected $message;
 
     /** @var OutgoingMessage|Question */
-    protected $ougoingMessage;
+    protected $outgoingMessage;
 
     /** @var string */
     protected $driverName;
