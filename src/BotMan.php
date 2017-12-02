@@ -622,12 +622,17 @@ class BotMan
     }
 
     /**
-     * @param string|Closure $callback
-     * @return callable
+     * @param $callback
+     * @return array|string|Closure
+     * @throws UnexpectedValueException
      */
     protected function getCallable($callback)
     {
         if ($callback instanceof Closure) {
+            return $callback;
+        }
+
+        if (is_array($callback)) {
             return $callback;
         }
 
