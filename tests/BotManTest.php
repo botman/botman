@@ -231,7 +231,7 @@ class BotManTest extends TestCase
 
         $this->assertTrue($command::$called);
     }
-    
+
     /** @test */
     public function it_does_not_hear_bot_commands()
     {
