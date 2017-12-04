@@ -216,6 +216,23 @@ class BotManTest extends TestCase
     }
 
     /** @test */
+    public function it_can_used_instance_commands()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+
+        $command = new TestClass($botman);
+
+        $botman->hears('Foo', [$command, 'foo']);
+        $botman->listen();
+
+        $this->assertTrue($command::$called);
+    }
+    
+    /** @test */
     public function it_does_not_hear_bot_commands()
     {
         $called = false;
