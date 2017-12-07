@@ -383,15 +383,6 @@ class BotMan
                 if ($this->loadedConversation === false) {
                     $this->callMatchingMessages();
                 }
-
-                /*
-                 * If the driver has a  "messagesHandled" method, call it.
-                 * This method can be used to trigger driver methods
-                 * once the messages are handles.
-                 */
-                if (method_exists($this->getDriver(), 'messagesHandled')) {
-                    $this->getDriver()->messagesHandled();
-                }
             }
 
             $this->firedDriverEvents = false;
