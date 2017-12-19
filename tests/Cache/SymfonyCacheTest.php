@@ -11,6 +11,8 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class SymfonyCacheTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     public function tearDown()
     {
         m::close();

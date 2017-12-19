@@ -14,6 +14,8 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class ApiAiTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     public function tearDown()
     {
         m::close();

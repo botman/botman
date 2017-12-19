@@ -20,6 +20,8 @@ use BotMan\BotMan\Tests\Fixtures\TestDataConversation;
 
 class BotManConversationTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /** @var BotMan */
     private $botman;
     /** @var FakeDriver */

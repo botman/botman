@@ -11,6 +11,8 @@ use BotMan\BotMan\Tests\Fixtures\TestConversation;
 
 class ConversationTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /** @var MockInterface */
     protected $commander;
 

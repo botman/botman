@@ -38,6 +38,8 @@ use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
  */
 class BotManTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /** @var MockInterface */
     protected $commander;
 
@@ -1315,6 +1317,37 @@ class BotManTest extends TestCase
         $botman = m::mock(BotMan::class)->makePartial();
         $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
         $botman->say('foo', 'channel', FakeDriver::class);
+    }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function it_can_originate_messages_to_multiple_users()
+    {
+        $driver = m::mock(NullDriver::class);
+        $driver->shouldReceive('buildServicePayload')
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'foo' && $match->getSender() === 'channel1' && $arguments === [];
+            });
+        $driver->shouldReceive('buildServicePayload')
+            ->withArgs(function ($message, $match, $arguments) {
+                return $message->getText() === 'foo' && $match->getSender() === 'channel2' && $arguments === [];
+            });
+
+        $driver->shouldReceive('sendPayload')
+            ->twice();
+
+        $mock = \Mockery::mock('alias:BotMan\BotMan\Drivers\DriverManager');
+        $mock->shouldReceive('loadFromName')
+            ->once()
+            ->with(FakeDriver::class, [])
+            ->andReturn($driver);
+
+        $botman = m::mock(BotMan::class)->makePartial();
+        $botman->middleware = m::mock(MiddlewareManager::class)->makePartial();
+        $botman->say('foo', ['channel1', 'channel2'], FakeDriver::class);
     }
 
     /**

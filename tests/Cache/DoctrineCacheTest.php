@@ -9,6 +9,8 @@ use Doctrine\Common\Cache\CacheProvider;
 
 class DoctrineCacheTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     public function tearDown()
     {
         m::close();

@@ -9,6 +9,8 @@ use BotMan\BotMan\Cache\CodeIgniterCache;
 
 class CodeIgniterCacheTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     public function tearDown()
     {
         m::close();
