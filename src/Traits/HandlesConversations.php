@@ -15,13 +15,13 @@ trait HandlesConversations
 {
     /**
      * @param \BotMan\BotMan\Messages\Conversations\Conversation $instance
-     * @param null|string $channel
+     * @param null|string $recipient
      * @param null|string $driver
      */
-    public function startConversation(Conversation $instance, $channel = null, $driver = null)
+    public function startConversation(Conversation $instance, $recipient = null, $driver = null)
     {
-        if (! is_null($channel) && ! is_null($driver)) {
-            $this->message = new IncomingMessage('', $channel, '');
+        if (! is_null($recipient) && ! is_null($driver)) {
+            $this->message = new IncomingMessage('', $recipient, '');
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
         $instance->setBot($this);
