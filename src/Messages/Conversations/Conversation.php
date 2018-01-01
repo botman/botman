@@ -46,6 +46,14 @@ abstract class Conversation
     }
 
     /**
+     * @return BotMan
+     */
+    public function getBot()
+    {
+        return $this->bot;
+    }
+
+    /**
      * @param string|Question $question
      * @param array|Closure $next
      * @param array $additionalParameters
