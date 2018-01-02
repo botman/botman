@@ -89,4 +89,13 @@ class ConversationTest extends TestCase
             ],
         ]);
     }
+
+    /** @test */
+    public function it_can_return_bot_instance()
+    {
+        $conversation = new TestConversation();
+        $bot = m::mock(BotMan::class);
+        $conversation->setBot($bot);
+        $this->assertEquals($bot, $conversation->getBot());
+    }
 }
