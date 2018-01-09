@@ -34,11 +34,11 @@ class ApiAi implements MiddlewareInterface
      * @param string $lang language
      * @param HttpInterface $http
      */
-    public function __construct($token, $lang = 'en', HttpInterface $http)
+    public function __construct($token, HttpInterface $http, $lang = 'en')
     {
         $this->token = $token;
-        $this->lang  = $lang;
-        $this->http  = $http;
+        $this->lang = $lang;
+        $this->http = $http;
     }
 
     /**
@@ -49,7 +49,7 @@ class ApiAi implements MiddlewareInterface
      */
     public static function create($token, $lang = 'en')
     {
-        return new static($token, $lang, new Curl());
+        return new static($token, new Curl(), $lang);
     }
 
     /**
