@@ -488,6 +488,7 @@ class BotMan
 
         $previousDriver = $this->driver;
         $previousMessage = $this->message;
+        $response = '';
 
         if ($driver instanceof DriverInterface) {
             $this->setDriver($driver);
