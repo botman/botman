@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Interfaces\Middleware\Matching;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class Matcher
@@ -25,7 +25,7 @@ class Matcher
      * @param Answer $answer
      * @param Command $command
      * @param DriverInterface $driver
-     * @param MiddlewareInterface[] $middleware
+     * @param Matching[] $middleware
      * @return bool
      */
     public function isMessageMatching(IncomingMessage $message, Answer $answer, Command $command, DriverInterface $driver, $middleware = [])
@@ -39,7 +39,7 @@ class Matcher
      * @param IncomingMessage $message
      * @param Answer $answer
      * @param string $pattern
-     * @param MiddlewareInterface[] $middleware
+     * @param Matching[] $middleware
      * @return int
      */
     public function isPatternValid(IncomingMessage $message, Answer $answer, $pattern, $middleware = [])
@@ -58,7 +58,7 @@ class Matcher
 
         // Try middleware first
         if (count($middleware)) {
-            return Collection::make($middleware)->reject(function (MiddlewareInterface $middleware) use (
+            return Collection::make($middleware)->reject(function (Matching $middleware) use (
                     $message,
                     $pattern,
                     $regexMatched
