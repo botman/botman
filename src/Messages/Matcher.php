@@ -63,8 +63,8 @@ class Matcher
                     $pattern,
                     $regexMatched
                 ) {
-                    return $middleware->matching($message, $pattern, $regexMatched);
-                })->isEmpty() === true;
+                return $middleware->matching($message, $pattern, $regexMatched);
+            })->isEmpty() === true;
         }
 
         return $regexMatched;
