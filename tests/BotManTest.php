@@ -57,9 +57,9 @@ class BotManTest extends TestCase
         $this->cache = new ArrayCache();
     }
 
-    protected function getBot($data)
+    protected function getBot($data, $config = [])
     {
-        $botman = BotManFactory::create([], $this->cache);
+        $botman = BotManFactory::create($config, $this->cache);
 
         $data = Collection::make($data);
         /** @var FakeDriver $driver */
@@ -1255,10 +1255,16 @@ class BotManTest extends TestCase
     /** @test */
     public function it_can_reply_content()
     {
-        $botman = $this->getBot([]);
+        $botman = $this->getBot([], [
+            'content_file' => __DIR__ . '/Fixtures/TestContent.yml'
+        ]);
         $driver = m::mock(FakeDriver::class)->makePartial();
         $botman->setDriver($driver);
         $botman->replyContent('simple');
+
+        $this->assertCount(2, $botman->getDriver()->getBotMessages());
+        $this->assertSame('Hello!', $botman->getDriver()->getBotMessages()[0]->getText());
+        $this->assertSame('How are you?', $botman->getDriver()->getBotMessages()[1]->getText());
     }
 
     /** @test */

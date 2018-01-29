@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Matcher;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Messages\Outgoing\Yaml;
 use BotMan\BotMan\Traits\ProvidesStorage;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -104,6 +105,9 @@ class BotMan
     /** @var Matcher */
     protected $matcher;
 
+    /** @var string */
+    protected $contentFile;
+
     /** @var bool */
     protected $loadedConversation = false;
 
@@ -131,6 +135,10 @@ class BotMan
         $this->middleware = new MiddlewareManager($this);
         $this->conversationManager = new ConversationManager();
         $this->exceptionHandler = new ExceptionHandler();
+
+        if (isset($this->config['content_file'])) {
+            $this->setContentFile($this->config['content_file']);
+        }
     }
 
     /**
@@ -584,9 +592,25 @@ class BotMan
         return $this->sendPayload($this->getDriver()->buildServicePayload($this->outgoingMessage, $this->message, $additionalParameters));
     }
 
+    /**
+     * @param string $content
+     * @param array $data
+     * @param array $additionalParameters
+     * @throws \Exception
+     */
     public function replyContent(string $content, array $data = [], array $additionalParameters = [])
     {
+        if ($this->contentFile === null) {
+            throw new \Exception('You have not configured a content file to load.');
+        }
 
+        $instructions = (new Yaml($this->contentFile))->getMessagesForContent($content, $data);
+
+        foreach ($instructions as $instruction) {
+            if (method_exists($this, $instruction['method'])) {
+                call_user_func_array([$this, $instruction['method']], $instruction['arguments']);
+            }
+        }
     }
 
     /**
@@ -724,5 +748,13 @@ class BotMan
             'config',
             'middleware',
         ];
+    }
+
+    /**
+     * @param string $contentFile
+     */
+    public function setContentFile(string $contentFile)
+    {
+        $this->contentFile = $contentFile;
     }
 }
