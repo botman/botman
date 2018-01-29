@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Messages\Outgoing;
 
-use Illuminate\Support\Collection;
 use Mustache_Engine;
+use Illuminate\Support\Collection;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 
 class Yaml
@@ -18,7 +18,7 @@ class Yaml
      */
     public function __construct($file)
     {
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             throw new \Exception('File "'.$file.'" does not exist."');
         }
         $this->contents = file_get_contents($file);
@@ -45,6 +45,7 @@ class Yaml
     public function getMessagesForContent(string $content, $data = [])
     {
         $block = $this->parse($this->contents, $data)->get($content, []);
+
         return $this->mapInstructions($block, $data);
     }
 
@@ -76,16 +77,16 @@ class Yaml
                     $result[] = [
                         'method' => (is_array($text)) ? 'randomReply' : 'reply',
                         'arguments' => [
-                            is_array($text) ? array_map([$this, 'parseMustacheTemplate'], $text, $data) : $this->parseMustacheTemplate($text, $data)
-                        ]
+                            is_array($text) ? array_map([$this, 'parseMustacheTemplate'], $text, $data) : $this->parseMustacheTemplate($text, $data),
+                        ],
                     ];
                 }
                 if ($instruction->has('typing')) {
                     $result[] = [
                         'method' => 'typesAndWaits',
                         'arguments' => [
-                            $instruction->get('wait', 1)
-                        ]
+                            $instruction->get('wait', 1),
+                        ],
                     ];
                 }
             }
@@ -94,14 +95,14 @@ class Yaml
                 $result[] = [
                     'method' => 'reply',
                     'arguments' => [
-                        $this->parseMustacheTemplate($instruction, $data)
-                    ]
+                        $this->parseMustacheTemplate($instruction, $data),
+                    ],
                 ];
             }
+
             return $result;
         })
             ->flatten(1)
             ->toArray();
     }
-
 }
