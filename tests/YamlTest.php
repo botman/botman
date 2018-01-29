@@ -2,9 +2,8 @@
 
 namespace BotMan\BotMan\Tests;
 
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use BotMan\BotMan\Messages\Outgoing\Yaml;
 use PHPUnit\Framework\TestCase;
+use BotMan\BotMan\Messages\Outgoing\Yaml;
 
 class YamlTest extends TestCase
 {
@@ -61,7 +60,7 @@ class YamlTest extends TestCase
     {
         $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
         $data = [
-            'example' => 'foobar'
+            'example' => 'foobar',
         ];
 
         $messages = $yaml->getMessagesForContent('mustache', $data);
@@ -82,13 +81,13 @@ class YamlTest extends TestCase
             'tweets' => [
                 [
                     'author' => 'Foo',
-                    'tweet' => 'Tweet #1'
+                    'tweet' => 'Tweet #1',
                 ],
                 [
                     'author' => 'Bar',
-                    'tweet' => 'Tweet #2'
-                ]
-            ]
+                    'tweet' => 'Tweet #2',
+                ],
+            ],
         ];
         $messages = $yaml->getMessagesForContent('sendTweets', $data);
 
