@@ -584,6 +584,11 @@ class BotMan
         return $this->sendPayload($this->getDriver()->buildServicePayload($this->outgoingMessage, $this->message, $additionalParameters));
     }
 
+    public function replyContent(string $content, array $data = [], array $additionalParameters = [])
+    {
+
+    }
+
     /**
      * @param $payload
      * @return mixed

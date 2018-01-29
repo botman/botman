@@ -1,0 +1,29 @@
+gettingStarted:
+  - text: Hello!
+    typing: true
+    wait: 2
+  - text: How are you?
+    typing: true
+
+simple:
+  - Hello!
+  - How are you?
+
+random:
+  - text:
+    - Hello!
+    - Morning!
+  - How are you?
+
+mustache:
+  - text: Hi {{example}}
+  - How are you?
+
+sendTweets:
+  - Here's the latest tweets
+
+  {{#tweets}}
+  - text: |
+      Sent by: {{author}}
+      Tweet: {{tweet}}
+  {{/tweets}}

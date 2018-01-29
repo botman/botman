@@ -1253,6 +1253,15 @@ class BotManTest extends TestCase
     }
 
     /** @test */
+    public function it_can_reply_content()
+    {
+        $botman = $this->getBot([]);
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $botman->setDriver($driver);
+        $botman->replyContent('simple');
+    }
+
+    /** @test */
     public function it_can_reply_a_random_message()
     {
         $randomMessages = ['foo', 'bar', 'baz'];
