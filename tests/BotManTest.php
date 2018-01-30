@@ -1255,12 +1255,11 @@ class BotManTest extends TestCase
     /** @test */
     public function it_can_reply_content()
     {
-        $botman = $this->getBot([], [
-            'content_file' => __DIR__.'/Fixtures/TestContent.yml',
-        ]);
+        $botman = $this->getBot([]);
         $driver = m::mock(FakeDriver::class)->makePartial();
         $botman->setDriver($driver);
-        $botman->replyContent('simple');
+        $botman->loadInstructions(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
+        $botman->replyInstruction('simple');
 
         $this->assertCount(2, $botman->getDriver()->getBotMessages());
         $this->assertSame('Hello!', $botman->getDriver()->getBotMessages()[0]->getText());

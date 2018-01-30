@@ -1,27 +1,24 @@
 <?php
 
-namespace BotMan\BotMan\Messages\Outgoing;
+namespace BotMan\BotMan\Yaml;
 
 use Mustache_Engine;
+use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Collection;
-use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 
-class Yaml
+class Parser
 {
     /** @var Collection */
     protected $contents;
 
     /**
      * Yaml constructor.
-     * @param $file
+     * @param string $contents
      * @throws \Exception
      */
-    public function __construct($file)
+    public function __construct(string $contents)
     {
-        if (! file_exists($file)) {
-            throw new \Exception('File "'.$file.'" does not exist."');
-        }
-        $this->contents = file_get_contents($file);
+        $this->contents = $contents;
     }
 
     /**
@@ -32,7 +29,7 @@ class Yaml
     protected function parse($input, $data = [])
     {
         $yaml = $this->parseMustacheTemplate($input, $data);
-        $parsed = SymfonyYaml::parse($yaml);
+        $parsed = Yaml::parse($yaml);
 
         return Collection::make($parsed);
     }
@@ -42,7 +39,7 @@ class Yaml
      * @param array $data
      * @return mixed
      */
-    public function getMessagesForContent(string $content, $data = [])
+    public function getMessagesForInstruction(string $content, $data = [])
     {
         $block = $this->parse($this->contents, $data)->get($content, []);
 

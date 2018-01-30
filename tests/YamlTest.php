@@ -2,16 +2,16 @@
 
 namespace BotMan\BotMan\Tests;
 
+use BotMan\BotMan\Yaml\Parser;
 use PHPUnit\Framework\TestCase;
-use BotMan\BotMan\Messages\Outgoing\Yaml;
 
 class YamlTest extends TestCase
 {
     /** @test */
     public function it_can_parse_yaml_with_types()
     {
-        $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
-        $messages = $yaml->getMessagesForContent('gettingStarted');
+        $yaml = new Parser(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
+        $messages = $yaml->getMessagesForInstruction('gettingStarted');
 
         $this->assertCount(4, $messages);
         $this->assertSame('reply', $messages[0]['method']);
@@ -30,8 +30,8 @@ class YamlTest extends TestCase
     /** @test */
     public function it_can_parse_flat_yaml()
     {
-        $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
-        $messages = $yaml->getMessagesForContent('simple');
+        $yaml = new Parser(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
+        $messages = $yaml->getMessagesForInstruction('simple');
 
         $this->assertCount(2, $messages);
         $this->assertSame('reply', $messages[0]['method']);
@@ -44,8 +44,8 @@ class YamlTest extends TestCase
     /** @test */
     public function it_can_parse_random_responses_yaml()
     {
-        $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
-        $messages = $yaml->getMessagesForContent('random');
+        $yaml = new Parser(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
+        $messages = $yaml->getMessagesForInstruction('random');
 
         $this->assertCount(2, $messages);
         $this->assertSame('randomReply', $messages[0]['method']);
@@ -58,12 +58,12 @@ class YamlTest extends TestCase
     /** @test */
     public function it_can_parse_mustache_templates()
     {
-        $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
+        $yaml = new Parser(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
         $data = [
             'example' => 'foobar',
         ];
 
-        $messages = $yaml->getMessagesForContent('mustache', $data);
+        $messages = $yaml->getMessagesForInstruction('mustache', $data);
 
         $this->assertCount(2, $messages);
         $this->assertSame('reply', $messages[0]['method']);
@@ -76,7 +76,7 @@ class YamlTest extends TestCase
     /** @test */
     public function it_can_parse_mustache_templates_with_blocks()
     {
-        $yaml = new Yaml(__DIR__.'/Fixtures/TestContent.yml');
+        $yaml = new Parser(file_get_contents(__DIR__.'/Fixtures/TestContent.yml'));
         $data = [
             'tweets' => [
                 [
@@ -89,7 +89,7 @@ class YamlTest extends TestCase
                 ],
             ],
         ];
-        $messages = $yaml->getMessagesForContent('sendTweets', $data);
+        $messages = $yaml->getMessagesForInstruction('sendTweets', $data);
 
         $this->assertCount(3, $messages);
         $this->assertSame('reply', $messages[0]['method']);

@@ -3,11 +3,11 @@
 namespace BotMan\BotMan;
 
 use Closure;
+use BotMan\BotMan\Yaml\Parser;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Matcher;
 use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Messages\Outgoing\Yaml;
 use BotMan\BotMan\Traits\ProvidesStorage;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -106,7 +106,7 @@ class BotMan
     protected $matcher;
 
     /** @var string */
-    protected $contentFile;
+    protected $instructions = '';
 
     /** @var bool */
     protected $loadedConversation = false;
@@ -135,10 +135,6 @@ class BotMan
         $this->middleware = new MiddlewareManager($this);
         $this->conversationManager = new ConversationManager();
         $this->exceptionHandler = new ExceptionHandler();
-
-        if (isset($this->config['content_file'])) {
-            $this->setContentFile($this->config['content_file']);
-        }
     }
 
     /**
@@ -593,24 +589,27 @@ class BotMan
     }
 
     /**
-     * @param string $content
+     * @param string $instruction
      * @param array $data
      * @param array $additionalParameters
-     * @throws \Exception
      */
-    public function replyContent(string $content, array $data = [], array $additionalParameters = [])
+    public function replyInstruction(string $instruction, array $data = [], array $additionalParameters = [])
     {
-        if ($this->contentFile === null) {
-            throw new \Exception('You have not configured a content file to load.');
-        }
-
-        $instructions = (new Yaml($this->contentFile))->getMessagesForContent($content, $data);
+        $instructions = (new Parser($this->instructions))->getMessagesForInstruction($instruction, $data);
 
         foreach ($instructions as $instruction) {
             if (method_exists($this, $instruction['method'])) {
                 call_user_func_array([$this, $instruction['method']], $instruction['arguments']);
             }
         }
+    }
+
+    /**
+     * @param string $instructions
+     */
+    public function loadInstructions(string $instructions)
+    {
+        $this->instructions = $instructions;
     }
 
     /**
@@ -748,13 +747,5 @@ class BotMan
             'config',
             'middleware',
         ];
-    }
-
-    /**
-     * @param string $contentFile
-     */
-    public function setContentFile(string $contentFile)
-    {
-        $this->contentFile = $contentFile;
     }
 }
