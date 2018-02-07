@@ -77,8 +77,8 @@ class BotManMiddlewareTest extends TestCase
         });
 
         $this->replyWithFakeMessage('Foo');
-
         $this->replyWithFakeMessage('My Answer');
+
         $this->assertSame('My Question', $_SERVER['middleware_captured_question']);
     }
 

@@ -395,6 +395,7 @@ class BotMan
             }
 
             $this->firedDriverEvents = false;
+            $this->message = new IncomingMessage('', '', '');
         } catch (\Throwable $e) {
             $this->exceptionHandler->handleException($e, $this);
         }

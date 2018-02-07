@@ -33,44 +33,40 @@ class BotManStorageTest extends TestCase
     public function it_creates_an_user_storage()
     {
         $bot = $this->getBot();
-        $bot->hears('Hello again', function () {
+        $bot->hears('Hello again', function ($bot) {
+            $storage = $bot->userStorage();
+            $this->assertInstanceOf(Storage::class, $storage);
+            $this->assertSame('user_', $storage->getPrefix());
+            $this->assertSame('UX12345', $storage->getDefaultKey());
         });
         $bot->listen();
-
-        $storage = $bot->userStorage();
-
-        $this->assertInstanceOf(Storage::class, $storage);
-        $this->assertSame('user_', $storage->getPrefix());
-        $this->assertSame('UX12345', $storage->getDefaultKey());
     }
 
     /** @test */
     public function it_creates_a_channel_storage()
     {
         $bot = $this->getBot();
-        $bot->hears('Hello again', function () {
+        $bot->hears('Hello again', function ($bot) {
+            $storage = $bot->channelStorage();
+
+            $this->assertInstanceOf(Storage::class, $storage);
+            $this->assertSame('channel_', $storage->getPrefix());
+            $this->assertSame('general', $storage->getDefaultKey());
         });
         $bot->listen();
-
-        $storage = $bot->channelStorage();
-
-        $this->assertInstanceOf(Storage::class, $storage);
-        $this->assertSame('channel_', $storage->getPrefix());
-        $this->assertSame('general', $storage->getDefaultKey());
     }
 
     /** @test */
     public function it_creates_a_driver_storage()
     {
         $bot = $this->getBot();
-        $bot->hears('Hello again', function () {
+        $bot->hears('Hello again', function ($bot) {
+            $storage = $bot->driverStorage();
+
+            $this->assertInstanceOf(Storage::class, $storage);
+            $this->assertSame('driver_', $storage->getPrefix());
+            $this->assertSame('Fake', $storage->getDefaultKey());
         });
         $bot->listen();
-
-        $storage = $bot->driverStorage();
-
-        $this->assertInstanceOf(Storage::class, $storage);
-        $this->assertSame('driver_', $storage->getPrefix());
-        $this->assertSame('Fake', $storage->getDefaultKey());
     }
 }

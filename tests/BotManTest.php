@@ -140,16 +140,16 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+
+            $conversation = new TestConversation();
+
+            $botman->storeConversation($conversation, function ($answer) use (&$called) {
+                $GLOBALS['answer'] = $answer;
+                $GLOBALS['called'] = true;
+            });
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, function ($answer) use (&$called) {
-            $GLOBALS['answer'] = $answer;
-            $GLOBALS['called'] = true;
-        });
 
         /*
          * Now that the first message is saved, fake a reply
@@ -643,14 +643,14 @@ class BotManTest extends TestCase
             'recipient' => 'general',
             'message' => 'foo',
         ]);
+    
+        $conversation = new TestConversation();
 
-        $botman->hears('foo', function () {
+        $botman->hears('foo', function ($botman) use ($conversation) {
+            $botman->storeConversation($conversation, function ($answer) {
+            });
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-        $botman->storeConversation($conversation, function ($answer) {
-        });
 
         $cacheKey = 'conversation-'.sha1('UX12345').'-'.sha1('general');
         $this->assertTrue($this->cache->has($cacheKey));
@@ -697,16 +697,15 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+            $conversation = new TestConversation();
+
+            $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
+                $GLOBALS['answer'] = $answer;
+                $GLOBALS['called'] = true;
+            });
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
-            $GLOBALS['answer'] = $answer;
-            $GLOBALS['called'] = true;
-        });
 
         /*
          * Now that the first message is saved, fake a reply
@@ -772,15 +771,14 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+            $conversation = new TestConversation();
+
+            $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
+                $this->_throwException('called conversation');
+            });
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
-            $this->_throwException('called conversation');
-        });
 
         /*
          * Now that the first message is saved, fake a reply
@@ -805,28 +803,27 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+            $conversation = new TestConversation();
+
+            $botman->storeConversation($conversation, [
+                [
+                    'pattern' => 'token_one',
+                    'callback' => function (Answer $answer) use (&$called) {
+                        $GLOBALS['answer'] = $answer;
+                        $GLOBALS['called_foo'] = true;
+                    },
+                ],
+                [
+                    'pattern' => 'token_two',
+                    'callback' => function (Answer $answer) use (&$called) {
+                        $GLOBALS['answer'] = $answer;
+                        $GLOBALS['called_bar'] = true;
+                    },
+                ],
+            ]);
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, [
-            [
-                'pattern' => 'token_one',
-                'callback' => function (Answer $answer) use (&$called) {
-                    $GLOBALS['answer'] = $answer;
-                    $GLOBALS['called_foo'] = true;
-                },
-            ],
-            [
-                'pattern' => 'token_two',
-                'callback' => function (Answer $answer) use (&$called) {
-                    $GLOBALS['answer'] = $answer;
-                    $GLOBALS['called_bar'] = true;
-                },
-            ],
-        ]);
 
         /*
          * Now that the first message is saved, fake a reply
@@ -856,21 +853,19 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+            $conversation = new TestConversation();
+            $botman->storeConversation($conversation, [
+                [
+                    'pattern' => '([0]?[0-2][0-3]|[0-9])',
+                    'callback' => function (Answer $answer, $number) use (&$called) {
+                        $GLOBALS['answer'] = $answer;
+                        $GLOBALS['called'] = true;
+                    },
+                ],
+            ]);
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, [
-            [
-                'pattern' => '([0]?[0-2][0-3]|[0-9])',
-                'callback' => function (Answer $answer, $number) use (&$called) {
-                    $GLOBALS['answer'] = $answer;
-                    $GLOBALS['called'] = true;
-                },
-            ],
-        ]);
 
         /*
          * Now that the first message is saved, fake a reply
@@ -899,21 +894,19 @@ class BotManTest extends TestCase
             'message' => 'Hi Julia',
         ]);
 
-        $botman->hears('Hi Julia', function () {
+        $botman->hears('Hi Julia', function ($botman) {
+            $conversation = new TestConversation();
+            $botman->storeConversation($conversation, [
+                [
+                    'pattern' => 'Call me {name}',
+                    'callback' => function ($answer, $name) use (&$called) {
+                        $GLOBALS['answer'] = $name;
+                        $GLOBALS['called'] = true;
+                    },
+                ],
+            ]);
         });
         $botman->listen();
-
-        $conversation = new TestConversation();
-
-        $botman->storeConversation($conversation, [
-            [
-                'pattern' => 'Call me {name}',
-                'callback' => function ($answer, $name) use (&$called) {
-                    $GLOBALS['answer'] = $name;
-                    $GLOBALS['called'] = true;
-                },
-            ],
-        ]);
 
         /*
          * Now that the first message is saved, fake a reply

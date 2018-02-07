@@ -21,7 +21,7 @@ class TestCustomMiddleware implements MiddlewareInterface
     public function captured(IncomingMessage $message, $next, BotMan $bot)
     {
         $_SERVER['middleware_captured'] = $message->getText();
-        $conversation = $bot->getStoredConversation();
+        $conversation = $bot->getStoredConversation($message);
         /** @var Question $question */
         $question = unserialize($conversation['question']);
         $_SERVER['middleware_captured_question'] = $question;
