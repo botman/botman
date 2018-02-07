@@ -21,8 +21,8 @@ class Command
     /** @var string */
     protected $driver;
 
-    /** @var string */
-    protected $recipient;
+    /** @var array */
+    protected $recipients;
 
     /** @var array */
     protected $middleware = [];
@@ -38,15 +38,15 @@ class Command
      *
      * @param string $pattern
      * @param Closure|string $callback
-     * @param string|null $recipient
+     * @param array|null $recipients
      * @param string|null $driver
      */
-    public function __construct($pattern, $callback, $recipient = null, $driver = null)
+    public function __construct($pattern, $callback, $recipients = null, $driver = null)
     {
         $this->pattern = $pattern;
         $this->callback = $callback;
         $this->driver = $driver;
-        $this->recipient = $recipient;
+        $this->recipients = $recipients;
     }
 
     /**
@@ -132,12 +132,12 @@ class Command
     }
 
     /**
-     * @param $recipient
+     * @param $recipients
      * @return $this
      */
-    public function recipient($recipient)
+    public function recipient($recipients)
     {
-        $this->recipient = $recipient;
+        $this->recipients = is_array($recipients) ? $recipients : [$recipients];
 
         return $this;
     }
@@ -169,7 +169,7 @@ class Command
             'callback' => $this->callback,
             'driver' => $this->driver,
             'middleware' => $this->middleware,
-            'recipient' => $this->recipient,
+            'recipient' => $this->recipients,
         ];
     }
 
@@ -206,10 +206,10 @@ class Command
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRecipient()
+    public function getRecipients()
     {
-        return $this->recipient;
+        return $this->recipients;
     }
 }

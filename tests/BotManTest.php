@@ -1089,6 +1089,62 @@ class BotManTest extends TestCase
     }
 
     /** @test */
+    public function it_only_listens_for_specific_recipients_from_a_list_of_specific_recipients()
+    {
+        $called_one = false;
+        $called_two = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'foo',
+        ]);
+
+        $botman->hears('foo', function ($bot) use (&$called_one) {
+            $called_one = true;
+        })->recipient(['C12345', 'C12346']);
+
+        $botman->hears('foo', function ($bot) use (&$called_two) {
+            $called_two = true;
+        })->recipient(['C12346', 'C12347']);
+
+        $botman->listen();
+
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
+    }
+
+    /** @test */
+    public function it_only_listens_for_specific_recipients_from_a_list_of_specific_recipients_in_group()
+    {
+        $called_one = false;
+        $called_two = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'C12345',
+            'message' => 'foo',
+        ]);
+
+        $botman->group(['recipient' => ['C12345', 'C12346']], function ($botman) use (&$called_one) {
+            $botman->hears('foo', function ($bot) use (&$called_one) {
+                $called_one = true;
+            });
+        });
+
+        $botman->group(['recipient' => ['C12346', 'C12347']], function ($botman) use (&$called_two) {
+            $botman->hears('foo', function ($bot) use (&$called_two) {
+                $called_two = true;
+            });
+        });
+
+        $botman->listen();
+
+        $this->assertTrue($called_one);
+        $this->assertFalse($called_two);
+    }
+
+    /** @test */
     public function it_only_listens_for_specific_recipients()
     {
         $called_one = false;
