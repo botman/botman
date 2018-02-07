@@ -141,7 +141,6 @@ class BotManTest extends TestCase
         ]);
 
         $botman->hears('Hi Julia', function ($botman) {
-
             $conversation = new TestConversation();
 
             $botman->storeConversation($conversation, function ($answer) use (&$called) {
@@ -643,7 +642,7 @@ class BotManTest extends TestCase
             'recipient' => 'general',
             'message' => 'foo',
         ]);
-    
+
         $conversation = new TestConversation();
 
         $botman->hears('foo', function ($botman) use ($conversation) {
