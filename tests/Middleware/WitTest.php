@@ -90,7 +90,7 @@ class WitTest extends TestCase
 
         $middleware = new Wit('token', 0.5, $http);
         $middleware->received($message, $callback, m::mock(BotMan::class));
-        $this->assertTrue($middleware->matching($message, 'emotion', false));
+        $this->assertTrue($middleware->matching($message, '.*(emotion)*.', false));
     }
 
     /** @test */

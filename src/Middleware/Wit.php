@@ -99,12 +99,13 @@ class Wit implements MiddlewareInterface
     public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
-
+        $pattern = '/^'.$pattern.'$/i';
+        
         if (! empty($entities)) {
             foreach ($entities as $name => $entity) {
                 if ($name === 'intent') {
                     foreach ($entity as $item) {
-                        if ($item['value'] === $pattern && $item['confidence'] >= $this->minimumConfidence) {
+                        if ((bool) preg_match($pattern, $item['value']) && $item['confidence'] >= $this->minimumConfidence) {
                             return true;
                         }
                     }
