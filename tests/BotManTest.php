@@ -10,6 +10,7 @@ use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\NullDriver;
+use Psr\Container\ContainerInterface;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Interfaces\UserInterface;
@@ -19,6 +20,7 @@ use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
+use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
@@ -32,8 +34,6 @@ use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
 use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class BotManTest.
@@ -294,7 +294,7 @@ class BotManTest extends TestCase
     }
 
     /** @test */
-    public function it_hears_matching_commands_registered_in_container()
+    public function it_hears_matching_commands_with_container()
     {
         $botman = $this->getBot([
             'sender' => 'UX12345',
@@ -329,7 +329,8 @@ class BotManTest extends TestCase
 
         /** @var ContainerInterface|m\Mock $containerMock */
         $containerMock = m::mock(ContainerInterface::class);
-        $exceptionMock = new class() extends \Exception implements NotFoundExceptionInterface {};
+        $exceptionMock = new class() extends \Exception implements NotFoundExceptionInterface {
+        };
         $containerMock->shouldReceive('get')->once()->andThrow($exceptionMock);
 
         $botman->setContainer($containerMock);
