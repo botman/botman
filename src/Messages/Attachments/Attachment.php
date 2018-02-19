@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Messages\Attachments;
 
-use BotMan\BotMan\Interfaces\WebAccess;
 use Illuminate\Support\Collection;
+use BotMan\BotMan\Interfaces\WebAccess;
 
 abstract class Attachment implements WebAccess
 {

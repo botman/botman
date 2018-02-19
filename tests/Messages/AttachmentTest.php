@@ -20,5 +20,4 @@ class AttachmentTest extends TestCase
         // Test getting a non-existent extra
         $this->assertNull($attachment->getExtras('DoesNotExist'));
     }
-
 }
