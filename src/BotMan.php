@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
 use BotMan\BotMan\Messages\Matcher;
+use Psr\Container\ContainerInterface;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Traits\ProvidesStorage;
 use BotMan\BotMan\Interfaces\UserInterface;
@@ -19,6 +20,7 @@ use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,6 +100,9 @@ class BotMan
     /** @var CacheInterface */
     private $cache;
 
+    /** @var ContainerInterface */
+    protected $container;
+
     /** @var StorageInterface */
     protected $storage;
 
@@ -165,6 +170,14 @@ class BotMan
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -630,6 +643,7 @@ class BotMan
      * @param $callback
      * @return array|string|Closure
      * @throws UnexpectedValueException
+     * @throws NotFoundExceptionInterface
      */
     protected function getCallable($callback)
     {
@@ -647,7 +661,9 @@ class BotMan
 
         list($class, $method) = explode('@', $callback);
 
-        return [new $class($this), $method];
+        $command = $this->container ? $this->container->get($class) : new $class($this);
+
+        return [$command, $method];
     }
 
     /**

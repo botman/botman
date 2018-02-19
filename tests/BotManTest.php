@@ -10,6 +10,7 @@ use BotMan\BotMan\BotManFactory;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\NullDriver;
+use Psr\Container\ContainerInterface;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Interfaces\UserInterface;
@@ -19,6 +20,7 @@ use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
+use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
@@ -289,6 +291,56 @@ class BotManTest extends TestCase
         $botman->hears('foo', TestClass::class.'@foo');
         $botman->listen();
         $this->assertTrue(TestClass::$called);
+    }
+
+    /** @test */
+    public function it_hears_matching_commands_with_container()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+        TestClass::$called = false;
+
+        /** @var ContainerInterface|m\Mock $containerMock */
+        $containerMock = m::mock(ContainerInterface::class);
+        $containerMock->shouldReceive('get')
+            ->with(TestClass::class)
+            ->once()
+            ->andReturn(new TestClass($botman));
+
+        $botman->setContainer($containerMock);
+
+        $botman->hears('foo', TestClass::class.'@foo');
+        $botman->listen();
+        $this->assertTrue(TestClass::$called);
+    }
+
+    /** @test */
+    public function it_throws_not_found_exception_when_command_is_not_registered_in_container()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+        TestClass::$called = false;
+
+        /** @var ContainerInterface|m\Mock $containerMock */
+        $containerMock = m::mock(ContainerInterface::class);
+        $exceptionMock = new class() extends \Exception implements NotFoundExceptionInterface {
+        };
+        $containerMock->shouldReceive('get')->once()->andThrow($exceptionMock);
+
+        $botman->setContainer($containerMock);
+
+        $botman->hears('foo', TestClass::class.'@foo');
+
+        $this->expectException(NotFoundExceptionInterface::class);
+
+        $botman->listen();
+        $this->assertFalse(TestClass::$called);
     }
 
     /** @test */

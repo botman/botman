@@ -21,7 +21,8 @@
         "opis/closure": "^2.3",
         "mpociot/pipeline": "^1.0",
         "react/socket": "~0.4",
-        "spatie/macroable": "^1.0"
+        "spatie/macroable": "^1.0",
+        "psr/container": "^1.0"
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
