@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
@@ -29,6 +28,7 @@ use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
 use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;

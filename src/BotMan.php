@@ -2,7 +2,6 @@
 
 namespace BotMan\BotMan;
 
-use BotMan\BotMan\Interfaces\Middleware\Heard;
 use Closure;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
@@ -22,6 +21,7 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Psr\Container\NotFoundExceptionInterface;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Traits\HandlesConversations;
 use Symfony\Component\HttpFoundation\Response;
