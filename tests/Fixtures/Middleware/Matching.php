@@ -7,7 +7,6 @@ use BotMan\BotMan\Interfaces\Middleware\Matching as MatchingInterface;
 
 class Matching implements MatchingInterface
 {
-
     /**
      * @param IncomingMessage $message
      * @param string $pattern
