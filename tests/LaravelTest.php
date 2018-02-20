@@ -2,13 +2,13 @@
 
 namespace BotMan\BotMan\tests;
 
-use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use Cache;
 use BotMan;
 use Mockery;
 use Orchestra\Testbench\TestCase;
+use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class LaravelTest extends TestCase
 {

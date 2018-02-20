@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class TestController
 {
-
     public function __construct(Request $request)
     {
         $_SERVER['autowiring'] = true;
@@ -15,6 +14,5 @@ class TestController
 
     public function handle(BotMan $bot)
     {
-
     }
 }

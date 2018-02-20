@@ -9,8 +9,8 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Illuminate\Container\EntryNotFoundException;
 
-class LaravelContainer implements ContainerInterface {
-
+class LaravelContainer implements ContainerInterface
+{
     /** @var Container */
     protected $container;
 
@@ -55,6 +55,7 @@ class LaravelContainer implements ContainerInterface {
         }
         try {
             $this->container->make($id);
+
             return true;
         } catch (ReflectionException $e) {
             return false;
