@@ -5,7 +5,8 @@ namespace BotMan\BotMan\Commands;
 use BotMan\BotMan\Closure;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
+use BotMan\BotMan\Interfaces\Middleware\Matching;
 
 class Command
 {
@@ -143,7 +144,7 @@ class Command
     }
 
     /**
-     * @param array|MiddlewareInterface $middleware
+     * @param array|Matching $middleware
      * @return $this
      */
     public function middleware($middleware)
@@ -153,7 +154,7 @@ class Command
         }
 
         $this->middleware = Collection::make($middleware)->filter(function ($item) {
-            return $item instanceof MiddlewareInterface;
+            return $item instanceof Matching || $item instanceof Heard;
         })->merge($this->middleware)->toArray();
 
         return $this;

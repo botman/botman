@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan;
 
+use BotMan\BotMan\Interfaces\Middleware\Heard;
 use Closure;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
@@ -430,7 +431,12 @@ class BotMan
             // Set the message first, so it's available for middlewares
             $this->message = $matchingMessage->getMessage();
 
-            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $this->command->getMiddleware());
+            $commandMiddleware = Collection::make($this->command->getMiddleware())->filter(function ($middleware) {
+                return $middleware instanceof Heard;
+            })->toArray();
+
+            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $commandMiddleware);
+
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
             $parameters = $matchingMessage->getMatches();

@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\tests;
 
+use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use Mockery\MockInterface;
@@ -1302,6 +1303,7 @@ class BotManTest extends TestCase
     {
         $called_one = false;
         $called_two = false;
+        $called_three = false;
         $botman = $this->getBot([
             'sender' => 'UX12345',
             'recipient' => 'C12345',
@@ -1317,9 +1319,14 @@ class BotManTest extends TestCase
             $called_two = true;
         })->middleware(new TestMatchMiddleware());
 
+        $botman->hears('keyword', function ($bot) use (&$called_three) {
+            $called_three = true;
+        })->middleware(new Matching());
+
         $botman->listen();
         $this->assertTrue($called_one);
         $this->assertFalse($called_two);
+        $this->assertTrue($called_three);
     }
 
     /** @test */
