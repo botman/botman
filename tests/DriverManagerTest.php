@@ -3,11 +3,11 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\Http\Curl;
-use BotMan\BotMan\Tests\Fixtures\AnotherDriver;
 use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Tests\Fixtures\AnotherDriver;
 use BotMan\BotMan\Tests\Fixtures\TestDriverWithSubDriver;
 
 class DriverManagerTest extends TestCase
