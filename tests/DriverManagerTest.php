@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Tests\Fixtures\AnotherDriver;
 use BotMan\BotMan\Tests\Fixtures\TestDriverWithSubDriver;
 
 class DriverManagerTest extends TestCase
@@ -15,6 +16,7 @@ class DriverManagerTest extends TestCase
     {
         DriverManager::unloadDriver(TestDriver::class);
         DriverManager::unloadDriver(TestDriverWithSubDriver::class);
+        DriverManager::unloadDriver(AnotherDriver::class);
         \Mockery::close();
     }
 
@@ -79,6 +81,11 @@ class DriverManagerTest extends TestCase
         DriverManager::loadDriver(TestDriver::class);
         $this->assertInstanceOf(TestDriver::class, DriverManager::loadFromName('Test', []));
         $this->assertInstanceOf(TestDriver::class, DriverManager::loadFromName(TestDriver::class, []));
+
+        // This driver has the characters 'e' and 'r' from 'Driver' charset in the old rtrim way of fetching the driver's name
+        DriverManager::loadDriver(AnotherDriver::class);
+        $this->assertInstanceOf(AnotherDriver::class, DriverManager::loadFromName('Another', []));
+        $this->assertInstanceOf(AnotherDriver::class, DriverManager::loadFromName(AnotherDriver::class, []));
     }
 
     /** @test */
