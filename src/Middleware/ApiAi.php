@@ -29,8 +29,8 @@ class ApiAi implements MiddlewareInterface
     protected $listenForAction = false;
 
     /**
-     * Wit constructor.
-     * @param string $token wit.ai access token
+     * API.ai constructor.
+     * @param string $token api.ai access token
      * @param HttpInterface $http
      */
     public function __construct($token, HttpInterface $http)
@@ -40,8 +40,8 @@ class ApiAi implements MiddlewareInterface
     }
 
     /**
-     * Create a new Wit middleware instance.
-     * @param string $token wit.ai access token
+     * Create a new API.ai middleware instance.
+     * @param string $token api.ai access token
      * @return ApiAi
      */
     public static function create($token)
