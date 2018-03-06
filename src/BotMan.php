@@ -497,7 +497,7 @@ class BotMan
      * @param string|array $recipients
      * @param DriverInterface|null $driver
      * @param array $additionalParameters
-     * @return Response
+     * @return array Response
      * @throws BotManException
      */
     public function say($message, $recipients, $driver = null, $additionalParameters = [])
@@ -515,11 +515,12 @@ class BotMan
             $this->setDriver(DriverManager::loadFromName($driver, $this->config));
         }
 
+        $response = [];
         $recipients = is_array($recipients) ? $recipients : [$recipients];
 
         foreach ($recipients as $recipient) {
             $this->message = new IncomingMessage('', $recipient, '');
-            $response = $this->reply($message, $additionalParameters);
+            $response[] = $this->reply($message, $additionalParameters);
         }
 
         $this->message = $previousMessage;
