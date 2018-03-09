@@ -8,7 +8,6 @@ use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DriverManager
 {
@@ -148,7 +147,7 @@ class DriverManager
      *
      * @param array $config
      * @param Request|null $request
-     * @return Response|null
+     * @return void
      */
     public static function verifyServices(array $config, Request $request = null)
     {
