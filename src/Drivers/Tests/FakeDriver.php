@@ -197,7 +197,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     /**
-     * @return bool
+     * @return bool|GenericEvent
      */
     public function hasMatchingEvent()
     {

@@ -148,7 +148,7 @@ class DriverManager
      *
      * @param array $config
      * @param Request|null $request
-     * @return Response|null
+     * @return void
      */
     public static function verifyServices(array $config, Request $request = null)
     {
