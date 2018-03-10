@@ -568,8 +568,7 @@ class BotMan
      */
     public function typesAndWaits($seconds)
     {
-        $this->getDriver()->types($this->message);
-        sleep($seconds);
+        $this->getDriver()->typesAndWaits($this->message, $seconds);
 
         return $this;
     }

@@ -171,6 +171,17 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param int $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, int $seconds)
+    {
+        $this->types($matchingMessage);
+    }
+
+    /**
      * Returns true if types() has been called.
      *
      * @return bool

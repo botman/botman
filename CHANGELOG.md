@@ -1,7 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.1.5|
+## [Unreleased]
+
+### Added
+- Delegate `typesAndWaits` to the driver, instead of having a static `sleep` call in the core.
+
+## [2.1.5]
 ### Added
 - Added the ability to pass arrays as command callables
 

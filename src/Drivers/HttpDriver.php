@@ -79,6 +79,18 @@ abstract class HttpDriver implements DriverInterface
     }
 
     /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param int $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, int $seconds)
+    {
+        $this->types($matchingMessage);
+        sleep($seconds);
+    }
+
+    /**
      * @return bool
      */
     public function hasMatchingEvent()

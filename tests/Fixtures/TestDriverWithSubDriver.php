@@ -140,4 +140,14 @@ class TestDriverWithSubDriver implements DriverInterface
             TestDriver::class,
         ];
     }
+
+    /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param int $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, int $seconds)
+    {
+    }
 }

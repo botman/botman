@@ -104,4 +104,15 @@ final class ProxyDriver implements DriverInterface
     {
         return self::instance()->serializesCallbacks();
     }
+
+    /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param int $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, int $seconds)
+    {
+        return self::instance()->typesAndWaits($matchingMessage, $seconds);
+    }
 }
