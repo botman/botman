@@ -475,7 +475,13 @@ class BotMan
      */
     protected function callFallbackMessage()
     {
-        $this->message = $this->getMessages()[0];
+        $messages = $this->getMessages();
+        
+        if (!isset($messages[0])) {
+            return;
+        }
+        
+        $this->message = $messages[0];
 
         $this->fallbackMessage = $this->getCallable($this->fallbackMessage);
 
