@@ -21,7 +21,6 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
         $hasImages = ! $col->where('contentType', 'image')->isEmpty() ||
 			! $col->where('contentType', 'image/jpeg')->isEmpty();
 
-		L("image matches request " . $hasImages);
         return parent::matchesRequest() && $hasImages;
     }
 
@@ -50,6 +49,7 @@ class BotFrameworkImageDriver extends BotFrameworkDriver
 			$col->where('contentType', 'image')->pluck('contentUrl')->toArray(),
 			$col->where('contentType', 'image/jpeg')->pluck('contentUrl')->toArray()
 		);
+
         return $mergedResults;
     }
 
