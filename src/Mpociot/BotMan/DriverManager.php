@@ -101,7 +101,7 @@ class DriverManager
         * DriverInterface object.
         */
         if (class_exists($name) && is_subclass_of($name, DriverInterface::class)) {
-            $name = rtrim(basename(str_replace('\\', '/', $name)), 'Driver');
+            $name = preg_replace('/Driver/', '', basename(str_replace('\\', '/', $name)));
         }
         /*
          * Use the driver name constant if we try to load a driver by it's
