@@ -77,10 +77,10 @@ interface DriverInterface
     /**
      * Send a typing indicator and wait for the given amount of seconds.
      * @param IncomingMessage $matchingMessage
-     * @param int $seconds
+     * @param float $seconds
      * @return mixed
      */
-    public function typesAndWaits(IncomingMessage $matchingMessage, int $seconds);
+    public function typesAndWaits(IncomingMessage $matchingMessage, float $seconds);
 
     /**
      * Tells if the stored conversation callbacks are serialized.
