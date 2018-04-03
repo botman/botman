@@ -13,6 +13,9 @@ class ApiAi implements MiddlewareInterface
     /** @var string */
     protected $token;
 
+    /** @var string */
+    protected $lang = 'en';
+
     /** @var HttpInterface */
     protected $http;
 
@@ -29,24 +32,27 @@ class ApiAi implements MiddlewareInterface
     protected $listenForAction = false;
 
     /**
-     * API.ai constructor.
+     * Wit constructor.
      * @param string $token api.ai access token
+     * @param string $lang language
      * @param HttpInterface $http
      */
-    public function __construct($token, HttpInterface $http)
+    public function __construct($token, HttpInterface $http, $lang = 'en')
     {
         $this->token = $token;
+        $this->lang = $lang;
         $this->http = $http;
     }
 
     /**
      * Create a new API.ai middleware instance.
      * @param string $token api.ai access token
+     * @param string $lang language
      * @return ApiAi
      */
-    public static function create($token)
+    public static function create($token, $lang = 'en')
     {
-        return new static($token, new Curl());
+        return new static($token, new Curl(), $lang);
     }
 
     /**
@@ -71,7 +77,7 @@ class ApiAi implements MiddlewareInterface
         $response = $this->http->post($this->apiUrl, [], [
             'query' => [$message->getText()],
             'sessionId' => md5($message->getConversationIdentifier()),
-            'lang' => 'en',
+            'lang' => $this->lang,
         ], [
             'Authorization: Bearer '.$this->token,
             'Content-Type: application/json; charset=utf-8',
