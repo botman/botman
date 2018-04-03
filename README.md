@@ -2,7 +2,7 @@
 <h1 align="center">BotMan</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/botman/botman.svg?style=flat-square)](https://packagist.org/packages/botman/botman)
-[![Build Status](https://travis-ci.org/botman/botman.svg?branch=master)](https://travis-ci.org/botman/botman)
+[![Build Status](https://travis-ci.org/botman/botman.svg?branch=2.0)](https://travis-ci.org/botman/botman)
 [![codecov](https://codecov.io/gh/botman/botman/branch/master/graph/badge.svg)](https://codecov.io/gh/botman/botman)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/botman/botman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/botman/botman/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/botman/botman.svg)]()
