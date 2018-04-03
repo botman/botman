@@ -14,6 +14,7 @@ class RedisCache implements CacheInterface
 {
     const KEY_PREFIX = 'botman:cache:';
 
+    /** @var Redis */
     private $redis;
     private $host;
     private $port;
@@ -44,7 +45,16 @@ class RedisCache implements CacheInterface
      */
     public function has($key)
     {
-        return $this->redis->exists($this->decorateKey($key));
+        /*
+         * Version >= 4.0 of phpredis returns an integer instead of bool
+         */
+        $check = $this->redis->exists($this->decorateKey($key));
+
+        if (is_bool($check)) {
+            return $check;
+        }
+
+        return $check > 0;
     }
 
     /**
