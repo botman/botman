@@ -8,7 +8,6 @@ use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DriverManager
 {
@@ -159,6 +158,7 @@ class DriverManager
                 return true;
             }
         }
+
         return false;
     }
 
