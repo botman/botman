@@ -148,7 +148,7 @@ class DriverManager
      *
      * @param array $config
      * @param Request|null $request
-     * @return Response|null
+     * @return bool
      */
     public static function verifyServices(array $config, Request $request = null)
     {
@@ -156,9 +156,10 @@ class DriverManager
         foreach (self::getAvailableHttpDrivers() as $driver) {
             $driver = new $driver($request, $config, new Curl());
             if ($driver instanceof VerifiesService && ! is_null($driver->verifyRequest($request))) {
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     /**

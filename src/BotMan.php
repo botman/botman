@@ -387,29 +387,31 @@ class BotMan
     public function listen()
     {
         try {
-            $this->verifyServices();
+            $isVerificationRequest = $this->verifyServices();
 
-            $this->fireDriverEvents();
+            if (! $isVerificationRequest) {
+                $this->fireDriverEvents();
 
-            if ($this->firedDriverEvents === false) {
-                $this->loadActiveConversation();
+                if ($this->firedDriverEvents === false) {
+                    $this->loadActiveConversation();
 
-                if ($this->loadedConversation === false) {
-                    $this->callMatchingMessages();
+                    if ($this->loadedConversation === false) {
+                        $this->callMatchingMessages();
+                    }
+
+                    /*
+                     * If the driver has a  "messagesHandled" method, call it.
+                     * This method can be used to trigger driver methods
+                     * once the messages are handles.
+                     */
+                    if (method_exists($this->getDriver(), 'messagesHandled')) {
+                        $this->getDriver()->messagesHandled();
+                    }
                 }
 
-                /*
-                 * If the driver has a  "messagesHandled" method, call it.
-                 * This method can be used to trigger driver methods
-                 * once the messages are handles.
-                 */
-                if (method_exists($this->getDriver(), 'messagesHandled')) {
-                    $this->getDriver()->messagesHandled();
-                }
+                $this->firedDriverEvents = false;
+                $this->message = new IncomingMessage('', '', '');
             }
-
-            $this->firedDriverEvents = false;
-            $this->message = new IncomingMessage('', '', '');
         } catch (\Throwable $e) {
             $this->exceptionHandler->handleException($e, $this);
         }
@@ -491,7 +493,7 @@ class BotMan
     /**
      * Verify service webhook URLs.
      *
-     * @return null|Response
+     * @return bool
      */
     protected function verifyServices()
     {
