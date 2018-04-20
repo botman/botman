@@ -85,9 +85,10 @@ class BotManFactory
         CacheInterface $cache = null,
         StorageInterface $storageDriver = null
     ) {
+        $host = isset($config['host']) ? $config['host'] : '127.0.0.1';
         $port = isset($config['port']) ? $config['port'] : 8080;
 
-        $socket = new Server($loop);
+        $socket = new Server(sprintf('%s:%d', $host, $port), $loop);
 
         if (empty($cache)) {
             $cache = new ArrayCache();
@@ -111,7 +112,6 @@ class BotManFactory
                 $botman->listen();
             });
         });
-        $socket->listen($port);
 
         return $botman;
     }
