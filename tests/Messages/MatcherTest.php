@@ -23,6 +23,10 @@ class MatcherTest extends TestCase
             ['foo ', 'foo', true,],
             ['foo ', 'foo ', true,],
 
+            ['foo', '{command}', true,],
+            ['foo ', '{command}', true,],
+            ['foo ', '{command} ', true,],
+
             ['call me foo', 'call me {name}', true,],
             ['call me foo ', 'call me {name}', true,],
             ['call me foo ', 'call me {name} ', true,],
@@ -34,6 +38,10 @@ class MatcherTest extends TestCase
             ['/foo', '/foo', true,],
             ['/foo ', '/foo', true,],
             ['/foo ', '/foo ', true,],
+
+            ['/foo', '/{command}', true,],
+            ['/foo ', '/{command}', true,],
+            ['/foo ', '/{command} ', true,],
 
             ['/call me foo', '/call me {name}', true,],
             ['/call me foo ', '/call me {name}', true,],
@@ -47,6 +55,10 @@ class MatcherTest extends TestCase
             ['!foo ', '!foo', true,],
             ['!foo ', '!foo ', true,],
 
+            ['!foo', '!{command}', true,],
+            ['!foo ', '!{command}', true,],
+            ['!foo ', '!{command} ', true,],
+
             ['!call me foo', '!call me {name}', true,],
             ['!call me foo ', '!call me {name}', true,],
             ['!call me foo ', '!call me {name} ', true,],
@@ -59,6 +71,10 @@ class MatcherTest extends TestCase
             ['@foo ', '@foo', true,],
             ['@foo ', '@foo ', true,],
 
+            ['@foo', '@{command}', true,],
+            ['@foo ', '@{command}', true,],
+            ['@foo ', '@{command} ', true,],
+
             ['@call me foo', '@call me {name}', true,],
             ['@call me foo ', '@call me {name}', true,],
             ['@call me foo ', '@call me {name} ', true,],
@@ -67,6 +83,21 @@ class MatcherTest extends TestCase
             ['@call me foo baz ', '@call me {name} {surname}', true,],
             ['@call me foo baz ', '@call me {name} {surname} ', true,],
 
+            ['#foo', '#foo', true,],
+            ['#foo ', '#foo', true,],
+            ['#foo ', '#foo ', true,],
+
+            ['#foo', '#{command}', true,],
+            ['#foo ', '#{command}', true,],
+            ['#foo ', '#{command} ', true,],
+
+            ['#call me foo', '#call me {name}', true,],
+            ['#call me foo ', '#call me {name}', true,],
+            ['#call me foo ', '#call me {name} ', true,],
+
+            ['#call me foo baz', '#call me {name} {surname}', true,],
+            ['#call me foo baz ', '#call me {name} {surname}', true,],
+            ['#call me foo baz ', '#call me {name} {surname} ', true,],
 
             ['!@#2f00', '!@#2f00', true,],
             ['!@#2f00 ', '!@#2f00', true,],
@@ -79,6 +110,10 @@ class MatcherTest extends TestCase
             ['!@#2c@ll m3 f00 baz', '!@#2c@ll m3 {nam3} {surnam3}', true,],
             ['!@#2c@ll m3 f00 baz ', '!@#2c@ll m3 {nam3} {surnam3}', true,],
             ['!@#2c@ll m3 f00 baz ', '!@#2c@ll m3 {nam3} {surnam3} ', true,],
+
+            [' foo', 'foo', false,],
+            [' foo', 'foo ', false,],
+            [' foo ', 'foo ', false,],
 
             ['foo', 'baz', false,],
             ['foo ', 'baz', false,],
@@ -103,7 +138,10 @@ class MatcherTest extends TestCase
         $answer = new Answer();
 
         $this->assertSame($expected, $matcher->isPatternValid($incomingMessage, $answer, $pattern),
-            sprintf('Message `%s` does not match pattern `%s`', $message, $pattern)
+            sprintf('Message `%s` and pattern `%s` should assert `%s`',
+                $message,
+                $pattern,
+                $expected ? 'true' : 'false')
         );
     }
 }
