@@ -203,6 +203,10 @@ class IncomingMessage
      */
     public function getLocation() : Location
     {
+        if (empty($this->location)) {
+            throw new \UnexpectedValueException('This message does not contain a location');
+        }
+
         return $this->location;
     }
 
