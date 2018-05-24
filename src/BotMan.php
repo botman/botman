@@ -229,12 +229,12 @@ class BotMan
      */
     public function getUser()
     {
-        if ($user = $this->cache->get('user_' . $this->driver->getName() . '_' . $this->getMessage()->getSender())) {
+        if ($user = $this->cache->get('user_'.$this->driver->getName().'_'.$this->getMessage()->getSender())) {
             return $user;
         }
 
         $user = $this->getDriver()->getUser($this->getMessage());
-        $this->cache->put('user_' . $this->driver->getName() . '_' . $user->getId(), $user,
+        $this->cache->put('user_'.$this->driver->getName().'_'.$user->getId(), $user,
             $this->config['user_cache_time'] ?? 30);
 
         return $user;
@@ -390,7 +390,7 @@ class BotMan
         try {
             $isVerificationRequest = $this->verifyServices();
 
-            if (!$isVerificationRequest) {
+            if (! $isVerificationRequest) {
                 $this->fireDriverEvents();
 
                 if ($this->firedDriverEvents === false) {
@@ -470,7 +470,7 @@ class BotMan
             \call_user_func_array($callback, $parameters);
         }
 
-        if (empty($matchingMessages) && empty($this->getBotMessages()) && !\is_null($this->fallbackMessage)) {
+        if (empty($matchingMessages) && empty($this->getBotMessages()) && ! \is_null($this->fallbackMessage)) {
             $this->callFallbackMessage();
         }
     }
@@ -482,7 +482,7 @@ class BotMan
     {
         $messages = $this->getMessages();
 
-        if (!isset($messages[0])) {
+        if (! isset($messages[0])) {
             return;
         }
 
@@ -549,7 +549,7 @@ class BotMan
      */
     public function ask($question, $next, $additionalParameters = [], $recipient = null, $driver = null)
     {
-        if (!\is_null($recipient) && !\is_null($driver)) {
+        if (! \is_null($recipient) && ! \is_null($driver)) {
             if (\is_string($driver)) {
                 $driver = DriverManager::loadFromName($driver, $this->config);
             }
@@ -600,7 +600,7 @@ class BotMan
             return $driver->sendRequest($endpoint, $additionalParameters, $this->message);
         }
 
-        throw new BadMethodCallException('The driver ' . $this->getDriver()->getName() . ' does not support low level requests.');
+        throw new BadMethodCallException('The driver '.$this->getDriver()->getName().' does not support low level requests.');
     }
 
     /**
@@ -648,13 +648,13 @@ class BotMan
      */
     protected function makeInvokableAction($action)
     {
-        if (!method_exists($action, '__invoke')) {
+        if (! method_exists($action, '__invoke')) {
             throw new UnexpectedValueException(sprintf(
                 'Invalid hears action: [%s]', $action
             ));
         }
 
-        return $action . '@__invoke';
+        return $action.'@__invoke';
     }
 
     /**
@@ -724,7 +724,7 @@ class BotMan
             return \call_user_func_array([$this->getDriver(), $name], $arguments);
         }
 
-        throw new BadMethodCallException('Method [' . $name . '] does not exist.');
+        throw new BadMethodCallException('Method ['.$name.'] does not exist.');
     }
 
     /**
