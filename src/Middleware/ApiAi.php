@@ -19,7 +19,7 @@ class ApiAi implements MiddlewareInterface
     /** @var HttpInterface */
     protected $http;
 
-    /** @var stdClass */
+    /** @var \stdClass */
     protected $response;
 
     /** @var string */
@@ -70,7 +70,7 @@ class ApiAi implements MiddlewareInterface
     /**
      * Perform the API.ai API call and cache it for the message.
      * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-     * @return stdClass
+     * @return \stdClass
      */
     protected function getResponse(IncomingMessage $message)
     {
