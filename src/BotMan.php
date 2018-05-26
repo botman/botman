@@ -467,7 +467,9 @@ class BotMan
 
             $parameters = $this->conversationManager->addDataParameters($this->message, $parameters);
 
-            \call_user_func_array($callback, $parameters);
+            if (call_user_func_array($callback, $parameters)) {
+                return;
+            }
         }
 
         if (empty($matchingMessages) && empty($this->getBotMessages()) && ! \is_null($this->fallbackMessage)) {
