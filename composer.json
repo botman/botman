@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "symfony/http-foundation": "2.8.*|3.0.*|3.1.*|3.2.*|3.3.*|3.4.*|4.0.*",
+        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0",
         "tightenco/collect": "~5.0",
         "opis/closure": "^2.3",
         "mpociot/pipeline": "^1.0",
@@ -29,7 +29,7 @@
         "illuminate/support": "^5.4",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~6.4",
-        "mockery/mockery": "dev-master",
+        "mockery/mockery": "^1.1",
         "sllh/php-cs-fixer-styleci-bridge": "^2.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",
