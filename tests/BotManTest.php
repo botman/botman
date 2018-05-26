@@ -204,7 +204,8 @@ class BotManTest extends TestCase
     /** @test */
     public function it_hears_matching_commands()
     {
-        $called = false;
+        $called_once = false;
+        $called_twice = false;
 
         $botman = $this->getBot([
             'sender' => 'UX12345',
@@ -212,11 +213,44 @@ class BotManTest extends TestCase
             'message' => 'Foo',
         ]);
 
-        $botman->hears('Foo', function ($bot) use (&$called) {
-            $called = true;
+        $botman->hears('Foo', function ($bot) use (&$called_once) {
+            $called_once = true;
         });
+
+        $botman->hears('Foo(.*)', function ($bot) use (&$called_twice) {
+            $called_twice = true;
+        });
+
         $botman->listen();
-        $this->assertTrue($called);
+        $this->assertTrue($called_once);
+        $this->assertTrue($called_twice);
+    }
+
+    /** @test */
+    public function it_hears_only_first_matching_command_that_returns()
+    {
+        $called_once = false;
+        $called_twice = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+
+        $botman->hears('Foo', function ($bot) use (&$called_once) {
+            $called_once = true;
+
+            return true;
+        });
+
+        $botman->hears('Foo(.*)', function ($bot) use (&$called_twice) {
+            $called_twice = true;
+        });
+
+        $botman->listen();
+        $this->assertTrue($called_once);
+        $this->assertFalse($called_twice);
     }
 
     /** @test */
