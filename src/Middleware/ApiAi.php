@@ -31,18 +31,20 @@ class ApiAi implements MiddlewareInterface
     /** @var bool */
     protected $listenForAction = false;
 
+    /** @var bool */
+    protected $resetContexts = false;
+
     /**
      * Wit constructor.
      * @param string $token api.ai access token
      * @param string $lang language
      * @param HttpInterface $http
      */
-    public function __construct($token, HttpInterface $http, $lang, $resetContexts)
+    public function __construct($token, HttpInterface $http, $lang = 'en')
     {
         $this->token = $token;
+        $this->lang = $lang;
         $this->http = $http;
-        $this->lang = $lang ?: 'en';
-        $this->resetContexts = $resetContexts ?: false;
     }
 
     /**
@@ -51,9 +53,9 @@ class ApiAi implements MiddlewareInterface
      * @param string $lang language
      * @return ApiAi
      */
-    public static function create($token, $lang = 'en', $resetContexts = false)
+    public static function create($token, $lang = 'en')
     {
-        return new static($token, new Curl(), $lang, $resetContexts);
+        return new static($token, new Curl(), $lang);
     }
 
     /**
@@ -66,6 +68,14 @@ class ApiAi implements MiddlewareInterface
         $this->listenForAction = $listen;
 
         return $this;
+    }
+
+    /**
+     * Set Reset Contexts Flag.
+     */
+    public function setResetContexts(bool $value)
+    {
+        $this->resetContexts = $value;
     }
 
     /**
