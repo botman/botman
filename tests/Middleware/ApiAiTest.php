@@ -51,6 +51,7 @@ class ApiAiTest extends TestCase
                 'query' => [$messageText],
                 'sessionId' => md5($message->getConversationIdentifier()),
                 'lang' => 'en',
+                'resetContexts' => false,
             ], [
                 'Authorization: Bearer token',
                 'Content-Type: application/json; charset=utf-8',
