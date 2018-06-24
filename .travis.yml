@@ -13,7 +13,6 @@ before_install:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
-  - travis_retry composer self-update --preview
   - travis_retry composer install --prefer-dist --no-interaction
   - sudo redis-server /etc/redis/redis.conf --port 6380 --requirepass 'secret'
 
