@@ -60,10 +60,17 @@ class QuestionTest extends TestCase
     }
 
     /** @test */
+    public function it_can_add_a_color()
+    {
+        $message = Question::create('foo')->color('3AA3E3');
+        $this->assertArraySubset(['color' => '3AA3E3'], $message->toArray());
+    }
+
+    /** @test */
     public function it_can_be_serialized()
     {
         $message = Question::create('foo');
-        $this->assertSame('{"text":"foo","fallback":null,"callback_id":null,"actions":[]}', json_encode($message));
+        $this->assertSame('{"text":"foo","fallback":null,"callback_id":null,"color":null,"actions":[]}', json_encode($message));
     }
 
     /** @test */
@@ -75,6 +82,7 @@ class QuestionTest extends TestCase
             'text' => 'foo',
             'fallback' => null,
             'callback_id' => null,
+            'color' => null,
             'actions' => [],
         ], $message->toWebDriver());
     }
@@ -89,6 +97,7 @@ class QuestionTest extends TestCase
             'text' => 'foo',
             'fallback' => null,
             'callback_id' => null,
+            'color' => null,
             'actions' => [$button->toArray()],
         ], $message->toWebDriver());
     }

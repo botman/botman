@@ -21,6 +21,9 @@ class Question implements JsonSerializable, WebAccess
     /** @var string */
     protected $fallback;
 
+    /** @var string */
+    protected $color;
+
     /**
      * @param string $text
      *
@@ -49,6 +52,19 @@ class Question implements JsonSerializable, WebAccess
     public function fallback($fallback)
     {
         $this->fallback = $fallback;
+
+        return $this;
+    }
+
+    /**
+     * Set the question color value.
+     *
+     * @param string $color
+     * @return $this
+     */
+    public function color($color)
+    {
+        $this->color = $color;
 
         return $this;
     }
@@ -106,6 +122,7 @@ class Question implements JsonSerializable, WebAccess
             'text' => $this->text,
             'fallback' => $this->fallback,
             'callback_id' => $this->callback_id,
+            'color' => $this->color,
             'actions' => $this->actions,
         ];
     }
@@ -155,6 +172,7 @@ class Question implements JsonSerializable, WebAccess
             'text' => $this->text,
             'fallback' => $this->fallback,
             'callback_id' => $this->callback_id,
+            'color' => $this->color,
             'actions' => $this->actions,
         ];
     }
