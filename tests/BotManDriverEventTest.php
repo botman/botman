@@ -53,6 +53,26 @@ class BotManDriverEventTest extends TestCase
     }
 
     /** @test */
+    public function it_can_assign_same_callback_for_events()
+    {
+        $called = 0;
+        $this->fakeDriver->hasMatchingEvent = new TestEvent([]);
+        $this->botman->on(['test_event', 'test_event_two'], function ($data, BotMan $bot) use (&$called) {
+            $called++;
+        });
+
+        $this->botman->listen();
+
+        $this->assertEquals(1, $called);
+
+        $this->fakeDriver->hasMatchingEvent = new TestEventTwo([]);
+
+        $this->botman->listen();
+
+        $this->assertEquals(2, $called);
+    }
+
+    /** @test */
     public function it_calls_driver_events_without_closure()
     {
         $this->fakeDriver->hasMatchingEvent = new TestEvent([]);
@@ -111,6 +131,19 @@ class TestEvent implements DriverEventInterface
             'event' => 'test_event',
             'data' => 'foo',
         ];
+    }
+}
+
+class TestEventTwo extends TestEvent
+{
+    /**
+     * Return the event name to match.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+         return 'test_event_two';
     }
 }
 

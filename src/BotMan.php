@@ -274,15 +274,23 @@ class BotMan
     /**
      * Listen for messaging service events.
      *
-     * @param string $name
+     * @param array|string $names
      * @param Closure|string $callback
      */
-    public function on($name, $callback)
+    public function on($names, $callback)
     {
-        $this->events[] = [
-            'name' => $name,
-            'callback' => $this->getCallable($callback),
-        ];
+        if (! is_array($names)) {
+            $names = [$names];
+        }
+
+        $callable = $this->getCallable($callback);
+
+        foreach ($names as $name) {
+            $this->events[] = [
+                'name' => $name,
+                'callback' => $callable,
+            ];
+        }
     }
 
     /**
