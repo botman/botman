@@ -143,7 +143,7 @@ class TestEventTwo extends TestEvent
      */
     public function getName()
     {
-         return 'test_event_two';
+        return 'test_event_two';
     }
 }
 
