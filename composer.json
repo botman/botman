@@ -33,11 +33,15 @@
         "sllh/php-cs-fixer-styleci-bridge": "^2.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/psr-http-message-bridge": "^1.0"
     },
     "suggest": {
         "doctrine/cache": "Use any Doctrine cache driver for cache",
-        "symfony/cache": "Use any Symfony cache driver for cache"
+        "symfony/cache": "Use any Symfony cache driver for cache",
+        "guzzlehttp/guzzle": "Use Guzzle as a HTTP client",
+        "symfony/psr-http-message-bridge": "PSR-7 bridge for HttpFoundation"
     },
     "autoload": {
         "psr-4": {
