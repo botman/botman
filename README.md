@@ -28,7 +28,8 @@ You can find the BotMan documentation at [https://botman.io](https://botman.io).
 **Do you like this project? Support it by donating**
 
 - PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=m%2epociot%40googlemail%2ecom&lc=CY&item_name=BotMan&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
-- Patreon: [Donate](https://www.patreon.com/botman)
+- Open Collective: [Become A Backer](https://opencollective.com/botman)
+- Patreon: [Become A Backer](https://www.patreon.com/botman)
 
 ## Contributing
 
