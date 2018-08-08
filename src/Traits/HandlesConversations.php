@@ -78,7 +78,7 @@ trait HandlesConversations
             $touched = $this->currentConversationData;
             $touched['time'] = microtime();
 
-            $this->cache->put($this->message->getConversationIdentifier(), $touched, $this->config['conversation_cache_time'] ?? 30);
+            $this->cache->put($this->message->getConversationIdentifier(), $touched, $this->config['config']['conversation_cache_time'] ?? 30);
         }
     }
 
