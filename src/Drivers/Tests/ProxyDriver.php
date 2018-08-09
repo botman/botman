@@ -70,6 +70,11 @@ final class ProxyDriver implements DriverInterface
         return self::instance()->getUser($matchingMessage);
     }
 
+    public function getUserWithFields(array $fields, IncomingMessage $matchingMessage)
+    {
+        return self::instance()->getUser($matchingMessage);
+    }
+
     public function getConversationAnswer(IncomingMessage $message)
     {
         return self::instance()->getConversationAnswer($message);
