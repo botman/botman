@@ -264,7 +264,7 @@ class BotMan
     public function hears($pattern, $callback, $in = null)
     {
         if (is_array($pattern)) {
-            $pattern = implode('|', $pattern);
+            $pattern = '(?|'.implode('|', $pattern).')';
         }
 
         $command = new Command($pattern, $callback, $in);

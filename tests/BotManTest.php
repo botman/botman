@@ -256,6 +256,26 @@ class BotManTest extends TestCase
     }
 
     /** @test */
+    public function it_resets_the_group_matching_with_multiple_commands()
+    {
+        $called = 0;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => ['Foo 1', 'Bar 2'],
+        ]);
+
+        $botman->hears(['Foo (\d+)', 'Bar (\d+)'], function ($bot, $number) use (&$called) {
+            $called++;
+
+            $this->assertEquals($called, $number);
+        });
+
+        $botman->listen();
+    }
+
+    /** @test */
     public function it_hears_only_first_matching_command_that_returns()
     {
         $called_once = false;
