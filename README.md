@@ -35,6 +35,15 @@ You can find the BotMan documentation at [https://botman.io](https://botman.io).
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
+[![0](https://sourcerer.io/fame/sergey48k/botman/botman/images/0)](https://sourcerer.io/fame/sergey48k/botman/botman/links/0)
+[![1](https://sourcerer.io/fame/sergey48k/botman/botman/images/1)](https://sourcerer.io/fame/sergey48k/botman/botman/links/1)
+[![2](https://sourcerer.io/fame/sergey48k/botman/botman/images/2)](https://sourcerer.io/fame/sergey48k/botman/botman/links/2)
+[![3](https://sourcerer.io/fame/sergey48k/botman/botman/images/3)](https://sourcerer.io/fame/sergey48k/botman/botman/links/3)
+[![4](https://sourcerer.io/fame/sergey48k/botman/botman/images/4)](https://sourcerer.io/fame/sergey48k/botman/botman/links/4)
+[![5](https://sourcerer.io/fame/sergey48k/botman/botman/images/5)](https://sourcerer.io/fame/sergey48k/botman/botman/links/5)
+[![6](https://sourcerer.io/fame/sergey48k/botman/botman/images/6)](https://sourcerer.io/fame/sergey48k/botman/botman/links/6)
+[![7](https://sourcerer.io/fame/sergey48k/botman/botman/images/7)](https://sourcerer.io/fame/sergey48k/botman/botman/links/7)
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within BotMan, please send an e-mail to Marcel Pociot at m.pociot@gmail.com. All security vulnerabilities will be promptly addressed.
