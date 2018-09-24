@@ -11,6 +11,8 @@ class Question implements JsonSerializable, WebAccess
 {
     /** @var array */
     protected $actions;
+    /** @var int */
+    protected $buttonRows;
 
     /** @var string */
     protected $text;
@@ -83,7 +85,14 @@ class Question implements JsonSerializable, WebAccess
 
         return $this;
     }
-
+    
+    
+    public function buttonRows($buttonRows)
+    {
+        $this->buttonRows  = $buttonRows;
+        
+        return $this;
+     }
     /**
      * @param array $buttons
      * @return $this
@@ -132,6 +141,14 @@ class Question implements JsonSerializable, WebAccess
     public function getActions()
     {
         return $this->actions;
+    }
+    /**
+     * @return int
+     */
+
+    public function getButtonRows()
+    {
+        return $this->buttonRows;
     }
 
     /**
