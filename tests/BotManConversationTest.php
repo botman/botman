@@ -14,6 +14,7 @@ use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestDataConversation;
@@ -132,7 +133,7 @@ class BotManConversationTest extends TestCase
         static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
-    /** @test */
+    /** @test */ 
     public function it_calls_custom_repeat_method_on_invalid_image_answers()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
@@ -314,8 +315,25 @@ class BotManConversationTest extends TestCase
         static::assertEquals('That is not a location...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
-    /** @test */
+ 	/** @test */
     public function it_returns_the_location()
+    {
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestDataConversation());
+        });
+        $this->replyWithFakeMessage('Hello');
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
+        $this->replyWithFakeMessage('location');
+        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
+        $message = new IncomingMessage(Location::PATTERN, 'helloman', '#helloworld');
+        $location = new Location(41.123, -12.123);
+        $message->setLocation($location);
+        $this->replyWithFakeMessage($message);
+        static::assertEquals('41.123:-12.123', $this->fakeDriver->getBotMessages()[2]->getText());
+    }
+	
+	/** @test */
+    public function it_repeats_invalid_contact_answers()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
             $bot->startConversation(new TestDataConversation());
@@ -324,15 +342,49 @@ class BotManConversationTest extends TestCase
         $this->replyWithFakeMessage('Hello');
         static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
 
-        $this->replyWithFakeMessage('location');
-        static::assertEquals('Please supply a location', $this->fakeDriver->getBotMessages()[1]->getText());
+        $this->replyWithFakeMessage('contact');
+        static::assertEquals('Please supply a contact', $this->fakeDriver->getBotMessages()[1]->getText());
 
-        $message = new IncomingMessage(Location::PATTERN, 'helloman', '#helloworld');
-        $location = new Location(41.123, -12.123);
-        $message->setLocation($location);
+        $this->replyWithFakeMessage('not_a_contact');
+        static::assertEquals('Please supply a contact', $this->fakeDriver->getBotMessages()[2]->getText());
+    }
+    
+    /** @test */
+    public function it_calls_custom_repeat_method_on_invalid_contact_answers()
+    {
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestDataConversation());
+        });
+
+        $this->replyWithFakeMessage('Hello');
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
+
+        $this->replyWithFakeMessage('custom_contact_repeat');
+        static::assertEquals('Please supply a contact', $this->fakeDriver->getBotMessages()[1]->getText());
+
+        $this->replyWithFakeMessage('not_a_contact');
+        static::assertEquals('That is not a contact...', $this->fakeDriver->getBotMessages()[2]->getText());
+    }
+
+    /** @test */
+    public function it_returns_the_contact()
+    {
+        $this->botman->hears('Hello', function (BotMan $bot) {
+            $bot->startConversation(new TestDataConversation());
+        });
+
+        $this->replyWithFakeMessage('Hello');
+        static::assertEquals('What do you want to test?', $this->fakeDriver->getBotMessages()[0]->getText());
+
+        $this->replyWithFakeMessage('contact');
+        static::assertEquals('Please supply a contact', $this->fakeDriver->getBotMessages()[1]->getText());
+
+        $message = new IncomingMessage(Contact::PATTERN, 'helloman', '#helloworld');
+        $contact = new Contact('0775269856', 'Daniele', 'Rapisarda', '123');
+        $message->setcontact($contact);
         $this->replyWithFakeMessage($message);
 
-        static::assertEquals('41.123:-12.123', $this->fakeDriver->getBotMessages()[2]->getText());
+        static::assertEquals('0775269856:Daniele:Rapisarda:123', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
     private function replyWithFakeMessage($message, $username = 'helloman', $channel = '#helloworld')

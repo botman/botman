@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Commands\ConversationManager;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -335,6 +336,18 @@ class BotMan
     public function receivesLocation($callback)
     {
         return $this->hears(Location::PATTERN, $callback);
+    }
+
+    /**
+     * Listening for contact attachment.
+     *
+     * @param $callback
+     *
+     * @return Command
+     */
+    public function receivesContact($callback)
+    {
+        return $this->hears(Contact::PATTERN, $callback);
     }
 
     /**
