@@ -24,6 +24,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Tests\Fixtures\TestFallback;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
@@ -2314,6 +2315,39 @@ class BotManTest extends TestCase
             $called = true;
             $this->assertInstanceOf(Location::class, $data);
             $this->assertSame($location, $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_contact_as_second_argument()
+    {
+        $called = false;
+        $phone_number = '0775269856';
+        $first_name = 'Daniele';
+     	$last_name = 'Rapisarda';
+        $user_id = '123';
+
+        $contact = new Contact($phone_number, $first_name, $last_name, $user_id);
+
+        $message = new IncomingMessage(Contact::PATTERN, '', '');
+        $message->setContact($contact);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesContact(function ($bot, $data) use (&$called, $contact) {
+            $called = true;
+            $this->assertInstanceOf(Contact::class, $data);
+            $this->assertSame($contact, $data);
         });
         $botman->listen();
         $this->assertTrue($called);
