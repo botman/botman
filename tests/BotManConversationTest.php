@@ -13,8 +13,8 @@ use BotMan\BotMan\Drivers\Tests\ProxyDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Tests\Fixtures\TestDataConversation;
@@ -133,7 +133,7 @@ class BotManConversationTest extends TestCase
         static::assertEquals('Please supply an image', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
-    /** @test */ 
+    /** @test */
     public function it_calls_custom_repeat_method_on_invalid_image_answers()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
@@ -315,7 +315,7 @@ class BotManConversationTest extends TestCase
         static::assertEquals('That is not a location...', $this->fakeDriver->getBotMessages()[2]->getText());
     }
 
- 	/** @test */
+    /** @test */
     public function it_returns_the_location()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
@@ -331,8 +331,8 @@ class BotManConversationTest extends TestCase
         $this->replyWithFakeMessage($message);
         static::assertEquals('41.123:-12.123', $this->fakeDriver->getBotMessages()[2]->getText());
     }
-	
-	/** @test */
+
+    /** @test */
     public function it_repeats_invalid_contact_answers()
     {
         $this->botman->hears('Hello', function (BotMan $bot) {
@@ -348,7 +348,7 @@ class BotManConversationTest extends TestCase
         $this->replyWithFakeMessage('not_a_contact');
         static::assertEquals('Please supply a contact', $this->fakeDriver->getBotMessages()[2]->getText());
     }
-    
+
     /** @test */
     public function it_calls_custom_repeat_method_on_invalid_contact_answers()
     {

@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\Tests\Fixtures;
 
 use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class TestDataConversation extends Conversation
@@ -61,7 +61,7 @@ class TestDataConversation extends Conversation
                 });
             } elseif ($answer->getText() === 'custom_contact_repeat') {
                 $this->askForContact('Please supply a contact', function (Contact $contact) {
-                 	$this->say($contact->getPhoneNumber().':'.$contact->getFirstName().':'.$contact->getLastName().':'.$contact->getUserId());
+                    $this->say($contact->getPhoneNumber().':'.$contact->getFirstName().':'.$contact->getLastName().':'.$contact->getUserId());
                 }, function (Answer $answer) {
                     $this->say('That is not a contact...');
                 });
