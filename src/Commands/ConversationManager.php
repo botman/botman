@@ -10,9 +10,9 @@ use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Matching\MatchingMessage;
 

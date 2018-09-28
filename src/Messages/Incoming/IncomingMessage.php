@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\Messages\Incoming;
 
 use Illuminate\Support\Collection;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\Location;
 
 class IncomingMessage
 {
@@ -38,7 +38,7 @@ class IncomingMessage
     /** @var \BotMan\BotMan\Messages\Attachments\Location */
     private $location;
 
- 	/** @var \BotMan\BotMan\Messages\Attachments\Contact */
+    /** @var \BotMan\BotMan\Messages\Attachments\Contact */
     private $contact;
 
     /** @var bool */
@@ -226,14 +226,13 @@ class IncomingMessage
         return $this->contact;
     }
 
-  	/**
+    /**
      * @param \BotMan\BotMan\Messages\Attachments\Contact $contact
      */
     public function setContact(Contact $contact)
     {
         $this->contact = $contact;
     }
-
 
     /**
      * @return bool

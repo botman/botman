@@ -22,9 +22,9 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Tests\Fixtures\TestFallback;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
@@ -2326,7 +2326,7 @@ class BotManTest extends TestCase
         $called = false;
         $phone_number = '0775269856';
         $first_name = 'Daniele';
-     	$last_name = 'Rapisarda';
+        $last_name = 'Rapisarda';
         $user_id = '123';
 
         $contact = new Contact($phone_number, $first_name, $last_name, $user_id);

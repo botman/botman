@@ -15,13 +15,13 @@ class Contact extends Attachment
     /** @var string */
     protected $first_name;
 
- 	/** @var string */
+    /** @var string */
     protected $last_name;
 
     /** @var string */
     protected $user_id;
 
- 	/** @var string */
+    /** @var string */
     protected $vcard;
 
     /**
@@ -50,7 +50,7 @@ class Contact extends Attachment
      * @param string $last_name
      * @param string $user_id
      * @param string $vcard
-	 *	
+     *
      * @return Contact
      */
     public static function create($phone_number, $first_name, $last_name, $user_id, $vcard = null)
