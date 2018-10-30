@@ -7,6 +7,7 @@ use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
 
 class ApiAi implements MiddlewareInterface
 {
@@ -136,7 +137,7 @@ class ApiAi implements MiddlewareInterface
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
      */
-    public function matching(IncomingMessage $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched, Matcher $matcher)
     {
         if ($this->listenForAction) {
             $pattern = '/^'.$pattern.'$/i';

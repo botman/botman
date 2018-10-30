@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
 
 class Wit implements MiddlewareInterface
 {
@@ -97,7 +98,7 @@ class Wit implements MiddlewareInterface
      * @param bool $regexMatched Indicator if the regular expression was matched too
      * @return bool
      */
-    public function matching(IncomingMessage $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched, Matcher $matcher)
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
