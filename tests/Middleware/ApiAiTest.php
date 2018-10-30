@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\tests\Middleware;
 
+use BotMan\BotMan\Messages\Matcher;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
@@ -104,8 +105,8 @@ class ApiAiTest extends TestCase
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
         $middleware->received($message, $callback, m::mock(BotMan::class));
-        $this->assertTrue($middleware->matching($message, $messageText, false));
-        $this->assertFalse($middleware->matching($message, 'some_other_action', false));
+        $this->assertTrue($middleware->matching($message, $messageText, false, new Matcher()));
+        $this->assertFalse($middleware->matching($message, 'some_other_action', false, new Matcher()));
     }
 
     /** @test */
@@ -139,8 +140,8 @@ class ApiAiTest extends TestCase
         $middleware = new ApiAi('token', $http);
         $middleware->listenForAction();
         $middleware->received($message, $callback, m::mock(BotMan::class));
-        $this->assertTrue($middleware->matching($message, $messageText, false));
-        $this->assertFalse($middleware->matching($message, 'some_other_action', false));
+        $this->assertTrue($middleware->matching($message, $messageText, false, new Matcher()));
+        $this->assertFalse($middleware->matching($message, 'some_other_action', false, new Matcher()));
     }
 
     /** @test */

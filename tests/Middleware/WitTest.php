@@ -2,6 +2,7 @@
 
 namespace BotMan\BotMan\tests\Middleware;
 
+use BotMan\BotMan\Messages\Matcher;
 use Mockery as m;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
@@ -90,7 +91,7 @@ class WitTest extends TestCase
 
         $middleware = new Wit('token', 0.5, $http);
         $middleware->received($message, $callback, m::mock(BotMan::class));
-        $this->assertTrue($middleware->matching($message, 'emotion', false));
+        $this->assertTrue($middleware->matching($message, 'emotion', false, new Matcher()));
     }
 
     /** @test */
@@ -134,7 +135,7 @@ class WitTest extends TestCase
 
         $middleware = new Wit('token', 0.5, $http);
         $middleware->received($message, $callback, m::mock(BotMan::class));
-        $this->assertFalse($middleware->matching($message, 'emotion', false));
+        $this->assertFalse($middleware->matching($message, 'emotion', false, new Matcher()));
     }
 
     /** @test */
