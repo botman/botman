@@ -5,6 +5,7 @@ namespace BotMan\BotMan\Tests\Fixtures;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
 
 class TestMiddleware implements MiddlewareInterface
 {
@@ -43,9 +44,10 @@ class TestMiddleware implements MiddlewareInterface
      * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
+     * @param Matcher $matcher The current Matcher instance
      * @return bool
      */
-    public function matching(IncomingMessage $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched, Matcher $matcher)
     {
         return $message->getExtras()['test'] == $pattern;
     }
