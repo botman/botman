@@ -6,6 +6,7 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
 
 class TestCustomMiddleware implements MiddlewareInterface
 {
@@ -50,9 +51,10 @@ class TestCustomMiddleware implements MiddlewareInterface
      * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
      * @param string $pattern
      * @param bool $regexMatched Indicator if the regular expression was matched too
+     * @param Matcher $matcher The current Matcher instance
      * @return bool
      */
-    public function matching(IncomingMessage $message, $pattern, $regexMatched)
+    public function matching(IncomingMessage $message, $pattern, $regexMatched, Matcher $matcher)
     {
         $_SERVER['middleware_matching'] = $message->getText().'-'.$pattern;
 
