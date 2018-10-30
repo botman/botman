@@ -58,12 +58,14 @@ class Matcher
 
         // Try middleware first
         if (count($middleware)) {
+            $matcher=$this;
             return Collection::make($middleware)->reject(function (Matching $middleware) use (
                     $message,
                     $pattern,
-                    $regexMatched
+                    $regexMatched,
+                    $matcher
                 ) {
-                return $middleware->matching($message, $pattern, $regexMatched);
+                return $middleware->matching($message, $pattern, $regexMatched, $matcher);
             })->isEmpty() === true;
         }
 
