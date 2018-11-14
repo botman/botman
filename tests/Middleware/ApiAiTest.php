@@ -68,6 +68,16 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             'apiActionIncomplete' => false,
             'apiIntent' => 'name of the matched intent',
             'apiParameters' => ['param1' => 'value'],
+            'apiResponseMessages' => [['type' => 0], ['type' => 4]],
+            'apiTextResponses' => [['type' => 0], ['type' => 0]],
+            'apiCustomPayloadResponses' => [['type' => 4], ['type' => 4]],
+            'apiContexts' => [
+                [
+                    'name' => 'context_name',
+                    'parameters' => [],
+                    'lifespan' => 5
+                ]
+            ]
         ], $message->getExtras());
     }
 
