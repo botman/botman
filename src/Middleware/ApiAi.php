@@ -115,6 +115,7 @@ class ApiAi implements MiddlewareInterface
         $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
         $parameters = isset($response->result->parameters) ? (array) $response->result->parameters : [];
         $responseMessages = isset($response->result->fulfillment->messages) ? json_decode(json_encode($response->result->fulfillment->messages), true) : [];
+        $contexts = isset($response->result->contexts) ? json_decode(json_encode($response->result->contexts), true) : [];
 
         if (count($responseMessages)) {
             $textResponses = count(collect($responseMessages)->where('type', 0)) ? array_values(collect($responseMessages)->where('type', 0)->toArray()) : [];
@@ -129,6 +130,7 @@ class ApiAi implements MiddlewareInterface
         $message->addExtras('apiResponseMessages', $responseMessages);
         $message->addExtras('apiTextResponses', $textResponses ?? []);
         $message->addExtras('apiCustomPayloadResponses', $customPayloadResponses ?? []);
+        $message->addExtras('apiContexts', $contexts);
 
         return $next($message);
     }
