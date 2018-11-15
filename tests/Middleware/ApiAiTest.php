@@ -71,7 +71,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
             'apiResponseMessages' => [],
             'apiTextResponses' => [],
             'apiCustomPayloadResponses' => [],
-            'apiContexts' => []
+            'apiContexts' => [],
         ], $message->getExtras());
     }
 
