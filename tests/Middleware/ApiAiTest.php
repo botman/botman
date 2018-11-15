@@ -31,11 +31,11 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 'fulfillment' => [
                     'speech' => 'api reply text',
                 ],
-                'action'      => 'api action name',
-                'metadata'    => [
+                'action' => 'api action name',
+                'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
-                'parameters'  => [
+                'parameters' => [
                     'param1' => 'value',
                 ],
             ],
@@ -46,9 +46,9 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $http->shouldReceive('post')
             ->once()
             ->with('https://api.api.ai/v1/query?v=20150910', [], [
-                'query'     => [$messageText],
+                'query' => [$messageText],
                 'sessionId' => md5($messageChannel),
-                'lang'      => 'en',
+                'lang' => 'en',
             ], [
                 'Authorization: Bearer token',
                 'Content-Type: application/json; charset=utf-8',
@@ -63,15 +63,15 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
         $middleware->received($message, $callback, m::mock(BotMan::class));
 
         $this->assertSame([
-            'apiReply'                  => 'api reply text',
-            'apiAction'                 => 'api action name',
-            'apiActionIncomplete'       => false,
-            'apiIntent'                 => 'name of the matched intent',
-            'apiParameters'             => ['param1' => 'value'],
-            'apiResponseMessages'       => [],
-            'apiTextResponses'          => [],
+            'apiReply' => 'api reply text',
+            'apiAction' => 'api action name',
+            'apiActionIncomplete' => false,
+            'apiIntent' => 'name of the matched intent',
+            'apiParameters' => ['param1' => 'value'],
+            'apiResponseMessages' => [],
+            'apiTextResponses' => [],
             'apiCustomPayloadResponses' => [],
-            'apiContexts'               => [],
+            'apiContexts' => []
         ], $message->getExtras());
     }
 
@@ -86,8 +86,8 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 'fulfillment' => [
                     'speech' => 'api reply text',
                 ],
-                'action'      => 'my_api_ai_action_name',
-                'metadata'    => [
+                'action' => 'my_api_ai_action_name',
+                'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
             ],
@@ -121,8 +121,8 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
                 'fulfillment' => [
                     'speech' => 'api reply text',
                 ],
-                'action'      => 'my_api_ai_action_name',
-                'metadata'    => [
+                'action' => 'my_api_ai_action_name',
+                'metadata' => [
                     'intentName' => 'name of the matched intent',
                 ],
             ],
@@ -155,10 +155,10 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_only_calls_service_once_per_listen()
     {
-        $request = m::mock(\Illuminate\Http\Request::class . '[getContent]');
+        $request = m::mock(\Illuminate\Http\Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode([]));
 
-        $botman = BotManFactory::create([], new ArrayCache(), $request);
+        $botman = BotManFactory::create([], new ArrayCache, $request);
 
         $http = m::mock(Curl::class);
         $http->shouldReceive('post')
