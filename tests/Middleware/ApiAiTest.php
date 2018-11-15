@@ -23,8 +23,8 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     public function it_adds_entities_to_the_message()
     {
         $messageChannel = '1234567890';
-        $messageText    = 'This will be my message text!';
-        $message        = new IncomingMessage($messageText, '', $messageChannel);
+        $messageText = 'This will be my message text!';
+        $message = new IncomingMessage($messageText, '', $messageChannel);
 
         $apiResponse = [
             'result' => [
@@ -79,7 +79,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     public function it_matches_messages()
     {
         $messageText = 'my_api_ai_action_name';
-        $message     = new IncomingMessage($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $apiResponse = [
             'result' => [
@@ -114,7 +114,7 @@ class ApiAiTest extends PHPUnit_Framework_TestCase
     public function it_matches_messages_with_regular_expressions()
     {
         $messageText = 'my_api_ai_.*';
-        $message     = new IncomingMessage($messageText, '', '');
+        $message = new IncomingMessage($messageText, '', '');
 
         $apiResponse = [
             'result' => [
