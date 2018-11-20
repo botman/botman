@@ -120,12 +120,23 @@ class ApiAi implements MiddlewareInterface
         $actionIncomplete = isset($response->result->actionIncomplete) ? (bool) $response->result->actionIncomplete : false;
         $intent = $response->result->metadata->intentName ?? '';
         $parameters = isset($response->result->parameters) ? (array) $response->result->parameters : [];
+        $responseMessages = isset($response->result->fulfillment->messages) ? json_decode(json_encode($response->result->fulfillment->messages), true) : [];
+        $contexts = isset($response->result->contexts) ? json_decode(json_encode($response->result->contexts), true) : [];
+
+        if (count($responseMessages)) {
+            $textResponses = count(collect($responseMessages)->where('type', 0)) ? array_values(collect($responseMessages)->where('type', 0)->toArray()) : [];
+            $customPayloadResponses = count(collect($responseMessages)->where('type', 4)) ? array_values(collect($responseMessages)->where('type', 4)->toArray()) : [];
+        }
 
         $message->addExtras('apiReply', $reply);
         $message->addExtras('apiAction', $action);
         $message->addExtras('apiActionIncomplete', $actionIncomplete);
         $message->addExtras('apiIntent', $intent);
         $message->addExtras('apiParameters', $parameters);
+        $message->addExtras('apiResponseMessages', $responseMessages);
+        $message->addExtras('apiTextResponses', $textResponses ?? []);
+        $message->addExtras('apiCustomPayloadResponses', $customPayloadResponses ?? []);
+        $message->addExtras('apiContexts', $contexts);
 
         return $next($message);
     }

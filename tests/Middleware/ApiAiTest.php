@@ -70,6 +70,10 @@ class ApiAiTest extends TestCase
             'apiActionIncomplete' => false,
             'apiIntent' => 'name of the matched intent',
             'apiParameters' => ['param1' => 'value'],
+            'apiResponseMessages' => [],
+            'apiTextResponses' => [],
+            'apiCustomPayloadResponses' => [],
+            'apiContexts' => [],
         ], $message->getExtras());
     }
 
