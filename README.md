@@ -20,6 +20,8 @@ $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
 });
 ```
 
+> If you want to learn how to create reusable PHP packages yourself, take a look at my upcoming [PHP Package Development](https://phppackagedevelopment.com) video course.
+
 ## Documentation
 
 You can find the BotMan documentation at [https://botman.io](https://botman.io).
