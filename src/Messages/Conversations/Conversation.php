@@ -91,6 +91,22 @@ abstract class Conversation
      * @param array $additionalParameters
      * @return $this
      */
+    public function askForFiles($question, $next, $repeat = null, $additionalParameters = [])
+    {
+        $additionalParameters['__getter']  = 'getFiles';
+        $additionalParameters['__pattern'] = File::PATTERN;
+        $additionalParameters['__repeat']  = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+
+        return $this->ask($question, $next, $additionalParameters);
+    }
+
+    /**
+     * @param string|\BotMan\BotMan\Messages\Outgoing\Question $question
+     * @param array|Closure $next
+     * @param array|Closure $repeat
+     * @param array $additionalParameters
+     * @return $this
+     */
     public function askForVideos($question, $next, $repeat = null, $additionalParameters = [])
     {
         $additionalParameters['__getter'] = 'getVideos';
