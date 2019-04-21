@@ -93,9 +93,9 @@ abstract class Conversation
      */
     public function askForFiles($question, $next, $repeat = null, $additionalParameters = [])
     {
-        $additionalParameters['__getter']  = 'getFiles';
+        $additionalParameters['__getter'] = 'getFiles';
         $additionalParameters['__pattern'] = File::PATTERN;
-        $additionalParameters['__repeat']  = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
+        $additionalParameters['__repeat'] = ! is_null($repeat) ? $this->bot->serializeClosure($repeat) : $repeat;
 
         return $this->ask($question, $next, $additionalParameters);
     }
