@@ -24,29 +24,29 @@ class DialogflowV2 implements MiddlewareInterface
     protected $lang = 'en';
 
     /**
-    * constructor.
-    * @param string $lang language
-    */
+     * constructor.
+     * @param string $lang language
+     */
     public function __construct($lang = 'en')
     {
         $this->lang = $lang;
     }
 
     /**
-    * Create a new Dialogflow middleware instance.
-    * @param string $lang language
-    * @return DialogflowV2
-    */
+     * Create a new Dialogflow middleware instance.
+     * @param string $lang language
+     * @return DialogflowV2
+     */
     public static function create($lang = 'en')
     {
         return new static($lang);
     }
 
     /**
-    * Restrict the middleware to only listen for dialogflow actions.
-    * @param  bool $listen
-    * @return $this
-    */
+     * Restrict the middleware to only listen for dialogflow actions.
+     * @param  bool $listen
+     * @return $this
+     */
     public function listenForAction($listen = true)
     {
         $this->listenForAction = $listen;
@@ -55,10 +55,10 @@ class DialogflowV2 implements MiddlewareInterface
     }
 
     /**
-    * Perform the Dialogflow API call and cache it for the message.
-    * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-    * @return \stdClass
-    */
+     * Perform the Dialogflow API call and cache it for the message.
+     * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @return \stdClass
+     */
     protected function getResponse(IncomingMessage $message)
     {
         $this->response = $this->detectIntentTexts(
@@ -93,14 +93,14 @@ class DialogflowV2 implements MiddlewareInterface
     }
 
     /**
-    * Handle a captured message.
-    *
-    * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-    * @param BotMan $bot
-    * @param $next
-    *
-    * @return mixed
-    */
+     * Handle a captured message.
+     *
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
     public function captured(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
@@ -108,14 +108,14 @@ class DialogflowV2 implements MiddlewareInterface
 
 
     /**
-    * Handle an incoming message.
-    *
-    * @param IncomingMessage $message
-    * @param BotMan $bot
-    * @param $next
-    *
-    * @return mixed
-    */
+     * Handle an incoming message.
+     *
+     * @param IncomingMessage $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
     public function received(IncomingMessage $message, $next, BotMan $bot)
     {
         $response = $this->getResponse($message);
@@ -136,13 +136,13 @@ class DialogflowV2 implements MiddlewareInterface
             $contexts[] = [
                 'name' => substr(strrchr($context->getName(), '/'), 1),
                 'parameters' => $cparams,
-                'lifespan' => $context->getLifespanCount()
+                'lifespan' => $context->getLifespanCount(),
             ];
         }
 
         $message->addExtras('apiReply', $queryResult->getFulfillmentText());
         $message->addExtras('apiAction', $queryResult->getAction());
-        $message->addExtras('apiActionIncomplete', !$queryResult->getAllRequiredParamsPresent());
+        $message->addExtras('apiActionIncomplete', ! $queryResult->getAllRequiredParamsPresent());
         $message->addExtras('apiIntent', $intent->getDisplayName());
         $message->addExtras('apiParameters', $parameters);
         $message->addExtras('apiContexts', $contexts);
@@ -151,11 +151,11 @@ class DialogflowV2 implements MiddlewareInterface
     }
 
     /**
-    * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-    * @param string $pattern
-    * @param bool $regexMatched Indicator if the regular expression was matched too
-    * @return bool
-    */
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param string $pattern
+     * @param bool $regexMatched Indicator if the regular expression was matched too
+     * @return bool
+     */
     public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
         if ($this->listenForAction) {
@@ -168,29 +168,29 @@ class DialogflowV2 implements MiddlewareInterface
     }
 
     /**
-    * Handle a message that was successfully heard, but not processed yet.
-    *
-    * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-    * @param BotMan $bot
-    * @param $next
-    *
-    * @return mixed
-    */
+     * Handle a message that was successfully heard, but not processed yet.
+     *
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
     public function heard(IncomingMessage $message, $next, BotMan $bot)
     {
         return $next($message);
     }
 
     /**
-    * Handle an outgoing message payload before/after it
-    * hits the message service.
-    *
-    * @param mixed $payload
-    * @param BotMan $bot
-    * @param $next
-    *
-    * @return mixed
-    */
+     * Handle an outgoing message payload before/after it
+     * hits the message service.
+     *
+     * @param mixed $payload
+     * @param BotMan $bot
+     * @param $next
+     *
+     * @return mixed
+     */
     public function sending($payload, $next, BotMan $bot)
     {
         return $next($payload);
