@@ -106,7 +106,6 @@ class DialogflowV2 implements MiddlewareInterface
         return $next($message);
     }
 
-
     /**
      * Handle an incoming message.
      *
