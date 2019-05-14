@@ -700,7 +700,7 @@ class BotMan
             $callback = $this->makeInvokableAction($callback);
         }
 
-        list($class, $method) = explode('@', $callback);
+        [$class, $method] = explode('@', $callback);
 
         $command = $this->container ? $this->container->get($class) : new $class($this);
 
