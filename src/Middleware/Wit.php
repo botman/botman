@@ -12,6 +12,9 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 class Wit implements MiddlewareInterface
 {
     /** @var string */
+    protected $version = '20170307';
+
+    /** @var string */
     protected $token;
 
     /** @var float */
@@ -49,9 +52,12 @@ class Wit implements MiddlewareInterface
 
     protected function getResponse(IncomingMessage $message)
     {
-        $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
+        $endpoint = 'https://api.wit.ai/message';
 
-        $this->response = $this->http->post($endpoint, [], [], [
+        $this->response = $this->http->get($endpoint, [
+            'v' => $this->version,
+            'q' => $message->getText()
+        ], [
             'Authorization: Bearer '.$this->token,
         ]);
 
