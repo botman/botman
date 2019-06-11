@@ -21,12 +21,15 @@ class ApiAiTest extends TestCase
         m::close();
     }
 
-    /** @test */
+    /** @test
+     *  TODO: Add an example for multiple message
+     */
     public function it_adds_entities_to_the_message()
     {
         $messageChannel = '1234567890';
         $messageText = 'This will be my message text!';
         $message = new IncomingMessage($messageText, '', $messageChannel);
+        $speechMessage = array("type" => 0, "speech" => "api reply message");
 
         $apiResponse = [
             'result' => [
@@ -70,6 +73,7 @@ class ApiAiTest extends TestCase
             'apiActionIncomplete' => false,
             'apiIntent' => 'name of the matched intent',
             'apiParameters' => ['param1' => 'value'],
+            'apiMessages' => []
         ], $message->getExtras());
     }
 
