@@ -41,7 +41,7 @@ class RedisCacheTest extends TestCase
     {
         $cache = new RedisCache('127.0.0.1', 6380, 'secret');
         $cache->put('foo', 'bar', 1);
-        static::assertTrue($cache->has('foo'));
+        static::assertTrue((bool) $cache->has('foo'));
     }
 
     /**
@@ -59,14 +59,14 @@ class RedisCacheTest extends TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 1);
-        static::assertTrue($cache->has('foo'));
+        static::assertTrue((bool) $cache->has('foo'));
     }
 
     /** @test */
     public function has_not()
     {
         $cache = new RedisCache();
-        static::assertFalse($cache->has('foo'));
+        static::assertFalse((bool) $cache->has('foo'));
     }
 
     /** @test */
@@ -74,7 +74,7 @@ class RedisCacheTest extends TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 5);
-        static::assertTrue($cache->has('foo'));
+        static::assertTrue((bool) $cache->has('foo'));
         static::assertEquals('bar', $cache->get('foo'));
     }
 
@@ -90,9 +90,9 @@ class RedisCacheTest extends TestCase
     {
         $cache = new RedisCache();
         $cache->put('foo', 'bar', 5);
-        static::assertTrue($cache->has('foo'));
+        static::assertTrue((bool) $cache->has('foo'));
         static::assertEquals('bar', $cache->pull('foo'));
-        static::assertFalse($cache->has('foo'));
+        static::assertFalse((bool) $cache->has('foo'));
         static::assertNull($cache->get('foo'));
     }
 
