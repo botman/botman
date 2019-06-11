@@ -110,7 +110,7 @@ class ApiAi implements MiddlewareInterface
         $response = $this->getResponse($message);
 
         $reply = isset($response->result->fulfillment->speech) ? $response->result->fulfillment->speech : '';
-        $messages = isset($response->result->fulfillment->messages) ? $response->result->fulfillment->messages : '';
+        $messages = isset($response->result->fulfillment->messages) ? $response->result->fulfillment->messages : [];
         $action = isset($response->result->action) ? $response->result->action : '';
         $actionIncomplete = isset($response->result->actionIncomplete) ? (bool) $response->result->actionIncomplete : false;
         $intent = isset($response->result->metadata->intentName) ? $response->result->metadata->intentName : '';
