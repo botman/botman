@@ -30,9 +30,9 @@ class WitTest extends TestCase
         $response = new Response(json_encode(['entities' => ['foo' => 'bar']]));
 
         $http = m::mock(Curl::class);
-        $http->shouldReceive('post')
+        $http->shouldReceive('get')
             ->once()
-            ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
+            ->with('https://api.wit.ai/message?v=20170307&q='.urlencode($messageText), [], [], [
                 'Authorization: Bearer token',
             ])
             ->andReturn($response);
@@ -77,9 +77,9 @@ class WitTest extends TestCase
         ');
 
         $http = m::mock(Curl::class);
-        $http->shouldReceive('post')
+        $http->shouldReceive('get')
             ->once()
-            ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
+            ->with('https://api.wit.ai/message?v=20170307&q='.urlencode($messageText), [], [], [
                 'Authorization: Bearer token',
             ])
             ->andReturn($response);
@@ -121,9 +121,9 @@ class WitTest extends TestCase
         ');
 
         $http = m::mock(Curl::class);
-        $http->shouldReceive('post')
+        $http->shouldReceive('get')
             ->once()
-            ->with('https://api.wit.ai/message?q='.urlencode($messageText), [], [], [
+            ->with('https://api.wit.ai/message?v=20170307&q='.urlencode($messageText), [], [], [
                 'Authorization: Bearer token',
             ])
             ->andReturn($response);
