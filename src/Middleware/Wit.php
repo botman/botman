@@ -56,7 +56,7 @@ class Wit implements MiddlewareInterface
 
         $this->response = $this->http->get($endpoint, [
             'v' => $this->version,
-            'q' => $message->getText()
+            'q' => $message->getText(),
         ], [
             'Authorization: Bearer '.$this->token,
         ]);
