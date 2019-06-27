@@ -10,6 +10,7 @@ use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -48,6 +49,8 @@ class ConversationManager
             $parameters[] = $message->getAudio();
         } elseif ($messageText === Location::PATTERN) {
             $parameters[] = $message->getLocation();
+        } elseif ($messageText === Contact::PATTERN) {
+            $parameters[] = $message->getContact();
         } elseif ($messageText === File::PATTERN) {
             $parameters[] = $message->getFiles();
         }

@@ -174,6 +174,28 @@ class FakeDriverTest extends TestCase
     }
 
     /** @test */
+    public function it_can_fake_users_from_fields_method()
+    {
+        $userData = [
+            'id' => '987',
+            'first_name' => 'Marcel',
+            'last_name' => 'Pociot',
+            'username' => 'mpociot',
+        ];
+        $this->fakeDriver->setUser($userData);
+        $this->botman->hears('user', function (BotMan $bot) use ($userData) {
+            $user = $bot->getUserWithFields(['first_name']);
+            $this->assertSame($userData, $user->getInfo());
+            $this->assertSame('987', $user->getId());
+            $this->assertSame('Marcel', $user->getFirstname());
+            $this->assertSame('Pociot', $user->getLastname());
+            $this->assertSame('mpociot', $user->getUsername());
+        });
+
+        $this->listenToFakeMessage('user', 'helloman123', '#helloworld');
+    }
+
+    /** @test */
     public function it_can_fake_driver_name()
     {
         $this->fakeDriver->setName('custom_driver_name');

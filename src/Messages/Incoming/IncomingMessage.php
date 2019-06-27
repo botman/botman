@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Messages\Incoming;
 
 use Illuminate\Support\Collection;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Messages\Attachments\Location;
 
 class IncomingMessage
@@ -36,6 +37,9 @@ class IncomingMessage
 
     /** @var \BotMan\BotMan\Messages\Attachments\Location */
     private $location;
+
+    /** @var \BotMan\BotMan\Messages\Attachments\Contact */
+    private $contact;
 
     /** @var bool */
     protected $isFromBot = false;
@@ -203,7 +207,31 @@ class IncomingMessage
      */
     public function getLocation() : Location
     {
+        if (empty($this->location)) {
+            throw new \UnexpectedValueException('This message does not contain a location');
+        }
+
         return $this->location;
+    }
+
+    /**
+     * @return \BotMan\BotMan\Messages\Attachments\Contact
+     */
+    public function getContact() : Contact
+    {
+        if (empty($this->contact)) {
+            throw new \UnexpectedValueException('This message does not contain a contact');
+        }
+
+        return $this->contact;
+    }
+
+    /**
+     * @param \BotMan\BotMan\Messages\Attachments\Contact $contact
+     */
+    public function setContact(Contact $contact)
+    {
+        $this->contact = $contact;
     }
 
     /**

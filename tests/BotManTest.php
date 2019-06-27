@@ -22,6 +22,7 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use Psr\Container\NotFoundExceptionInterface;
 use BotMan\BotMan\Tests\Fixtures\TestFallback;
+use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Middleware\MiddlewareManager;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
@@ -204,7 +205,8 @@ class BotManTest extends TestCase
     /** @test */
     public function it_hears_matching_commands()
     {
-        $called = false;
+        $called_once = false;
+        $called_twice = false;
 
         $botman = $this->getBot([
             'sender' => 'UX12345',
@@ -212,11 +214,44 @@ class BotManTest extends TestCase
             'message' => 'Foo',
         ]);
 
-        $botman->hears('Foo', function ($bot) use (&$called) {
-            $called = true;
+        $botman->hears('Foo', function ($bot) use (&$called_once) {
+            $called_once = true;
         });
+
+        $botman->hears('Foo(.*)', function ($bot) use (&$called_twice) {
+            $called_twice = true;
+        });
+
         $botman->listen();
-        $this->assertTrue($called);
+        $this->assertTrue($called_once);
+        $this->assertTrue($called_twice);
+    }
+
+    /** @test */
+    public function it_hears_only_first_matching_command_that_returns()
+    {
+        $called_once = false;
+        $called_twice = false;
+
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+
+        $botman->hears('Foo', function ($bot) use (&$called_once) {
+            $called_once = true;
+
+            return true;
+        });
+
+        $botman->hears('Foo(.*)', function ($bot) use (&$called_twice) {
+            $called_twice = true;
+        });
+
+        $botman->listen();
+        $this->assertTrue($called_once);
+        $this->assertFalse($called_twice);
     }
 
     /** @test */
@@ -2280,6 +2315,39 @@ class BotManTest extends TestCase
             $called = true;
             $this->assertInstanceOf(Location::class, $data);
             $this->assertSame($location, $data);
+        });
+        $botman->listen();
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function it_returns_contact_as_second_argument()
+    {
+        $called = false;
+        $phone_number = '0775269856';
+        $first_name = 'Daniele';
+        $last_name = 'Rapisarda';
+        $user_id = '123';
+
+        $contact = new Contact($phone_number, $first_name, $last_name, $user_id);
+
+        $message = new IncomingMessage(Contact::PATTERN, '', '');
+        $message->setContact($contact);
+
+        $botman = $this->getBot([]);
+
+        $driver = m::mock(FakeDriver::class)->makePartial();
+        $driver->shouldReceive('getMessages')
+            ->andReturn([
+                $message,
+            ]);
+
+        $botman->setDriver($driver);
+
+        $botman->receivesContact(function ($bot, $data) use (&$called, $contact) {
+            $called = true;
+            $this->assertInstanceOf(Contact::class, $data);
+            $this->assertSame($contact, $data);
         });
         $botman->listen();
         $this->assertTrue($called);
