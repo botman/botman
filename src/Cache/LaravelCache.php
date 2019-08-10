@@ -2,7 +2,7 @@
 
 namespace BotMan\BotMan\Cache;
 
-use Cache;
+use Illuminate\Support\Facades\Cache;
 use BotMan\BotMan\Interfaces\CacheInterface;
 
 /**
