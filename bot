@@ -1,0 +1,20 @@
+
+[pyrogram]
+api_id = 12345
+api_hash = 805449121:AAGsnwIWiNiGbCj03vVi4TWAL6_LVIWusQ8
+
+from pyrogram import Client, Filters
+
+# التوكن الذي حصلت عليه من @botfather
+# مثال :
+# app = Client("bot", bot_token="805449121:AAGsnwIWiNiGbCj03vVi4TWAL6_LVIWusQ8")
+app = Client("اسم الجلسة", bot_token="التوكن")
+
+# اذا كانت الرسالة في الخاص و كانت الرسالة الامر /start
+@app.on_message(Filters.private & Filters.command('start'))
+def startmsg(client, message):
+    # البوت سيقوم بالرد عليك بهذه الرسالة
+    message.reply("اهلا بك في بوت همسات خواطر حياكم  @mama1921")
+
+
+app.run() # لتشغيل البوت "long-polling"
