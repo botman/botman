@@ -529,7 +529,7 @@ class BotMan
     /**
      * @param string|Question $message
      * @param string|array $recipients
-     * @param DriverInterface|null $driver
+     * @param DriverInterface|string|null $driver
      * @param array $additionalParameters
      * @return Response
      * @throws BotManException
