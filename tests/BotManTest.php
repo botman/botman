@@ -21,6 +21,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Tests\Fixtures\InvokableService;
 use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
 use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
 use BotMan\BotMan\Tests\Fixtures\TestClass;
@@ -402,6 +403,20 @@ class BotManTest extends TestCase
         ]);
         $botman->hears('foo', \stdClass::class);
         $botman->listen();
+    }
+
+    /** @test */
+    public function it_hears_matching_commands_without_invokable_service()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+        $service = new InvokableService();
+        $botman->hears('foo', $service);
+        $botman->listen();
+        $this->assertTrue($service->invoked);
     }
 
     /** @test */
