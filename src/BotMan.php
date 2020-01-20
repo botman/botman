@@ -627,7 +627,7 @@ class BotMan
     }
 
     /**
-     * @param string|Question $message
+     * @param string|OutgoingMessage|Question $message
      * @param array $additionalParameters
      * @return mixed
      */
