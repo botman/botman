@@ -3,8 +3,8 @@
 namespace BotMan\BotMan\tests;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
+use PHPUnit\Framework\TestCase;
 
 class BotManFactoryTest extends TestCase
 {

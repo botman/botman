@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Tests\Fixtures\Middleware;
 
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Interfaces\Middleware\Matching as MatchingInterface;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class Matching implements MatchingInterface
 {

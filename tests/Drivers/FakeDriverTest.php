@@ -3,13 +3,13 @@
 namespace BotMan\BotMan\tests\Drivers;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Drivers\Tests\ProxyDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \BotMan\BotMan\Drivers\Tests\FakeDriver

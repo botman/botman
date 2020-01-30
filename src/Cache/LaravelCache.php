@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Cache;
 
-use Cache;
 use BotMan\BotMan\Interfaces\CacheInterface;
+use Cache;
 
 /**
  * The Laravel Cache implementation.

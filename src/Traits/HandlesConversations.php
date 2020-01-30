@@ -2,14 +2,14 @@
 
 namespace BotMan\BotMan\Traits;
 
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Interfaces\ShouldQueue;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Closure;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
-use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Interfaces\ShouldQueue;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Conversations\Conversation;
 
 trait HandlesConversations
 {

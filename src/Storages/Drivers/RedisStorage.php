@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Storages\Drivers;
 
+use BotMan\BotMan\Interfaces\StorageInterface;
+use Illuminate\Support\Collection;
 use Redis;
 use RuntimeException;
-use Illuminate\Support\Collection;
-use BotMan\BotMan\Interfaces\StorageInterface;
 
 class RedisStorage implements StorageInterface
 {
