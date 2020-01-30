@@ -2,15 +2,15 @@
 
 namespace BotMan\BotMan\Middleware;
 
-use Closure;
 use BotMan\BotMan\BotMan;
-use Mpociot\Pipeline\Pipeline;
-use BotMan\BotMan\Interfaces\Middleware\Heard;
-use BotMan\BotMan\Interfaces\Middleware\Sending;
 use BotMan\BotMan\Interfaces\Middleware\Captured;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
 use BotMan\BotMan\Interfaces\Middleware\Matching;
 use BotMan\BotMan\Interfaces\Middleware\Received;
+use BotMan\BotMan\Interfaces\Middleware\Sending;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
+use Closure;
+use Mpociot\Pipeline\Pipeline;
 
 class MiddlewareManager
 {

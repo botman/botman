@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\tests\Storages;
 
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Storages\Drivers\FileStorage;
+use PHPUnit\Framework\TestCase;
 
 class FileStorageTest extends TestCase
 {

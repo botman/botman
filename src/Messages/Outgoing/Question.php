@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Messages\Outgoing;
 
-use JsonSerializable;
+use BotMan\BotMan\Interfaces\QuestionActionInterface;
 use BotMan\BotMan\Interfaces\WebAccess;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Interfaces\QuestionActionInterface;
+use JsonSerializable;
 
 class Question implements JsonSerializable, WebAccess
 {

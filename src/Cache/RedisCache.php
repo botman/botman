@@ -2,9 +2,9 @@
 
 namespace BotMan\BotMan\Cache;
 
+use BotMan\BotMan\Interfaces\CacheInterface;
 use Redis;
 use RuntimeException;
-use BotMan\BotMan\Interfaces\CacheInterface;
 
 /**
  * Redis <http://redis.io> cache backend

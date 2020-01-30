@@ -2,9 +2,9 @@
 
 namespace BotMan\BotMan\Messages\Incoming;
 
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Messages\Attachments\Contact;
 use BotMan\BotMan\Messages\Attachments\Location;
+use Illuminate\Support\Collection;
 
 class IncomingMessage
 {
@@ -205,7 +205,7 @@ class IncomingMessage
     /**
      * @return \BotMan\BotMan\Messages\Attachments\Location
      */
-    public function getLocation() : Location
+    public function getLocation(): Location
     {
         if (empty($this->location)) {
             throw new \UnexpectedValueException('This message does not contain a location');
@@ -217,7 +217,7 @@ class IncomingMessage
     /**
      * @return \BotMan\BotMan\Messages\Attachments\Contact
      */
-    public function getContact() : Contact
+    public function getContact(): Contact
     {
         if (empty($this->contact)) {
             throw new \UnexpectedValueException('This message does not contain a contact');

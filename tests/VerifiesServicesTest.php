@@ -2,17 +2,17 @@
 
 namespace BotMan\BotMan\Tests;
 
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
-use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Interfaces\UserInterface;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Tests\Fixtures\TestDriver;
 use BotMan\BotMan\Interfaces\VerifiesService;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 /**
  * Class VerifiesServicesTest.

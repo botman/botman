@@ -2,12 +2,12 @@
 
 namespace BotMan\BotMan\Container;
 
-use ReflectionException;
-use Psr\Container\ContainerInterface;
-use Illuminate\Contracts\Container\Container;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Container\ContainerExceptionInterface;
 use Illuminate\Container\EntryNotFoundException;
+use Illuminate\Contracts\Container\Container;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 
 class LaravelContainer implements ContainerInterface
 {

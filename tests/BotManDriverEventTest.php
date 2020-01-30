@@ -3,12 +3,12 @@
 namespace BotMan\BotMan\Tests;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Drivers\Tests\ProxyDriver;
 use BotMan\BotMan\Interfaces\DriverEventInterface;
+use PHPUnit\Framework\TestCase;
 
 class BotManDriverEventTest extends TestCase
 {

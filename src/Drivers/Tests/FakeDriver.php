@@ -2,15 +2,15 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
-use BotMan\BotMan\Users\User;
-use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Symfony\Component\HttpFoundation\Request;
-use BotMan\BotMan\Drivers\Events\GenericEvent;
-use Symfony\Component\HttpFoundation\Response;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Users\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.

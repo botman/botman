@@ -2,17 +2,17 @@
 
 namespace BotMan\BotMan\tests;
 
-use Exception;
-use Mockery as m;
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use BotMan\BotMan\Tests\Fixtures\TestClass;
 use BotMan\BotMan\Exceptions\Base\BotManException;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\TestClass;
+use Exception;
+use Illuminate\Support\Collection;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
 class ExceptionTest extends TestCase
 {

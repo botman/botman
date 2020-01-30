@@ -2,9 +2,9 @@
 
 namespace BotMan\BotMan\tests;
 
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\TestCase;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class ButtonTest extends TestCase
 {

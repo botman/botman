@@ -2,11 +2,11 @@
 
 namespace BotMan\BotMan\Tests;
 
+use BotMan\BotMan\Storages\Drivers\RedisStorage;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\TestCase;
 use Redis;
 use RedisException;
-use PHPUnit\Framework\TestCase;
-use Illuminate\Support\Collection;
-use BotMan\BotMan\Storages\Drivers\RedisStorage;
 
 /**
  * @group integration
