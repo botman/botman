@@ -116,7 +116,7 @@ class QuestionTest extends TestCase
         $translationCallable = function ($text) {
             return strtoupper($text);
         };
-        $button = Button::create('qux')->setName('bar');
+        $button = Button::create('qux')->name('bar');
         $message = Question::create("foo")->addAction($button);
         $message->translate($translationCallable);
         $this->assertSame([
