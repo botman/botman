@@ -116,7 +116,7 @@ class QuestionTest extends TestCase
         $translationCallable = function ($text) {
             return strtoupper($text);
         };
-        $button = Button::create('qux');
+        $button = Button::create('qux')->setName('bar');
         $message = Question::create("foo")->addAction($button);
         $message->translate($translationCallable);
         $this->assertSame([
@@ -125,7 +125,7 @@ class QuestionTest extends TestCase
             'fallback' => null,
             'callback_id' => null,
             'actions' => [[
-                'name' => 'QUX',
+                'name' => 'BAR',
                 'text' => 'QUX',
                 'image_url' => null,
                 'type' => 'button',
