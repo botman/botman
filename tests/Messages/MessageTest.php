@@ -50,4 +50,27 @@ class MessageTest extends TestCase
         $message = OutgoingMessage::create()->withAttachment(Video::url('foo'));
         $this->assertSame('foo', $message->getAttachment()->getUrl());
     }
+
+    /** @test */
+    public function it_can_be_translated()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $message = OutgoingMessage::create()->text('foo');
+        $message->translate($translationCallable);
+        $this->assertSame('FOO', $message->getText());
+    }
+
+    /** @test */
+    public function it_can_translate_attachement()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $message = OutgoingMessage::create()->withAttachment(Image::url('foo')->title('bar'));
+        $message->translate($translationCallable);
+
+        $this->assertSame('BAR', $message->getAttachment()->getTitle());
+    }
 }

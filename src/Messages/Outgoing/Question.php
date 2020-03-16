@@ -3,14 +3,18 @@
 namespace BotMan\BotMan\Messages\Outgoing;
 
 use BotMan\BotMan\Interfaces\QuestionActionInterface;
+use BotMan\BotMan\Interfaces\TranslatableInterface;
 use BotMan\BotMan\Interfaces\WebAccess;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use JsonSerializable;
 
-class Question implements JsonSerializable, WebAccess
+class Question implements JsonSerializable, WebAccess, TranslatableInterface
 {
     /** @var array */
     protected $actions;
+
+    /** @var array */
+    protected $actionInstances;
 
     /** @var string */
     protected $text;
@@ -38,6 +42,7 @@ class Question implements JsonSerializable, WebAccess
     {
         $this->text = $text;
         $this->actions = [];
+        $this->actionInstances = [];
     }
 
     /**
@@ -69,6 +74,7 @@ class Question implements JsonSerializable, WebAccess
     public function addAction(QuestionActionInterface $action)
     {
         $this->actions[] = $action->toArray();
+        $this->actionInstances[] = $action;
 
         return $this;
     }
@@ -80,6 +86,7 @@ class Question implements JsonSerializable, WebAccess
     public function addButton(Button $button)
     {
         $this->actions[] = $button->toArray();
+        $this->actionInstances[] = $button;
 
         return $this;
     }
@@ -92,6 +99,7 @@ class Question implements JsonSerializable, WebAccess
     {
         foreach ($buttons as $button) {
             $this->actions[] = $button->toArray();
+            $this->actionInstances[] = $button;
         }
 
         return $this;
@@ -157,5 +165,18 @@ class Question implements JsonSerializable, WebAccess
             'callback_id' => $this->callback_id,
             'actions' => $this->actions,
         ];
+    }
+
+    public function translate(callable $callable): void
+    {
+        $this->text = $callable($this->text);
+        $translatedActions = [];
+        foreach ($this->actionInstances as $actionInstance) {
+            if ($actionInstance instanceof TranslatableInterface) {
+                $actionInstance->translate($callable);
+            }
+            $translatedActions[] = $actionInstance->toArray();
+        }
+        $this->actions = $translatedActions;
     }
 }

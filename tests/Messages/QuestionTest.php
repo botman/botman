@@ -92,4 +92,107 @@ class QuestionTest extends TestCase
             'actions' => [$button->toArray()],
         ], $message->toWebDriver());
     }
+
+    /** @test */
+    public function it_can_be_translated()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $message = Question::create("foo");
+        $message->translate($translationCallable);
+        $this->assertSame([
+            'type' => 'text',
+            'text' => 'FOO',
+            'fallback' => null,
+            'callback_id' => null,
+            'actions' => [],
+        ], $message->toWebDriver());
+    }
+
+    /** @test */
+    public function it_can_translate_an_action()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $button = Button::create('qux');
+        $message = Question::create("foo")->addAction($button);
+        $message->translate($translationCallable);
+        $this->assertSame([
+            'type' => 'actions',
+            'text' => 'FOO',
+            'fallback' => null,
+            'callback_id' => null,
+            'actions' => [[
+                'name' => 'QUX',
+                'text' => 'QUX',
+                'image_url' => null,
+                'type' => 'button',
+                'value' => null,
+                'additional' => [],
+            ]],
+        ], $message->toWebDriver());
+    }
+
+    /** @test */
+    public function it_can_translate_a_button()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $button = Button::create('qux');
+        $message = Question::create("foo")->addButton($button);
+        $message->translate($translationCallable);
+        $this->assertSame([
+            'type' => 'actions',
+            'text' => 'FOO',
+            'fallback' => null,
+            'callback_id' => null,
+            'actions' => [[
+                'name' => 'QUX',
+                'text' => 'QUX',
+                'image_url' => null,
+                'type' => 'button',
+                'value' => null,
+                'additional' => [],
+            ]],
+        ], $message->toWebDriver());
+    }
+
+    /** @test */
+    public function it_can_translate_buttons()
+    {
+        $translationCallable = function ($text) {
+            return strtoupper($text);
+        };
+        $button1 = Button::create('bar');
+        $button2 = Button::create('qux');
+        $message = Question::create("foo")->addButtons([$button1, $button2]);
+        $message->translate($translationCallable);
+        $this->assertSame([
+            'type' => 'actions',
+            'text' => 'FOO',
+            'fallback' => null,
+            'callback_id' => null,
+            'actions' => [
+                [
+                    'name' => 'BAR',
+                    'text' => 'BAR',
+                    'image_url' => null,
+                    'type' => 'button',
+                    'value' => null,
+                    'additional' => [],
+                ],
+                [
+                    'name' => 'QUX',
+                    'text' => 'QUX',
+                    'image_url' => null,
+                    'type' => 'button',
+                    'value' => null,
+                    'additional' => [],
+                ],
+            ],
+        ], $message->toWebDriver());
+    }
 }

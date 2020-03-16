@@ -3,9 +3,10 @@
 namespace BotMan\BotMan\Messages\Outgoing\Actions;
 
 use BotMan\BotMan\Interfaces\QuestionActionInterface;
+use BotMan\BotMan\Interfaces\TranslatableInterface;
 use JsonSerializable;
 
-class Button implements JsonSerializable, QuestionActionInterface
+class Button implements JsonSerializable, QuestionActionInterface, TranslatableInterface
 {
     /** @var string */
     protected $text;
@@ -113,5 +114,16 @@ class Button implements JsonSerializable, QuestionActionInterface
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    /**
+     * @param callable $callable
+     */
+    public function translate(callable $callable): void
+    {
+        $this->text = $callable($this->text);
+        if (isset($this->name)) {
+            $this->name = $callable($this->name);
+        }
     }
 }

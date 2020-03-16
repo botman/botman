@@ -2,9 +2,10 @@
 
 namespace BotMan\BotMan\Messages\Outgoing;
 
+use BotMan\BotMan\Interfaces\TranslatableInterface;
 use BotMan\BotMan\Messages\Attachments\Attachment;
 
-class OutgoingMessage
+class OutgoingMessage implements TranslatableInterface
 {
     /** @var string */
     protected $message;
@@ -69,5 +70,16 @@ class OutgoingMessage
     public function getText()
     {
         return $this->message;
+    }
+
+    /**
+     * @param callable $callable
+     */
+    public function translate(callable $callable): void
+    {
+        $this->message = $callable($this->message);
+        if ($this->attachment instanceof TranslatableInterface) {
+            $this->attachment->translate($callable);
+        }
     }
 }

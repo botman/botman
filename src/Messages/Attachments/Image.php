@@ -2,7 +2,9 @@
 
 namespace BotMan\BotMan\Messages\Attachments;
 
-class Image extends Attachment
+use BotMan\BotMan\Interfaces\TranslatableInterface;
+
+class Image extends Attachment implements TranslatableInterface
 {
     /**
      * Pattern that messages use to identify image uploads.
@@ -75,5 +77,13 @@ class Image extends Attachment
             'url' => $this->url,
             'title' => $this->title,
         ];
+    }
+
+    /**
+     * @param callable $callable
+     */
+    public function translate(callable $callable): void
+    {
+        $this->title = $callable($this->title);
     }
 }
