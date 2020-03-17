@@ -3,6 +3,8 @@
 namespace BotMan\BotMan\Traits;
 
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Exceptions\Base\BotManException;
+use BotMan\BotMan\Exceptions\Core\ContainerNotSetException;
 use BotMan\BotMan\Interfaces\ShouldQueue;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -10,6 +12,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use Closure;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
+use Psr\Container\ContainerInterface;
 
 trait HandlesConversations
 {
@@ -26,6 +29,23 @@ trait HandlesConversations
         }
         $instance->setBot($this);
         $instance->run();
+    }
+
+    /**
+     * @param string $serviceName
+     * @param null|string $recipient
+     * @param null|string $driver
+     * @throws BotManException
+     */
+    public function startConversationService($serviceName, $recipient = null, $driver = null)
+    {
+        if ($this->container instanceof ContainerInterface) {
+            $instance = $this->container->get($serviceName);
+        } else {
+            throw new ContainerNotSetException("Container is not set or does not implement PSR Interface");
+        }
+
+        $this->startConversation($instance, $recipient, $driver);
     }
 
     /**
