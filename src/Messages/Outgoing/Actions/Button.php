@@ -23,6 +23,9 @@ class Button implements JsonSerializable, QuestionActionInterface, TranslatableI
     /** @var string */
     protected $imageUrl;
 
+    /** @var bool */
+    protected $isTranslated;
+
     /**
      * @param string $text
      *
@@ -119,11 +122,15 @@ class Button implements JsonSerializable, QuestionActionInterface, TranslatableI
     /**
      * @param callable $callable
      */
-    public function translate(callable $callable): void
+    public function translate(callable $callable)
     {
+        if ($this->isTranslated) {
+            return;
+        }
         $this->text = $callable($this->text);
         if (isset($this->name)) {
             $this->name = $callable($this->name);
         }
+        $this->isTranslated = true;
     }
 }

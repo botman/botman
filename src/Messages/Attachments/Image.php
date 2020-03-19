@@ -17,6 +17,9 @@ class Image extends Attachment implements TranslatableInterface
     /** @var string */
     protected $title;
 
+    /** @var bool */
+    protected $isTranslated;
+
     /**
      * Video constructor.
      * @param string $url
@@ -82,8 +85,12 @@ class Image extends Attachment implements TranslatableInterface
     /**
      * @param callable $callable
      */
-    public function translate(callable $callable): void
+    public function translate(callable $callable)
     {
+        if ($this->isTranslated) {
+            return;
+        }
         $this->title = $callable($this->title);
+        $this->isTranslated = true;
     }
 }

@@ -7,5 +7,6 @@ interface TranslatableInterface
     /**
      * @param callable $callable
      */
-    public function translate(callable $callable): void;
+    public function translate(callable $callable);
+
 }

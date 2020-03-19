@@ -73,4 +73,34 @@ class MessageTest extends TestCase
 
         $this->assertSame('BAR', $message->getAttachment()->getTitle());
     }
+
+    /** @test */
+    public function it_can_be_translated_once_only()
+    {
+        $translationCallable = function ($text) {
+            return strrev($text);
+        };
+        $message = OutgoingMessage::create()->text('foo');
+        $message->translate($translationCallable);
+        $this->assertSame('oof', $message->getText());
+
+        $message->translate($translationCallable);
+        $this->assertSame('oof', $message->getText());
+
+    }
+
+    /** @test */
+    public function it_can_translate_attachement_once_only()
+    {
+        $translationCallable = function ($text) {
+            return strrev($text);
+        };
+        $message = OutgoingMessage::create()->withAttachment(Image::url('foo')->title('bar'));
+        $message->translate($translationCallable);
+        $this->assertSame('rab', $message->getAttachment()->getTitle());
+
+        $message->translate($translationCallable);
+        $this->assertSame('rab', $message->getAttachment()->getTitle());
+
+    }
 }

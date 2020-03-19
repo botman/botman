@@ -13,6 +13,9 @@ class OutgoingMessage implements TranslatableInterface
     /** @var \BotMan\BotMan\Messages\Attachments\Attachment */
     protected $attachment;
 
+    /** @var bool */
+    protected $isTranslated;
+
     /**
      * IncomingMessage constructor.
      * @param string $message
@@ -75,11 +78,16 @@ class OutgoingMessage implements TranslatableInterface
     /**
      * @param callable $callable
      */
-    public function translate(callable $callable): void
+    public function translate(callable $callable)
     {
-        $this->message = $callable($this->message);
         if ($this->attachment instanceof TranslatableInterface) {
             $this->attachment->translate($callable);
         }
+        if ($this->isTranslated) {
+            return;
+        }
+
+        $this->message = $callable($this->message);
+        $this->isTranslated = true;
     }
 }

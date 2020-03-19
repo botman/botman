@@ -25,6 +25,9 @@ class Question implements JsonSerializable, WebAccess, TranslatableInterface
     /** @var string */
     protected $fallback;
 
+    /** @var bool */
+    private $isTranslated;
+
     /**
      * @param string $text
      *
@@ -167,9 +170,8 @@ class Question implements JsonSerializable, WebAccess, TranslatableInterface
         ];
     }
 
-    public function translate(callable $callable): void
+    public function translate(callable $callable)
     {
-        $this->text = $callable($this->text);
         $translatedActions = [];
         foreach ($this->actionInstances as $actionInstance) {
             if ($actionInstance instanceof TranslatableInterface) {
@@ -177,6 +179,11 @@ class Question implements JsonSerializable, WebAccess, TranslatableInterface
             }
             $translatedActions[] = $actionInstance->toArray();
         }
+        if ($this->isTranslated) {
+            return;
+        }
+        $this->text = $callable($this->text);
         $this->actions = $translatedActions;
+        $this->isTranslated = true;
     }
 }
