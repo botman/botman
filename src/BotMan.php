@@ -681,18 +681,14 @@ class BotMan
     }
 
     /**
-     * @param $callback
-     * @return array|string|Closure
+     * @param mixed $callback
+     * @return mixed
      * @throws UnexpectedValueException
      * @throws NotFoundExceptionInterface
      */
     protected function getCallable($callback)
     {
-        if ($callback instanceof Closure) {
-            return $callback;
-        }
-
-        if (\is_array($callback)) {
+        if (is_callable($callback)) {
             return $callback;
         }
 
