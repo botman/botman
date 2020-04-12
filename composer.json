@@ -69,7 +69,7 @@
     "repositories": [
     {
         "type": "vcs",
-        "url": "https://github.com/your-github-username/invoicexpress-api"
+        "url": "https://github.com/hananloser/botman"
     }
 ]
 }
