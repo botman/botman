@@ -69,7 +69,7 @@
     "repositories": [
     {
         "type": "vcs",
-        "url": "https://github.com/hananloser/botman"
+        "url": "https://github.com/hananloser/botman.git"
     }
 ]
 }
