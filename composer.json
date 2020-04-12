@@ -26,7 +26,7 @@
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
-        "illuminate/support": "^5.4",
+        "illuminate/support": "^7.0",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~6.4",
         "mockery/mockery": "^1.1",
@@ -65,5 +65,11 @@
     "scripts": {
         "test": "phpunit",
         "cs": "php-cs-fixer fix"
+    },
+    "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/your-github-username/invoicexpress-api"
     }
+]
 }
