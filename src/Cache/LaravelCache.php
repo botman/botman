@@ -57,6 +57,9 @@ class LaravelCache implements CacheInterface
      */
     public function put($key, $value, $minutes)
     {
+        if (! $minutes instanceof \DateTime) {
+            $minutes = $minutes * 60;
+        }
         Cache::put($key, $value, $minutes);
     }
 }
