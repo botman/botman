@@ -257,13 +257,17 @@ class BotMan
     }
 
     /**
-     * @param string $pattern the pattern to listen for
+     * @param array|string $pattern the pattern to listen for
      * @param Closure|string $callback the callback to execute. Either a closure or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
      * @return Command
      */
     public function hears($pattern, $callback, $in = null)
     {
+        if (is_array($pattern)) {
+            $pattern = '(?|'.implode('|', $pattern).')';
+        }
+
         $command = new Command($pattern, $callback, $in);
         $command->applyGroupAttributes($this->groupAttributes);
 
