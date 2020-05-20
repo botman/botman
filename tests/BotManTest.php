@@ -2,40 +2,41 @@
 
 namespace BotMan\BotMan\tests;
 
-use Mockery as m;
 use BotMan\BotMan\BotMan;
-use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Cache\ArrayCache;
-use BotMan\BotMan\Drivers\NullDriver;
-use Psr\Container\ContainerInterface;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Drivers\NullDriver;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use BotMan\BotMan\Interfaces\UserInterface;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Tests\Fixtures\TestClass;
-use BotMan\BotMan\Tests\Fixtures\TestDriver;
-use BotMan\BotMan\Messages\Attachments\Audio;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Video;
-use Psr\Container\NotFoundExceptionInterface;
-use BotMan\BotMan\Tests\Fixtures\TestFallback;
-use BotMan\BotMan\Messages\Attachments\Contact;
-use BotMan\BotMan\Middleware\MiddlewareManager;
-use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
 use BotMan\BotMan\Exceptions\Base\BotManException;
-use BotMan\BotMan\Tests\Fixtures\TestConversation;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
-use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
-use BotMan\BotMan\Messages\Conversations\Conversation;
-use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
-use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
 use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
 use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Tests\Fixtures\InvokableService;
+use BotMan\BotMan\Tests\Fixtures\Middleware\Matching;
+use BotMan\BotMan\Tests\Fixtures\TestAdditionalDriver;
+use BotMan\BotMan\Tests\Fixtures\TestClass;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Tests\Fixtures\TestDriver;
+use BotMan\BotMan\Tests\Fixtures\TestFallback;
+use BotMan\BotMan\Tests\Fixtures\TestMatchMiddleware;
+use BotMan\BotMan\Tests\Fixtures\TestMiddleware;
+use BotMan\BotMan\Tests\Fixtures\TestNoMatchMiddleware;
+use Illuminate\Support\Collection;
+use Mockery as m;
+use Mockery\MockInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class BotManTest.
@@ -402,6 +403,20 @@ class BotManTest extends TestCase
         ]);
         $botman->hears('foo', \stdClass::class);
         $botman->listen();
+    }
+
+    /** @test */
+    public function it_hears_matching_commands_without_invokable_service()
+    {
+        $botman = $this->getBot([
+            'sender' => 'UX12345',
+            'recipient' => 'general',
+            'message' => 'Foo',
+        ]);
+        $service = new InvokableService();
+        $botman->hears('foo', $service);
+        $botman->listen();
+        $this->assertTrue($service->invoked);
     }
 
     /** @test */

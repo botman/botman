@@ -2,22 +2,22 @@
 
 namespace BotMan\BotMan\tests;
 
-use Mockery as m;
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
 use BotMan\BotMan\Drivers\Tests\ProxyDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Tests\Fixtures\TestConversation;
+use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Tests\Fixtures\TestConversation;
 use BotMan\BotMan\Tests\Fixtures\TestDataConversation;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
 class BotManConversationTest extends TestCase
 {

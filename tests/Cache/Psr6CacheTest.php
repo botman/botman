@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
+use BotMan\BotMan\Cache\Psr6Cache;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
-use BotMan\BotMan\Cache\Psr6Cache;
 use Psr\Cache\CacheItemPoolInterface;
 
 class Psr6CacheTest extends TestCase

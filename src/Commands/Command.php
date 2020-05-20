@@ -3,10 +3,10 @@
 namespace BotMan\BotMan\Commands;
 
 use BotMan\BotMan\Closure;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\Middleware\Heard;
 use BotMan\BotMan\Interfaces\Middleware\Matching;
+use Illuminate\Support\Collection;
 
 class Command
 {

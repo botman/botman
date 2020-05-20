@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
+use BotMan\BotMan\Cache\SymfonyCache;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
-use BotMan\BotMan\Cache\SymfonyCache;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

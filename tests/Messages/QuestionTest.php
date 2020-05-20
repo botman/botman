@@ -2,9 +2,9 @@
 
 namespace BotMan\BotMan\tests\Messages;
 
-use PHPUnit\Framework\TestCase;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use PHPUnit\Framework\TestCase;
 
 class QuestionTest extends TestCase
 {

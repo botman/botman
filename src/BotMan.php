@@ -2,41 +2,41 @@
 
 namespace BotMan\BotMan;
 
-use Closure;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
-use BotMan\BotMan\Messages\Matcher;
-use Psr\Container\ContainerInterface;
-use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Traits\ProvidesStorage;
-use BotMan\BotMan\Interfaces\UserInterface;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Traits\HandlesExceptions;
-use BotMan\BotMan\Handlers\ExceptionHandler;
-use BotMan\BotMan\Interfaces\CacheInterface;
-use BotMan\BotMan\Messages\Attachments\File;
-use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Messages\Attachments\Audio;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Video;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Psr\Container\NotFoundExceptionInterface;
-use BotMan\BotMan\Interfaces\Middleware\Heard;
-use BotMan\BotMan\Interfaces\StorageInterface;
-use BotMan\BotMan\Traits\HandlesConversations;
-use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Commands\ConversationManager;
-use BotMan\BotMan\Messages\Attachments\Contact;
-use BotMan\BotMan\Middleware\MiddlewareManager;
-use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Exceptions\Base\BotManException;
-use BotMan\BotMan\Interfaces\DriverEventInterface;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
 use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
 use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
+use BotMan\BotMan\Handlers\ExceptionHandler;
+use BotMan\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
+use BotMan\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Conversations\InlineConversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Traits\HandlesConversations;
+use BotMan\BotMan\Traits\HandlesExceptions;
+use BotMan\BotMan\Traits\ProvidesStorage;
+use Closure;
+use Illuminate\Support\Collection;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BotMan.
@@ -627,7 +627,7 @@ class BotMan
     }
 
     /**
-     * @param string|Question $message
+     * @param string|OutgoingMessage|Question $message
      * @param array $additionalParameters
      * @return mixed
      */
@@ -681,18 +681,14 @@ class BotMan
     }
 
     /**
-     * @param $callback
-     * @return array|string|Closure
+     * @param mixed $callback
+     * @return mixed
      * @throws UnexpectedValueException
      * @throws NotFoundExceptionInterface
      */
     protected function getCallable($callback)
     {
-        if ($callback instanceof Closure) {
-            return $callback;
-        }
-
-        if (\is_array($callback)) {
+        if (is_callable($callback)) {
             return $callback;
         }
 

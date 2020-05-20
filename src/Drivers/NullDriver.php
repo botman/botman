@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Drivers;
 
-use BotMan\BotMan\Users\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Users\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class NullDriver extends HttpDriver
 {

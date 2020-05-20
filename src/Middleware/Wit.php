@@ -4,10 +4,10 @@ namespace BotMan\BotMan\Middleware;
 
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use Illuminate\Support\Collection;
 
 class Wit implements MiddlewareInterface
 {

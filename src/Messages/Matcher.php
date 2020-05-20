@@ -2,12 +2,12 @@
 
 namespace BotMan\BotMan\Messages;
 
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\Middleware\Matching;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use Illuminate\Support\Collection;
 
 class Matcher
 {
