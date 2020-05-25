@@ -207,6 +207,7 @@ trait HandlesConversations
             $next = false;
             $parameters = [];
             if (is_array($convo['next'])) {
+                $toRepeat = false;
                 foreach ($convo['next'] as $callback) {
                     if ($this->matcher->isPatternValid($message, $this->getConversationAnswer(), $callback['pattern'])) {
                         $parameterNames = $this->compileParameterNames($callback['pattern']);
@@ -222,6 +223,13 @@ trait HandlesConversations
                         break;
                     }
                 }
+                
+                if($next == false){
+                    //no pattern match
+                    //answer probably unexpected (some plain text)
+                    //let's repeat question
+                    $toRepeat = true;
+                }
             } else {
                 $next = $this->unserializeClosure($convo['next']);
             }
@@ -231,6 +239,11 @@ trait HandlesConversations
 
             if (is_callable($next)) {
                 $this->callConversation($next, $convo, $message, $parameters);
+            } elseif($toRepeat) {
+                $conversation = $convo['conversation'];
+                $conversation->setBot($this);
+                $conversation->repeat();
+                $this->loadedConversation = true;
             }
         });
     }
