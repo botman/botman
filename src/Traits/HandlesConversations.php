@@ -224,7 +224,7 @@ trait HandlesConversations
                     }
                 }
                 
-                if($next == false){
+                if ($next == false) {
                     //no pattern match
                     //answer probably unexpected (some plain text)
                     //let's repeat question
@@ -239,7 +239,7 @@ trait HandlesConversations
 
             if (is_callable($next)) {
                 $this->callConversation($next, $convo, $message, $parameters);
-            } elseif($toRepeat) {
+            } elseif ($toRepeat) {
                 $conversation = $convo['conversation'];
                 $conversation->setBot($this);
                 $conversation->repeat();
