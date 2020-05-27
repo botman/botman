@@ -14,14 +14,14 @@ class StorageTest extends TestCase
     /** @var FileStorage */
     protected $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new FileStorage(__DIR__.'/../Fixtures/storage');
         $this->storage = new Storage($this->driver);
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach (glob(__DIR__.'/../Fixtures/storage/*.json') as $file) {
             unlink($file);

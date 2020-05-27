@@ -16,7 +16,7 @@ class ConversationTest extends TestCase
     /** @var MockInterface */
     protected $commander;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

@@ -13,7 +13,7 @@ class SymfonyCacheTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
