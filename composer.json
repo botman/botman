@@ -1,5 +1,5 @@
 {
-    "name": "botman/botman",
+    "name": "zeald/botman",
     "license": "MIT",
     "description": "Create messaging bots in PHP with ease. A Botman fork by Zeald to support Laravel 7.",
     "keywords": [
