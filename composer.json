@@ -1,21 +1,21 @@
 {
-    "name": "zeald/botman",
+    "name": "botman/botman",
     "license": "MIT",
-    "description": "Create messaging bots in PHP with ease. A Botman fork by Zeald to support Laravel 7.",
+    "description": "Create messaging bots in PHP with ease.",
     "keywords": [
         "Bot",
         "BotMan",
         "Chatbot"
     ],
-    "homepage": "https://github.com/Zeald/fork.botman",
+    "homepage": "http://github.com/botman/botman",
     "authors": [
         {
-            "name": "Ariel Magbanua",
-            "email": "ariel.magbanua@zeald.com"
+            "name": "Marcel Pociot",
+            "email": "m.pociot@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.0",
         "symfony/http-foundation": "^3.0 || ^4.0 || ^5.0",
         "tightenco/collect": "^5.0 || ^6.0 || ^7.0",
         "opis/closure": "^2.3 || ^3.1",
