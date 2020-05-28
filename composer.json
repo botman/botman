@@ -16,21 +16,21 @@
     ],
     "require": {
         "php": ">=7.2",
-        "symfony/http-foundation": "^5.0",
-        "tightenco/collect": "^7.12",
-        "opis/closure": "^3.1",
+        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0",
+        "tightenco/collect": "^5.0 || ^6.0 || ^7.0",
+        "opis/closure": "^2.3 || ^3.1",
         "mpociot/pipeline": "^1.0",
-        "react/socket": "^1.4",
+        "react/socket": "^1.0 || ^1.4",
         "spatie/macroable": "^1.0",
         "psr/container": "^1.0"
     },
     "require-dev": {
         "codeigniter/framework": "^3.1",
-        "orchestra/testbench": "^5.2",
-        "phpunit/phpunit": "^9.0",
-        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^5.0 || ^6.0",
+        "phpunit/phpunit": "^8.0 || ^9.0",
+        "mockery/mockery": "^1.1 || ^1.4",
         "doctrine/cache": "^1.10",
-        "symfony/cache": "^5.0",
+        "symfony/cache": "^3.1 || ^5.0",
         "ext-curl": "*"
     },
     "suggest": {
