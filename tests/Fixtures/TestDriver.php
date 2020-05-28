@@ -2,13 +2,13 @@
 
 namespace BotMan\BotMan\Tests\Fixtures;
 
-use BotMan\BotMan\Users\User;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Symfony\Component\HttpFoundation\Request;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Users\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestDriver implements DriverInterface, VerifiesService
 {

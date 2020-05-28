@@ -2,9 +2,9 @@
 
 namespace BotMan\BotMan\Tests\Fixtures;
 
+use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class TestConversation extends Conversation
 {

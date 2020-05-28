@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Tests;
 
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Cache\ArrayCache;
+use PHPUnit\Framework\TestCase;
 
 class ArrayCacheTest extends TestCase
 {

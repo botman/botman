@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Messages\Outgoing\Actions;
 
-use BotMan\BotMan\Interfaces\QuestionActionInterface;
 use JsonSerializable;
+use BotMan\BotMan\Interfaces\QuestionActionInterface;
 
-class Button implements JsonSerializable, QuestionActionInterface
+class Select implements JsonSerializable, QuestionActionInterface
 {
     /** @var string */
     protected $text;
@@ -17,10 +17,7 @@ class Button implements JsonSerializable, QuestionActionInterface
     protected $name;
 
     /** @var array */
-    protected $additional = [];
-
-    /** @var string */
-    protected $imageUrl;
+    protected $options = [];
 
     /**
      * @param string $text
@@ -41,7 +38,7 @@ class Button implements JsonSerializable, QuestionActionInterface
     }
 
     /**
-     * Set the button value.
+     * Set the select value.
      *
      * @param string $value
      * @return $this
@@ -54,7 +51,7 @@ class Button implements JsonSerializable, QuestionActionInterface
     }
 
     /**
-     * Set the button name (defaults to button text).
+     * Set the select name (defaults to select text).
      *
      * @param string $name
      * @return $this
@@ -67,27 +64,14 @@ class Button implements JsonSerializable, QuestionActionInterface
     }
 
     /**
-     * Set the button additional parameters to pass to the service.
+     * Set the select options parameters to pass to the service.
      *
-     * @param array $additional
+     * @param array $options
      * @return $this
      */
-    public function additionalParameters(array $additional)
+    public function options(array $options)
     {
-        $this->additional = $additional;
-
-        return $this;
-    }
-
-    /**
-     * Set the button image (Facebook only).
-     *
-     * @param string $imageUrl
-     * @return $this
-     */
-    public function image($imageUrl)
-    {
-        $this->imageUrl = $imageUrl;
+        $this->options = $options;
 
         return $this;
     }
@@ -100,10 +84,8 @@ class Button implements JsonSerializable, QuestionActionInterface
         return [
             'name' => isset($this->name) ? $this->name : $this->text,
             'text' => $this->text,
-            'image_url' => $this->imageUrl,
-            'type' => 'button',
-            'value' => $this->value,
-            'additional' => $this->additional,
+            'type' => 'select',
+            'options' => $this->options,
         ];
     }
 

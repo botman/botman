@@ -2,14 +2,14 @@
 
 namespace BotMan\BotMan\Traits;
 
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Interfaces\ShouldQueue;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Closure;
 use Illuminate\Support\Collection;
 use Opis\Closure\SerializableClosure;
-use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Interfaces\ShouldQueue;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Conversations\Conversation;
 
 trait HandlesConversations
 {
@@ -78,7 +78,7 @@ trait HandlesConversations
             $touched = $this->currentConversationData;
             $touched['time'] = microtime();
 
-            $this->cache->put($this->message->getConversationIdentifier(), $touched, $this->config['conversation_cache_time'] ?? 30);
+            $this->cache->put($this->message->getConversationIdentifier(), $touched, $this->config['config']['conversation_cache_time'] ?? 30);
         }
     }
 
@@ -207,6 +207,7 @@ trait HandlesConversations
             $next = false;
             $parameters = [];
             if (is_array($convo['next'])) {
+                $toRepeat = false;
                 foreach ($convo['next'] as $callback) {
                     if ($this->matcher->isPatternValid($message, $this->getConversationAnswer(), $callback['pattern'])) {
                         $parameterNames = $this->compileParameterNames($callback['pattern']);
@@ -222,6 +223,13 @@ trait HandlesConversations
                         break;
                     }
                 }
+                
+                if ($next == false) {
+                    //no pattern match
+                    //answer probably unexpected (some plain text)
+                    //let's repeat question
+                    $toRepeat = true;
+                }
             } else {
                 $next = $this->unserializeClosure($convo['next']);
             }
@@ -231,6 +239,11 @@ trait HandlesConversations
 
             if (is_callable($next)) {
                 $this->callConversation($next, $convo, $message, $parameters);
+            } elseif ($toRepeat) {
+                $conversation = $convo['conversation'];
+                $conversation->setBot($this);
+                $conversation->repeat();
+                $this->loadedConversation = true;
             }
         });
     }

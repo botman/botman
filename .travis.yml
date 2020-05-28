@@ -4,16 +4,16 @@ services:
   - redis-server
 
 php:
-  - 7.0
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4
 
 before_install:
   - pip install --user codecov
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
-  - travis_retry composer self-update --preview
   - travis_retry composer install --prefer-dist --no-interaction
   - sudo redis-server /etc/redis/redis.conf --port 6380 --requirepass 'secret'
 

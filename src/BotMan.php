@@ -2,40 +2,41 @@
 
 namespace BotMan\BotMan;
 
-use Closure;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
-use BotMan\BotMan\Messages\Matcher;
-use Psr\Container\ContainerInterface;
-use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Traits\ProvidesStorage;
-use BotMan\BotMan\Interfaces\UserInterface;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Traits\HandlesExceptions;
-use BotMan\BotMan\Handlers\ExceptionHandler;
-use BotMan\BotMan\Interfaces\CacheInterface;
-use BotMan\BotMan\Messages\Attachments\File;
-use BotMan\BotMan\Interfaces\DriverInterface;
-use BotMan\BotMan\Messages\Attachments\Audio;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Video;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Psr\Container\NotFoundExceptionInterface;
-use BotMan\BotMan\Interfaces\Middleware\Heard;
-use BotMan\BotMan\Interfaces\StorageInterface;
-use BotMan\BotMan\Traits\HandlesConversations;
-use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Commands\ConversationManager;
-use BotMan\BotMan\Middleware\MiddlewareManager;
-use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Exceptions\Base\BotManException;
-use BotMan\BotMan\Interfaces\DriverEventInterface;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
 use BotMan\BotMan\Exceptions\Core\BadMethodCallException;
 use BotMan\BotMan\Exceptions\Core\UnexpectedValueException;
+use BotMan\BotMan\Handlers\ExceptionHandler;
+use BotMan\BotMan\Interfaces\CacheInterface;
+use BotMan\BotMan\Interfaces\DriverEventInterface;
+use BotMan\BotMan\Interfaces\DriverInterface;
+use BotMan\BotMan\Interfaces\ExceptionHandlerInterface;
+use BotMan\BotMan\Interfaces\Middleware\Heard;
+use BotMan\BotMan\Interfaces\StorageInterface;
+use BotMan\BotMan\Interfaces\UserInterface;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Contact;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Conversations\InlineConversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Matcher;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Middleware\MiddlewareManager;
+use BotMan\BotMan\Traits\HandlesConversations;
+use BotMan\BotMan\Traits\HandlesExceptions;
+use BotMan\BotMan\Traits\ProvidesStorage;
+use Closure;
+use Illuminate\Support\Collection;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BotMan.
@@ -217,7 +218,7 @@ class BotMan
      */
     public function runsOnSocket($running = null)
     {
-        if (is_bool($running)) {
+        if (\is_bool($running)) {
             $this->runsOnSocket = $running;
         }
 
@@ -234,7 +235,8 @@ class BotMan
         }
 
         $user = $this->getDriver()->getUser($this->getMessage());
-        $this->cache->put('user_'.$this->driver->getName().'_'.$user->getId(), $user, $this->config['user_cache_time'] ?? 30);
+        $this->cache->put('user_'.$this->driver->getName().'_'.$user->getId(), $user,
+            $this->config['user_cache_time'] ?? 30);
 
         return $user;
     }
@@ -255,13 +257,17 @@ class BotMan
     }
 
     /**
-     * @param string $pattern the pattern to listen for
+     * @param array|string $pattern the pattern to listen for
      * @param Closure|string $callback the callback to execute. Either a closure or a Class@method notation
      * @param string $in the channel type to listen to (either direct message or public channel)
      * @return Command
      */
     public function hears($pattern, $callback, $in = null)
     {
+        if (is_array($pattern)) {
+            $pattern = '(?|'.implode('|', $pattern).')';
+        }
+
         $command = new Command($pattern, $callback, $in);
         $command->applyGroupAttributes($this->groupAttributes);
 
@@ -273,15 +279,23 @@ class BotMan
     /**
      * Listen for messaging service events.
      *
-     * @param string $name
+     * @param array|string $names
      * @param Closure|string $callback
      */
-    public function on($name, $callback)
+    public function on($names, $callback)
     {
-        $this->events[] = [
-            'name' => $name,
-            'callback' => $this->getCallable($callback),
-        ];
+        if (! is_array($names)) {
+            $names = [$names];
+        }
+
+        $callable = $this->getCallable($callback);
+
+        foreach ($names as $name) {
+            $this->events[] = [
+                'name' => $name,
+                'callback' => $callable,
+            ];
+        }
     }
 
     /**
@@ -329,6 +343,18 @@ class BotMan
     }
 
     /**
+     * Listening for contact attachment.
+     *
+     * @param $callback
+     *
+     * @return Command
+     */
+    public function receivesContact($callback)
+    {
+        return $this->hears(Contact::PATTERN, $callback);
+    }
+
+    /**
      * Listening for files attachment.
      *
      * @param $callback
@@ -350,7 +376,7 @@ class BotMan
         $previousGroupAttributes = $this->groupAttributes;
         $this->groupAttributes = array_merge_recursive($previousGroupAttributes, $attributes);
 
-        call_user_func($callback, $this);
+        \call_user_func($callback, $this);
 
         $this->groupAttributes = $previousGroupAttributes;
     }
@@ -375,7 +401,7 @@ class BotMan
                     $this->message = $messages[0];
                 }
 
-                call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
+                \call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
             });
         }
     }
@@ -422,7 +448,8 @@ class BotMan
      */
     protected function callMatchingMessages()
     {
-        $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware, $this->getConversationAnswer(), $this->getDriver());
+        $matchingMessages = $this->conversationManager->getMatchingMessages($this->getMessages(), $this->middleware,
+            $this->getConversationAnswer(), $this->getDriver());
 
         foreach ($matchingMessages as $matchingMessage) {
             $this->command = $matchingMessage->getCommand();
@@ -437,23 +464,24 @@ class BotMan
                 return $middleware instanceof Heard;
             })->toArray();
 
-            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(), $commandMiddleware);
+            $this->message = $this->middleware->applyMiddleware('heard', $matchingMessage->getMessage(),
+                $commandMiddleware);
 
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
             $parameters = $matchingMessage->getMatches();
-            if (count($parameterNames) !== count($parameters)) {
+            if (\count($parameterNames) !== \count($parameters)) {
                 $parameters = array_merge(
-                    //First, all named parameters (eg. function ($a, $b, $c))
+                //First, all named parameters (eg. function ($a, $b, $c))
                     array_filter(
                         $parameters,
-                        'is_string',
+                        '\is_string',
                         ARRAY_FILTER_USE_KEY
                     ),
                     //Then, all other unsorted parameters (regex non named results)
                     array_filter(
                         $parameters,
-                        'is_integer',
+                        '\is_integer',
                         ARRAY_FILTER_USE_KEY
                     )
                 );
@@ -464,10 +492,12 @@ class BotMan
 
             $parameters = $this->conversationManager->addDataParameters($this->message, $parameters);
 
-            call_user_func_array($callback, $parameters);
+            if (call_user_func_array($callback, $parameters)) {
+                return;
+            }
         }
 
-        if (empty($matchingMessages) && empty($this->getBotMessages()) && ! is_null($this->fallbackMessage)) {
+        if (empty($matchingMessages) && empty($this->getBotMessages()) && ! \is_null($this->fallbackMessage)) {
             $this->callFallbackMessage();
         }
     }
@@ -477,11 +507,17 @@ class BotMan
      */
     protected function callFallbackMessage()
     {
-        $this->message = $this->getMessages()[0];
+        $messages = $this->getMessages();
+
+        if (! isset($messages[0])) {
+            return;
+        }
+
+        $this->message = $messages[0];
 
         $this->fallbackMessage = $this->getCallable($this->fallbackMessage);
 
-        call_user_func($this->fallbackMessage, $this);
+        \call_user_func($this->fallbackMessage, $this);
     }
 
     /**
@@ -513,11 +549,11 @@ class BotMan
 
         if ($driver instanceof DriverInterface) {
             $this->setDriver($driver);
-        } elseif (is_string($driver)) {
+        } elseif (\is_string($driver)) {
             $this->setDriver(DriverManager::loadFromName($driver, $this->config));
         }
 
-        $recipients = is_array($recipients) ? $recipients : [$recipients];
+        $recipients = \is_array($recipients) ? $recipients : [$recipients];
 
         foreach ($recipients as $recipient) {
             $this->message = new IncomingMessage('', $recipient, '');
@@ -540,8 +576,8 @@ class BotMan
      */
     public function ask($question, $next, $additionalParameters = [], $recipient = null, $driver = null)
     {
-        if (! is_null($recipient) && ! is_null($driver)) {
-            if (is_string($driver)) {
+        if (! \is_null($recipient) && ! \is_null($driver)) {
+            if (\is_string($driver)) {
                 $driver = DriverManager::loadFromName($driver, $this->config);
             }
             $this->message = new IncomingMessage('', $recipient, '');
@@ -588,21 +624,22 @@ class BotMan
         $driver = $this->getDriver();
         if (method_exists($driver, 'sendRequest')) {
             return $driver->sendRequest($endpoint, $additionalParameters, $this->message);
-        } else {
-            throw new BadMethodCallException('The driver '.$this->getDriver()->getName().' does not support low level requests.');
         }
+
+        throw new BadMethodCallException('The driver '.$this->getDriver()->getName().' does not support low level requests.');
     }
 
     /**
-     * @param string|Question $message
+     * @param string|OutgoingMessage|Question $message
      * @param array $additionalParameters
      * @return mixed
      */
     public function reply($message, $additionalParameters = [])
     {
-        $this->outgoingMessage = is_string($message) ? OutgoingMessage::create($message) : $message;
+        $this->outgoingMessage = \is_string($message) ? OutgoingMessage::create($message) : $message;
 
-        return $this->sendPayload($this->getDriver()->buildServicePayload($this->outgoingMessage, $this->message, $additionalParameters));
+        return $this->sendPayload($this->getDriver()->buildServicePayload($this->outgoingMessage, $this->message,
+            $additionalParameters));
     }
 
     /**
@@ -647,18 +684,14 @@ class BotMan
     }
 
     /**
-     * @param $callback
-     * @return array|string|Closure
+     * @param mixed $callback
+     * @return mixed
      * @throws UnexpectedValueException
      * @throws NotFoundExceptionInterface
      */
     protected function getCallable($callback)
     {
-        if ($callback instanceof Closure) {
-            return $callback;
-        }
-
-        if (is_array($callback)) {
+        if (is_callable($callback)) {
             return $callback;
         }
 
@@ -666,7 +699,7 @@ class BotMan
             $callback = $this->makeInvokableAction($callback);
         }
 
-        list($class, $method) = explode('@', $callback);
+        [$class, $method] = explode('@', $callback);
 
         $command = $this->container ? $this->container->get($class) : new $class($this);
 
@@ -710,7 +743,7 @@ class BotMan
             $arguments[] = $this->getMessage();
             $arguments[] = $this;
 
-            return call_user_func_array([$this->getDriver(), $name], $arguments);
+            return \call_user_func_array([$this->getDriver(), $name], $arguments);
         }
 
         throw new BadMethodCallException('Method ['.$name.'] does not exist.');

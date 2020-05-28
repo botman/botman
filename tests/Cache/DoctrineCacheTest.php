@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\Tests;
 
-use Mockery as m;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Cache\DoctrineCache;
 use Doctrine\Common\Cache\CacheProvider;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
 class DoctrineCacheTest extends TestCase
 {

@@ -2,15 +2,15 @@
 
 namespace BotMan\BotMan;
 
-use React\Socket\Server;
-use BotMan\BotMan\Http\Curl;
-use React\EventLoop\LoopInterface;
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Interfaces\CacheInterface;
-use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Interfaces\StorageInterface;
 use BotMan\BotMan\Storages\Drivers\FileStorage;
+use React\EventLoop\LoopInterface;
+use React\Socket\Server;
+use Symfony\Component\HttpFoundation\Request;
 
 class BotManFactory
 {
@@ -33,7 +33,7 @@ class BotManFactory
     public static function __callStatic($name, $arguments)
     {
         try {
-            return call_user_func_array(self::$extensions[$name], $arguments);
+            return \call_user_func_array(self::$extensions[$name], $arguments);
         } catch (\Exception $e) {
             throw new \BadMethodCallException("Method [$name] does not exist.");
         }

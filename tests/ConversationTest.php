@@ -2,12 +2,12 @@
 
 namespace BotMan\BotMan\tests;
 
-use Mockery as m;
 use BotMan\BotMan\BotMan;
-use Mockery\MockInterface;
-use SuperClosure\Serializer;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Tests\Fixtures\TestConversation;
+use Mockery as m;
+use Mockery\MockInterface;
+use PHPUnit\Framework\TestCase;
+use SuperClosure\Serializer;
 
 class ConversationTest extends TestCase
 {

@@ -2,12 +2,12 @@
 
 namespace BotMan\BotMan\Messages;
 
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Commands\Command;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\Middleware\Matching;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use Illuminate\Support\Collection;
 
 class Matcher
 {
@@ -52,7 +52,7 @@ class Matcher
         }
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(?<$1>.*)', $pattern).'$/miu';
+        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
 
         $regexMatched = (bool) preg_match($text, $message->getText(), $this->matches) || (bool) preg_match($text, $answerText, $this->matches);
 

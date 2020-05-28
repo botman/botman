@@ -3,9 +3,9 @@
 namespace BotMan\BotMan\Tests\Fixtures;
 
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
 
 class TestCustomMiddleware implements MiddlewareInterface
 {

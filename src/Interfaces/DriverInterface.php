@@ -2,8 +2,8 @@
 
 namespace BotMan\BotMan\Interfaces;
 
-use Symfony\Component\HttpFoundation\Response;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use Symfony\Component\HttpFoundation\Response;
 
 interface DriverInterface
 {

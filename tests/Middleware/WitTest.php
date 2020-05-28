@@ -2,15 +2,15 @@
 
 namespace BotMan\BotMan\tests\Middleware;
 
-use Mockery as m;
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Http\Curl;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
-use BotMan\BotMan\Middleware\Wit;
 use BotMan\BotMan\Cache\ArrayCache;
-use Symfony\Component\HttpFoundation\Response;
+use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Middleware\Wit;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class WitTest extends TestCase
 {

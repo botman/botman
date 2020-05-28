@@ -2,15 +2,15 @@
 
 namespace BotMan\BotMan\Drivers\Tests;
 
-use BotMan\BotMan\Users\User;
-use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use BotMan\BotMan\Interfaces\DriverInterface;
 use BotMan\BotMan\Interfaces\VerifiesService;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Symfony\Component\HttpFoundation\Request;
-use BotMan\BotMan\Drivers\Events\GenericEvent;
-use Symfony\Component\HttpFoundation\Response;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Users\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * A fake driver for tests. Must be used with ProxyDriver.
@@ -130,6 +130,11 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     public function getUser(IncomingMessage $matchingMessage)
+    {
+        return new User($this->user_id ?? $matchingMessage->getSender(), $this->user_first_name, $this->user_last_name, $this->username, $this->user_info);
+    }
+
+    public function getUserWithFields(array $fields, IncomingMessage $matchingMessage)
     {
         return new User($this->user_id ?? $matchingMessage->getSender(), $this->user_first_name, $this->user_last_name, $this->username, $this->user_info);
     }

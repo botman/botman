@@ -3,13 +3,13 @@
 namespace BotMan\BotMan\tests\Drivers;
 
 use BotMan\BotMan\BotMan;
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Drivers\Tests\FakeDriver;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Drivers\Tests\ProxyDriver;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \BotMan\BotMan\Drivers\Tests\FakeDriver
@@ -163,6 +163,28 @@ class FakeDriverTest extends TestCase
         $this->fakeDriver->setUser($userData);
         $this->botman->hears('user', function (BotMan $bot) use ($userData) {
             $user = $bot->getUser();
+            $this->assertSame($userData, $user->getInfo());
+            $this->assertSame('987', $user->getId());
+            $this->assertSame('Marcel', $user->getFirstname());
+            $this->assertSame('Pociot', $user->getLastname());
+            $this->assertSame('mpociot', $user->getUsername());
+        });
+
+        $this->listenToFakeMessage('user', 'helloman123', '#helloworld');
+    }
+
+    /** @test */
+    public function it_can_fake_users_from_fields_method()
+    {
+        $userData = [
+            'id' => '987',
+            'first_name' => 'Marcel',
+            'last_name' => 'Pociot',
+            'username' => 'mpociot',
+        ];
+        $this->fakeDriver->setUser($userData);
+        $this->botman->hears('user', function (BotMan $bot) use ($userData) {
+            $user = $bot->getUserWithFields(['first_name']);
             $this->assertSame($userData, $user->getInfo());
             $this->assertSame('987', $user->getId());
             $this->assertSame('Marcel', $user->getFirstname());

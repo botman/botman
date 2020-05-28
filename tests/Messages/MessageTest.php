@@ -2,10 +2,10 @@
 
 namespace BotMan\BotMan\tests\Messages;
 
-use PHPUnit\Framework\TestCase;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use PHPUnit\Framework\TestCase;
 
 class MessageTest extends TestCase
 {
