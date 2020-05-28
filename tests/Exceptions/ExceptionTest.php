@@ -19,12 +19,12 @@ class ExceptionTest extends TestCase
     /** @var ArrayCache */
     protected $cache;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->cache = new ArrayCache();

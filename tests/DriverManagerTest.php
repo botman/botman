@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class DriverManagerTest extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         DriverManager::unloadDriver(TestDriver::class);
         DriverManager::unloadDriver(TestDriverWithSubDriver::class);

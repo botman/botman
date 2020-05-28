@@ -137,4 +137,15 @@ class TestDriver implements DriverInterface, VerifiesService
     {
         $_SERVER['verifiedTestDriver'] = true;
     }
+
+    /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param float $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, float $seconds)
+    {
+        //
+    }
 }

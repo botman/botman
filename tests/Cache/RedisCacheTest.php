@@ -13,14 +13,14 @@ use RedisException;
  */
 class RedisCacheTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (! extension_loaded('redis')) {
             $this->markTestSkipped('Redis extension required');
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
 

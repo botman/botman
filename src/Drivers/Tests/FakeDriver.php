@@ -176,6 +176,17 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param float $seconds
+     * @return mixed
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, float $seconds)
+    {
+        $this->types($matchingMessage);
+    }
+
+    /**
      * Returns true if types() has been called.
      *
      * @return bool
@@ -202,7 +213,7 @@ class FakeDriver implements DriverInterface, VerifiesService
     }
 
     /**
-     * @return bool
+     * @return bool|GenericEvent
      */
     public function hasMatchingEvent()
     {

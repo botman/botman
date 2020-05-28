@@ -424,15 +424,15 @@ class BotMan
                     if ($this->loadedConversation === false) {
                         $this->callMatchingMessages();
                     }
+                }
 
-                    /*
-                     * If the driver has a  "messagesHandled" method, call it.
-                     * This method can be used to trigger driver methods
-                     * once the messages are handles.
-                     */
-                    if (method_exists($this->getDriver(), 'messagesHandled')) {
-                        $this->getDriver()->messagesHandled();
-                    }
+                /*
+                 * If the driver has a  "messagesHandled" method, call it.
+                 * This method can be used to trigger driver methods
+                 * once the messages are handles.
+                 */
+                if (method_exists($this->getDriver(), 'messagesHandled')) {
+                    $this->getDriver()->messagesHandled();
                 }
 
                 $this->firedDriverEvents = false;
@@ -533,7 +533,7 @@ class BotMan
     /**
      * @param string|Question $message
      * @param string|array $recipients
-     * @param DriverInterface|null $driver
+     * @param DriverInterface|string|null $driver
      * @param array $additionalParameters
      * @return Response
      * @throws BotManException
@@ -601,13 +601,12 @@ class BotMan
     }
 
     /**
-     * @param int $seconds Number of seconds to wait
+     * @param float $seconds Number of seconds to wait
      * @return $this
      */
-    public function typesAndWaits($seconds)
+    public function typesAndWaits(float $seconds)
     {
-        $this->getDriver()->types($this->message);
-        sleep($seconds);
+        $this->getDriver()->typesAndWaits($this->message, $seconds);
 
         return $this;
     }
