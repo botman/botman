@@ -926,7 +926,7 @@ class BotManTest extends TestCase
             $conversation = new TestConversation();
 
             $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
-                $this->_throwException('called conversation');
+                throw new \Exception('called conversation');
             });
         });
         $botman->listen();
