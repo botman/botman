@@ -105,7 +105,7 @@ jobs:
 
       - name: Run redis with password
         run: |
-          docker run --rm --name redis -p 3680:3679 redis:${{ matrix.redis }} redis-server --requirepass secret --port 3679
+          docker run --rm --name redis -p 6380:3679 redis:${{ matrix.redis }} redis-server --requirepass secret --port 3679
 
       - name: Install dependencies
         run: |
