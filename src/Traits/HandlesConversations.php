@@ -223,7 +223,7 @@ trait HandlesConversations
                         break;
                     }
                 }
-                
+
                 if ($next == false) {
                     //no pattern match
                     //answer probably unexpected (some plain text)

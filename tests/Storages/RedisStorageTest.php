@@ -100,6 +100,7 @@ class RedisStorageTest extends TestCase
         self::assertEquals(Collection::make($data1), $items[$key1]);
         self::assertEquals(Collection::make($data2), $items[$key2]);
     }
+
     /**
      * Get redis host.
      *

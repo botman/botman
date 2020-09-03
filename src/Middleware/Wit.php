@@ -4,10 +4,10 @@ namespace BotMan\BotMan\Middleware;
 
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Http\Curl;
-use Illuminate\Support\Collection;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use JsonSerializable;
 
 class Wit implements MiddlewareInterface
 {
@@ -49,10 +49,10 @@ class Wit implements MiddlewareInterface
 
     protected function getResponse(IncomingMessage $message)
     {
-        $endpoint = 'https://api.wit.ai/message?q=' . urlencode($message->getText());
+        $endpoint = 'https://api.wit.ai/message?q='.urlencode($message->getText());
 
         $this->response = $this->http->get($endpoint, [], [
-            'Authorization: Bearer ' . $this->token,
+            'Authorization: Bearer '.$this->token,
         ]);
 
         return $this->response;
@@ -101,7 +101,7 @@ class Wit implements MiddlewareInterface
     {
         $entities = Collection::make($message->getExtras())->get('entities', []);
 
-        if (!empty($entities)) {
+        if (! empty($entities)) {
             foreach ($entities as $name => $entity) {
                 if ($name === 'intent') {
                     foreach ($entity as $item) {
