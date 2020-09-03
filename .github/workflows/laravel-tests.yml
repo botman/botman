@@ -112,6 +112,11 @@ jobs:
 
   tests-on-php73:
     runs-on: ubuntu-latest
+    redis:
+      image: redis:5.0
+      ports:
+        - 6379:6379
+      options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -121,20 +126,9 @@ jobs:
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
 
     steps:
-      - name: 'Setup redis without password'
-        uses: getong/redis-action@v1
-        with:
-          redis version: '5.0.7'
-          host port: 6379
-          container port: 6379
-
       - name: 'Setup redis with password'
-        uses: getong/redis-action@v1
-        with:
-          redis version: '5.0.7'
-          host port: 6380
-          container port: 6379
-          redis password: 'secret'
+        run: |
+          sudo redis-server /etc/redis/redis.conf --port 6380 --requirepass 'secret'
 
       - name: Checkout code
         uses: actions/checkout@v1
