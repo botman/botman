@@ -57,7 +57,7 @@ jobs:
 
       - name: Install redis
         run: |
-          apt install redis-server
+          sudo apt install redis-server
           redis-cli ping
 
 
