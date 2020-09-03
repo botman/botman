@@ -111,14 +111,14 @@ jobs:
         run: |
           docker ps -a
 
-#      - name: Install dependencies
-#        run: |
-#          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-#          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
-#
-#      - name: Execute tests
-#        # we need to split the tests into two classes one for secure and one for insecure redis
-#        run: vendor/bin/phpunit
-#        env:
-#          REDIS_HOST: 127.0.0.1
-#          REDIS_PORT: 6380
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        # we need to split the tests into two classes one for secure and one for insecure redis
+        run: vendor/bin/phpunit
+        env:
+          REDIS_HOST: 0.0.0.0
+          REDIS_PORT: 6380
