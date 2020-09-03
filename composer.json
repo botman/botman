@@ -27,7 +27,7 @@
     "require-dev": {
         "codeigniter/framework": "~3.0",
         "illuminate/support": "^5.4",
-        "orchestra/testbench": "~3.0",
+        "orchestra/testbench": "^3.4",
         "phpunit/phpunit": "~6.4",
         "mockery/mockery": "^1.1",
         "sllh/php-cs-fixer-styleci-bridge": "^2.1",
