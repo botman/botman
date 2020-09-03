@@ -39,7 +39,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --exclude-group=redis-auth
         env:
           REDIS_HOST: redis
 
@@ -75,7 +75,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --exclude-group=redis-auth
         env:
           REDIS_HOST: redis
 
@@ -122,7 +122,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --exclude-group=redis-auth
         env:
           REDIS_HOST: redis
 
@@ -158,6 +158,6 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --exclude-group=redis-auth
         env:
           REDIS_HOST: redis
