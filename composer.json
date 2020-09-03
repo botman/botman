@@ -26,8 +26,8 @@
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
-        "orchestra/testbench": "^3.4",
-        "phpunit/phpunit": "^6.0 || ^7.0",
+        "orchestra/testbench": "^3.4 || ^4.0",
+        "phpunit/phpunit": "^6.0 || ^7.0 || ^8.0",
         "mockery/mockery": "^1.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",

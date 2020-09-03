@@ -1,0 +1,44 @@
+name: 'Laravel 5.4 Tests'
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.2, 7.1]
+        laravel: [5.4]
+
+    name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "phpunit/phpunit:^6.0" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --no-suggest
+      - name: Execute tests
+        run: vendor/bin/phpunit --exclude-group=redis-auth
+        env:
+          REDIS_HOST: redis

@@ -14,14 +14,14 @@ use RedisException;
  */
 class RedisStorageTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (! extension_loaded('redis')) {
             $this->markTestSkipped('Redis extension required');
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
 

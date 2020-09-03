@@ -10,13 +10,13 @@ class FileStorageTest extends TestCase
     /** @var FileStorage */
     protected $storage;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->storage = new FileStorage(__DIR__.'/../Fixtures/storage');
         parent::setUp();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         foreach (glob(__DIR__.'/../Fixtures/storage/*.json') as $file) {
             unlink($file);

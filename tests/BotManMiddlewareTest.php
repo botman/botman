@@ -19,24 +19,24 @@ class BotManMiddlewareTest extends TestCase
     /** @var FakeDriver */
     private $fakeDriver;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         DriverManager::loadDriver(ProxyDriver::class);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         DriverManager::unloadDriver(ProxyDriver::class);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fakeDriver = new FakeDriver();
         ProxyDriver::setInstance($this->fakeDriver);
         $this->botman = BotManFactory::create([]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         ProxyDriver::setInstance(FakeDriver::createInactive());
     }

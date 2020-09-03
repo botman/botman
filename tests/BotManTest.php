@@ -51,12 +51,12 @@ class BotManTest extends TestCase
     /** @var ArrayCache */
     protected $cache;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->cache = new ArrayCache();

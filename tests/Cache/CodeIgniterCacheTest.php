@@ -11,7 +11,7 @@ class CodeIgniterCacheTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
