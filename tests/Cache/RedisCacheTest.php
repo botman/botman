@@ -30,7 +30,7 @@ class RedisCacheTest extends TestCase
         $redis->close();
 
         $redis = new Redis();
-        $redis->connect($this->getRedisHost(), 6380);
+        $redis->connect($this->getRedisHost(), $this->getRedisPort());
         $redis->auth('secret');
         $redis->eval($script);
         $redis->close();
@@ -39,7 +39,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function valid_auth()
     {
-        $cache = new RedisCache($this->getRedisHost(), 6380, 'secret');
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
     }
@@ -50,7 +50,7 @@ class RedisCacheTest extends TestCase
      */
     public function invalid_auth()
     {
-        $cache = new RedisCache($this->getRedisHost(), 6380, 'invalid');
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'invalid');
         $cache->put('foo', 'bar', 1);
     }
 

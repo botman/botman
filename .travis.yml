@@ -15,7 +15,7 @@ before_install:
 
 before_script:
   - travis_retry composer install --prefer-dist --no-interaction
-  - sudo redis-server /etc/redis/redis.conf --port 6380 --requirepass 'secret'
+  - sudo redis-server /etc/redis/redis.conf --port 6379 --requirepass 'secret'
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml

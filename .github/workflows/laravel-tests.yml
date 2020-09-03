@@ -9,6 +9,12 @@ on:
 jobs:
   tests-on-php71:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -40,9 +46,17 @@ jobs:
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          REDIS_HOST: redis
 
   tests-on-php72:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -74,10 +88,18 @@ jobs:
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          REDIS_HOST: redis
 
 
   tests-on-php73:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -109,9 +131,17 @@ jobs:
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          REDIS_HOST: redis
 
   tests-on-php74:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -143,3 +173,5 @@ jobs:
           composer update --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          REDIS_HOST: redis
