@@ -14,7 +14,7 @@ class LaravelTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->app['config']->set('cache.default', 'file');

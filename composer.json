@@ -26,11 +26,10 @@
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
-        "illuminate/support": "^5.4",
-        "orchestra/testbench": "^3.4",
-        "phpunit/phpunit": "~6.4",
+        "illuminate/support": "^5.5",
+        "orchestra/testbench": "^3.5",
+        "phpunit/phpunit": "^7.0",
         "mockery/mockery": "^1.1",
-        "sllh/php-cs-fixer-styleci-bridge": "^2.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.1",
         "ext-curl": "*"
@@ -63,8 +62,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
-        "cs": "php-cs-fixer fix"
+        "test": "phpunit"
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
