@@ -24,7 +24,7 @@ class BotManStorageTest extends TestCase
         return $botman;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         exec('rm -rf '.__DIR__.'/../Fixtures/storage/*.json');
     }
