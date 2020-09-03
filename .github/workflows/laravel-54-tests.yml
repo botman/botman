@@ -1,4 +1,4 @@
-name: 'Laravel Tests'
+name: 'Laravel 5.4 Tests'
 
 on:
   push:
