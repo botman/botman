@@ -119,5 +119,5 @@ jobs:
         # we need to split the tests into two classes one for secure and one for insecure redis
         run: vendor/bin/phpunit
         env:
-          REDIS_HOST: 127.0.0.1
+          REDIS_HOST: redis
           REDIS_PORT: 6380
