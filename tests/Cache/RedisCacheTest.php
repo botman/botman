@@ -10,6 +10,7 @@ use RedisException;
 
 /**
  * @group integration
+ * @group redis-auth
  */
 class RedisCacheTest extends TestCase
 {
@@ -20,7 +21,7 @@ class RedisCacheTest extends TestCase
         }
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
 
