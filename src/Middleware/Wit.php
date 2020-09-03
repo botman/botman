@@ -7,7 +7,6 @@ use BotMan\BotMan\Http\Curl;
 use BotMan\BotMan\Interfaces\HttpInterface;
 use BotMan\BotMan\Interfaces\MiddlewareInterface;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use JsonSerializable;
 
 class Wit implements MiddlewareInterface
 {
