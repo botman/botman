@@ -103,12 +103,15 @@ jobs:
           path: ~/.composer/cache/files
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
+
+
       - name: Run redis with password
         run: |
+          more $PWD/.github/confd/redis.conf
           docker run -d \
             -v $PWD/.github/confd/redis.conf:/usr/local/etc/redis/redis.conf \
             --name redis \
-            -p 6380:6380 \
+            -p 6380:6379 \
             redis:${{ matrix.redis }} redis-server /usr/local/etc/redis/redis.conf;
 
       - name: Install dependencies
