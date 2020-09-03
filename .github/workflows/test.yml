@@ -110,9 +110,6 @@ jobs:
           host port: 6380
           redis password: 'secret'
 
-      - name: Testing redis
-        run
-
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
