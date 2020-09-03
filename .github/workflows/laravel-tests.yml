@@ -9,6 +9,12 @@ on:
 jobs:
   tests-on-php71:
     runs-on: ${{ matrix.os }}
+    services:
+      redis:
+        image: redis:5.0
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
