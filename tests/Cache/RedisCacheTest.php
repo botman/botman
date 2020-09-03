@@ -25,12 +25,12 @@ class RedisCacheTest extends TestCase
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
 
         $redis = new Redis();
-        $redis->connect('127.0.0.1');
+        $redis->connect($this->getRedisHost());
         $redis->eval($script);
         $redis->close();
 
         $redis = new Redis();
-        $redis->connect('127.0.0.1', 6380);
+        $redis->connect($this->getRedisHost(), 6380);
         $redis->auth('secret');
         $redis->eval($script);
         $redis->close();
@@ -39,7 +39,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function valid_auth()
     {
-        $cache = new RedisCache('127.0.0.1', 6380, 'secret');
+        $cache = new RedisCache($this->getRedisHost(), 6380, 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
     }
@@ -50,7 +50,7 @@ class RedisCacheTest extends TestCase
      */
     public function invalid_auth()
     {
-        $cache = new RedisCache('127.0.0.1', 6380, 'invalid');
+        $cache = new RedisCache($this->getRedisHost(), 6380, 'invalid');
         $cache->put('foo', 'bar', 1);
     }
 
@@ -108,5 +108,25 @@ class RedisCacheTest extends TestCase
     {
         $cache = new ArrayCache();
         static::assertEquals('bar', $cache->pull('foo', 'bar'));
+    }
+
+    /**
+     * Get redis host.
+     *
+     * @return string
+     */
+    protected function getRedisHost()
+    {
+        return $_ENV['REDIS_HOST'] ?? '127.0.0.1';
+    }
+
+    /**
+     * Get redis port.
+     *
+     * @return int
+     */
+    protected function getRedisPort()
+    {
+        return (int) ($_ENV['REDIS_PORT'] ?? 6379);
     }
 }
