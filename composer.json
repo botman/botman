@@ -30,7 +30,7 @@
         "phpunit/phpunit": "^6.0 || ^7.0 || ^8.0",
         "mockery/mockery": "^1.1",
         "doctrine/cache": "^1.6",
-        "symfony/cache": "^3.4.35 || ^4.2.12 || ^5.0",
+        "symfony/cache": "^3.4.35 || ^4.3.7 || ^5.0",
         "ext-curl": "*"
     },
     "suggest": {
