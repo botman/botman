@@ -28,7 +28,7 @@ jobs:
           - laravel: 5.5.*
             php: 7.4
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Insecure
 
     steps:
       - name: Checkout code
@@ -84,7 +84,7 @@ jobs:
           - laravel: 5.5.*
             php: 7.4
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Secure
 
     steps:
       - name: Checkout code
