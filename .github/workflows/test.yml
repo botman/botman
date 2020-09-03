@@ -7,7 +7,7 @@ on:
 
 env:
     REDIS_HOST: 127.0.0.1
-    REDIS_PORT: 6380
+    REDIS_PORT: 6379
 
 jobs:
   php-tests:
@@ -104,7 +104,7 @@ jobs:
 
       - name: Run redis with password
         run: |
-          docker run --rm --name redis -p 6380:6379 -d redis:${{ matrix.redis }} redis-server --requirepass secret --port 6379
+          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }} redis-server --requirepass secret --port 6379
 
       - name: Validate redis
         run: docker ps -a
