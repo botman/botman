@@ -11,8 +11,10 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.4, 7.3, 7.2, 7.1]
-        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+#        php: [7.4, 7.3, 7.2, 7.1]
+#        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        php: [7.4]
+        laravel: [6.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         redis: [5-alpine]
@@ -47,15 +49,15 @@ jobs:
 
       - name: Run redis without password
         run: |
-          docker run -p 6379:6379 --name "redis-public" -d redis:${{ matrix.redis }}
+          docker run -p 6379:6379 --name redis -d redis:${{ matrix.redis }}
 
-      - name: Run redis with password
-        run: |
-          docker run -d \
-            -v $PWD/.github/confd/redis.conf:/usr/local/etc/redis/redis.conf \
-            --name "redis-password" \
-            -p 7000:6379 \
-            redis:${{ matrix.redis }} redis-server /usr/local/etc/redis/redis.conf;
+#      - name: Run redis with password
+#        run: |
+#          docker run -d \
+#            -v $PWD/.github/confd/redis.conf:/usr/local/etc/redis/redis.conf \
+#            --name "redis-password" \
+#            -p 7000:6379 \
+#            redis:${{ matrix.redis }} redis-server /usr/local/etc/redis/redis.conf;
 
       - name: Install dependencies
         run: |
