@@ -94,7 +94,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
           coverage: none
 
       - name: Cache dependencies
@@ -106,10 +106,6 @@ jobs:
       - name: Run redis with password
         run: |
           docker run --rm --name redis -p 6380:6379 -d redis:${{ matrix.redis }} redis-server --requirepass secret --port 3679
-
-      - name: Test redis
-        run: |
-          docker ps -a
 
       - name: Install dependencies
         run: |
