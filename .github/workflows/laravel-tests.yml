@@ -9,12 +9,6 @@ on:
 jobs:
   tests-on-php71:
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis:5.0
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -24,6 +18,13 @@ jobs:
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
 
     steps:
+      - uses: getong/redis-action@v1
+        with:
+          redis version: '5.0.7'
+          host port: 6379
+          container port: 6379
+          redis password: 'secret'
+
       - name: Checkout code
         uses: actions/checkout@v1
 
@@ -51,12 +52,6 @@ jobs:
 
   tests-on-php72:
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis:5.0
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -66,6 +61,13 @@ jobs:
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
 
     steps:
+      - uses: getong/redis-action@v1
+        with:
+          redis version: '5.0.7'
+          host port: 6379
+          container port: 6379
+          redis password: 'secret'
+
       - name: Checkout code
         uses: actions/checkout@v1
 
@@ -94,12 +96,6 @@ jobs:
 
   tests-on-php73:
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis:5.0
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -109,6 +105,13 @@ jobs:
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
 
     steps:
+      - uses: getong/redis-action@v1
+        with:
+          redis version: '5.0.7'
+          host port: 6379
+          container port: 6379
+          redis password: 'secret'
+
       - name: Checkout code
         uses: actions/checkout@v1
 
@@ -136,12 +139,6 @@ jobs:
 
   tests-on-php74:
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis:5.0
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
     strategy:
       fail-fast: false
       matrix:
@@ -151,6 +148,13 @@ jobs:
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }}
 
     steps:
+      - uses: getong/redis-action@v1
+        with:
+          redis version: '5.0.7'
+          host port: 6379
+          container port: 6379
+          redis password: 'secret'
+
       - name: Checkout code
         uses: actions/checkout@v1
 
