@@ -65,6 +65,6 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        run: vendor/bin/phpunit --exclude-group=redis-auth
+        run: vendor/bin/phpunit
         env:
           REDIS_HOST: redis
