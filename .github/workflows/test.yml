@@ -121,4 +121,4 @@ jobs:
         run: vendor/bin/phpunit
         env:
           REDIS_HOST: redis
-          REDIS_PORT: 3680
+          REDIS_PORT: 6380
