@@ -23,7 +23,7 @@ class Button implements JsonSerializable, QuestionActionInterface
     protected $imageUrl;
     
     /** @var url */
-    protected $url; //new 1
+    protected $url;
 
     /**
      * @param string $text
@@ -69,7 +69,6 @@ class Button implements JsonSerializable, QuestionActionInterface
         return $this;
     }
     
-    // new 2
     /**
      * Set the button url (telegram only).
      *
@@ -117,7 +116,7 @@ class Button implements JsonSerializable, QuestionActionInterface
             'name' => isset($this->name) ? $this->name : $this->text,
             'text' => $this->text,
             'image_url' => $this->imageUrl,
-            'url' => $this->url, // new 3
+            'url' => $this->url,
             'type' => 'button',
             'value' => $this->value,
             'additional' => $this->additional,
