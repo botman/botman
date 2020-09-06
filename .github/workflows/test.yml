@@ -54,10 +54,10 @@ jobs:
       - name: Check which docker images is running
         run: docker ps -a
 
-      - name: Install redis-cli
-        run: |
-          sudo apt install redis-tools
-          redis-cli ping
+#      - name: Install redis-cli
+#        run: |
+#          sudo apt install redis-tools
+#          redis-cli ping
 
       - name: Install dependencies
         run: |
