@@ -75,6 +75,9 @@ jobs:
   redis-with-password:
     runs-on: ${{ matrix.os }}
 
+    env:
+      REDIS_PASS: secret
+
     strategy:
       max-parallel: 15
       fail-fast: false
@@ -114,8 +117,6 @@ jobs:
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Run redis with a password
-        env:
-          REDIS_PASS: secret
         run: |
           docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass $REDIS_PASS --port $REDIS_PORT
 
@@ -125,7 +126,7 @@ jobs:
       - name: Install redis-cli
         run: |
           sudo apt install redis-tools
-          redis-cli ping
+          redis-cli -a $REDIS_PASS -p $REDIS_PORT ping
 
       - name: Install dependencies
         run: |
