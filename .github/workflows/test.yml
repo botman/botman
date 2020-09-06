@@ -54,9 +54,9 @@ jobs:
         run: |
           docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }}
 
-      - name: Install redis
+      - name: Install redis-cli
         run: |
-          sudo apt install redis-server
+          sudo apt install redis-tools
           redis-cli ping
 
       - name: Install dependencies
@@ -111,6 +111,11 @@ jobs:
 
       - name: Run redis with a password
         run: docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }} redis-server --requirepass secret --port 6379
+
+      - name: Install redis-cli
+        run: |
+          sudo apt install redis-tools
+          redis-cli -a secret ping
 
       - name: Install dependencies
         run: |
