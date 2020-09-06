@@ -45,11 +45,9 @@ jobs:
           path: ~/.composer/cache/files
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
-      - name: Build Redis without a password
-        uses: getong/redis-action@v1
-        with:
-          redis version: ${{ matrix.redis-versions }} # Optional, default value is "latest". The version of the redis
-          host port: 6379 # Optional, default value is 6379. The port of host
+      - name: Run redis without a password
+        run: |
+          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }}
 
       - name: Check which docker images is running
         run: docker ps -a
