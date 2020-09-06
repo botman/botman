@@ -114,10 +114,8 @@ jobs:
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Run redis with a password
-        env:
-          REDIS_PASS: "secret"
         run: |
-          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass $REDIS_PASS --port $REDIS_PORT
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass secret --port $REDIS_PORT
 
       - name: Check which docker images is running
         run: docker ps -a
