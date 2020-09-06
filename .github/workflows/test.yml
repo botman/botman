@@ -112,7 +112,7 @@ jobs:
         uses: getong/redis-action@v1
         with:
           redis version: ${{ matrix.redis-versions }}
-          host port: 6379
+          host port: 7000
           redis password: 'secret'
 
       - name: Install redis-cli
@@ -131,4 +131,4 @@ jobs:
         run: vendor/bin/phpunit
         env:
             REDIS_HOST: 127.0.0.1
-            REDIS_PORT: 6379   
+            REDIS_PORT: 7000   
