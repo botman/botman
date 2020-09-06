@@ -1,9 +1,7 @@
 name: Run tests
 
 on:
-  push:
-  schedule:
-    - cron: '0 0 * * *'
+  push
 
 env:
     REDIS_HOST: 127.0.0.1
@@ -20,7 +18,7 @@ jobs:
         laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
-        redis: [5-alpine]
+        redis-versions: [5-alpine]
         exclude:
           - laravel: 6.*
             php: 7.1
@@ -50,9 +48,11 @@ jobs:
           path: ~/.composer/cache/files
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
-      - name: Run redis without a password
-        run: |
-          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }}
+      - name: Build Redis without a password
+        uses: getong/redis-action@v1
+        with:
+          host port: 6379          
+          redis version: ${{ matrix.redis-versions }}
 
       - name: Install redis-cli
         run: |
@@ -109,8 +109,12 @@ jobs:
           path: ~/.composer/cache/files
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
-      - name: Run redis with a password
-        run: docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }} redis-server --requirepass secret --port 6379
+      - name: Build Redis with a password
+        uses: getong/redis-action@v1
+        with:
+          redis version: ${{ matrix.redis-versions }}
+          host port: 6379
+          redis password: 'secret'
 
       - name: Install redis-cli
         run: |
