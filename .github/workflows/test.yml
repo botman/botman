@@ -83,7 +83,7 @@ jobs:
         laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
-        redis: [5-alpine]
+        redis-versions: [5-alpine]
         exclude:
           - laravel: 6.*
             php: 7.1
@@ -114,8 +114,10 @@ jobs:
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Run redis with a password
+        env:
+          REDIS_PASS: secret
         run: |
-          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass secret --port $REDIS_PORT
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass $REDIS_PASS --port $REDIS_PORT
 
       - name: Check which docker images is running
         run: docker ps -a
