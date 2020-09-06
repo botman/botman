@@ -47,7 +47,7 @@ jobs:
 
       - name: Run redis without a password
         run: |
-          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis }}
+          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis-versions }}
 
       - name: Check which docker images is running
         run: docker ps -a
