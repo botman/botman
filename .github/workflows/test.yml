@@ -47,8 +47,8 @@ jobs:
       - name: Build Redis without a password
         uses: getong/redis-action@v1
         with:
-          host port: 6379          
-          redis version: ${{ matrix.redis-versions }}
+          redis version: ${{ matrix.redis-versions }} # Optional, default value is "latest". The version of the redis
+          host port: 6379 # Optional, default value is 6379. The port of host
 
       - name: Install redis-cli
         run: |
@@ -66,7 +66,7 @@ jobs:
         run: vendor/bin/phpunit
         env:
             REDIS_HOST: 127.0.0.1
-            REDIS_PORT: 6379        
+            REDIS_PORT: 6379
 
   redis-with-password:
     runs-on: ${{ matrix.os }}
@@ -111,9 +111,10 @@ jobs:
       - name: Build Redis with a password
         uses: getong/redis-action@v1
         with:
-          redis version: ${{ matrix.redis-versions }}
-          host port: 7000
-          redis password: 'secret'
+          redis version: ${{ matrix.redis-versions }} # Optional, default value is "latest". The version of the redis
+          host port: 6379 # Optional, default value is 6379. The port of host
+          container port: 6379 # Optional, default value is 6379. The port of container
+          redis password: 'secret' # Optional, default is empty
 
       - name: Install redis-cli
         run: |
@@ -131,4 +132,4 @@ jobs:
         run: vendor/bin/phpunit
         env:
             REDIS_HOST: 127.0.0.1
-            REDIS_PORT: 7000   
+            REDIS_PORT: 6379
