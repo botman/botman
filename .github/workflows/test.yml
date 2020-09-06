@@ -3,6 +3,10 @@ name: Run tests
 on:
   push
 
+env:
+  REDIS_HOST: 127.0.0.1
+  REDIS_PORT: 6379
+
 jobs:
   php-tests:
     runs-on: ${{ matrix.os }}
@@ -47,7 +51,7 @@ jobs:
 
       - name: Run redis without a password
         run: |
-          docker run --rm --name redis -p 6379:6379 -d redis:${{ matrix.redis-versions }}
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }}
 
       - name: Check which docker images is running
         run: docker ps -a
@@ -66,9 +70,7 @@ jobs:
         # we need to split the tests into two groups one for secure and one for insecure redis
 #        run: vendor/bin/phpunit --exclude-group=redis-auth
         run: vendor/bin/phpunit
-        env:
-            REDIS_HOST: 127.0.0.1
-            REDIS_PORT: 6379
+
 
 #  redis-with-password:
 #    runs-on: ${{ matrix.os }}
