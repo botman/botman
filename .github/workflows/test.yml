@@ -3,10 +3,6 @@ name: Run tests
 on:
   push
 
-env:
-    REDIS_HOST: 127.0.0.1
-    REDIS_PORT: 6379
-
 jobs:
   php-tests:
     runs-on: ${{ matrix.os }}
@@ -68,6 +64,9 @@ jobs:
         # we need to split the tests into two groups one for secure and one for insecure redis
 #        run: vendor/bin/phpunit --exclude-group=redis-auth
         run: vendor/bin/phpunit
+        env:
+            REDIS_HOST: 127.0.0.1
+            REDIS_PORT: 6379        
 
   redis-with-password:
     runs-on: ${{ matrix.os }}
@@ -130,3 +129,6 @@ jobs:
         # we need to split the tests into two groups one for secure and one for insecure redis
 #        run: vendor/bin/phpunit --exclude-group=redis-insecure
         run: vendor/bin/phpunit
+        env:
+            REDIS_HOST: 127.0.0.1
+            REDIS_PORT: 6379   
