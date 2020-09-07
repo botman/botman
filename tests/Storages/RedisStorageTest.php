@@ -74,7 +74,7 @@ class RedisStorageTest extends TestCase
     public function get()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
@@ -88,7 +88,7 @@ class RedisStorageTest extends TestCase
     public function delete()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
@@ -105,7 +105,7 @@ class RedisStorageTest extends TestCase
     public function get_all()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());

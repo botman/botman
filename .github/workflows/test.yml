@@ -11,6 +11,9 @@ jobs:
   php-tests:
     runs-on: ${{ matrix.os }}
 
+    env:
+      REDIS_SECURE: false
+
     strategy:
       fail-fast: false
       max-parallel: 15
@@ -75,7 +78,7 @@ jobs:
 
     env:
       REDIS_PASS: secret
-      REDIS_SECRET: true
+      REDIS_SECURE: true
 
     strategy:
       max-parallel: 15

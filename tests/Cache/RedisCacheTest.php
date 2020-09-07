@@ -70,7 +70,7 @@ class RedisCacheTest extends TestCase
     public function has()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
@@ -82,7 +82,7 @@ class RedisCacheTest extends TestCase
     public function has_not()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
@@ -93,7 +93,7 @@ class RedisCacheTest extends TestCase
     public function get_existing_key()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
@@ -106,7 +106,7 @@ class RedisCacheTest extends TestCase
     public function get_non_existing_key()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
@@ -117,7 +117,7 @@ class RedisCacheTest extends TestCase
     public function pull_existing_key()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
@@ -132,7 +132,7 @@ class RedisCacheTest extends TestCase
     public function pull_non_existing_key()
     {
         if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an isecure instance');
+            $this->markTestSkipped('This function needs an insecure instance');
         }
 
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
