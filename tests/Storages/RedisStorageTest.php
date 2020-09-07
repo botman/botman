@@ -108,7 +108,7 @@ class RedisStorageTest extends TestCase
      */
     protected function getRedisHost()
     {
-//        return getenv('REDIS_HOST') ?? '127.0.0.1';
+        echo getenv('REDIS_HOST');
         return getenv('REDIS_HOST') ?? '127.0.0.1';
     }
 
@@ -119,6 +119,7 @@ class RedisStorageTest extends TestCase
      */
     protected function getAuthRedisPort()
     {
+        echo getenv('REDIS_PORT');
         return (int) (getenv('REDIS_PORT') ?? 6380);
     }
 }
