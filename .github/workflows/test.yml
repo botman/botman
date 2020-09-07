@@ -104,7 +104,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          ini-values: variables_order="EGPCS"
+#          ini-values: variables_order="EGPCS"
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
           coverage: none
 
