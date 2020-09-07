@@ -66,14 +66,14 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function has_not()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertFalse($cache->has('foo'));
     }
 
     /** @test */
     public function get_existing_key()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
         static::assertEquals('bar', $cache->get('foo'));
@@ -82,14 +82,14 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function get_non_existing_key()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertNull($cache->get('foo'));
     }
 
     /** @test */
     public function pull_existing_key()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
         static::assertEquals('bar', $cache->pull('foo'));
@@ -100,7 +100,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function pull_non_existing_key()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertNull($cache->pull('foo'));
     }
 
@@ -118,7 +118,7 @@ class RedisCacheTest extends TestCase
      */
     protected function getRedisHost()
     {
-        return $_ENV['REDIS_HOST'] ?? '127.0.0.1';
+        return getenv('REDIS_HOST') ?? '127.0.0.1';
     }
 
     /**
@@ -128,6 +128,6 @@ class RedisCacheTest extends TestCase
      */
     protected function getAuthRedisPort()
     {
-        return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+        return (int) (getenv('REDIS_PORT') ?? 6380);
     }
 }
