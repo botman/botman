@@ -75,6 +75,7 @@ jobs:
 
     env:
       REDIS_PASS: secret
+      REDIS_SECRET: true
 
     strategy:
       max-parallel: 15
