@@ -59,7 +59,7 @@ jobs:
       - name: Install redis-cli
         run: |
           sudo apt install redis-tools
-          redis-cli ping
+          redis-cli  -p $REDIS_PORT ping
 
       - name: Install dependencies
         run: |
