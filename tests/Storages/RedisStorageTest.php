@@ -21,21 +21,21 @@ class RedisStorageTest extends TestCase
         }
     }
 
-//    protected function tearDown(): void
-//    {
-//        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
-//
-//        $redis = new Redis();
-//        $redis->connect($this->getRedisHost());
-//        $redis->eval($script);
-//        $redis->close();
-//
-//        $redis = new Redis();
-//        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-//        $redis->auth('secret');
-//        $redis->eval($script);
-//        $redis->close();
-//    }
+    protected function tearDown(): void
+    {
+        $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
+
+        $redis = new Redis();
+        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+        $redis->eval($script);
+        $redis->close();
+
+        $redis = new Redis();
+        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+        $redis->auth('secret');
+        $redis->eval($script);
+        $redis->close();
+    }
 
     /** @test */
     public function valid_auth()
