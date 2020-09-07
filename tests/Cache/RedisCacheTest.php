@@ -40,6 +40,8 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function valid_auth()
     {
+        echo $this->getRedisHost() . ' -> ' . $this->getAuthRedisPort() . PHP_EOL;
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort(), 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
