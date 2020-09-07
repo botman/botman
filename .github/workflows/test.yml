@@ -67,7 +67,7 @@ jobs:
       - name: Execute tests
         # we need to split the tests into two groups one for secure and one for insecure redis
 #        run: vendor/bin/phpunit --exclude-group=redis-secure
-        run: vendor/bin/phpunit ---textdox
+        run: vendor/bin/phpunit --testdox
 
 
   redis-with-password:
@@ -132,4 +132,4 @@ jobs:
       - name: Execute tests
         # we need to split the tests into two groups one for secure and one for insecure redis
 #        run: vendor/bin/phpunit --exclude-group=redis-insecure
-        run: vendor/bin/phpunit ---textdox
+        run: vendor/bin/phpunit --testdox
