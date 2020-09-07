@@ -125,11 +125,6 @@ jobs:
       - name: Check which docker images is running
         run: docker ps -a
 
-      - name: Install redis-cli
-        run: |
-          sudo apt install redis-tools
-          redis-cli -a $REDIS_PASS -p $REDIS_PORT ping
-
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
