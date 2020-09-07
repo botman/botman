@@ -117,13 +117,13 @@ jobs:
         run: |
           docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server /etc/redis/redis.conf --requirepass '$REDIS_PASS' --port $REDIS_PORT
 
-      - name: Check which docker images is running
-        run: docker ps -a
-
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Check that redis is still alive
+        run: docker ps -a
 
       - name: Execute tests
         # we need to split the tests into two groups one for secure and one for insecure redis
