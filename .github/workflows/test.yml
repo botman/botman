@@ -15,10 +15,8 @@ jobs:
       fail-fast: false
       max-parallel: 15
       matrix:
-#        php: [7.4, 7.3, 7.2, 7.1]
-#        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
-        php: [7.4]
-        laravel: [6.*]
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         redis-versions: [5-alpine]
@@ -81,10 +79,8 @@ jobs:
       max-parallel: 15
       fail-fast: false
       matrix:
-#        php: [7.4, 7.3, 7.2, 7.1]
-#        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
-        php: [7.4]
-        laravel: [6.*]
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         redis-versions: [5-alpine]
