@@ -8,68 +8,63 @@ env:
   REDIS_PORT: 6379
 
 jobs:
-#  php-tests:
-#    runs-on: ${{ matrix.os }}
-#
-#    strategy:
-#      fail-fast: false
-#      max-parallel: 15
-#      matrix:
-#        php: [7.4, 7.3, 7.2, 7.1]
-#        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
-#        dependency-version: [prefer-stable]
-#        os: [ubuntu-latest]
-#        redis-versions: [5-alpine]
-#        exclude:
-#          - laravel: 6.*
-#            php: 7.1
-#          - laravel: 5.7.*
-#            php: 7.4
-#          - laravel: 5.6.*
-#            php: 7.4
-#          - laravel: 5.5.*
-#            php: 7.4
-#
-#    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Insecure
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v1
-#
-#      - name: Setup PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ matrix.php }}
-#          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
-#          coverage: none
-#
-#      - name: Cache dependencies
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.composer/cache/files
-#          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-#
-#      - name: Run redis without a password
-#        run: |
-#          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }}
-#
-#      - name: Check which docker images is running
-#        run: docker ps -a
-#
-#      - name: Install redis-cli
-#        run: |
-#          sudo apt install redis-tools
-#          redis-cli  -p $REDIS_PORT ping
-#
-#      - name: Install dependencies
-#        run: |
-#          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-#          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
-#
-#      - name: Execute tests
-#        # we need to split the tests into two groups one for secure and one for insecure redis
-##        run: vendor/bin/phpunit --exclude-group=redis-secure
-#        run: vendor/bin/phpunit
+  php-tests:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      max-parallel: 15
+      matrix:
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
+        redis-versions: [5-alpine]
+        exclude:
+          - laravel: 6.*
+            php: 7.1
+          - laravel: 5.7.*
+            php: 7.4
+          - laravel: 5.6.*
+            php: 7.4
+          - laravel: 5.5.*
+            php: 7.4
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Insecure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Run redis without a password
+        run: |
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }}
+
+      - name: Check which docker images is running
+        run: docker ps -a
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        # we need to split the tests into two groups one for secure and one for insecure redis
+#        run: vendor/bin/phpunit --exclude-group=redis-secure
+        run: vendor/bin/phpunit
 
 
   redis-with-password:
@@ -82,10 +77,8 @@ jobs:
       max-parallel: 15
       fail-fast: false
       matrix:
-#        php: [7.4, 7.3, 7.2, 7.1]
-#        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
-        php: [7.4]
-        laravel: [6.*]
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         redis-versions: [5-alpine]
