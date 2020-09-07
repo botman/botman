@@ -25,21 +25,28 @@ class RedisStorageTest extends TestCase
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
 
-        $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-        $redis->eval($script);
-        $redis->close();
-
-        $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-        $redis->auth('secret');
-        $redis->eval($script);
-        $redis->close();
+        if (! $this->isSecure())
+        {
+            $redis = new Redis();
+            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+            $redis->eval($script);
+            $redis->close();
+        } else {
+            $redis = new Redis();
+            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+            $redis->auth('secret');
+            $redis->eval($script);
+            $redis->close();
+        }
     }
 
     /** @test */
     public function valid_auth()
     {
+        if(! $this->isSecure()) {
+            $this->markTestSkipped('This function needs a secure instance');
+        }
+
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'secret');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
@@ -53,6 +60,10 @@ class RedisStorageTest extends TestCase
      */
     public function invalid_auth()
     {
+        if(! $this->isSecure()) {
+            $this->markTestSkipped('This function needs a secure instance');
+        }
+
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'invalid');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
@@ -62,6 +73,10 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
@@ -72,6 +87,10 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function delete()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
@@ -85,6 +104,10 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get_all()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key1 = 'key1';
         $data1 = ['foo' => 1, 'bar' => new \DateTime()];
@@ -119,5 +142,15 @@ class RedisStorageTest extends TestCase
     protected function getAuthRedisPort()
     {
         return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+    }
+
+    /**
+     * is secure.
+     *
+     * @return int
+     */
+    protected function isSecure()
+    {
+        return (bool) ($_ENV['REDIS_SECURE'] ?? false);
     }
 }

@@ -25,21 +25,28 @@ class RedisCacheTest extends TestCase
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
 
-        $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-        $redis->eval($script);
-        $redis->close();
-
-        $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-        $redis->auth('secret');
-        $redis->eval($script);
-        $redis->close();
+        if (! $this->isSecure())
+        {
+            $redis = new Redis();
+            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+            $redis->eval($script);
+            $redis->close();
+        } else {
+            $redis = new Redis();
+            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
+            $redis->auth('secret');
+            $redis->eval($script);
+            $redis->close();
+        }
     }
 
     /** @test */
     public function valid_auth()
     {
+        if(! $this->isSecure()) {
+            $this->markTestSkipped('This function needs a secure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort(), 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
@@ -51,6 +58,10 @@ class RedisCacheTest extends TestCase
      */
     public function invalid_auth()
     {
+        if(! $this->isSecure()) {
+            $this->markTestSkipped('This function needs a secure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort(), 'invalid');
         $cache->put('foo', 'bar', 1);
     }
@@ -58,6 +69,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function has()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
@@ -66,6 +81,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function has_not()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertFalse($cache->has('foo'));
     }
@@ -73,6 +92,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function get_existing_key()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
@@ -82,6 +105,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function get_non_existing_key()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertNull($cache->get('foo'));
     }
@@ -89,6 +116,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function pull_existing_key()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
@@ -100,6 +131,10 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function pull_non_existing_key()
     {
+        if($this->isSecure()) {
+            $this->markTestSkipped('This function needs an isecure instance');
+        }
+
         $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         static::assertNull($cache->pull('foo'));
     }
@@ -129,5 +164,15 @@ class RedisCacheTest extends TestCase
     protected function getAuthRedisPort()
     {
         return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+    }
+
+    /**
+     * is secure.
+     *
+     * @return int
+     */
+    protected function isSecure()
+    {
+        return (bool) ($_ENV['REDIS_SECURE'] ?? false);
     }
 }
