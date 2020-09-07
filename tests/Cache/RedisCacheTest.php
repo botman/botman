@@ -60,7 +60,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function has()
     {
-        $cache = new RedisCache($this->getRedisHost());
+        $cache = new RedisCache($this->getRedisHost(), $this->getAuthRedisPort());
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
     }

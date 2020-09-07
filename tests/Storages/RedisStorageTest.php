@@ -62,7 +62,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -72,7 +72,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function delete()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -85,7 +85,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get_all()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
         $key1 = 'key1';
         $data1 = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data1, $key1);
