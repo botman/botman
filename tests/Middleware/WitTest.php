@@ -58,18 +58,19 @@ class WitTest extends TestCase
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",
           "_text": "I am happy",
+          "intents": [
+            {
+              "id": "123456",
+              "name": "emotion",
+              "confidence": 0.7343395827157483
+            }
+          ],
           "entities": {
             "emotion": [
               {
                 "confidence": 0.9775576413827303,
                 "type": "value",
                 "value": "happy"
-              }
-            ],
-            "intent": [
-              {
-                "confidence": 0.7343395827157483,
-                "value": "emotion"
               }
             ]
           }
@@ -102,18 +103,19 @@ class WitTest extends TestCase
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",
           "_text": "I am happy",
+          "intents": [
+            {
+              "id": "123456",
+              "name": "emotion",
+              "confidence": 0.343395827157483,
+            }
+          ],
           "entities": {
             "emotion": [
               {
                 "confidence": 0.9775576413827303,
                 "type": "value",
                 "value": "happy"
-              }
-            ],
-            "intent": [
-              {
-                "confidence": 0.343395827157483,
-                "value": "emotion"
               }
             ]
           }
