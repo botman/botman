@@ -27,7 +27,7 @@ class WitTest extends TestCase
         $messageText = 'This will be my message text!';
         $message = new IncomingMessage($messageText, '', '');
 
-        $response = new Response(json_encode(['entities' => ['foo' => 'bar']]));
+        $response = new Response(json_encode(['intents' => [], 'entities' => ['foo' => 'bar']]));
 
         $http = m::mock(Curl::class);
         $http->shouldReceive('get')
@@ -45,6 +45,7 @@ class WitTest extends TestCase
         $middleware->received($message, $callback, m::mock(BotMan::class));
 
         $this->assertSame([
+            'intents' => [],
             'entities' => ['foo' => 'bar'],
         ], $message->getExtras());
     }
