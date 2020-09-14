@@ -87,6 +87,7 @@ class Wit implements MiddlewareInterface
 
         $responseData = Collection::make(json_decode($response->getContent(), true));
         $message->addExtras('entities', $responseData->get('entities'));
+        $message->addExtras('intents', $responseData->get('intents'));
 
         return $next($message);
     }
@@ -99,16 +100,12 @@ class Wit implements MiddlewareInterface
      */
     public function matching(IncomingMessage $message, $pattern, $regexMatched)
     {
-        $entities = Collection::make($message->getExtras())->get('entities', []);
+        $intents = Collection::make($message->getExtras())->get('intents', []);
 
-        if (! empty($entities)) {
-            foreach ($entities as $name => $entity) {
-                if ($name === 'intent') {
-                    foreach ($entity as $item) {
-                        if ($item['value'] === $pattern && $item['confidence'] >= $this->minimumConfidence) {
-                            return true;
-                        }
-                    }
+        if (!empty($intents)) {
+            foreach ($intents as $intent) {
+                if (($intent['name'] === $pattern || $intent['id'] === $pattern) && $intent['confidence'] >= $this->minimumConfidence) {
+                    return true;
                 }
             }
         }
