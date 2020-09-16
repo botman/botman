@@ -42,10 +42,8 @@ class RedisStorage implements StorageInterface
      * @param  array $data
      * @param  string $key
      */
-    public function save(array $data, $key)
-    {
-        $this->redis->set($this->decorateKey($key), $data);
-    }
+Storage drivers implement same methods, but acting differently #1100
+
 
     /**
      * Retrieve an item from the storage by key.
