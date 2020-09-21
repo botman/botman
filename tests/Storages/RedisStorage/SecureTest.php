@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\RedisStorage;
 
 use BotMan\BotMan\Storages\Drivers\RedisStorage;
 use Illuminate\Support\Collection;
@@ -10,9 +10,9 @@ use RedisException;
 
 /**
  * @group integration
- * @group redis-auth
+ * @group redis-secure
  */
-class RedisStorageTest extends TestCase
+class SecureTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -25,29 +25,17 @@ class RedisStorageTest extends TestCase
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
 
-        if (! $this->isSecure())
-        {
-            $redis = new Redis();
-            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-            $redis->eval($script);
-            $redis->close();
-        } else {
-            $redis = new Redis();
-            $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-            $redis->auth('secret');
-            $redis->eval($script);
-            $redis->close();
-        }
+        $redis = new Redis();
+        $redis->connect($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $redis->auth('secret');
+        $redis->eval($script);
+        $redis->close();
     }
 
     /** @test */
     public function valid_auth()
     {
-        if(! $this->isSecure()) {
-            $this->markTestSkipped('This function needs a secure instance');
-        }
-
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'secret');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -60,11 +48,7 @@ class RedisStorageTest extends TestCase
      */
     public function invalid_auth()
     {
-        if(! $this->isSecure()) {
-            $this->markTestSkipped('This function needs a secure instance');
-        }
-
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'invalid');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'invalid');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -73,11 +57,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get()
     {
-        if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an insecure instance');
-        }
-
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -87,11 +67,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function delete()
     {
-        if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an insecure instance');
-        }
-
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -104,11 +80,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get_all()
     {
-        if($this->isSecure()) {
-            $this->markTestSkipped('This function needs an insecure instance');
-        }
-
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $key1 = 'key1';
         $data1 = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data1, $key1);
@@ -139,18 +111,8 @@ class RedisStorageTest extends TestCase
      *
      * @return int
      */
-    protected function getAuthRedisPort()
+    protected function getRedisPort()
     {
         return (int) ($_ENV['REDIS_PORT'] ?? 6380);
-    }
-
-    /**
-     * is secure.
-     *
-     * @return int
-     */
-    protected function isSecure()
-    {
-        return (bool) ($_ENV['REDIS_SECURE'] ?? false);
     }
 }

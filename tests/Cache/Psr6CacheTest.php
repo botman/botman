@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache;
 
 use BotMan\BotMan\Cache\Psr6Cache;
 use Mockery as m;

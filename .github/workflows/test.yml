@@ -63,10 +63,7 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        # we need to split the tests into two groups one for secure and one for insecure redis
-#        run: vendor/bin/phpunit --exclude-group=redis-secure
-        run: vendor/bin/phpunit --testdox
-
+        run: vendor/bin/phpunit --exclude-group=redis-secure
 
   redis-with-password:
     runs-on: ${{ matrix.os }}
@@ -127,6 +124,4 @@ jobs:
         run: docker ps -a
 
       - name: Execute tests
-        # we need to split the tests into two groups one for secure and one for insecure redis
-#        run: vendor/bin/phpunit --exclude-group=redis-insecure
-        run: vendor/bin/phpunit --testdox
+        run: vendor/bin/phpunit --exclude-group=redis-insecure

@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache;
 
 use BotMan\BotMan\Cache\ArrayCache;
 use PHPUnit\Framework\TestCase;
