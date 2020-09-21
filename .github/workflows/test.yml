@@ -113,7 +113,7 @@ jobs:
 
       - name: Run redis with a password
         run: |
-          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass "secret" --port 6379
+          docker run --rm --name redis -p $REDIS_PORT:6380 -d redis:${{ matrix.redis-versions }} redis-server --requirepass "secret" --port 6379
 
       - name: Install dependencies
         run: |
@@ -124,4 +124,6 @@ jobs:
         run: docker ps -a
 
       - name: Execute tests
-        run: vendor/bin/phpunit --exclude-group=redis-insecure
+        run: vendor/bin/phpunit --exclude-group=redis-insecure\
+        env:
+          REDIS_PORT: 6380

@@ -90,6 +90,6 @@ class InsecureTest extends TestCase
      */
     protected function getRedisPort()
     {
-        return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+        return (int) ($_ENV['REDIS_PORT'] ?? 6379);
     }
 }
