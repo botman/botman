@@ -124,6 +124,4 @@ jobs:
         run: docker ps -a
 
       - name: Execute tests
-        run: vendor/bin/phpunit --exclude-group=redis-insecure\
-        env:
-          REDIS_PORT: 6379
+        run: vendor/bin/phpunit --exclude-group=redis-insecure
