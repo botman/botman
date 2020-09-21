@@ -26,7 +26,7 @@ class SecureTest extends TestCase
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
 
         $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $redis->connect($this->getRedisHost(), $this->getRedisPort());
         $redis->auth('secret');
         $redis->eval($script);
         $redis->close();
@@ -35,7 +35,7 @@ class SecureTest extends TestCase
     /** @test */
     public function valid_auth()
     {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
