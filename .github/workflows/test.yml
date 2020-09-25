@@ -1,0 +1,127 @@
+name: Run tests
+
+on:
+  push
+
+env:
+  REDIS_HOST: 127.0.0.1
+  REDIS_PORT: 6380
+
+jobs:
+  php-tests:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      max-parallel: 15
+      matrix:
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
+        redis-versions: [5-alpine]
+        exclude:
+          - laravel: 6.*
+            php: 7.1
+          - laravel: 5.7.*
+            php: 7.4
+          - laravel: 5.6.*
+            php: 7.4
+          - laravel: 5.5.*
+            php: 7.4
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Insecure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: variables_order="EGPCS"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Run redis without a password
+        run: |
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }}
+
+      - name: Check which docker images is running
+        run: docker ps -a
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --exclude-group=redis-secure
+
+  redis-with-password:
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDIS_PASS: secret
+      REDIS_SECURE: true
+
+    strategy:
+      max-parallel: 15
+      fail-fast: false
+      matrix:
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
+        redis-versions: [5-alpine]
+        exclude:
+          - laravel: 6.*
+            php: 7.1
+          - laravel: 5.7.*
+            php: 7.4
+          - laravel: 5.6.*
+            php: 7.4
+          - laravel: 5.5.*
+            php: 7.4
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - Secure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: variables_order="EGPCS"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, redis
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Run redis with a password
+        run: |
+          docker run --rm --name redis -p $REDIS_PORT:6379 -d redis:${{ matrix.redis-versions }} redis-server --requirepass "secret" --port 6379
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Check that redis is still alive
+        run: docker ps -a
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --exclude-group=redis-insecure

@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\RedisStorage;
 
 use BotMan\BotMan\Storages\Drivers\RedisStorage;
 use Illuminate\Support\Collection;
@@ -10,9 +10,9 @@ use RedisException;
 
 /**
  * @group integration
- * @group redis-auth
+ * @group redis-insecure
  */
-class RedisStorageTest extends TestCase
+class InsecureTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -26,43 +26,15 @@ class RedisStorageTest extends TestCase
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisStorage::KEY_PREFIX);
 
         $redis = new Redis();
-        $redis->connect($this->getRedisHost());
+        $redis->connect($this->getRedisHost(), $this->getRedisPort());
         $redis->eval($script);
         $redis->close();
-
-        $redis = new Redis();
-        $redis->connect($this->getRedisHost(), $this->getAuthRedisPort());
-        $redis->auth('secret');
-        $redis->eval($script);
-        $redis->close();
-    }
-
-    /** @test */
-    public function valid_auth()
-    {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'secret');
-        $key = 'key';
-        $data = ['foo' => 1, 'bar' => new \DateTime()];
-        $storage->save($data, $key);
-        self::assertEquals(Collection::make($data), $storage->get($key));
-    }
-
-    /**
-     * @test
-     * @expectedException RedisException
-     */
-    public function invalid_auth()
-    {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getAuthRedisPort(), 'invalid');
-        $key = 'key';
-        $data = ['foo' => 1, 'bar' => new \DateTime()];
-        $storage->save($data, $key);
     }
 
     /** @test */
     public function get()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -72,7 +44,7 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function delete()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -85,13 +57,13 @@ class RedisStorageTest extends TestCase
     /** @test */
     public function get_all()
     {
-        $storage = new RedisStorage($this->getRedisHost());
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key1 = 'key1';
         $data1 = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data1, $key1);
 
         $key2 = 'key2';
-        $data2 = ['foo' => 'alice', 'bar' => new \DateTime()];
+        $data2 = ['foo' => 'alice', 'bar' => new \DateTime(), 1 => 'bob'];
         $storage->save($data2, $key2);
 
         $items = $storage->all();
@@ -116,8 +88,8 @@ class RedisStorageTest extends TestCase
      *
      * @return int
      */
-    protected function getAuthRedisPort()
+    protected function getRedisPort()
     {
-        return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+        return (int) ($_ENV['REDIS_PORT'] ?? 6379);
     }
 }
