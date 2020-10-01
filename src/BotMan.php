@@ -129,8 +129,12 @@ class BotMan
      */
     public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
+        if (!isset($config['bot_id'])) {
+            $config['bot_id'] = '';
+        }
+
         $this->cache = $cache;
-        $this->message = new IncomingMessage('', '', '');
+        $this->message = new IncomingMessage('', '', '', null, $config['bot_id']);
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
@@ -436,7 +440,7 @@ class BotMan
                 }
 
                 $this->firedDriverEvents = false;
-                $this->message = new IncomingMessage('', '', '');
+                $this->message = new IncomingMessage('', '', '', null, $this->config['bot_id']);
             }
         } catch (\Throwable $e) {
             $this->exceptionHandler->handleException($e, $this);
@@ -555,8 +559,12 @@ class BotMan
 
         $recipients = \is_array($recipients) ? $recipients : [$recipients];
 
+        if (!isset($this->config['bot_id'])) {
+            $this->config['bot_id'] = '';
+        }
+
         foreach ($recipients as $recipient) {
-            $this->message = new IncomingMessage('', $recipient, '');
+            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
             $response = $this->reply($message, $additionalParameters);
         }
 
@@ -580,7 +588,7 @@ class BotMan
             if (\is_string($driver)) {
                 $driver = DriverManager::loadFromName($driver, $this->config);
             }
-            $this->message = new IncomingMessage('', $recipient, '');
+            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
             $this->setDriver($driver);
         }
 
