@@ -134,7 +134,7 @@ class BotMan
         }
 
         $this->cache = $cache;
-        $this->message = new IncomingMessage('', '', '', null, $this->config['bot_id']);
+        $this->message = new IncomingMessage('', '', '', null, $config['bot_id']);
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
