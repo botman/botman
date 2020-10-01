@@ -560,7 +560,7 @@ class BotMan
         $recipients = \is_array($recipients) ? $recipients : [$recipients];
 
         foreach ($recipients as $recipient) {
-            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
+            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id'] ?? '');
             $response = $this->reply($message, $additionalParameters);
         }
 
