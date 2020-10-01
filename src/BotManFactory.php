@@ -64,6 +64,14 @@ class BotManFactory
             $storageDriver = new FileStorage(__DIR__);
         }
 
+        if (isset($config['bot_id'])) {
+            foreach ($config as $driverCode=>$driverConfig) {
+                if ($driverCode != 'config' && !isset($driverConfig['bot_id'])) {
+                    $config[$driverCode]['bot_id'] = $config['bot_id'];
+                }
+            }
+        }
+
         $driverManager = new DriverManager($config, new Curl());
         $driver = $driverManager->getMatchingDriver($request);
 
