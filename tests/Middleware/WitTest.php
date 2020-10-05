@@ -16,7 +16,7 @@ class WitTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -27,7 +27,7 @@ class WitTest extends TestCase
         $messageText = 'This will be my message text!';
         $message = new IncomingMessage($messageText, '', '');
 
-        $response = new Response(json_encode(['entities' => ['foo' => 'bar']]));
+        $response = new Response(json_encode(['entities' => ['foo' => 'bar'], 'intents' => []]));
 
         $http = m::mock(Curl::class);
         $http->shouldReceive('get')
@@ -46,6 +46,7 @@ class WitTest extends TestCase
 
         $this->assertSame([
             'entities' => ['foo' => 'bar'],
+            'intents' => []
         ], $message->getExtras());
     }
 
@@ -58,18 +59,19 @@ class WitTest extends TestCase
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",
           "_text": "I am happy",
+          "intents": [
+            {
+              "id": "123456",
+              "name": "emotion",
+              "confidence": 0.7343395827157483
+            }
+          ],
           "entities": {
             "emotion": [
               {
                 "confidence": 0.9775576413827303,
                 "type": "value",
                 "value": "happy"
-              }
-            ],
-            "intent": [
-              {
-                "confidence": 0.7343395827157483,
-                "value": "emotion"
               }
             ]
           }
@@ -102,18 +104,19 @@ class WitTest extends TestCase
         $response = new Response('{
           "msg_id": "eb458be1-43e0-47c0-88b2-efbc9fa3240a",
           "_text": "I am happy",
+          "intents": [
+            {
+              "id": "123456",
+              "name": "emotion",
+              "confidence": 0.343395827157483,
+            }
+          ],
           "entities": {
             "emotion": [
               {
                 "confidence": 0.9775576413827303,
                 "type": "value",
                 "value": "happy"
-              }
-            ],
-            "intent": [
-              {
-                "confidence": 0.343395827157483,
-                "value": "emotion"
               }
             ]
           }

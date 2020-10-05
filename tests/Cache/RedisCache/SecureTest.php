@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache\RedisCache;
 
 use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\BotMan\Cache\RedisCache;
@@ -10,27 +10,23 @@ use RedisException;
 
 /**
  * @group integration
+ * @group redis-secure
  */
-class RedisCacheTest extends TestCase
+class SecureTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (! extension_loaded('redis')) {
             $this->markTestSkipped('Redis extension required');
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $script = sprintf("for i, name in ipairs(redis.call('KEYS', '%s*')) do redis.call('DEL', name); end", RedisCache::KEY_PREFIX);
 
         $redis = new Redis();
-        $redis->connect('127.0.0.1');
-        $redis->eval($script);
-        $redis->close();
-
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6380);
+        $redis->connect($this->getRedisHost(), $this->getRedisPort());
         $redis->auth('secret');
         $redis->eval($script);
         $redis->close();
@@ -39,7 +35,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function valid_auth()
     {
-        $cache = new RedisCache('127.0.0.1', 6380, 'secret');
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
     }
@@ -50,14 +46,14 @@ class RedisCacheTest extends TestCase
      */
     public function invalid_auth()
     {
-        $cache = new RedisCache('127.0.0.1', 6380, 'invalid');
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'invalid');
         $cache->put('foo', 'bar', 1);
     }
 
     /** @test */
     public function has()
     {
-        $cache = new RedisCache();
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $cache->put('foo', 'bar', 1);
         static::assertTrue($cache->has('foo'));
     }
@@ -65,14 +61,14 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function has_not()
     {
-        $cache = new RedisCache();
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         static::assertFalse($cache->has('foo'));
     }
 
     /** @test */
     public function get_existing_key()
     {
-        $cache = new RedisCache();
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
         static::assertEquals('bar', $cache->get('foo'));
@@ -81,14 +77,15 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function get_non_existing_key()
     {
-        $cache = new RedisCache();
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         static::assertNull($cache->get('foo'));
     }
 
     /** @test */
     public function pull_existing_key()
     {
-        $cache = new RedisCache();
+
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         $cache->put('foo', 'bar', 5);
         static::assertTrue($cache->has('foo'));
         static::assertEquals('bar', $cache->pull('foo'));
@@ -99,7 +96,7 @@ class RedisCacheTest extends TestCase
     /** @test */
     public function pull_non_existing_key()
     {
-        $cache = new RedisCache();
+        $cache = new RedisCache($this->getRedisHost(), $this->getRedisPort(), 'secret');
         static::assertNull($cache->pull('foo'));
     }
 
@@ -108,5 +105,25 @@ class RedisCacheTest extends TestCase
     {
         $cache = new ArrayCache();
         static::assertEquals('bar', $cache->pull('foo', 'bar'));
+    }
+
+    /**
+     * Get redis host.
+     *
+     * @return string
+     */
+    protected function getRedisHost()
+    {
+        return $_ENV['REDIS_HOST'] ?? '127.0.0.1';
+    }
+
+    /**
+     * Get redis port.
+     *
+     * @return int
+     */
+    protected function getRedisPort()
+    {
+        return (int) ($_ENV['REDIS_PORT'] ?? 6380);
     }
 }

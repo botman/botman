@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache;
 
 use BotMan\BotMan\Cache\DoctrineCache;
 use Doctrine\Common\Cache\CacheProvider;
@@ -11,7 +11,7 @@ class DoctrineCacheTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }

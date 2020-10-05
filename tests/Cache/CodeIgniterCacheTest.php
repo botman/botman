@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache;
 
 use BotMan\BotMan\Cache\CodeIgniterCache;
 use CI_Cache;
@@ -11,7 +11,7 @@ class CodeIgniterCacheTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }

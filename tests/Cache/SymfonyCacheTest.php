@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\BotMan\Tests;
+namespace BotMan\BotMan\Tests\Cache;
 
 use BotMan\BotMan\Cache\SymfonyCache;
 use Mockery as m;
@@ -13,7 +13,7 @@ class SymfonyCacheTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }

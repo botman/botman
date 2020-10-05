@@ -51,12 +51,12 @@ class BotManTest extends TestCase
     /** @var ArrayCache */
     protected $cache;
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->cache = new ArrayCache();
@@ -926,7 +926,7 @@ class BotManTest extends TestCase
             $conversation = new TestConversation();
 
             $botman->storeConversation($conversation, function (Answer $answer) use (&$called) {
-                $this->_throwException('called conversation');
+                throw new \Exception('called conversation');
             });
         });
         $botman->listen();

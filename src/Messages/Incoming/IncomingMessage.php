@@ -116,7 +116,7 @@ class IncomingMessage
 
     /**
      * @param string|null $key
-     * @return array
+     * @return mixed
      */
     public function getExtras($key = null)
     {

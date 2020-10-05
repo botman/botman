@@ -30,17 +30,17 @@ class BotManConversationTest extends TestCase
     /** @var m\MockInterface */
     private $cache;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         DriverManager::loadDriver(ProxyDriver::class);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         DriverManager::unloadDriver(ProxyDriver::class);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fakeDriver = new FakeDriver();
         $this->cache = m::mock(ArrayCache::class)->makePartial();
@@ -48,7 +48,7 @@ class BotManConversationTest extends TestCase
         $this->botman = BotManFactory::create([], $this->cache);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         ProxyDriver::setInstance(FakeDriver::createInactive());
         m::close();
