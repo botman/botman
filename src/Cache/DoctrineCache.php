@@ -57,14 +57,12 @@ class DoctrineCache implements CacheInterface
      */
     public function pull($key, $default = null)
     {
-        if ($this->has($key)) {
-            $cached = $this->get($key, $default);
-            $this->driver->delete($key);
-
-            return $cached;
+        if (!$this->has($key)) {
+            return $default;
         }
-
-        return $default;
+        $cached = $this->get($key, $default);
+        $this->driver->delete($key);
+        return $cached;
     }
 
     /**
