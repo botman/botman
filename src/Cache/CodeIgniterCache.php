@@ -55,14 +55,12 @@ class CodeIgniterCache implements CacheInterface
      */
     public function pull($key, $default = null)
     {
-        if ($this->has($key)) {
-            $cached = $this->cache->get($key);
-            $this->cache->delete($key);
-
-            return $cached;
+        if (!$this->has($key)) {
+            return $default;	
         }
-
-        return $default;
+		$cached = $this->cache->get($key);
+		$this->cache->delete($key);
+		return $cached;
     }
 
     /**
