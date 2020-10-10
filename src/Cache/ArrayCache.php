@@ -47,14 +47,12 @@ class ArrayCache implements CacheInterface
      */
     public function pull($key, $default = null)
     {
-        if (isset($this->cache[$key])) {
-            $cached = $this->cache[$key];
-            unset($this->cache[$key]);
-
-            return $cached;
+        if (!isset($this->cache[$key])) {
+            return $default;
         }
-
-        return $default;
+		$cached = $this->cache[$key];
+		unset($this->cache[$key]);
+		return $cached;
     }
 
     /**
