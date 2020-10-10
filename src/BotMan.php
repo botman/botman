@@ -399,9 +399,8 @@ class BotMan
 			 * Load the message, so driver events can reply.
 			 */
 			$messages = $this->getDriver()->getMessages();
-			if (isset($messages[0])) {
-				$this->message = $messages[0];
-			}
+			
+			$this->message = $messages[0] ?? $messages[0];
 
 			\call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
 		});
