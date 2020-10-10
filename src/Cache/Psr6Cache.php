@@ -52,13 +52,13 @@ class Psr6Cache implements CacheInterface
     public function pull($key, $default = null)
     {
         $item = $this->adapter->getItem($key);
-        if ($item->isHit()) {
-            $this->adapter->deleteItem($key);
 
-            return $item->get();
+        if (!$item->isHit()) {
+            return $default;
         }
 
-        return $default;
+        $this->adapter->deleteItem($key);
+        return $item->get();
     }
 
     /**
