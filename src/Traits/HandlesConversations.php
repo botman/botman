@@ -21,7 +21,7 @@ trait HandlesConversations
     public function startConversation(Conversation $instance, $recipient = null, $driver = null)
     {
         if (! is_null($recipient) && ! is_null($driver)) {
-            $this->message = new IncomingMessage('', $recipient, '');
+            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
         $instance->setBot($this);
