@@ -22,7 +22,8 @@
         "mpociot/pipeline": "^1.0.2",
         "react/socket": "~1.0",
         "spatie/macroable": "^1.0",
-        "psr/container": "^1.0"
+        "psr/container": "^1.0",
+        "google/cloud-dialogflow": "^0.17.2"
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
