@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Cache;
 
 use BotMan\BotMan\Interfaces\CacheInterface;
+use DateTime;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -18,7 +19,7 @@ class LaravelCache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return Cache::has($key);
     }
@@ -30,7 +31,7 @@ class LaravelCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         return Cache::get($key, $default = null);
     }
@@ -42,7 +43,7 @@ class LaravelCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
         return Cache::pull($key, $default);
     }
@@ -55,9 +56,9 @@ class LaravelCache implements CacheInterface
      * @param  \DateTime|int $minutes
      * @return void
      */
-    public function put($key, $value, $minutes)
+    public function put(string $key, $value, $minutes)
     {
-        if (! $minutes instanceof \DateTime) {
+        if (! $minutes instanceof DateTime) {
             $minutes = $minutes * 60;
         }
         Cache::put($key, $value, $minutes);
