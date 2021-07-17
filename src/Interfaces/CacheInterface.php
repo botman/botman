@@ -10,7 +10,7 @@ interface CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key);
+    public function has(string $key): bool;
 
     /**
      * Retrieve an item from the cache by key.
@@ -19,7 +19,7 @@ interface CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function get($key, $default = null);
+    public function get(string $key, $default = null);
 
     /**
      * Retrieve an item from the cache and delete it.
@@ -28,7 +28,7 @@ interface CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function pull($key, $default = null);
+    public function pull(string $key, $default = null);
 
     /**
      * Store an item in the cache.
@@ -38,5 +38,5 @@ interface CacheInterface
      * @param  \DateTime|int $minutes
      * @return void
      */
-    public function put($key, $value, $minutes);
+    public function put(string $key, $value, $minutes);
 }
