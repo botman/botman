@@ -43,7 +43,7 @@ class RedisCache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         /*
          * Version >= 4.0 of phpredis returns an integer instead of bool
@@ -64,7 +64,7 @@ class RedisCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         return $this->redis->get($this->decorateKey($key)) ?: $default;
     }
@@ -76,7 +76,7 @@ class RedisCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
         $redisKey = $this->decorateKey($key);
         $r = $this->redis->multi()
@@ -95,7 +95,7 @@ class RedisCache implements CacheInterface
      * @param  \DateTime|int $minutes
      * @return void
      */
-    public function put($key, $value, $minutes)
+    public function put(string $key, $value, $minutes)
     {
         if ($minutes instanceof \Datetime) {
             $seconds = $minutes->getTimestamp() - time();
