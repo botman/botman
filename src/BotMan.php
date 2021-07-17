@@ -391,23 +391,25 @@ class BotMan
     protected function fireDriverEvents()
     {
         $driverEvent = $this->getDriver()->hasMatchingEvent();
-        if ($driverEvent instanceof DriverEventInterface) {
-            $this->firedDriverEvents = true;
-
-            Collection::make($this->events)->filter(function ($event) use ($driverEvent) {
-                return $driverEvent->getName() === $event['name'];
-            })->each(function ($event) use ($driverEvent) {
-                /**
-                 * Load the message, so driver events can reply.
-                 */
-                $messages = $this->getDriver()->getMessages();
-                if (isset($messages[0])) {
-                    $this->message = $messages[0];
-                }
-
-                \call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
-            });
+        if (!$driverEvent instanceof DriverEventInterface) {
+            return;
         }
+
+        $this->firedDriverEvents = true;
+
+        Collection::make($this->events)->filter(function ($event) use ($driverEvent) {
+            return $driverEvent->getName() === $event['name'];
+        })->each(function ($event) use ($driverEvent) {
+            /**
+             * Load the message, so driver events can reply.
+             */
+            $messages = $this->getDriver()->getMessages();
+            if (isset($messages[0])) {
+                $this->message = $messages[0];
+            }
+
+            call_user_func_array($event['callback'], [$driverEvent->getPayload(), $this]);
+        });
     }
 
     /**
