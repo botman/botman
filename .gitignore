@@ -3,3 +3,5 @@
 composer.lock
 .php_cs.cache
 /vendor/
+.phpunit.result.cache
+phpunit.local.xml
