@@ -3,6 +3,7 @@
 namespace BotMan\BotMan\Cache;
 
 use BotMan\BotMan\Interfaces\CacheInterface;
+use DateTime;
 use Doctrine\Common\Cache\Cache;
 
 class DoctrineCache implements CacheInterface
@@ -26,7 +27,7 @@ class DoctrineCache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->driver->contains($key);
     }
@@ -38,7 +39,7 @@ class DoctrineCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         $value = $this->driver->fetch($key);
         if ($value !== false) {
@@ -55,16 +56,16 @@ class DoctrineCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
-        if ($this->has($key)) {
-            $cached = $this->get($key, $default);
-            $this->driver->delete($key);
-
-            return $cached;
+        if (!$this->has($key)) {
+            return $default;
         }
 
-        return $default;
+        $cached = $this->get($key, $default);
+        $this->driver->delete($key);
+
+        return $cached;
     }
 
     /**
@@ -75,9 +76,9 @@ class DoctrineCache implements CacheInterface
      * @param  \DateTime|int $minutes
      * @return void
      */
-    public function put($key, $value, $minutes)
+    public function put(string $key, $value, $minutes)
     {
-        if ($minutes instanceof \Datetime) {
+        if ($minutes instanceof Datetime) {
             $seconds = $minutes->getTimestamp() - time();
         } else {
             $seconds = $minutes * 60;

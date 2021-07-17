@@ -3,6 +3,8 @@
 namespace BotMan\BotMan\Cache;
 
 use BotMan\BotMan\Interfaces\CacheInterface;
+use DateInterval;
+use DateTimeInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 class Psr6Cache implements CacheInterface
@@ -23,8 +25,9 @@ class Psr6Cache implements CacheInterface
     /**
      * @param string $key
      * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->adapter->hasItem($key);
     }
@@ -33,8 +36,9 @@ class Psr6Cache implements CacheInterface
      * @param string $key
      * @param null $default
      * @return mixed|null
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         $item = $this->adapter->getItem($key);
         if ($item->isHit()) {
@@ -48,33 +52,36 @@ class Psr6Cache implements CacheInterface
      * @param string $key
      * @param null $default
      * @return null
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
         $item = $this->adapter->getItem($key);
-        if ($item->isHit()) {
-            $this->adapter->deleteItem($key);
 
-            return $item->get();
+        if (!$item->isHit()) {
+            return $default;
         }
 
-        return $default;
+        $this->adapter->deleteItem($key);
+        return $item->get();
     }
 
     /**
      * @param string $key
      * @param mixed $value
      * @param \DateTime|int $minutes
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Exception
      */
-    public function put($key, $value, $minutes)
+    public function put(string $key, $value, $minutes)
     {
         $item = $this->adapter->getItem($key);
         $item->set($value);
 
-        if ($minutes instanceof \DateTimeInterface) {
+        if ($minutes instanceof DateTimeInterface) {
             $item->expiresAt($minutes);
         } else {
-            $item->expiresAfter(new \DateInterval(sprintf('PT%dM', $minutes)));
+            $item->expiresAfter(new DateInterval(sprintf('PT%dM', $minutes)));
         }
 
         $this->adapter->save($item);

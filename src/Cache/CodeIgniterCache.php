@@ -25,7 +25,7 @@ class CodeIgniterCache implements CacheInterface
      * @param  string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->cache->get($key) !== false;
     }
@@ -37,7 +37,7 @@ class CodeIgniterCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         if ($this->has($key)) {
             return $this->cache->get($key);
@@ -53,16 +53,16 @@ class CodeIgniterCache implements CacheInterface
      * @param  mixed $default
      * @return mixed
      */
-    public function pull($key, $default = null)
+    public function pull(string $key, $default = null)
     {
-        if ($this->has($key)) {
-            $cached = $this->cache->get($key);
-            $this->cache->delete($key);
-
-            return $cached;
+        if (!$this->has($key)) {
+            return $default;
         }
 
-        return $default;
+        $cached = $this->cache->get($key);
+        $this->cache->delete($key);
+
+        return $cached;
     }
 
     /**
@@ -73,7 +73,7 @@ class CodeIgniterCache implements CacheInterface
      * @param  \DateTime|int $minutes
      * @return void
      */
-    public function put($key, $value, $minutes)
+    public function put(string $key, $value, $minutes)
     {
         if ($minutes instanceof \Datetime) {
             $seconds = $minutes->getTimestamp() - time();
