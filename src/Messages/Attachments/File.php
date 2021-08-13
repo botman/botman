@@ -13,7 +13,7 @@ class File extends Attachment
     protected $url;
 
     /**
-     * Video constructor.
+     * File constructor.
      * @param string $url
      * @param mixed $payload
      */
