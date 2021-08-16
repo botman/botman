@@ -129,12 +129,8 @@ class BotMan
      */
     public function __construct(CacheInterface $cache, DriverInterface $driver, $config, StorageInterface $storage)
     {
-        if (!isset($config['bot_id'])) {
-            $config['bot_id'] = '';
-        }
-
         $this->cache = $cache;
-        $this->message = new IncomingMessage('', '', '', null, $config['bot_id']);
+        $this->message = new IncomingMessage('', '', '');
         $this->driver = $driver;
         $this->config = $config;
         $this->storage = $storage;
@@ -440,7 +436,7 @@ class BotMan
                 }
 
                 $this->firedDriverEvents = false;
-                $this->message = new IncomingMessage('', '', '', null, $this->config['bot_id']);
+                $this->message = new IncomingMessage('', '', '');
             }
         } catch (\Throwable $e) {
             $this->exceptionHandler->handleException($e, $this);
@@ -474,6 +470,7 @@ class BotMan
             $parameterNames = $this->compileParameterNames($this->command->getPattern());
 
             $parameters = $matchingMessage->getMatches();
+
             if (\count($parameterNames) !== \count($parameters)) {
                 $parameters = array_merge(
                 //First, all named parameters (eg. function ($a, $b, $c))
@@ -535,9 +532,9 @@ class BotMan
     }
 
     /**
-     * @param string|Question|OutgoingMessage $message
+     * @param string|Question $message
      * @param string|array $recipients
-     * @param string|DriverInterface|null $driver
+     * @param DriverInterface|null $driver
      * @param array $additionalParameters
      * @return Response
      * @throws BotManException
@@ -559,12 +556,8 @@ class BotMan
 
         $recipients = \is_array($recipients) ? $recipients : [$recipients];
 
-        if (!isset($this->config['bot_id'])) {
-            $this->config['bot_id'] = '';
-        }
-
         foreach ($recipients as $recipient) {
-            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
+            $this->message = new IncomingMessage('', $recipient, '');
             $response = $this->reply($message, $additionalParameters);
         }
 
@@ -588,7 +581,7 @@ class BotMan
             if (\is_string($driver)) {
                 $driver = DriverManager::loadFromName($driver, $this->config);
             }
-            $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
+            $this->message = new IncomingMessage('', $recipient, '');
             $this->setDriver($driver);
         }
 
