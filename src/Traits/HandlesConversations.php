@@ -107,12 +107,20 @@ trait HandlesConversations
          * Only remove it from the cache if it was not modified
          * after we loaded the data from the cache.
          */
-        if (!isset($this->getStoredConversation($message)['time'])) {
-            error_log('[BOTMAN BUG] getStoredConversation($message)[\'time\'] is not set !');
-        }
-        if (isset($this->getStoredConversation($message)['time']) && $this->getStoredConversation($message)['time'] == $this->currentConversationData['time']) {
-            $this->cache->pull($this->message->getConversationIdentifier());
-            $this->cache->pull($this->message->getOriginatedConversationIdentifier());
+        $conversationFromCache = $this->getStoredConversation($message);
+        if (!is_null($conversationFromCache) && !is_null($this->currentConversationData)) {
+            if ($this->getStoredConversation($message)['time'] == $this->currentConversationData['time']) {
+                $this->cache->pull($this->message->getConversationIdentifier());
+                $this->cache->pull($this->message->getOriginatedConversationIdentifier());
+            } else {
+                error_log('[BOTMAN] impossible removeStoredConversation : time different');
+            }
+        } elseif (is_null($conversationFromCache)) {
+            error_log('[BOTMAN] impossible removeStoredConversation : getStoredConversation not found');
+        } elseif (is_null($this->currentConversationData)) {
+            error_log('[BOTMAN] impossible removeStoredConversation : currentConversationData not found');
+        } else {
+            error_log('[BOTMAN] impossible removeStoredConversation : unknown state');
         }
     }
 
