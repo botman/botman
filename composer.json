@@ -1,5 +1,5 @@
 {
-    "name": "botman/botman",
+    "name": "belivey/botman",
     "license": "MIT",
     "description": "Create messaging bots in PHP with ease.",
     "keywords": [
@@ -7,7 +7,7 @@
         "BotMan",
         "Chatbot"
     ],
-    "homepage": "http://github.com/botman/botman",
+    "homepage": "http://github.com/belivey/botman",
     "authors": [
         {
             "name": "Marcel Pociot",
@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0",
+        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
         "tightenco/collect": "^5.0 || ^6.0 || ^7.0 || ^8.0",
         "opis/closure": "^2.3 || ^3.0",
         "mpociot/pipeline": "^1.0.2",
