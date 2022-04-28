@@ -16,13 +16,13 @@
     ],
     "require": {
         "php": ">=7.1",
-        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0",
+        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
         "tightenco/collect": "^5.0 || ^6.0 || ^7.0 || ^8.0",
         "opis/closure": "^2.3 || ^3.0",
         "mpociot/pipeline": "^1.0.2",
         "react/socket": "~1.0",
         "spatie/macroable": "^1.0",
-        "psr/container": "^1.0"
+        "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
