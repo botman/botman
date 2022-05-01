@@ -7,6 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Curl implements HttpInterface
 {
+    protected $options;
+
+    public function __construct($options = [])
+    {
+        $this->options = $options;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -58,7 +65,7 @@ class Curl implements HttpInterface
         $request = curl_init();
 
         if ($query = http_build_query($parameters)) {
-            $url .= '?'.$query;
+            $url .= '?' . $query;
         }
 
         curl_setopt($request, CURLOPT_URL, $url);
@@ -66,6 +73,11 @@ class Curl implements HttpInterface
         curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($request, CURLINFO_HEADER_OUT, true);
         curl_setopt($request, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($request, CURLOPT_VERBOSE, false);
+
+        if (!empty($this->options)) {
+            curl_setopt_array($request, $this->options);
+        }
 
         return $request;
     }

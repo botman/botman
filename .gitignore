@@ -4,3 +4,5 @@ composer.lock
 .php_cs.cache
 /vendor/
 update.bat
+.phpunit.result.cache
+todo.txt

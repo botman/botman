@@ -64,7 +64,7 @@ class BotManFactory
             $storageDriver = new FileStorage(__DIR__);
         }
 
-        $driverManager = new DriverManager($config, new Curl());
+        $driverManager = new DriverManager($config, new Curl($config['curl_options'] ?? []));
         $driver = $driverManager->getMatchingDriver($request);
 
         return new BotMan($cache, $driver, $config, $storageDriver);
@@ -97,7 +97,7 @@ class BotManFactory
             $storageDriver = new FileStorage(__DIR__);
         }
 
-        $driverManager = new DriverManager($config, new Curl());
+        $driverManager = new DriverManager($config, new Curl($config['curl_options'] ?? []));
 
         $botman = new BotMan($cache, DriverManager::loadFromName('Null', $config), $config, $storageDriver);
         $botman->runsOnSocket(true);
@@ -129,7 +129,7 @@ class BotManFactory
             $request = Request::createFromGlobals();
         }
 
-        $client = stream_socket_client('tcp://127.0.0.1:'.$port);
+        $client = stream_socket_client('tcp://127.0.0.1:' . $port);
         fwrite($client, json_encode([
             'attributes' => $request->attributes->all(),
             'query' => $request->query->all(),
