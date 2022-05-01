@@ -18,7 +18,7 @@ class BotManServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../assets/config.php' => config_path('botman/config.php'),
-        ]);
+        ], 'config');
     }
 
     /**
