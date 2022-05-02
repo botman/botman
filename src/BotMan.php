@@ -618,7 +618,14 @@ class BotMan
      */
     public function typesAndWaits(float $seconds)
     {
-        $this->getDriver()->typesAndWaits($this->message, $seconds);
+        $driver = $this->getDriver();
+
+        if (method_exists($driver, 'typesAndWaits')) {
+            $this->getDriver()->typesAndWaits($this->message, $seconds);
+        } else {
+            $this->types();
+            usleep($seconds * 1000000);
+        }
 
         return $this;
     }
