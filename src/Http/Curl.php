@@ -27,6 +27,7 @@ class Curl implements HttpInterface
         $request = $this->prepareRequest($url, $urlParameters, $headers);
 
         curl_setopt($request, CURLOPT_POST, count($postParameters));
+
         if ($asJSON === true) {
             curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($postParameters));
         } else {
@@ -48,6 +49,53 @@ class Curl implements HttpInterface
     public function get($url, array $urlParameters = [], array $headers = [], $asJSON = false)
     {
         $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        return $this->executeRequest($request);
+    }
+
+    /**
+     * Send a put request to a URL
+     *
+     * @param  string $url
+     * @param  array $urlParameters
+     * @param  array $headers
+     * @param  bool $asJSON
+     * @return void
+     */
+    public function put(
+        $url,
+        array $urlParameters = [],
+        array $postParameters = [],
+        array $headers = [],
+        $asJSON = false
+    ) {
+        $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        curl_setopt($request, CURLOPT_PUT, true);
+
+        if ($asJSON === true) {
+            curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($postParameters));
+        } else {
+            curl_setopt($request, CURLOPT_POSTFIELDS, http_build_query($postParameters));
+        }
+
+        return $this->executeRequest($request);
+    }
+
+    /**
+     * Send a delete request to a URL.
+     *
+     * @param  string $url
+     * @param  array $urlParameters
+     * @param  array $headers
+     * @param  bool $asJSON
+     * @return Response
+     */
+    public function delete($url, array $urlParameters = [], array $headers = [], $asJSON = false)
+    {
+        $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
         return $this->executeRequest($request);
     }
