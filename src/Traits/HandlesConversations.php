@@ -20,7 +20,7 @@ trait HandlesConversations
      */
     public function startConversation(Conversation $instance, $recipient = null, $driver = null)
     {
-        if (! is_null($recipient) && ! is_null($driver)) {
+        if (!is_null($recipient) && !is_null($driver)) {
             $this->message = new IncomingMessage('', $recipient, '', null, $this->config['bot_id']);
             $this->driver = DriverManager::loadFromName($driver, $this->config);
         }
@@ -74,7 +74,7 @@ trait HandlesConversations
      */
     public function touchCurrentConversation()
     {
-        if (! is_null($this->currentConversationData)) {
+        if (!is_null($this->currentConversationData)) {
             $touched = $this->currentConversationData;
             $touched['time'] = microtime();
 
@@ -119,7 +119,7 @@ trait HandlesConversations
      */
     public function serializeClosure(Closure $closure)
     {
-        if ($this->getDriver()->serializesCallbacks() && ! $this->runsOnSocket) {
+        if ($this->getDriver()->serializesCallbacks() && !$this->runsOnSocket) {
             return serialize(new SerializableClosure($closure, true));
         }
 
@@ -132,7 +132,7 @@ trait HandlesConversations
      */
     protected function unserializeClosure($closure)
     {
-        if ($this->getDriver()->serializesCallbacks() && ! $this->runsOnSocket) {
+        if ($this->getDriver()->serializesCallbacks() && !$this->runsOnSocket) {
             return unserialize($closure);
         }
 
@@ -258,7 +258,7 @@ trait HandlesConversations
     {
         /** @var \BotMan\BotMan\Messages\Conversations\Conversation $conversation */
         $conversation = $convo['conversation'];
-        if (! $conversation instanceof ShouldQueue) {
+        if (!$conversation instanceof ShouldQueue) {
             $conversation->setBot($this);
         }
         /*
@@ -303,6 +303,11 @@ trait HandlesConversations
         }
 
         $parameters[] = $conversation;
-        call_user_func_array($next, $parameters);
+
+        if (class_exists('Illuminate\\Support\\Facades\\App')) {
+            \Illuminate\Support\Facades\App::call($next, $parameters);
+        } else {
+            call_user_func_array($next, $parameters);
+        }
     }
 }
