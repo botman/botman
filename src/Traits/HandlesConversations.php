@@ -304,10 +304,15 @@ trait HandlesConversations
 
         $parameters[] = $conversation;
 
+        call_user_func_array($next, $parameters);
+
+        /*
+        // TODO: Needs more work
         if (class_exists('Illuminate\\Support\\Facades\\App')) {
             \Illuminate\Support\Facades\App::call($next, $parameters);
         } else {
             call_user_func_array($next, $parameters);
         }
+        // */
     }
 }
