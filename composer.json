@@ -8,12 +8,10 @@
         "Chatbot"
     ],
     "homepage": "http://github.com/botman/botman",
-    "authors": [
-        {
-            "name": "Marcel Pociot",
-            "email": "m.pociot@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Marcel Pociot",
+        "email": "m.pociot@gmail.com"
+    }],
     "require": {
         "php": ">=7.1",
         "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
@@ -31,7 +29,8 @@
         "mockery/mockery": "^1.1",
         "doctrine/cache": "^1.6",
         "symfony/cache": "^3.4.35 || ^4.3.7 || ^5.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "dms/phpunit-arraysubset-asserts": "^0.4.0"
     },
     "suggest": {
         "doctrine/cache": "Use any Doctrine cache driver for cache",

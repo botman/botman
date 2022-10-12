@@ -52,17 +52,17 @@ class Matcher
         }
 
         $pattern = str_replace('/', '\/', $pattern);
-        $text = '/^'.preg_replace(self::PARAM_NAME_REGEX, '(?<$1>.*)', $pattern).' ?$/miu';
+        $text = '/^' . preg_replace(self::PARAM_NAME_REGEX, '(?<$1>.*)', $pattern) . ' ?$/miu';
 
-        $regexMatched = (bool) preg_match($text, $message->getText(), $this->matches) || (bool) preg_match($text, $answerText, $this->matches);
+        $regexMatched = (bool) preg_match($text, (string)$message->getText(), $this->matches) || (bool) preg_match($text, (string)$answerText, $this->matches);
 
         // Try middleware first
         if (count($middleware)) {
             return Collection::make($middleware)->reject(function (Matching $middleware) use (
-                    $message,
-                    $pattern,
-                    $regexMatched
-                ) {
+                $message,
+                $pattern,
+                $regexMatched
+            ) {
                 return $middleware->matching($message, $pattern, $regexMatched);
             })->isEmpty() === true;
         }
@@ -77,7 +77,7 @@ class Matcher
      */
     protected function isDriverValid($driverName, $allowedDrivers)
     {
-        if (! is_null($allowedDrivers)) {
+        if (!is_null($allowedDrivers)) {
             return Collection::make($allowedDrivers)->contains($driverName);
         }
 

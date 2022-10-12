@@ -18,6 +18,13 @@ use Illuminate\Support\Collection;
 
 class ConversationManager
 {
+    protected $matcher;
+
+    public function __construct(?Matcher $matcher = null)
+    {
+        $this->matcher = $matcher ?? new Matcher();
+    }
+
     /**
      * Messages to listen to.
      * @var Command[]
@@ -68,7 +75,6 @@ class ConversationManager
      */
     public function getMatchingMessages($messages, MiddlewareManager $middleware, Answer $answer, DriverInterface $driver, $withReceivedMiddleware = true): array
     {
-        $matcher = new Matcher();
         $messages = Collection::make($messages)->reject(function (IncomingMessage $message) {
             return $message->isFromBot();
         });
@@ -80,8 +86,8 @@ class ConversationManager
             }
 
             foreach ($this->listenTo as $command) {
-                if ($matcher->isMessageMatching($message, $answer, $command, $driver, $middleware->matching())) {
-                    $matchingMessages[] = new MatchingMessage($command, $message, $matcher->getMatches());
+                if ($this->matcher->isMessageMatching($message, $answer, $command, $driver, $middleware->matching())) {
+                    $matchingMessages[] = new MatchingMessage($command, $message, $this->matcher->getMatches());
                 }
             }
         }

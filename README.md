@@ -7,7 +7,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/botman/botman/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/botman/botman/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/botman/botman.svg)]()
 [![StyleCI](https://styleci.io/repos/65017574/shield?branch=master)](https://styleci.io/repos/65017574)
-[![Slack](https://rauchg-slackin-jtdkltstsj.now.sh/badge.svg)](https://rauchg-slackin-jtdkltstsj.now.sh)
+[![Slack](https://slack.botman.io/badge.svg)](https://slack.botman.io)
 [![Monthly Downloads](https://img.shields.io/packagist/dm/botman/botman.svg?style=flat-square)](https://packagist.org/packages/botman/botman)
 
 [![https://phppackagedevelopment.com](https://display-demo.schlein.net/images/phppd.jpg)](https://phppackagedevelopment.com)
@@ -29,6 +29,14 @@ $botman->hears('I want cross-platform bots with PHP!', function (BotMan $bot) {
 ## Documentation
 
 You can find the BotMan documentation at [https://botman.io](https://botman.io).
+
+## Stand Alone Configuration
+
+If you are installing Botman in a stand alone Laravel application, you can publish the configuration file with the following command:
+
+```
+php artisan vendor:publish --tag=config --provider="BotMan\BotMan\BotManServiceProvider"
+```
 
 ## Support the development
 **Do you like this project? Support it by donating**

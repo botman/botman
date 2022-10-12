@@ -92,6 +92,7 @@ class Select implements JsonSerializable, QuestionActionInterface
     /**
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();
