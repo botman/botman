@@ -29,7 +29,7 @@ class LaravelContainer implements ContainerInterface
      *
      * @return mixed Entry.
      */
-    public function get($id)
+    public function get(string $id)
     {
         if ($this->has($id)) {
             return $this->container->make($id);
@@ -48,7 +48,7 @@ class LaravelContainer implements ContainerInterface
      *
      * @return bool
      */
-    public function has($id)
+    public function has(string $id)
     {
         if ($this->container->bound($id) || $this->container->resolved($id)) {
             return true;
