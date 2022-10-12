@@ -80,13 +80,13 @@ class DriverManager
         }
         foreach (self::getAvailableDrivers() as $driver) {
             /** @var HttpDriver $driver */
-            $driver = new $driver($request, $config, new Curl());
+            $driver = new $driver($request, $config, new Curl($config['curl_options'] ?? []));
             if ($driver->getName() === $name) {
                 return $driver;
             }
         }
 
-        return new NullDriver($request, [], new Curl());
+        return new NullDriver($request, [], new Curl($config['curl_options'] ?? []));
     }
 
     /**
@@ -98,7 +98,7 @@ class DriverManager
         $drivers = [];
 
         foreach (self::getAvailableHttpDrivers() as $driver) {
-            $driver = new $driver(Request::createFromGlobals(), $config, new Curl());
+            $driver = new $driver(Request::createFromGlobals(), $config, new Curl($config['curl_options'] ?? []));
             if ($driver->isConfigured()) {
                 $drivers[] = $driver;
             }
@@ -153,8 +153,8 @@ class DriverManager
     {
         $request = (isset($request)) ? $request : Request::createFromGlobals();
         foreach (self::getAvailableHttpDrivers() as $driver) {
-            $driver = new $driver($request, $config, new Curl());
-            if ($driver instanceof VerifiesService && ! is_null($driver->verifyRequest($request))) {
+            $driver = new $driver($request, $config, new Curl($config['curl_options'] ?? []));
+            if ($driver instanceof VerifiesService && !is_null($driver->verifyRequest($request))) {
                 return true;
             }
         }

@@ -7,6 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Curl implements HttpInterface
 {
+    protected $options;
+
+    public function __construct($options = [])
+    {
+        $this->options = $options;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -20,6 +27,7 @@ class Curl implements HttpInterface
         $request = $this->prepareRequest($url, $urlParameters, $headers);
 
         curl_setopt($request, CURLOPT_POST, count($postParameters));
+
         if ($asJSON === true) {
             curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($postParameters));
         } else {
@@ -46,6 +54,53 @@ class Curl implements HttpInterface
     }
 
     /**
+     * Send a put request to a URL
+     *
+     * @param  string $url
+     * @param  array $urlParameters
+     * @param  array $headers
+     * @param  bool $asJSON
+     * @return void
+     */
+    public function put(
+        $url,
+        array $urlParameters = [],
+        array $postParameters = [],
+        array $headers = [],
+        $asJSON = false
+    ) {
+        $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        curl_setopt($request, CURLOPT_PUT, true);
+
+        if ($asJSON === true) {
+            curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($postParameters));
+        } else {
+            curl_setopt($request, CURLOPT_POSTFIELDS, http_build_query($postParameters));
+        }
+
+        return $this->executeRequest($request);
+    }
+
+    /**
+     * Send a delete request to a URL.
+     *
+     * @param  string $url
+     * @param  array $urlParameters
+     * @param  array $headers
+     * @param  bool $asJSON
+     * @return Response
+     */
+    public function delete($url, array $urlParameters = [], array $headers = [], $asJSON = false)
+    {
+        $request = $this->prepareRequest($url, $urlParameters, $headers);
+
+        curl_setopt($request, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+        return $this->executeRequest($request);
+    }
+
+    /**
      * Prepares a request using curl.
      *
      * @param  string $url [description]
@@ -58,7 +113,7 @@ class Curl implements HttpInterface
         $request = curl_init();
 
         if ($query = http_build_query($parameters)) {
-            $url .= '?'.$query;
+            $url .= '?' . $query;
         }
 
         curl_setopt($request, CURLOPT_URL, $url);
@@ -66,6 +121,11 @@ class Curl implements HttpInterface
         curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($request, CURLINFO_HEADER_OUT, true);
         curl_setopt($request, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($request, CURLOPT_VERBOSE, false);
+
+        if (!empty($this->options)) {
+            curl_setopt_array($request, $this->options);
+        }
 
         return $request;
     }

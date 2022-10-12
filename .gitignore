@@ -4,3 +4,7 @@ composer.lock
 .php_cs.cache
 /vendor/
 .vscode/*
+update.bat
+test.bat
+.phpunit.result.cache
+todo.txt
