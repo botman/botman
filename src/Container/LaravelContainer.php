@@ -48,7 +48,7 @@ class LaravelContainer implements ContainerInterface
      *
      * @return bool
      */
-    public function has(string $id)
+    public function has(string $id): bool
     {
         if ($this->container->bound($id) || $this->container->resolved($id)) {
             return true;
