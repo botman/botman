@@ -93,7 +93,7 @@ class IncomingMessage
      */
     public function getConversationIdentifier()
     {
-        return 'conversation-'.$this->bot_id.sha1($this->getSender()).'-'.sha1($this->getRecipient());
+        return 'conversation-' . $this->bot_id . sha1((string)$this->getSender()) . '-' . sha1((string)$this->getRecipient());
     }
 
     /**
@@ -103,7 +103,7 @@ class IncomingMessage
      */
     public function getOriginatedConversationIdentifier()
     {
-        return 'conversation-'.$this->bot_id.sha1($this->getSender()).'-'.sha1('');
+        return 'conversation-' . $this->bot_id . sha1((string)$this->getSender()) . '-' . sha1('');
     }
 
     /**
@@ -124,7 +124,7 @@ class IncomingMessage
      */
     public function getExtras($key = null)
     {
-        if (! is_null($key)) {
+        if (!is_null($key)) {
             return Collection::make($this->extras)->get($key);
         }
 

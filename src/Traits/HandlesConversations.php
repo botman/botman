@@ -9,7 +9,7 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Closure;
 use Illuminate\Support\Collection;
-use Opis\Closure\SerializableClosure;
+use Laravel\SerializableClosure\SerializableClosure;
 
 trait HandlesConversations
 {
@@ -308,14 +308,14 @@ trait HandlesConversations
 
         $parameters[] = $conversation;
 
-        call_user_func_array($next, $parameters);
+        call_user_func_array($next, array_values($parameters));
 
         /*
         // TODO: Needs more work
         if (class_exists('Illuminate\\Support\\Facades\\App')) {
             \Illuminate\Support\Facades\App::call($next, $parameters);
         } else {
-            call_user_func_array($next, $parameters);
+            call_user_func_array($next, array_values($parameters));
         }
         // */
     }

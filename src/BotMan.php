@@ -759,7 +759,7 @@ class BotMan
             $arguments[] = $this->getMessage();
             $arguments[] = $this;
 
-            return \call_user_func_array([$this->getDriver(), $name], $arguments);
+            return \call_user_func_array([$this->getDriver(), $name], array_values($arguments));
         }
 
         throw new BadMethodCallException('Method [' . $name . '] does not exist.');

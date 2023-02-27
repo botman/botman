@@ -4,10 +4,13 @@ namespace BotMan\BotMan\tests\Messages;
 
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use PHPUnit\Framework\TestCase;
 
 class QuestionTest extends TestCase
 {
+    use ArraySubsetAsserts;
+
     /** @test */
     public function it_can_be_created()
     {
@@ -49,14 +52,14 @@ class QuestionTest extends TestCase
     public function it_can_add_a_callback_id()
     {
         $message = Question::create('foo')->callbackId('callback');
-        $this->assertArraySubset(['callback_id' => 'callback'], $message->toArray());
+        self::assertArraySubset(['callback_id' => 'callback'], $message->toArray());
     }
 
     /** @test */
     public function it_can_add_a_fallback()
     {
         $message = Question::create('foo')->fallback('fallback');
-        $this->assertArraySubset(['fallback' => 'fallback'], $message->toArray());
+        self::assertArraySubset(['fallback' => 'fallback'], $message->toArray());
     }
 
     /** @test */
