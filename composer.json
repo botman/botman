@@ -1,5 +1,5 @@
 {
-    "name": "botman/botman",
+    "name": "aung_thet/botman",
     "license": "MIT",
     "description": "Create messaging bots in PHP with ease.",
     "keywords": [
@@ -7,15 +7,15 @@
         "BotMan",
         "Chatbot"
     ],
-    "homepage": "http://github.com/botman/botman",
+    "homepage": "https://github.com/AungThet/botman",
     "authors": [
         {
-            "name": "Marcel Pociot",
-            "email": "m.pociot@gmail.com"
+            "name": "Aung Thet  Win",
+            "email": "aungthetw@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.1 || ^8.1",
         "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
         "mpociot/pipeline": "^1.0.2",
         "react/socket": "~1.0",
@@ -49,9 +49,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.1-dev"
-        },
         "laravel": {
             "providers": [
                 "BotMan\\BotMan\\BotManServiceProvider"
