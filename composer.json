@@ -19,7 +19,7 @@
         "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
         "mpociot/pipeline": "^1.0.2",
         "react/socket": "~1.0",
-        "spatie/macroable": "^1.0",
+        "spatie/macroable": "^1.0 || ^2.0",
         "psr/container": "^1.0 || ^2.0",
         "laravel/serializable-closure": "^1.0",
         "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0"
