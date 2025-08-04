@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.8.9]
+### Fixed
+- Add support for Laravel 12
+
 ## [2.8.7]
 ### Fixed
 - Allow spatie/macroable v2.0 (for php8+)
