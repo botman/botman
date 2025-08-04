@@ -22,15 +22,15 @@
         "spatie/macroable": "^1.0 || ^2.0",
         "psr/container": "^1.0 || ^2.0",
         "laravel/serializable-closure": "^1.0 || ^2.0",
-        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0"
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0"
     },
     "require-dev": {
         "codeigniter/framework": "~3.0",
-        "orchestra/testbench": "^3.4 || ^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
-        "phpunit/phpunit": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+        "orchestra/testbench": "^3.4 || ^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+        "phpunit/phpunit": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.5.3",
         "mockery/mockery": "^1.1",
-        "doctrine/cache": "^1.6",
-        "symfony/cache": "^3.4.35 || ^4.3.7 || ^5.0",
+        "doctrine/cache": "^1.6 || ^2.2",
+        "symfony/cache": "^3.4.35 || ^4.3.7 || ^5.0 || ^7.2",
         "ext-curl": "*",
         "dms/phpunit-arraysubset-asserts": "^0.4.0"
     },
