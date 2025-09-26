@@ -17,7 +17,7 @@ class OutgoingMessage
      * @param string $message
      * @param Attachment $attachment
      */
-    public function __construct($message = null, Attachment $attachment = null)
+    public function __construct($message = null, ?Attachment $attachment = null)
     {
         $this->message = $message;
         $this->attachment = $attachment;
@@ -28,7 +28,7 @@ class OutgoingMessage
      * @param Attachment $attachment
      * @return OutgoingMessage
      */
-    public static function create($message = null, Attachment $attachment = null)
+    public static function create($message = null, ?Attachment $attachment = null)
     {
         return new static($message, $attachment);
     }
