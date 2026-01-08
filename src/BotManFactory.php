@@ -43,17 +43,17 @@ class BotManFactory
      * Create a new BotMan instance.
      *
      * @param array $config
-     * @param CacheInterface $cache
-     * @param Request $request
-     * @param StorageInterface $storageDriver
+     * @param CacheInterface|null
+     * @param Request|null $request
+     * @param StorageInterface|null
      * @return \BotMan\BotMan\BotMan
      */
     public static function create(
         array $config,
-        CacheInterface $cache = null,
-        Request $request = null,
-        StorageInterface $storageDriver = null
-    ) {
+        ?CacheInterface $cache = null,
+        ?Request $request = null,
+        ?StorageInterface $storageDriver = null
+    ){
         if (empty($cache)) {
             $cache = new ArrayCache();
         }
@@ -75,15 +75,15 @@ class BotManFactory
      *
      * @param array $config
      * @param LoopInterface $loop
-     * @param CacheInterface $cache
-     * @param StorageInterface $storageDriver
+     * @param CacheInterface|null $cache
+     * @param StorageInterface|null $storageDriver
      * @return \BotMan\BotMan\BotMan
      */
     public static function createForSocket(
         array $config,
         LoopInterface $loop,
-        CacheInterface $cache = null,
-        StorageInterface $storageDriver = null
+        ?CacheInterface $cache = null,
+        ?StorageInterface $storageDriver = null
     ) {
         $port = isset($config['port']) ? $config['port'] : 8080;
 
@@ -123,7 +123,7 @@ class BotManFactory
      * @param  Request|null $request
      * @return void
      */
-    public static function passRequestToSocket($port = 8080, Request $request = null)
+    public static function passRequestToSocket($port = 8080, ?Request $request = null)
     {
         if (empty($request)) {
             $request = Request::createFromGlobals();
