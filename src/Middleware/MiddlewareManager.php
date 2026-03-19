@@ -109,7 +109,7 @@ class MiddlewareManager
      * @param Closure|null $destination
      * @return mixed
      */
-    public function applyMiddleware($method, $payload, array $additionalMiddleware = [], Closure $destination = null)
+    public function applyMiddleware($method, $payload, array $additionalMiddleware = [], ?Closure $destination = null)
     {
         $destination = is_null($destination) ? function ($payload) {
             return $payload;

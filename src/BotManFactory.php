@@ -50,9 +50,9 @@ class BotManFactory
      */
     public static function create(
         array $config,
-        CacheInterface $cache = null,
-        Request $request = null,
-        StorageInterface $storageDriver = null
+        ?CacheInterface $cache = null,
+        ?Request $request = null,
+        ?StorageInterface $storageDriver = null
     ) {
         if (empty($cache)) {
             $cache = new ArrayCache();
@@ -82,8 +82,8 @@ class BotManFactory
     public static function createForSocket(
         array $config,
         LoopInterface $loop,
-        CacheInterface $cache = null,
-        StorageInterface $storageDriver = null
+        ?CacheInterface $cache = null,
+        ?StorageInterface $storageDriver = null
     ) {
         $port = isset($config['port']) ? $config['port'] : 8080;
 
@@ -123,7 +123,7 @@ class BotManFactory
      * @param  Request|null $request
      * @return void
      */
-    public static function passRequestToSocket($port = 8080, Request $request = null)
+    public static function passRequestToSocket($port = 8080, ?Request $request = null)
     {
         if (empty($request)) {
             $request = Request::createFromGlobals();
