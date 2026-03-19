@@ -59,7 +59,7 @@ class DriverManager
      * @param Request|null $request
      * @return mixed|HttpDriver|NullDriver
      */
-    public static function loadFromName($name, array $config, Request $request = null)
+    public static function loadFromName($name, array $config, ?Request $request = null)
     {
         /*
         * Use the driver class basename without "Driver" if we're dealing with a
@@ -149,7 +149,7 @@ class DriverManager
      * @param Request|null $request
      * @return bool
      */
-    public static function verifyServices(array $config, Request $request = null)
+    public static function verifyServices(array $config, ?Request $request = null)
     {
         $request = (isset($request)) ? $request : Request::createFromGlobals();
         foreach (self::getAvailableHttpDrivers() as $driver) {
